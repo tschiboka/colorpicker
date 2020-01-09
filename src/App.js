@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react';
+import "./App.scss";
 
-function App() {
-  return (
-    <div className="App">
-    </div>
-  );
+import ColorPicker from "./Components/ColorPicker";
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { colorPickerIsVisible: false };
+  }
+
+
+
+  render() {
+    return (
+      <div className="App">
+        <button onClick={() => this.setState({ ...this.state, colorPickerIsVisible: !this.state.colorPickerIsVisible })}>Color Picker</button>
+
+        {this.state.colorPickerIsVisible && <ColorPicker />}
+      </div>
+    );
+  }
 }
-
-export default App;
