@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./App.scss";
-import ColorPicker from "./Components/ColorPicker";
+import ColorPicker from "./Components/ColorPicker/ColorPicker";
 
 
 
@@ -17,11 +17,10 @@ export default class App extends Component {
     return (
       <div
         className="App"
-        onClick={e => this.setState({
-          ...this.state,
-          colorPickerIsVisible: !this.state.colorPickerIsVisible
-        })}>
-        <ColorPicker visible={this.state.colorPickerIsVisible} />
+      >
+        <ColorPicker visible={this.state.colorPickerIsVisible} X={100} Y={100} close={() => this.setState({ ...this.state, colorPickerIsVisible: false })} />
+
+        <button onClick={() => this.setState({ ...this.state, colorPickerIsVisible: true })}>ColorPicker</button>
       </div>
     );
   }
