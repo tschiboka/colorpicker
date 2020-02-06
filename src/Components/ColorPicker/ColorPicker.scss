@@ -1,5 +1,5 @@
 $primaryBg: #191919;
-$primarytColor: #e5e5e5;
+$primarytColor: #c2c2c2;
 $borderColor: #111;
 $border: 1px solid $borderColor;
 
@@ -40,14 +40,97 @@ $border: 1px solid $borderColor;
         height: 95%;
         min-width: 30px;
         padding: 0 1px;
-        background-position: 50% 50%;
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-color: transparent;
+        background: 50% 50%/contain no-repeat transparent;
         color: deeppink;
         border: none;
         font-size: 18px;
         cursor: pointer;
         &:hover { font-size: 14px; }
+    }
+}
+
+.ColorPicker__body {
+    width: 100%;
+    height: calc(100% - 25px);
+}
+
+.ColorPicker__upper-box {
+    width: 100%;
+    height: 60%;
+    display: flex;
+    .ColorPicker__palette {
+        width: 60%;
+        height: 100%;
+        //border: 1px dotted white;
+    }
+    .ColorPicker__text-inputs {
+        width: 40%;
+        height: 100%;
+        //border: 1px dotted white;
+    }
+}
+
+.ColorPicker__lower-box {
+    width: 100%;
+    height: 40%;
+    //border: 1px dotted white;
+    > div {
+        width: 100%;
+        height: 33.3%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        //border: 1px dotted white;
+    }
+    .ColorPicker__ok-btn-box {
+        button {
+            height: 95%;
+            min-width: 30px;
+            padding: 0 2px;
+            background: 50% 50%/contain no-repeat transparent;
+            color: $primarytColor;
+            font-size: 17px;
+            border: none;
+            cursor: pointer;
+            &:hover { font-size: 14px; }
+        }
+    }
+}
+
+.ColorPicker__hue-slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .ColorPicker__hue {
+        width: 90%;
+        height: 15px;
+        background: -moz-linear-gradient(left, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+        background: -ms-linear-gradient(left, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+        background: -o-linear-gradient(left, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+        background: -webkit-gradient(linear, left from(#ff0000), color-stop(0.17, #ffff00), color-stop(0.33, #00ff00), color-stop(0.5, #00ffff), color-stop(0.67, #0000ff), color-stop(0.83, #ff00ff), to(#ff0000));
+        background: -webkit-linear-gradient(left, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+        background: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+    }
+}
+
+.ColorPicker__alpha-slider {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .ColorPicker__alpha-bg {
+        width: 90%;
+        height: 100%;
+        .ColorPicker__alpha {
+            width: 100%;
+            height: 15px;
+            background: -moz-linear-gradient(left, #ff0000 0%, transparent 100%);
+            background: -ms-linear-gradient(left, #ff0000 0%, transparent 100%);
+            background: -o-linear-gradient(left, #ff0000 0%, transparent 100%);
+            background: -webkit-gradient(linear, left from(#ff0000), to(#ff0000));
+            background: -webkit-linear-gradient(left, #ff0000 0%, transparent 100%);
+            background: linear-gradient(to right, #ff0000 0%, transparent 100%);
+        }
     }
 }
