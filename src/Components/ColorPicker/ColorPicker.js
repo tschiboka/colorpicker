@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import "./ColorPicker.scss";
-import btnBg from "./images/btn_sm_square.png";
 import transparentCheckerdBg from "./images/transparent_checkered_bg.png";
+import sliderThumb from "./images/hue_slider_thumb.png";
 
 export default class ColorPicker extends Component {
     constructor(props) {
@@ -24,9 +24,8 @@ export default class ColorPicker extends Component {
                 >
                     <div className="ColorPicker__header">
                         <button
-                            className="close-btn"
+                            className="close-btn ColorPicker--button-theme"
                             onClick={() => this.props.close()}
-                            style={{ backgroundImage: `url(${btnBg})` }}
                             title="close [Esc]"
                         >&times;</button>
                     </div>
@@ -40,20 +39,31 @@ export default class ColorPicker extends Component {
 
                         <div className="ColorPicker__lower-box">
                             <div className="ColorPicker__hue-slider">
-                                <div className="ColorPicker__hue"></div>
+                                <div className="ColorPicker__slider-bg">
+                                    <div className="ColorPicker__hue">
+                                        <div className="ColorPicker__slider-thumb" style={{ backgroundImage: `url(${sliderThumb})` }}>
+                                            <div className="ColorPicker__slider-point" id="hue-slider-point"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="ColorPicker__alpha-box">
                                 <div className="ColorPicker__alpha-slider">
-                                    <div className="ColorPicker__alpha-bg" style={{ backgroundImage: `url(${transparentCheckerdBg})` }}>
-
-                                        <div className="ColorPicker__alpha"></div>
+                                    <div className="ColorPicker__slider-bg">
+                                        <div className="ColorPicker__alpha-bg" style={{ backgroundImage: `url(${transparentCheckerdBg})` }}>
+                                            <div className="ColorPicker__alpha">
+                                                <div className="ColorPicker__slider-thumb" style={{ backgroundImage: `url(${sliderThumb})` }}>
+                                                    <div className="ColorPicker__slider-point" id="alpha-slider-point"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="ColorPicker__ok-btn-box">
-                                <button style={{ backgroundImage: `url(${btnBg})` }}>OK</button>
+                                <button className="ColorPicker--button-theme">OK</button>
                             </div>
                         </div>
                     </div>
