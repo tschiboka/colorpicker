@@ -13,7 +13,7 @@ export default class ColorPicker extends Component {
                 agent: navigator.userAgent.match(/(Chrome|Firefox|MSIE|Egde|Safari|Opera)/g)[0],
                 prefix: `-${(Array.prototype.slice.call(window.getComputedStyle(document.documentElement, '')).join('').match(/-(moz|webkit|ms)-/))[1]}-`
             },
-            RGBA: this.props.RGBA || [255, 0, 0, 0], // default
+            RGBA: this.props.RGBA || [255, 0, 0, 1], // default
             hueSliderMouseDown: false,
             alphaSliderMouseDown: false,
             sliderThumbsMinOffset: undefined,
@@ -84,15 +84,16 @@ export default class ColorPicker extends Component {
             target.style.left = diffX + "px";
             if (sliderType === "hue") {
                 const ctx = this.state.hueColorPoints.getContext("2d");
-                this.setState({ ...this.state, RGBA: [...ctx.getImageData(diffX, 3, 1, 1).data] }, () => this.styleAlphaSliderWithVendorPrefixes());
+                this.setState({ ...this.state, RGBA: [...ctx.getImageData(diffX, 3, 1, 1).data] });
+            }
+            else {
+                const alpha = Number((1 - (Math.round((diffX / maxX) * 100) / 100)).toFixed(2));
+                const rgba = [...this.state.RGBA];
+
+                rgba[3] = alpha;
+                this.setState({ ...this.state, RGBA: rgba });
             }
         }
-    }
-
-
-
-    styleAlphaSliderWithVendorPrefixes() {
-        console.log(this.state.browser);
     }
 
 
