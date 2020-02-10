@@ -18,7 +18,7 @@ export default class App extends Component {
       <div
         className="App"
       >
-        <ColorPicker visible={this.state.colorPickerIsVisible} X={100} Y={100} close={() => this.setState({ ...this.state, colorPickerIsVisible: false })} />
+        <ColorPicker id="color1" visible={this.state.colorPickerIsVisible} X={100} Y={100} close={() => this.setState({ ...this.state, colorPickerIsVisible: false })} />
 
         <button onClick={() => this.setState({ ...this.state, colorPickerIsVisible: true })}>ColorPicker</button>
       </div>
