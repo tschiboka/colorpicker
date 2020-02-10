@@ -11,12 +11,16 @@ export default class ColorPicker extends Component {
         this.state = {
             hueSliderMouseDown: false,
             alphaSliderMouseDown: false,
+            sliderThumbsMinOffset: undefined,
+            alphaSliderThumb: document.getElementById((this.props.id || "") + "-alpha__thumb"),
+            hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
         };
     }
 
 
+
     handleSliderMouseUpDown(e, mouseIsDown) {
-        const sliderType = e.target.id.replace(/.*-hue/g, "hue").replace(/.*-alpha/g, "alpha");
+        const sliderType = e.target.id.replace(/.*-hue__thumb/g, "hue").replace(/.*-alpha__thumb/g, "alpha");
         const touchPoint = e.clientX - document.getElementById(e.target.id).getBoundingClientRect().x;
 
         if (sliderType === "hue") this.setState({ ...this.state, hueSliderMouseDown: mouseIsDown, sliderTouchPoint: mouseIsDown ? touchPoint : 0 });
@@ -26,20 +30,28 @@ export default class ColorPicker extends Component {
 
 
     handleColorPickerMouseMove(e) {
+        // when react componentDidMount is called non of these elems are in the DOM 
+        // set state when component is mounted and rendered, first mousemove seems to be a smooth way to prime state without slowing performance 
+        if (!this.state.sliderThumbsMinOffset) this.setState({
+            ...this.state,
+            alphaSlider: document.getElementById((this.props.id || "") + "-alpha"),
+            hueSlider: document.getElementById((this.props.id || "") + "-hue"),
+            alphaSliderThumb: document.getElementById((this.props.id || "") + "-alpha__thumb"),
+            hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
+            sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue__thumb").getBoundingClientRect().left,
+        });
+
         const sliderType = this.state.hueSliderMouseDown ? "hue" : this.state.alphaSliderMouseDown ? "alpha" : "";
 
         if (sliderType) {
-            const target = document.getElementById((this.props.id || "") + "-" + sliderType);
-            if (!this.state.sliderThumbsMinOffset) this.setState({ ...this.state, sliderThumbsMinOffset: target.getBoundingClientRect().left });
-            const maxX = document.getElementsByClassName("ColorPicker__alpha")[0].getBoundingClientRect().width; // hue & alpha has same width
+            const target = sliderType === "hue" ? this.state.hueSliderThumb : this.state.alphaSliderThumb;
+            const maxX = this.state.alphaSlider.getBoundingClientRect().width; // hue & alpha has same width
             let diffX = e.clientX - this.state.sliderThumbsMinOffset - this.state.sliderTouchPoint;
 
             if (diffX < 0) diffX = 0;
             if (diffX > maxX - 1) diffX = maxX - 1;
 
             target.style.left = diffX + "px";
-            console.log(diffX, target.style.left);
-
         }
     }
 
@@ -80,9 +92,9 @@ export default class ColorPicker extends Component {
                         <div className="ColorPicker__lower-box">
                             <div className="ColorPicker__hue-slider">
                                 <div className="ColorPicker__slider-bg">
-                                    <div className="ColorPicker__hue">
+                                    <div className="ColorPicker__hue" id={(this.props.id || "") + "-hue"}>
                                         <div
-                                            id={(this.props.id || "") + "-hue"}
+                                            id={(this.props.id || "") + "-hue__thumb"}
                                             className="ColorPicker__slider-thumb"
                                             style={{ backgroundImage: `url(${sliderThumb})` }}
                                             onMouseDown={e => this.handleSliderMouseUpDown(e, true)}
@@ -97,9 +109,9 @@ export default class ColorPicker extends Component {
                                 <div className="ColorPicker__alpha-slider">
                                     <div className="ColorPicker__slider-bg">
                                         <div className="ColorPicker__alpha-bg" style={{ backgroundImage: `url(${transparentCheckerdBg})` }}>
-                                            <div className="ColorPicker__alpha">
+                                            <div className="ColorPicker__alpha" id={(this.props.id || "") + "-alpha"} >
                                                 <div
-                                                    id={(this.props.id || "") + "-alpha"}
+                                                    id={(this.props.id || "") + "-alpha__thumb"}
                                                     className="ColorPicker__slider-thumb"
                                                     style={{ backgroundImage: `url(${sliderThumb})` }}
                                                     onMouseDown={e => this.handleSliderMouseUpDown(e, true)}
