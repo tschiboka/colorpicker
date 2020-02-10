@@ -14,7 +14,32 @@ export default class ColorPicker extends Component {
             sliderThumbsMinOffset: undefined,
             alphaSliderThumb: document.getElementById((this.props.id || "") + "-alpha__thumb"),
             hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
+            hueCanvasColorSequenceDrawn: false, // the hue thats color will picked need to be drawn when component is visible
         };
+    }
+
+
+
+    drawHueCanvas() {
+        const hueSlider = this.state.hueSlider;
+        const hueRect = hueSlider.getBoundingClientRect();
+        const [width, height] = [hueRect.width, hueRect.height];
+        const hueCanvas = this.state.hueColorPoints;
+        const ctx = hueCanvas.getContext("2d");
+
+        hueCanvas.width = width;
+        hueCanvas.height = height;
+
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        const colorStops = [0, 0.17, 0.33, 0.5, 0.67, 0.83, 1];
+        const colors = ["FF0000", "FFFF00", "00FF00", "00FFFF", "0000FF", "FF00FF", "FF0000"];
+        colorStops.forEach((stop, i) => gradient.addColorStop(stop, `#${colors[i]}`));
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+
+        console.log(hueCanvas.width, hueCanvas.height);
+        this.setState({ ...this.state, hueCanvasColorSequenceDrawn: true });
     }
 
 
@@ -39,7 +64,8 @@ export default class ColorPicker extends Component {
             alphaSliderThumb: document.getElementById((this.props.id || "") + "-alpha__thumb"),
             hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
             sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue__thumb").getBoundingClientRect().left,
-        });
+            hueColorPoints: document.getElementById((this.props.id || "") + "-hue-color-points"),
+        }, () => this.drawHueCanvas());
 
         const sliderType = this.state.hueSliderMouseDown ? "hue" : this.state.alphaSliderMouseDown ? "alpha" : "";
 
@@ -52,6 +78,11 @@ export default class ColorPicker extends Component {
             if (diffX > maxX - 1) diffX = maxX - 1;
 
             target.style.left = diffX + "px";
+            if (sliderType === "hue") {
+                const ctx = this.state.hueColorPoints.getContext("2d");
+                const pixelData = ctx.getImageData(1, 1, 1, 1);
+                console.log(pixelData);
+            }
         }
     }
 
@@ -93,13 +124,14 @@ export default class ColorPicker extends Component {
                             <div className="ColorPicker__hue-slider">
                                 <div className="ColorPicker__slider-bg">
                                     <div className="ColorPicker__hue" id={(this.props.id || "") + "-hue"}>
+                                        <canvas id={(this.props.id || "") + "-hue-color-points"}></canvas>
+
                                         <div
                                             id={(this.props.id || "") + "-hue__thumb"}
                                             className="ColorPicker__slider-thumb"
                                             style={{ backgroundImage: `url(${sliderThumb})` }}
                                             onMouseDown={e => this.handleSliderMouseUpDown(e, true)}
                                             onMouseUp={e => this.handleSliderMouseUpDown(e, false)}>
-                                            <div className="ColorPicker__slider-point" id="hue-slider-point"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +148,6 @@ export default class ColorPicker extends Component {
                                                     style={{ backgroundImage: `url(${sliderThumb})` }}
                                                     onMouseDown={e => this.handleSliderMouseUpDown(e, true)}
                                                     onMouseUp={e => this.handleSliderMouseUpDown(e, false)}>
-                                                    <div className="ColorPicker__slider-point" id="alpha-slider-point"></div>
                                                 </div>
                                             </div>
                                         </div>
