@@ -9,6 +9,11 @@ export default class ColorPicker extends Component {
         super(props);
 
         this.state = {
+            browser: { // gradients won't work without sniffing the browser
+                agent: navigator.userAgent.match(/(Chrome|Firefox|MSIE|Egde|Safari|Opera)/g)[0],
+                prefix: `-${(Array.prototype.slice.call(window.getComputedStyle(document.documentElement, '')).join('').match(/-(moz|webkit|ms)-/))[1]}-`
+            },
+            RGBA: this.props.RGBA || [255, 0, 0, 0], // default
             hueSliderMouseDown: false,
             alphaSliderMouseDown: false,
             sliderThumbsMinOffset: undefined,
@@ -31,14 +36,13 @@ export default class ColorPicker extends Component {
         hueCanvas.height = height;
 
         const gradient = ctx.createLinearGradient(0, 0, width, height);
-        const colorStops = [0, 0.17, 0.33, 0.5, 0.67, 0.83, 1];
-        const colors = ["FF0000", "FFFF00", "00FF00", "00FFFF", "0000FF", "FF00FF", "FF0000"];
+        const colorStops = [0, 0.01, 0.17, 0.33, 0.5, 0.67, 0.83, 0.99, 1];
+        const colors = ["FF0000", "FF0000", "FFFF00", "00FF00", "00FFFF", "0000FF", "FF00FF", "FF0000", "FF0000"]; // widen a bit the red edges, max was rgba(255, 1, 0, 255) 
         colorStops.forEach((stop, i) => gradient.addColorStop(stop, `#${colors[i]}`));
 
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, width, height);
 
-        console.log(hueCanvas.width, hueCanvas.height);
         this.setState({ ...this.state, hueCanvasColorSequenceDrawn: true });
     }
 
@@ -65,7 +69,7 @@ export default class ColorPicker extends Component {
             hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
             sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue__thumb").getBoundingClientRect().left,
             hueColorPoints: document.getElementById((this.props.id || "") + "-hue-color-points"),
-        }, () => this.drawHueCanvas());
+        }, () => { this.drawHueCanvas() });
 
         const sliderType = this.state.hueSliderMouseDown ? "hue" : this.state.alphaSliderMouseDown ? "alpha" : "";
 
@@ -80,10 +84,15 @@ export default class ColorPicker extends Component {
             target.style.left = diffX + "px";
             if (sliderType === "hue") {
                 const ctx = this.state.hueColorPoints.getContext("2d");
-                const pixelData = ctx.getImageData(1, 1, 1, 1);
-                console.log(pixelData);
+                this.setState({ ...this.state, RGBA: [...ctx.getImageData(diffX, 3, 1, 1).data] }, () => this.styleAlphaSliderWithVendorPrefixes());
             }
         }
+    }
+
+
+
+    styleAlphaSliderWithVendorPrefixes() {
+        console.log(this.state.browser);
     }
 
 
@@ -141,7 +150,10 @@ export default class ColorPicker extends Component {
                                 <div className="ColorPicker__alpha-slider">
                                     <div className="ColorPicker__slider-bg">
                                         <div className="ColorPicker__alpha-bg" style={{ backgroundImage: `url(${transparentCheckerdBg})` }}>
-                                            <div className="ColorPicker__alpha" id={(this.props.id || "") + "-alpha"} >
+                                            <div
+                                                className="ColorPicker__alpha"
+                                                id={(this.props.id || "") + "-alpha"}
+                                                style={{ background: `${this.state.browser.prefix}linear-gradient(left, rgba(${this.state.RGBA[0]}, ${this.state.RGBA[1]}, ${this.state.RGBA[2]}), transparent)` }}>
                                                 <div
                                                     id={(this.props.id || "") + "-alpha__thumb"}
                                                     className="ColorPicker__slider-thumb"
