@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import "./ColorPicker.scss";
 import transparentCheckerdBg from "./images/transparent_checkered_bg.png";
+import checkeredRect from "./images/checkered_rect.png";
 import sliderThumb from "./images/hue_slider_thumb.png";
+
+
 
 export default class ColorPicker extends Component {
     constructor(props) {
@@ -14,6 +17,7 @@ export default class ColorPicker extends Component {
                 prefix: `-${(Array.prototype.slice.call(window.getComputedStyle(document.documentElement, '')).join('').match(/-(moz|webkit|ms)-/))[1]}-`
             },
             RGBA: this.props.RGBA || [255, 0, 0, 1], // default
+            originalRGBA: this.props.RGBA || [255, 0, 0, 1],
             hueSliderMouseDown: false,
             alphaSliderMouseDown: false,
             sliderThumbsMinOffset: undefined,
@@ -22,6 +26,9 @@ export default class ColorPicker extends Component {
             hueCanvasColorSequenceDrawn: false, // the hue thats color will picked need to be drawn when component is visible
         };
     }
+
+
+    //componentDidMount() { window.addEventListener("resize", () => { this.drawHueCanvas(); }); }
 
 
 
@@ -36,7 +43,7 @@ export default class ColorPicker extends Component {
         hueCanvas.height = height;
 
         const gradient = ctx.createLinearGradient(0, 0, width, height);
-        const colorStops = [0, 0.01, 0.17, 0.33, 0.5, 0.67, 0.83, 0.99, 1];
+        const colorStops = [0, 0.005, 0.17, 0.33, 0.5, 0.67, 0.83, 0.995, 1];
         const colors = ["FF0000", "FF0000", "FFFF00", "00FF00", "00FFFF", "0000FF", "FF00FF", "FF0000", "FF0000"]; // widen a bit the red edges, max was rgba(255, 1, 0, 255) 
         colorStops.forEach((stop, i) => gradient.addColorStop(stop, `#${colors[i]}`));
 
@@ -84,7 +91,9 @@ export default class ColorPicker extends Component {
             target.style.left = diffX + "px";
             if (sliderType === "hue") {
                 const ctx = this.state.hueColorPoints.getContext("2d");
-                this.setState({ ...this.state, RGBA: [...ctx.getImageData(diffX, 3, 1, 1).data] });
+                const rgba = [...ctx.getImageData(diffX, 3, 1, 1).data];
+                rgba[3] = this.state.RGBA[3];
+                this.setState({ ...this.state, RGBA: rgba });
             }
             else {
                 const alpha = Number((1 - (Math.round((diffX / maxX) * 100) / 100)).toFixed(2));
@@ -111,6 +120,23 @@ export default class ColorPicker extends Component {
                     ref={component => { if (ReactDOM.findDOMNode(component)) ReactDOM.findDOMNode(component).focus() }}
                 >
                     <div className="ColorPicker__header">
+                        <div className="ColorPicker__result-colors">
+                            <div
+                                id={(this.props.id || "") + "-prev-color"}
+                                className="ColorPicker__prev-color"
+                                style={{ backgroundImage: `url(${checkeredRect})` }}
+                            >
+                                <div style={{ backgroundColor: `rgba(${this.state.originalRGBA.join(",")}` }}></div>
+                            </div>
+
+                            <div
+                                id={(this.props.id || "") + "-curr-color"}
+                                className="ColorPicker__curr-color"
+                                style={{ backgroundImage: `url(${checkeredRect})` }}
+                            >
+                                <div style={{ backgroundColor: `rgba(${this.state.RGBA.join(",")}` }}></div>
+                            </div>
+                        </div>
                         <button
                             className="close-btn ColorPicker--button-theme"
                             onClick={() => this.props.close()}
