@@ -105,6 +105,8 @@ export default class ColorPicker extends Component {
 
         const gradGreyScale = ctx.createLinearGradient(0, 0, 0, height);
         gradGreyScale.addColorStop(0, "white");
+        gradGreyScale.addColorStop(0.01, "white"); // easier to pick up clear colors by the edges
+        gradGreyScale.addColorStop(0.99, "black");
         gradGreyScale.addColorStop(1, "black");
         const gradHueOpacity = ctx.createLinearGradient(0, 0, width, 0);
         gradHueOpacity.addColorStop(0, `hsla(${Math.floor(hue)},100%,50%,0)`);
@@ -130,10 +132,11 @@ export default class ColorPicker extends Component {
 
 
 
-    handleColorPickerMouseMove(e) {
-        // when react componentDidMount is called non of these elems are in the DOM 
-        // set state when component is mounted and rendered, first mousemove seems to be a smooth way to prime state without slowing performance 
-        if (!this.state.sliderThumbsMinOffset) this.setState({
+    // when react componentDidMount is called non of the elems are in the DOM
+    // getting elements multiple times in mouse events comes at the expense of performance
+    // set state when component is mounted and rendered, first mousemove seems to be a smooth way to prime state without slowing performance 
+    primeDOMElements() {
+        this.setState({
             ...this.state,
             alphaSlider: document.getElementById((this.props.id || "") + "-alpha"),
             hueSlider: document.getElementById((this.props.id || "") + "-hue"),
@@ -142,6 +145,12 @@ export default class ColorPicker extends Component {
             sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue__thumb").getBoundingClientRect().left,
             hueColorPoints: document.getElementById((this.props.id || "") + "-hue-color-points"),
         }, () => { this.drawHueCanvas(); });
+    }
+
+
+
+    handleColorPickerMouseMove(e) {
+        if (!this.state.sliderThumbsMinOffset) this.primeDOMElements();
 
         const sliderType = this.state.hueSliderMouseDown ? "hue" : this.state.alphaSliderMouseDown ? "alpha" : "";
 
@@ -174,7 +183,16 @@ export default class ColorPicker extends Component {
 
 
 
-    handleColorPaletteOnMouseMove() {
+    handleColorPaletteOnMouseMove(e) {
+        const target = this.state.colorPalette;
+        const rect = target.getBoundingClientRect();
+        const [width, height] = [rect.left, rect.top];
+        const [x, y] = [e.clientX - width, e.clientY - height];
+        const ctx = target.getContext("2d");
+        const rgba = [...ctx.getImageData(x, y, 1, 1).data].map(n => Math.round(n));
+        const [r, g, b, a] = [...rgba];
+
+        this.setState({ ...this.state, RGBA: [r, g, b, this.state.RGBA[3]] });
     }
 
 
@@ -227,7 +245,7 @@ export default class ColorPicker extends Component {
                                     id={(this.props.id || "") + "-color-palette"}
                                     onMouseDown={() => this.setState({ ...this.state, colorPaletteMouseDown: true })}
                                     onMouseLeave={() => this.setState({ ...this.state, colorPaletteMouseDown: false })}
-                                    onMouseMove={() => this.state.colorPaletteMouseDown && this.handleColorPaletteOnMouseMove()}
+                                    onMouseMove={e => this.state.colorPaletteMouseDown && this.handleColorPaletteOnMouseMove(e)}
                                 ></canvas>
                             </div>
 
