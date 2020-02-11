@@ -106,10 +106,13 @@ export default class ColorPicker extends Component {
         const gradGreyScale = ctx.createLinearGradient(0, 0, 0, height);
         gradGreyScale.addColorStop(0, "white");
         gradGreyScale.addColorStop(0.01, "white"); // easier to pick up clear colors by the edges
-        gradGreyScale.addColorStop(0.99, "black");
+        gradGreyScale.addColorStop(0.99, "black"); // see above
         gradGreyScale.addColorStop(1, "black");
+
         const gradHueOpacity = ctx.createLinearGradient(0, 0, width, 0);
         gradHueOpacity.addColorStop(0, `hsla(${Math.floor(hue)},100%,50%,0)`);
+        gradHueOpacity.addColorStop(0.01, `hsla(${Math.floor(hue)},100%,50%,0)`); // see above
+        gradHueOpacity.addColorStop(0.99, `hsla(${Math.floor(hue)},100%,50%,1)`); // see above
         gradHueOpacity.addColorStop(1, `hsla(${Math.floor(hue)},100%,50%,1)`);
 
         ctx.fillStyle = gradGreyScale;
@@ -144,6 +147,7 @@ export default class ColorPicker extends Component {
             hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
             sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue__thumb").getBoundingClientRect().left,
             hueColorPoints: document.getElementById((this.props.id || "") + "-hue-color-points"),
+            paletteCursor: document.getElementById((this.props.id || "") + "-color-palette-cursor"),
         }, () => { this.drawHueCanvas(); });
     }
 
@@ -186,14 +190,27 @@ export default class ColorPicker extends Component {
     handleColorPaletteOnMouseMove(e) {
         const target = this.state.colorPalette;
         const rect = target.getBoundingClientRect();
-        const [width, height] = [rect.left, rect.top];
-        const [x, y] = [e.clientX - width, e.clientY - height];
+        const [maxX, maxY] = [rect.width, rect.height];
+        const [left, top] = [rect.left, rect.top];
+        let [x, y] = [e.clientX - left, e.clientY - top];
+
+        x = x < 1 ? 1 : x > maxX ? maxX : x;
+        y = y < 1 ? 1 : y > maxY ? maxY : y;
+
         const ctx = target.getContext("2d");
         const rgba = [...ctx.getImageData(x, y, 1, 1).data].map(n => Math.round(n));
-        const [r, g, b, a] = [...rgba];
+        const [r, g, b, _] = [...rgba];
 
         this.setState({ ...this.state, RGBA: [r, g, b, this.state.RGBA[3]] });
+
+        const cursor = this.state.paletteCursor;
+        const curRect = cursor.getBoundingClientRect();
+        const [curWidth, curHeight] = [curRect.width, curRect.height];
+
+        cursor.style.left = (x - curWidth / 2) + "px";
+        cursor.style.top = (y - curHeight / 2) + "px";
     }
+
 
 
     render() {
@@ -235,18 +252,24 @@ export default class ColorPicker extends Component {
 
                     <div
                         className="ColorPicker__body"
-                        onMouseMove={e => this.handleColorPickerMouseMove(e)}
+                        onMouseMove={e => { this.handleColorPickerMouseMove(e); this.state.colorPaletteMouseDown && this.handleColorPaletteOnMouseMove(e); }}
                         onMouseUp={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
-                        onMouseLeave={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0 })}
+                        onMouseLeave={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
                     >
                         <div className="ColorPicker__upper-box">
                             <div className="ColorPicker__palette" id={(this.props.id || "") + "-color-palette-box"}>
                                 <canvas
                                     id={(this.props.id || "") + "-color-palette"}
-                                    onMouseDown={() => this.setState({ ...this.state, colorPaletteMouseDown: true })}
-                                    onMouseLeave={() => this.setState({ ...this.state, colorPaletteMouseDown: false })}
-                                    onMouseMove={e => this.state.colorPaletteMouseDown && this.handleColorPaletteOnMouseMove(e)}
+                                    onMouseDown={e => { this.setState({ ...this.state, colorPaletteMouseDown: true }); }}
                                 ></canvas>
+
+                                <div
+                                    id={(this.props.id || "") + "-color-palette-cursor"}
+                                    className="ColorPicker__color-palette-cursor"
+                                    onMouseDown={() => this.setState({ ...this.state, colorPaletteMouseDown: true })}
+                                >
+                                    <div><div></div></div>
+                                </div>
                             </div>
 
                             <div className="ColorPicker__text-inputs"></div>
