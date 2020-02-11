@@ -109,12 +109,18 @@ $border: 1px solid $borderColor;
 
 .ColorPicker__upper-box {
     width: 100%;
-    height: 60%;
+    height: 70%;
     display: flex;
     .ColorPicker__palette {
-        width: 60%;
-        height: 100%;
-        //border: 1px dotted white;
+        margin: 2% 0 2% 5%;
+        width: 55%;
+        height: 92%;
+        border: $border;
+        canvas {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
     }
     .ColorPicker__text-inputs {
         width: 40%;
@@ -125,17 +131,18 @@ $border: 1px solid $borderColor;
 
 .ColorPicker__lower-box {
     width: 100%;
-    height: 40%;
+    height: 30%;
     //border: 1px dotted white;
     > div {
         width: 100%;
-        height: 33.3%;
+        height: 30%;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         //border: 1px dotted white;
     }
+    > div:last-child { height: 40%; }
     .ColorPicker__ok-btn-box {
         button {
             height: 65%;

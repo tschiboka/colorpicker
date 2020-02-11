@@ -20,15 +20,27 @@ export default class ColorPicker extends Component {
             originalRGBA: this.props.RGBA || [255, 0, 0, 1],
             hueSliderMouseDown: false,
             alphaSliderMouseDown: false,
+            colorPaletteMouseDown: false,
             sliderThumbsMinOffset: undefined,
             alphaSliderThumb: document.getElementById((this.props.id || "") + "-alpha__thumb"),
             hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
-            hueCanvasColorSequenceDrawn: false, // the hue thats color will picked need to be drawn when component is visible
+            hueCanvasColorSequenceDrawn: false, // the hue thats color will picked need to be drawn when component is visible (first mouseover event)
+            colorPaletteDrawn: false, // same goes for color palette (as soon as component is visible)
         };
     }
 
 
-    //componentDidMount() { window.addEventListener("resize", () => { this.drawHueCanvas(); }); }
+    componentDidUpdate() {
+        if (!this.state.colorPaletteDrawn && document.getElementById((this.props.id || "") + "-color-palette")) {
+            this.setState({
+                ...this.state,
+                colorPaletteDrawn: true,
+                colorPaletteBox: document.getElementById((this.props.id || "") + "-color-palette-box"),
+                colorPalette: document.getElementById((this.props.id || "") + "-color-palette"),
+            },
+                () => this.drawColorPaletteCanvas());
+        }
+    }
 
 
 
@@ -54,6 +66,59 @@ export default class ColorPicker extends Component {
     }
 
 
+    rgbToHsl(red, green, blue) {
+        const r = red / 255, g = green / 255, b = blue / 255;
+        const min = Math.min(r, g, b), max = Math.max(r, g, b);
+        const lum = (min + max) / 2;
+        let hue, sat, dif;
+
+        if (min === max) {
+            hue = 0;
+            sat = 0;
+        } else {
+            dif = max - min;
+            sat = lum > 0.5 ? dif / (2 - max - min) : dif / (max + min);
+            switch (max) {
+                case r: { hue = (g - b) / dif; break; }
+                case g: { hue = 2 + ((b - r) / dif); break; }
+                case b: { hue = 4 + ((r - g) / dif); break; }
+            }
+            hue *= 60;
+            if (hue < 0) hue += 360;
+        }
+        return [hue, sat, lum]
+    }
+
+
+
+    drawColorPaletteCanvas() {
+        const box = this.state.colorPaletteBox;
+        const rect = box.getBoundingClientRect();
+        const [width, height] = [rect.width, rect.height];
+        const palette = this.state.colorPalette;
+        const ctx = palette.getContext("2d");
+        const [r, g, b, _] = [...this.state.RGBA];
+        const hue = this.rgbToHsl(r, g, b)[0];
+
+        palette.width = width;
+        palette.height = height;
+
+        const gradGreyScale = ctx.createLinearGradient(0, 0, 0, height);
+        gradGreyScale.addColorStop(0, "white");
+        gradGreyScale.addColorStop(1, "black");
+        const gradHueOpacity = ctx.createLinearGradient(0, 0, width, 0);
+        gradHueOpacity.addColorStop(0, `hsla(${Math.floor(hue)},100%,50%,0)`);
+        gradHueOpacity.addColorStop(1, `hsla(${Math.floor(hue)},100%,50%,1)`);
+
+        ctx.fillStyle = gradGreyScale;
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = gradHueOpacity;
+        ctx.globalCompositeOperation = "multiply";
+        ctx.fillRect(0, 0, width, height);
+        ctx.globalCompositeOperation = "source-over";
+    }
+
+
 
     handleSliderMouseUpDown(e, mouseIsDown) {
         const sliderType = e.target.id.replace(/.*-hue__thumb/g, "hue").replace(/.*-alpha__thumb/g, "alpha");
@@ -76,7 +141,7 @@ export default class ColorPicker extends Component {
             hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
             sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue__thumb").getBoundingClientRect().left,
             hueColorPoints: document.getElementById((this.props.id || "") + "-hue-color-points"),
-        }, () => { this.drawHueCanvas() });
+        }, () => { this.drawHueCanvas(); });
 
         const sliderType = this.state.hueSliderMouseDown ? "hue" : this.state.alphaSliderMouseDown ? "alpha" : "";
 
@@ -94,6 +159,8 @@ export default class ColorPicker extends Component {
                 const rgba = [...ctx.getImageData(diffX, 3, 1, 1).data];
                 rgba[3] = this.state.RGBA[3];
                 this.setState({ ...this.state, RGBA: rgba });
+
+                this.drawColorPaletteCanvas();
             }
             else {
                 const alpha = Number((1 - (Math.round((diffX / maxX) * 100) / 100)).toFixed(2));
@@ -105,6 +172,10 @@ export default class ColorPicker extends Component {
         }
     }
 
+
+
+    handleColorPaletteOnMouseMove() {
+    }
 
 
     render() {
@@ -147,11 +218,18 @@ export default class ColorPicker extends Component {
                     <div
                         className="ColorPicker__body"
                         onMouseMove={e => this.handleColorPickerMouseMove(e)}
-                        onMouseUp={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0 })}
+                        onMouseUp={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
                         onMouseLeave={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0 })}
                     >
                         <div className="ColorPicker__upper-box">
-                            <div className="ColorPicker__palette"></div>
+                            <div className="ColorPicker__palette" id={(this.props.id || "") + "-color-palette-box"}>
+                                <canvas
+                                    id={(this.props.id || "") + "-color-palette"}
+                                    onMouseDown={() => this.setState({ ...this.state, colorPaletteMouseDown: true })}
+                                    onMouseLeave={() => this.setState({ ...this.state, colorPaletteMouseDown: false })}
+                                    onMouseMove={() => this.state.colorPaletteMouseDown && this.handleColorPaletteOnMouseMove()}
+                                ></canvas>
+                            </div>
 
                             <div className="ColorPicker__text-inputs"></div>
                         </div>
