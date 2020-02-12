@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import "./ColorPicker.scss";
 import transparentCheckerdBg from "./images/transparent_checkered_bg.png";
 import checkeredRect from "./images/checkered_rect.png";
@@ -171,9 +170,11 @@ export default class ColorPicker extends Component {
                 const ctx = this.state.hueColorPoints.getContext("2d");
                 const rgba = [...ctx.getImageData(diffX, 3, 1, 1).data];
                 rgba[3] = this.state.RGBA[3];
-                this.setState({ ...this.state, RGBA: rgba });
-
-                this.drawColorPaletteCanvas();
+                this.setState({ ...this.state, RGBA: rgba }, () => {
+                    this.drawColorPaletteCanvas()
+                    const [r, g, b] = [...this.getColorUnderPaletteCursor()];
+                    this.setState({ ...this.state, RGBA: [r, g, b, this.state.RGBA[3]] });
+                });
             }
             else {
                 const alpha = Number((1 - (Math.round((diffX / maxX) * 100) / 100)).toFixed(2));
@@ -187,28 +188,43 @@ export default class ColorPicker extends Component {
 
 
 
+    // function can be invoked from mousemove on palette or from hue slider
+    getColorUnderPaletteCursor(x, y, callback) {
+        x = x || window.getComputedStyle(this.state.paletteCursor).left.match(/-?\d*\.?\d*/g)[0];
+        y = y || window.getComputedStyle(this.state.paletteCursor).top.match(/-?\d*\.?\d*/g)[0];
+
+        const ctx = this.state.colorPalette.getContext("2d");
+        const rgb = [...ctx.getImageData(x, y, 1, 1).data].map(n => Math.round(n));
+
+        rgb.pop(); // get rid of alpha
+
+        typeof callback === 'function' && callback(rgb);
+
+        return rgb;
+    }
+
+
+
     handleColorPaletteOnMouseMove(e) {
+        // find out mouse cursor position and add correction 
         const target = this.state.colorPalette;
         const rect = target.getBoundingClientRect();
         const [maxX, maxY] = [rect.width, rect.height];
         const [left, top] = [rect.left, rect.top];
         let [x, y] = [e.clientX - left, e.clientY - top];
-
         x = x < 1 ? 1 : x > maxX ? maxX : x;
         y = y < 1 ? 1 : y > maxY ? maxY : y;
 
-        const ctx = target.getContext("2d");
-        const rgba = [...ctx.getImageData(x, y, 1, 1).data].map(n => Math.round(n));
-        const [r, g, b, _] = [...rgba];
-
-        this.setState({ ...this.state, RGBA: [r, g, b, this.state.RGBA[3]] });
-
+        // set custom cursor position
         const cursor = this.state.paletteCursor;
         const curRect = cursor.getBoundingClientRect();
         const [curWidth, curHeight] = [curRect.width, curRect.height];
-
         cursor.style.left = (x - curWidth / 2) + "px";
         cursor.style.top = (y - curHeight / 2) + "px";
+
+        // set state
+        const [r, g, b] = [...this.getColorUnderPaletteCursor(x, y)];
+        this.setState({ ...this.state, RGBA: [r, g, b, this.state.RGBA[3]] });
     }
 
 
@@ -223,7 +239,7 @@ export default class ColorPicker extends Component {
                     //onBlur={() => this.props.close()}
                     onKeyDown={e => { if (e.keyCode === 27) this.props.close(); }}
                     tabIndex={1}
-                    ref={component => { if (ReactDOM.findDOMNode(component)) ReactDOM.findDOMNode(component).focus() }}
+                //ref={component => { if (ReactDOM.findDOMNode(component)) ReactDOM.findDOMNode(component).focus() }}
                 >
                     <div className="ColorPicker__header">
                         <div className="ColorPicker__result-colors">
@@ -268,11 +284,20 @@ export default class ColorPicker extends Component {
                                     className="ColorPicker__color-palette-cursor"
                                     onMouseDown={() => this.setState({ ...this.state, colorPaletteMouseDown: true })}
                                 >
-                                    <div><div></div></div>
+                                    <div><div></div></div> {/* inner white and black circles */}
                                 </div>
                             </div>
 
-                            <div className="ColorPicker__text-inputs"></div>
+                            <div className="ColorPicker__text-inputs">
+                                <div>R <input type="text" tabIndex={2} onClick={() => console.log("HERE")} placeholder={this.state.RGBA[0]} /></div>
+                                <div>G <input type="text" tabIndex={3} placeholder={12} /></div>
+                                <div>B <input type="text" tabIndex={4} placeholder={222} /></div>
+                                <div>A <input type="text" tabIndex={5} placeholder={2} /></div>
+                                <div>H <input type="text" tabIndex={6} placeholder={3} /></div>
+                                <div>S <input type="text" tabIndex={7} placeholder={2} /></div>
+                                <div>L <input type="text" tabIndex={8} placeholder={11} /></div>
+                                <div># <input type="text" tabIndex={9} placeholder={"ff00ff"} /></div>
+                            </div>
                         </div>
 
                         <div className="ColorPicker__lower-box">
