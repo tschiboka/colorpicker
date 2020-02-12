@@ -245,7 +245,7 @@ export default class ColorPicker extends Component {
                 return alpha >= 0 && alpha <= 1 && digits.every(d => d >= 0 && d <= 255);
             }
         }
-        const isHex = str => /^((#[A-Fa-f0-4]{8})|(#[A-Fa-f0-4]{6})|(#[A-Fa-f0-4]{3}))$/g.test(str);
+        const isHex = str => /^((#[A-Fa-f0-4]{8})|(#[A-Fa-f0-4]{6}))$/g.test(str);
         const isHsl = str => {
             if (!/^hsl\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)$/g.test(str)) return false;
             else {
@@ -267,9 +267,12 @@ export default class ColorPicker extends Component {
                 return h && s && l && a;
             }
         }
-        const getWebColor = str => webColors.find(wc => wc.toLocaleLowerCase() === str.toLocaleLowerCase()) || "";
+        const isWebColor = str => webColors.find(wc => wc.toLocaleLowerCase() === str.toLocaleLowerCase()) || false;
         const webColors = "AliceBlue,AntiqueWhite,Aqua,Aquamarine,Azure,Beige,Bisque,Black,BlanchedAlmond,Blue,BlueViolet,Brown,BurlyWood,CadetBlue,Chartreuse,Chocolate,Coral,CornflowerBlue,Cornsilk,Crimson,Cyan,DarkBlue,DarkCyan,DarkGoldenRod,DarkGray,DarkGrey,DarkGreen,DarkKhaki,DarkMagenta,DarkOliveGreen,DarkOrange,DarkOrchid,DarkRed,DarkSalmon,DarkSeaGreen,DarkSlateBlue,DarkSlateGray,DarkSlateGrey,DarkTurquoise,DarkViolet,DeepPink,DeepSkyBlue,DimGray,DimGrey,DodgerBlue,FireBrick,FloralWhite,ForestGreen,Fuchsia,Gainsboro,GhostWhite,Gold,GoldenRod,Gray,Grey,Green,GreenYellow,HoneyDew,HotPink,IndianRed,Indigo,Ivory,Khaki,Lavender,LavenderBlush,LawnGreen,LemonChiffon,LightBlue,LightCoral,LightCyan,LightGoldenRodYellow,LightGray,LightGrey,LightGreen,LightPink,LightSalmon,LightSeaGreen,LightSkyBlue,LightSlateGray,LightSlateGrey,LightSteelBlue,LightYellow,Lime,LimeGreen,Linen,Magenta,Maroon,MediumAquaMarine,MediumBlue,MediumOrchid,MediumPurple,MediumSeaGreen,MediumSlateBlue,MediumSpringGreen,MediumTurquoise,MediumVioletRed,MidnightBlue,MintCream,MistyRose,Moccasin,NavajoWhite,Navy,OldLace,Olive,OliveDrab,Orange,OrangeRed,Orchid,PaleGoldenRod,PaleGreen,PaleTurquoise,PaleVioletRed,PapayaWhip,PeachPuff,Peru,Pink,Plum,PowderBlue,Purple,RebeccaPurple,Red,RosyBrown,RoyalBlue,SaddleBrown,Salmon,SandyBrown,SeaGreen,SeaShell,Sienna,Silver,SkyBlue,SlateBlue,SlateGray,SlateGrey,Snow,SpringGreen,SteelBlue,Tan,Teal,Thistle,Tomato,Turquoise,Violet,Wheat,White,WhiteSmoke,Yellow,YellowGreen".split(",");
 
+        if (isRgb(colorStr)) {
+
+        }
     }
 
 
@@ -373,6 +376,8 @@ export default class ColorPicker extends Component {
                                 <div>L <input type="text" tabIndex={8} value={11} /></div>
 
                                 <div># <input type="text" tabIndex={9} value={"ff00ff"} /></div>
+
+                                <div>! <input type="text" tabIndex={9} value={"red"} /></div>
                             </div>
                         </div>
 
