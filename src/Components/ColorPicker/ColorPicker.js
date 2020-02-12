@@ -65,30 +65,6 @@ export default class ColorPicker extends Component {
     }
 
 
-    rgbToHsl(red, green, blue) {
-        const r = red / 255, g = green / 255, b = blue / 255;
-        const min = Math.min(r, g, b), max = Math.max(r, g, b);
-        const lum = (min + max) / 2;
-        let hue, sat, dif;
-
-        if (min === max) {
-            hue = 0;
-            sat = 0;
-        } else {
-            dif = max - min;
-            sat = lum > 0.5 ? dif / (2 - max - min) : dif / (max + min);
-            switch (max) {
-                case r: { hue = (g - b) / dif; break; }
-                case g: { hue = 2 + ((b - r) / dif); break; }
-                case b: { hue = 4 + ((r - g) / dif); break; }
-            }
-            hue *= 60;
-            if (hue < 0) hue += 360;
-        }
-        return [hue, sat, lum]
-    }
-
-
 
     drawColorPaletteCanvas() {
         const box = this.state.colorPaletteBox;
@@ -229,6 +205,99 @@ export default class ColorPicker extends Component {
 
 
 
+    handleInputOnchange(e) {
+        console.log(this.getColorObj("liceblue"));
+    }
+
+
+
+    /*
+    ColorPicker component is working with a color obj. 
+    eg: 
+    color = {
+        valid: true
+        rgb:{r:255, g:0, b:0, a:1},
+        hex:"FF0000", --> in case of alpha eg:"FF00001A"
+        hsl:{h:0, s:100, l:50, a:1},
+        colorName: "red" // or "" if non web color
+        code: {
+            rgb: "rgb(255, 0, 0)",
+            rgba: "rgba(255, 0, 0, 1)",
+            hex: "#FF0000",
+            hsl: hsl(0, 100%, 50%),
+            hsla: hsla(0, 100%, 50%, 1),
+            name: "red"
+        } 
+    }
+    */
+
+
+    // input can be any color or color code or text eg: red, #ff0000ff, rgba(255, 0, 0, 0.5)
+    getColorObj(colorStr) {
+        const isRgb = str => /^rgb\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)$/g.test(str)
+            ? str.match(/\d*/g).filter(m => !!m).map(Number).every(d => d >= 0 && d <= 255)
+            : false;
+        const isRgba = str => {
+            if (!/^rgba\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?\d\.?\d*\)$/g.test(str)) return false;
+            else {
+                const digits = str.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
+                const alpha = Number(digits[3]);
+                return alpha >= 0 && alpha <= 1 && digits.every(d => d >= 0 && d <= 255);
+            }
+        }
+        const isHex = str => /^((#[A-Fa-f0-4]{8})|(#[A-Fa-f0-4]{6})|(#[A-Fa-f0-4]{3}))$/g.test(str);
+        const isHsl = str => {
+            if (!/^hsl\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)$/g.test(str)) return false;
+            else {
+                const digits = str.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
+                const h = digits[0] >= 0 && digits[0] <= 360;
+                const s = digits[1] >= 0 && digits[1] <= 100;
+                const l = digits[2] >= 0 && digits[2] <= 100;
+                return h && s && l;
+            }
+        }
+        const isHsla = str => {
+            if (!/^hsl\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?\d\.?\d*\)$/g.test(str)) return false;
+            else {
+                const digits = str.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
+                const h = digits[0] >= 0 && digits[0] <= 360;
+                const s = digits[1] >= 0 && digits[1] <= 100;
+                const l = digits[2] >= 0 && digits[2] <= 100;
+                const a = digits[3] >= 0 && digits[3] <= 1;
+                return h && s && l && a;
+            }
+        }
+        const getWebColor = str => webColors.find(wc => wc.toLocaleLowerCase() === str.toLocaleLowerCase()) || "";
+        const webColors = "AliceBlue,AntiqueWhite,Aqua,Aquamarine,Azure,Beige,Bisque,Black,BlanchedAlmond,Blue,BlueViolet,Brown,BurlyWood,CadetBlue,Chartreuse,Chocolate,Coral,CornflowerBlue,Cornsilk,Crimson,Cyan,DarkBlue,DarkCyan,DarkGoldenRod,DarkGray,DarkGrey,DarkGreen,DarkKhaki,DarkMagenta,DarkOliveGreen,DarkOrange,DarkOrchid,DarkRed,DarkSalmon,DarkSeaGreen,DarkSlateBlue,DarkSlateGray,DarkSlateGrey,DarkTurquoise,DarkViolet,DeepPink,DeepSkyBlue,DimGray,DimGrey,DodgerBlue,FireBrick,FloralWhite,ForestGreen,Fuchsia,Gainsboro,GhostWhite,Gold,GoldenRod,Gray,Grey,Green,GreenYellow,HoneyDew,HotPink,IndianRed,Indigo,Ivory,Khaki,Lavender,LavenderBlush,LawnGreen,LemonChiffon,LightBlue,LightCoral,LightCyan,LightGoldenRodYellow,LightGray,LightGrey,LightGreen,LightPink,LightSalmon,LightSeaGreen,LightSkyBlue,LightSlateGray,LightSlateGrey,LightSteelBlue,LightYellow,Lime,LimeGreen,Linen,Magenta,Maroon,MediumAquaMarine,MediumBlue,MediumOrchid,MediumPurple,MediumSeaGreen,MediumSlateBlue,MediumSpringGreen,MediumTurquoise,MediumVioletRed,MidnightBlue,MintCream,MistyRose,Moccasin,NavajoWhite,Navy,OldLace,Olive,OliveDrab,Orange,OrangeRed,Orchid,PaleGoldenRod,PaleGreen,PaleTurquoise,PaleVioletRed,PapayaWhip,PeachPuff,Peru,Pink,Plum,PowderBlue,Purple,RebeccaPurple,Red,RosyBrown,RoyalBlue,SaddleBrown,Salmon,SandyBrown,SeaGreen,SeaShell,Sienna,Silver,SkyBlue,SlateBlue,SlateGray,SlateGrey,Snow,SpringGreen,SteelBlue,Tan,Teal,Thistle,Tomato,Turquoise,Violet,Wheat,White,WhiteSmoke,Yellow,YellowGreen".split(",");
+
+    }
+
+
+    rgbToHsl(red, green, blue) {
+        const r = red / 255, g = green / 255, b = blue / 255;
+        const min = Math.min(r, g, b), max = Math.max(r, g, b);
+        const lum = (min + max) / 2;
+        let hue, sat, dif;
+
+        if (min === max) {
+            hue = 0;
+            sat = 0;
+        } else {
+            dif = max - min;
+            sat = lum > 0.5 ? dif / (2 - max - min) : dif / (max + min);
+            switch (max) {
+                case r: { hue = (g - b) / dif; break; }
+                case g: { hue = 2 + ((b - r) / dif); break; }
+                case b: { hue = 4 + ((r - g) / dif); break; }
+            }
+            hue *= 60;
+            if (hue < 0) hue += 360;
+        }
+        return [hue, sat, lum]
+    }
+
+
+
     render() {
         return (
             this.props.visible ? (
@@ -289,14 +358,21 @@ export default class ColorPicker extends Component {
                             </div>
 
                             <div className="ColorPicker__text-inputs">
-                                <div>R <input type="text" tabIndex={2} onClick={() => console.log("HERE")} placeholder={this.state.RGBA[0]} /></div>
-                                <div>G <input type="text" tabIndex={3} placeholder={12} /></div>
-                                <div>B <input type="text" tabIndex={4} placeholder={222} /></div>
-                                <div>A <input type="text" tabIndex={5} placeholder={2} /></div>
-                                <div>H <input type="text" tabIndex={6} placeholder={3} /></div>
-                                <div>S <input type="text" tabIndex={7} placeholder={2} /></div>
-                                <div>L <input type="text" tabIndex={8} placeholder={11} /></div>
-                                <div># <input type="text" tabIndex={9} placeholder={"ff00ff"} /></div>
+                                <div>R <input type="text" tabIndex={2} value={this.state.RGBA[0]} onChange={e => this.handleInputOnchange(e)} /></div>
+
+                                <div>G <input type="text" tabIndex={3} value={this.state.RGBA[1]} /></div>
+
+                                <div>B <input type="text" tabIndex={4} value={this.state.RGBA[2]} /></div>
+
+                                <div>A <input type="text" tabIndex={5} value={this.state.RGBA[3]} /></div>
+
+                                <div>H <input type="text" tabIndex={6} value={3} /></div>
+
+                                <div>S <input type="text" tabIndex={7} value={2} /></div>
+
+                                <div>L <input type="text" tabIndex={8} value={11} /></div>
+
+                                <div># <input type="text" tabIndex={9} value={"ff00ff"} /></div>
                             </div>
                         </div>
 
