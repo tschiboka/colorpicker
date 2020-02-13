@@ -72,7 +72,8 @@ export default class ColorPicker extends Component {
         const [width, height] = [rect.width, rect.height];
         const palette = this.state.colorPalette;
         const ctx = palette.getContext("2d");
-        const [r, g, b, _] = [...this.state.RGBA];
+        const [r, g, b] = [...this.state.RGBA];
+
         const hue = this.rgbToHsl(r, g, b)[0];
 
         palette.width = width;
@@ -206,7 +207,7 @@ export default class ColorPicker extends Component {
 
 
     handleInputOnchange(e) {
-        console.log(this.getColorObj("rgb(0, 255, 0)"));
+        console.log(this.getColorObj("hsla(180, 100, 50, 0.3)"));
     }
 
 
@@ -224,7 +225,7 @@ export default class ColorPicker extends Component {
                 return alpha >= 0 && alpha <= 1 && digits.every(d => d >= 0 && d <= 255);
             }
         }
-        const isHex = str => /^((#[A-Fa-f0-4]{8})|(#[A-Fa-f0-4]{6}))$/g.test(str);
+        const isHex = str => /^((#[A-F\d]{8})|(#[A-F\d]{6})|(#[A-F\d]{3}))$/gi.test(str);
         const isHsl = str => {
             if (!/^hsl\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)$/g.test(str)) return false;
             else {
@@ -236,7 +237,7 @@ export default class ColorPicker extends Component {
             }
         }
         const isHsla = str => {
-            if (!/^hsl\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?\d\.?\d*\)$/g.test(str)) return false;
+            if (!/^hsla\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?\d\.?\d*\)$/g.test(str)) return false;
             else {
                 const digits = str.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
                 const h = digits[0] >= 0 && digits[0] <= 360;
@@ -249,44 +250,93 @@ export default class ColorPicker extends Component {
         const isWebSafe = hex => /^((00)|(33)|(66)|(99)|(CC)|(FF)){3}$/gi.test(hex);
 
         let r, g, b, hex, h, s, l, a, name, safe = undefined;
+        const colorType = ["rgb", "rgba", "hex", "hsl", "hsla", "invalid"][[isRgb(colorStr), isRgba(colorStr), isHex(colorStr), isHsl(colorStr), isHsla(colorStr), true].findIndex(e => !!e)];
 
-        let valid = true;
+        switch (colorType) {
+            case "rgb": {
+                const digits = colorStr.match(/\d*/g).filter(m => !!m).map(Number);
+                const hsl = this.rgbToHsl(...digits);
 
-        if (isRgb(colorStr)) {
-            const digits = colorStr.match(/\d*/g).filter(m => !!m).map(Number);
-            const hsl = this.rgbToHsl(...digits);
+                r = digits[0]; g = digits[1]; b = digits[2];
+                hex = this.rgbToHex(...digits);
+                h = hsl[0]; s = hsl[1]; l = hsl[2];
+                break;
+            }
+            case "rgba": {
+                const digits = colorStr.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
+                const hsl = this.rgbToHsl(...digits);
 
-            r = digits[0]; g = digits[1]; b = digits[2];
-            hex = this.rgbToHex(...digits);
-            h = hsl[0]; s = hsl[1]; l = hsl[2];
-            a = 1;
+                r = digits[0]; g = digits[1]; b = digits[2]; a = digits[3];
+                hex = this.rgbToHex(...digits);
+                h = hsl[0]; s = hsl[1]; l = hsl[2];
+                break;
+            }
+            case "hex": {
+                const rgba = this.hexToRgb(colorStr);
+                r = rgba[0]; g = rgba[1]; b = rgba[2]; a = rgba[3];
+                const hsl = this.rgbToHsl(r, g, b);
+                h = hsl[0]; s = hsl[1]; l = hsl[2];
+                hex = this.rgbToHex(r, g, b);
+                break;
+            }
+            case "hsl": {
+                const digits = colorStr.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
+                const rgb = this.hslToRgb(...digits);
+                r = rgb[0]; g = rgb[1]; b = rgb[2];
+                h = digits[0]; s = digits[1]; l = digits[2];
+                hex = this.rgbToHex(r, g, b);
+                break;
+            }
+            case "hsla": {
+                const digits = colorStr.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
+                console.log(digits);
+                const rgb = this.hslToRgb(...digits);
+                r = rgb[0]; g = rgb[1]; b = rgb[2];
+                h = digits[0]; s = digits[1]; l = digits[2]; a = digits[3];
+                hex = this.rgbToHex(r, g, b);
+                break;
+            }
+            default: { console.log("Inccalid color : ", colorStr); }
+        }
+
+        if (colorType !== "invalid") {
             safe = isWebSafe(hex);
-            name = require("./json/colors.json").find(c => hex === c.hex.toLowerCase()).name.toLowerCase();
+            name = (require("./json/colors.json").find(c => hex === c.hex.toLowerCase()) || { name: "" }).name.toLowerCase();
         }
 
         return ({
-            valid: valid,
+            valid: colorType !== "invalid",
             websafe: safe,
             rgb: { r: r, g: g, b: b },
             hex: hex,
             hsl: { h: h, s: s, l: l },
             colorName: name,
-            alpha: a,
+            alpha: a || 1,
             code: {
                 rgb: `rgb(${r}, ${g}, ${b})`,
-                rgba: `rgba(${r}, ${g}, ${b}, ${a})`,
+                rgba: `rgba(${r}, ${g}, ${b}, ${a || 1})`,
                 hex: `#${hex}`,
                 hsl: `hsl(${h}, ${s}%, ${l}%)`,
-                hsla: `hsla(${h}, ${s}%, ${l}%, ${a})`,
+                hsla: `hsla(${h}, ${s}%, ${l}%, ${a || 1})`,
                 name: name
             }
         })
     }
 
 
+    hexToRgb(hex) {
+        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;  // Expand shorthand form "03F" to full form "0033FF"
+        hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+        return hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i)
+            .map(h => parseInt(h, 16))
+            .map((n, i) => i !== 4 ? n : Math.round((n / 255) * 100) / 100) // get % if alpha present
+            .filter(n => !isNaN(n)); // first elem isNan
+    }
+
+
 
     rgbToHex(r, g, b) {
-        const decToHex = (n, hex = n.toString(16)) => hex.length == 1 ? "0" + hex : hex;
+        const decToHex = (n, hex = n.toString(16)) => hex.length === 1 ? "0" + hex : hex;
         return decToHex(r) + decToHex(g) + decToHex(b);
     }
 
@@ -308,11 +358,42 @@ export default class ColorPicker extends Component {
                 case r: { hue = (g - b) / dif; break; }
                 case g: { hue = 2 + ((b - r) / dif); break; }
                 case b: { hue = 4 + ((r - g) / dif); break; }
+                default: { }
             }
             hue *= 60;
             if (hue < 0) hue += 360;
         }
         return [hue, sat * 100, lum * 100];
+    }
+
+
+
+    hslToRgb(h, s, l) {
+        let r, g, b, m, c, x;
+
+        if (!isFinite(h)) h = 0; if (!isFinite(s)) s = 0; if (!isFinite(l)) l = 0;
+
+        h /= 60;
+        if (h < 0) h = 6 - (-h % 6);
+        h %= 6;
+
+        s = Math.max(0, Math.min(1, s / 100));
+        l = Math.max(0, Math.min(1, l / 100));
+
+        c = (1 - Math.abs((2 * l) - 1)) * s;
+        x = c * (1 - Math.abs((h % 2) - 1));
+
+        if (h < 1) { r = c; g = x; b = 0; }
+        else if (h < 2) { r = x; g = c; b = 0; }
+        else if (h < 3) { r = 0; g = c; b = x; }
+        else if (h < 4) { r = 0; g = x; b = c; }
+        else if (h < 5) { r = x; g = 0; b = c; }
+        else { r = c; g = 0; b = x; }
+
+        m = l - c / 2;
+        r = Math.round((r + m) * 255); g = Math.round((g + m) * 255); b = Math.round((b + m) * 255);
+
+        return [r, g, b];
     }
 
 
