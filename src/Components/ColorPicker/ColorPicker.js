@@ -206,30 +206,9 @@ export default class ColorPicker extends Component {
 
 
     handleInputOnchange(e) {
-        console.log(this.getColorObj("liceblue"));
+        console.log(this.getColorObj("rgb(0, 255, 0)"));
     }
 
-
-
-    /*
-    ColorPicker component is working with a color obj. 
-    eg: 
-    color = {
-        valid: true
-        rgb:{r:255, g:0, b:0, a:1},
-        hex:"FF0000", --> in case of alpha eg:"FF00001A"
-        hsl:{h:0, s:100, l:50, a:1},
-        colorName: "red" // or "" if non web color
-        code: {
-            rgb: "rgb(255, 0, 0)",
-            rgba: "rgba(255, 0, 0, 1)",
-            hex: "#FF0000",
-            hsl: hsl(0, 100%, 50%),
-            hsla: hsla(0, 100%, 50%, 1),
-            name: "red"
-        } 
-    }
-    */
 
 
     // input can be any color or color code or text eg: red, #ff0000ff, rgba(255, 0, 0, 0.5)
@@ -267,13 +246,50 @@ export default class ColorPicker extends Component {
                 return h && s && l && a;
             }
         }
-        const isWebColor = str => webColors.find(wc => wc.toLocaleLowerCase() === str.toLocaleLowerCase()) || false;
-        const webColors = "AliceBlue,AntiqueWhite,Aqua,Aquamarine,Azure,Beige,Bisque,Black,BlanchedAlmond,Blue,BlueViolet,Brown,BurlyWood,CadetBlue,Chartreuse,Chocolate,Coral,CornflowerBlue,Cornsilk,Crimson,Cyan,DarkBlue,DarkCyan,DarkGoldenRod,DarkGray,DarkGrey,DarkGreen,DarkKhaki,DarkMagenta,DarkOliveGreen,DarkOrange,DarkOrchid,DarkRed,DarkSalmon,DarkSeaGreen,DarkSlateBlue,DarkSlateGray,DarkSlateGrey,DarkTurquoise,DarkViolet,DeepPink,DeepSkyBlue,DimGray,DimGrey,DodgerBlue,FireBrick,FloralWhite,ForestGreen,Fuchsia,Gainsboro,GhostWhite,Gold,GoldenRod,Gray,Grey,Green,GreenYellow,HoneyDew,HotPink,IndianRed,Indigo,Ivory,Khaki,Lavender,LavenderBlush,LawnGreen,LemonChiffon,LightBlue,LightCoral,LightCyan,LightGoldenRodYellow,LightGray,LightGrey,LightGreen,LightPink,LightSalmon,LightSeaGreen,LightSkyBlue,LightSlateGray,LightSlateGrey,LightSteelBlue,LightYellow,Lime,LimeGreen,Linen,Magenta,Maroon,MediumAquaMarine,MediumBlue,MediumOrchid,MediumPurple,MediumSeaGreen,MediumSlateBlue,MediumSpringGreen,MediumTurquoise,MediumVioletRed,MidnightBlue,MintCream,MistyRose,Moccasin,NavajoWhite,Navy,OldLace,Olive,OliveDrab,Orange,OrangeRed,Orchid,PaleGoldenRod,PaleGreen,PaleTurquoise,PaleVioletRed,PapayaWhip,PeachPuff,Peru,Pink,Plum,PowderBlue,Purple,RebeccaPurple,Red,RosyBrown,RoyalBlue,SaddleBrown,Salmon,SandyBrown,SeaGreen,SeaShell,Sienna,Silver,SkyBlue,SlateBlue,SlateGray,SlateGrey,Snow,SpringGreen,SteelBlue,Tan,Teal,Thistle,Tomato,Turquoise,Violet,Wheat,White,WhiteSmoke,Yellow,YellowGreen".split(",");
+        const isWebSafe = hex => /^((00)|(33)|(66)|(99)|(CC)|(FF)){3}$/gi.test(hex);
+
+        let r, g, b, hex, h, s, l, a, name, safe = undefined;
+
+        let valid = true;
 
         if (isRgb(colorStr)) {
+            const digits = colorStr.match(/\d*/g).filter(m => !!m).map(Number);
+            const hsl = this.rgbToHsl(...digits);
 
+            r = digits[0]; g = digits[1]; b = digits[2];
+            hex = this.rgbToHex(...digits);
+            h = hsl[0]; s = hsl[1]; l = hsl[2];
+            a = 1;
+            safe = isWebSafe(hex);
+            name = require("./json/colors.json").find(c => hex === c.hex.toLowerCase()).name.toLowerCase();
         }
+
+        return ({
+            valid: valid,
+            websafe: safe,
+            rgb: { r: r, g: g, b: b },
+            hex: hex,
+            hsl: { h: h, s: s, l: l },
+            colorName: name,
+            alpha: a,
+            code: {
+                rgb: `rgb(${r}, ${g}, ${b})`,
+                rgba: `rgba(${r}, ${g}, ${b}, ${a})`,
+                hex: `#${hex}`,
+                hsl: `hsl(${h}, ${s}%, ${l}%)`,
+                hsla: `hsla(${h}, ${s}%, ${l}%, ${a})`,
+                name: name
+            }
+        })
     }
+
+
+
+    rgbToHex(r, g, b) {
+        const decToHex = (n, hex = n.toString(16)) => hex.length == 1 ? "0" + hex : hex;
+        return decToHex(r) + decToHex(g) + decToHex(b);
+    }
+
 
 
     rgbToHsl(red, green, blue) {
@@ -296,7 +312,7 @@ export default class ColorPicker extends Component {
             hue *= 60;
             if (hue < 0) hue += 360;
         }
-        return [hue, sat, lum]
+        return [hue, sat * 100, lum * 100];
     }
 
 
