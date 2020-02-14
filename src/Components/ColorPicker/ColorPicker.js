@@ -15,8 +15,8 @@ export default class ColorPicker extends Component {
                 agent: navigator.userAgent.match(/(Chrome|Firefox|MSIE|Egde|Safari|Opera)/g)[0],
                 prefix: `-${(Array.prototype.slice.call(window.getComputedStyle(document.documentElement, '')).join('').match(/-(moz|webkit|ms)-/))[1]}-`
             },
-            RGBA: this.props.RGBA || [255, 0, 0, 1], // default
-            originalRGBA: this.props.RGBA || [255, 0, 0, 1],
+            color: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
+            originalcolor: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
             hueSliderMouseDown: false,
             alphaSliderMouseDown: false,
             colorPaletteMouseDown: false,
@@ -72,9 +72,8 @@ export default class ColorPicker extends Component {
         const [width, height] = [rect.width, rect.height];
         const palette = this.state.colorPalette;
         const ctx = palette.getContext("2d");
-        const [r, g, b] = [...this.state.RGBA];
 
-        const hue = this.rgbToHsl(r, g, b)[0];
+        const hue = this.state.color.hsl.h;
 
         palette.width = width;
         palette.height = height;
@@ -145,20 +144,20 @@ export default class ColorPicker extends Component {
             target.style.left = diffX + "px";
             if (sliderType === "hue") {
                 const ctx = this.state.hueColorPoints.getContext("2d");
-                const rgba = [...ctx.getImageData(diffX, 3, 1, 1).data];
-                rgba[3] = this.state.RGBA[3];
-                this.setState({ ...this.state, RGBA: rgba }, () => {
+                const [r, g, b] = [...ctx.getImageData(diffX, 3, 1, 1).data];
+
+                this.setState({ ...this.state, color: this.getColorObj(`rgb(${r}, ${g}, ${b})`) }, () => {
                     this.drawColorPaletteCanvas()
                     const [r, g, b] = [...this.getColorUnderPaletteCursor()];
-                    this.setState({ ...this.state, RGBA: [r, g, b, this.state.RGBA[3]] });
+                    this.setState({ ...this.state, color: this.getColorObj(`rgb(${r}, ${g}, ${b})`) });
                 });
             }
             else {
                 const alpha = Number((1 - (Math.round((diffX / maxX) * 100) / 100)).toFixed(2));
-                const rgba = [...this.state.RGBA];
+                const colorObj = Object.assign({}, this.state.color);
+                colorObj.alpha = alpha;
 
-                rgba[3] = alpha;
-                this.setState({ ...this.state, RGBA: rgba });
+                this.setState({ ...this.state, color: colorObj });
             }
         }
     }
@@ -201,7 +200,7 @@ export default class ColorPicker extends Component {
 
         // set state
         const [r, g, b] = [...this.getColorUnderPaletteCursor(x, y)];
-        this.setState({ ...this.state, RGBA: [r, g, b, this.state.RGBA[3]] });
+        this.setState({ ...this.state, color: this.getColorObj(`rgb(${r}, ${g}, ${b})`) });
     }
 
 
@@ -289,14 +288,13 @@ export default class ColorPicker extends Component {
             }
             case "hsla": {
                 const digits = colorStr.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
-                console.log(digits);
                 const rgb = this.hslToRgb(...digits);
                 r = rgb[0]; g = rgb[1]; b = rgb[2];
                 h = digits[0]; s = digits[1]; l = digits[2]; a = digits[3];
                 hex = this.rgbToHex(r, g, b);
                 break;
             }
-            default: { console.log("Inccalid color : ", colorStr); }
+            default: { console.log("Invalid color : ", colorStr); }
         }
 
         if (colorType !== "invalid") {
@@ -392,7 +390,6 @@ export default class ColorPicker extends Component {
 
         m = l - c / 2;
         r = Math.round((r + m) * 255); g = Math.round((g + m) * 255); b = Math.round((b + m) * 255);
-
         return [r, g, b];
     }
 
@@ -417,7 +414,7 @@ export default class ColorPicker extends Component {
                                 className="ColorPicker__prev-color"
                                 style={{ backgroundImage: `url(${checkeredRect})` }}
                             >
-                                <div style={{ backgroundColor: `rgba(${this.state.originalRGBA.join(",")}` }}></div>
+                                <div style={{ backgroundColor: this.state.originalcolor.code.rgba }}></div>
                             </div>
 
                             <div
@@ -425,7 +422,7 @@ export default class ColorPicker extends Component {
                                 className="ColorPicker__curr-color"
                                 style={{ backgroundImage: `url(${checkeredRect})` }}
                             >
-                                <div style={{ backgroundColor: `rgba(${this.state.RGBA.join(",")}` }}></div>
+                                <div style={{ backgroundColor: this.state.color.code.rgba }}></div>
                             </div>
                         </div>
                         <button
@@ -458,13 +455,13 @@ export default class ColorPicker extends Component {
                             </div>
 
                             <div className="ColorPicker__text-inputs">
-                                <div>R <input type="text" tabIndex={2} value={this.state.RGBA[0]} onChange={e => this.handleInputOnchange(e)} /></div>
+                                <div>R <input type="text" tabIndex={2} value={this.state.color.rgb[0]} onChange={e => this.handleInputOnchange(e)} /></div>
 
-                                <div>G <input type="text" tabIndex={3} value={this.state.RGBA[1]} /></div>
+                                <div>G <input type="text" tabIndex={3} value={this.state.color.rgb[1]} /></div>
 
-                                <div>B <input type="text" tabIndex={4} value={this.state.RGBA[2]} /></div>
+                                <div>B <input type="text" tabIndex={4} value={this.state.color.rgb[2]} /></div>
 
-                                <div>A <input type="text" tabIndex={5} value={this.state.RGBA[3]} /></div>
+                                <div>A <input type="text" tabIndex={5} value={this.state.color.alpha} /></div>
 
                                 <div>H <input type="text" tabIndex={6} value={3} /></div>
 
@@ -502,7 +499,7 @@ export default class ColorPicker extends Component {
                                             <div
                                                 className="ColorPicker__alpha"
                                                 id={(this.props.id || "") + "-alpha"}
-                                                style={{ background: `${this.state.browser.prefix}linear-gradient(left, rgba(${this.state.RGBA[0]}, ${this.state.RGBA[1]}, ${this.state.RGBA[2]}), transparent)` }}>
+                                                style={{ background: `${this.state.browser.prefix}linear-gradient(left, ${this.state.color.code.rgb}, transparent)` }}>
                                                 <div
                                                     id={(this.props.id || "") + "-alpha__thumb"}
                                                     className="ColorPicker__slider-thumb"
