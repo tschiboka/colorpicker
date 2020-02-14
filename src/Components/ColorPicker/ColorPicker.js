@@ -442,6 +442,7 @@ export default class ColorPicker extends Component {
                                 <canvas
                                     id={(this.props.id || "") + "-color-palette"}
                                     onMouseDown={e => { this.setState({ ...this.state, colorPaletteMouseDown: true }); }}
+                                    onClick={e => this.handleColorPaletteOnMouseMove(e)}
                                 ></canvas>
 
                                 <div
@@ -485,6 +486,7 @@ export default class ColorPicker extends Component {
                                             className="ColorPicker__slider-thumb"
                                             style={{ backgroundImage: `url(${sliderThumb})` }}
                                             onMouseDown={e => this.handleSliderMouseUpDown(e, true)}
+                                            onClick={e => this.handleSliderMouseUpDown(e, true)}
                                             onMouseUp={e => this.handleSliderMouseUpDown(e, false)}>
                                         </div>
                                     </div>
