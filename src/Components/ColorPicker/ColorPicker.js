@@ -483,10 +483,9 @@ export default class ColorPicker extends Component {
 
                                         <div
                                             id={(this.props.id || "") + "-hue__thumb"}
-                                            className="ColorPicker__slider-thumb"
+                                            className={`ColorPicker__slider-thumb ${this.state.hueSliderMouseDown ? "thumb-hover" : ""}`}
                                             style={{ backgroundImage: `url(${sliderThumb})` }}
                                             onMouseDown={e => this.handleSliderMouseUpDown(e, true)}
-                                            onClick={e => this.handleSliderMouseUpDown(e, true)}
                                             onMouseUp={e => this.handleSliderMouseUpDown(e, false)}>
                                         </div>
                                     </div>
@@ -503,7 +502,7 @@ export default class ColorPicker extends Component {
                                                 style={{ background: `${this.state.browser.prefix}linear-gradient(left, ${this.state.color.code.rgb}, transparent)` }}>
                                                 <div
                                                     id={(this.props.id || "") + "-alpha__thumb"}
-                                                    className="ColorPicker__slider-thumb"
+                                                    className={`ColorPicker__slider-thumb ${this.state.alphaSliderMouseDown ? "thumb-hover" : ""}`}
                                                     style={{ backgroundImage: `url(${sliderThumb})` }}
                                                     onMouseDown={e => this.handleSliderMouseUpDown(e, true)}
                                                     onMouseUp={e => this.handleSliderMouseUpDown(e, false)}>

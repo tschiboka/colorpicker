@@ -314,7 +314,7 @@ $border: 1px solid $borderColor;
     transform: translate(-11px, -9.5px);
     -webkit-transform: translate(-11px, -9.5px);
     cursor: pointer;
-    &:hover {
+    &:hover, &.thumb-hover {
         transform: translate(-11px, -9.5px) rotate(180deg);
         -webkit-transform: translate(-11px, -9.5px) rotate(180deg);
     }
