@@ -146,17 +146,15 @@ export default class ColorPicker extends Component {
                 const ctx = this.state.hueColorPoints.getContext("2d");
                 const [r, g, b] = [...ctx.getImageData(diffX, 3, 1, 1).data];
 
-                this.setState({ ...this.state, color: this.getColorObj(`rgb(${r}, ${g}, ${b})`) }, () => {
+                this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${this.state.color.alpha})`) }, () => {
                     this.drawColorPaletteCanvas()
                     const [r, g, b] = [...this.getColorUnderPaletteCursor()];
-                    this.setState({ ...this.state, color: this.getColorObj(`rgb(${r}, ${g}, ${b})`) });
+                    this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${this.state.color.alpha})`) });
                 });
             }
             else {
                 const alpha = Number((1 - (Math.round((diffX / maxX) * 100) / 100)).toFixed(2));
-                const colorObj = Object.assign({}, this.state.color);
-                colorObj.alpha = alpha;
-
+                const colorObj = this.getColorObj(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${alpha})`);
                 this.setState({ ...this.state, color: colorObj });
             }
         }
@@ -166,8 +164,8 @@ export default class ColorPicker extends Component {
 
     // function can be invoked from mousemove on palette or from hue slider
     getColorUnderPaletteCursor(x, y, callback) {
-        x = x || window.getComputedStyle(this.state.paletteCursor).left.match(/-?\d*\.?\d*/g)[0];
-        y = y || window.getComputedStyle(this.state.paletteCursor).top.match(/-?\d*\.?\d*/g)[0];
+        x = x || Number(window.getComputedStyle(this.state.paletteCursor).left.match(/-?\d*\.?\d*/g)[0]) + 11;
+        y = y || Number(window.getComputedStyle(this.state.paletteCursor).top.match(/-?\d*\.?\d*/g)[0]) + 11;
 
         const ctx = this.state.colorPalette.getContext("2d");
         const rgb = [...ctx.getImageData(x, y, 1, 1).data].map(n => Math.round(n));
@@ -200,7 +198,7 @@ export default class ColorPicker extends Component {
 
         // set state
         const [r, g, b] = [...this.getColorUnderPaletteCursor(x, y)];
-        this.setState({ ...this.state, color: this.getColorObj(`rgb(${r}, ${g}, ${b})`) });
+        this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${this.state.color.alpha})`) });
     }
 
 
@@ -298,6 +296,7 @@ export default class ColorPicker extends Component {
         }
 
         if (colorType !== "invalid") {
+            a = (a === undefined) ? 1 : a; // a can be 0 which is falsy
             safe = isWebSafe(hex);
             name = (require("./json/colors.json").find(c => hex === c.hex.toLowerCase()) || { name: "" }).name.toLowerCase();
         }
@@ -309,13 +308,13 @@ export default class ColorPicker extends Component {
             hex: hex,
             hsl: { h: h, s: s, l: l },
             colorName: name,
-            alpha: a || 1,
+            alpha: a,
             code: {
                 rgb: `rgb(${r}, ${g}, ${b})`,
-                rgba: `rgba(${r}, ${g}, ${b}, ${a || 1})`,
+                rgba: `rgba(${r}, ${g}, ${b}, ${a})`,
                 hex: `#${hex}`,
                 hsl: `hsl(${h}, ${s}%, ${l}%)`,
-                hsla: `hsla(${h}, ${s}%, ${l}%, ${a || 1})`,
+                hsla: `hsla(${h}, ${s}%, ${l}%, ${a})`,
                 name: name
             }
         })
@@ -361,7 +360,7 @@ export default class ColorPicker extends Component {
             hue *= 60;
             if (hue < 0) hue += 360;
         }
-        return [hue, sat * 100, lum * 100];
+        return [hue, sat * 100, lum * 100].map(n => Math.round(n));
     }
 
 
@@ -455,23 +454,23 @@ export default class ColorPicker extends Component {
                             </div>
 
                             <div className="ColorPicker__text-inputs">
-                                <div>R <input type="text" tabIndex={2} value={this.state.color.rgb[0]} onChange={e => this.handleInputOnchange(e)} /></div>
+                                <div>R <input type="text" tabIndex={2} value={this.state.color.rgb.r} onChange={e => this.handleInputOnchange(e)} /></div>
 
-                                <div>G <input type="text" tabIndex={3} value={this.state.color.rgb[1]} /></div>
+                                <div>G <input type="text" tabIndex={3} value={this.state.color.rgb.g} /></div>
 
-                                <div>B <input type="text" tabIndex={4} value={this.state.color.rgb[2]} /></div>
+                                <div>B <input type="text" tabIndex={4} value={this.state.color.rgb.b} /></div>
 
                                 <div>A <input type="text" tabIndex={5} value={this.state.color.alpha} /></div>
 
-                                <div>H <input type="text" tabIndex={6} value={3} /></div>
+                                <div>H <input type="text" tabIndex={6} value={this.state.color.hsl.h} /></div>
 
-                                <div>S <input type="text" tabIndex={7} value={2} /></div>
+                                <div>S <input type="text" tabIndex={7} value={this.state.color.hsl.s} /></div>
 
-                                <div>L <input type="text" tabIndex={8} value={11} /></div>
+                                <div>L <input type="text" tabIndex={8} value={this.state.color.hsl.l} /></div>
 
-                                <div># <input type="text" tabIndex={9} value={"ff00ff"} /></div>
+                                <div># <input type="text" tabIndex={9} value={this.state.color.hex} /></div>
 
-                                <div>! <input type="text" tabIndex={9} value={"red"} /></div>
+                                <div>! <input type="text" tabIndex={9} value={this.state.color.colorName} /></div>
                             </div>
                         </div>
 
