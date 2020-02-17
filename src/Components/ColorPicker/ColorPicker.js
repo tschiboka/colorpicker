@@ -43,6 +43,24 @@ export default class ColorPicker extends Component {
 
 
 
+    // when react componentDidMount is called non of the elems are in the DOM
+    // getting elements multiple times in mouse events comes at the expense of performance
+    // set state when component is mounted and rendered, first mousemove seems to be a smooth way to prime state without slowing performance 
+    primeDOMElements() {
+        this.setState({
+            ...this.state,
+            alphaSlider: document.getElementById((this.props.id || "") + "-alpha"),
+            hueSlider: document.getElementById((this.props.id || "") + "-hue"),
+            alphaSliderThumb: document.getElementById((this.props.id || "") + "-alpha__thumb"),
+            hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
+            sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue__thumb").getBoundingClientRect().left,
+            hueColorPoints: document.getElementById((this.props.id || "") + "-hue-color-points"),
+            paletteCursor: document.getElementById((this.props.id || "") + "-color-palette-cursor"),
+        }, () => { this.drawHueCanvas(); });
+    }
+
+
+
     drawHueCanvas() {
         const hueSlider = this.state.hueSlider;
         const hueRect = hueSlider.getBoundingClientRect();
@@ -100,30 +118,26 @@ export default class ColorPicker extends Component {
 
 
 
-    handleSliderMouseUpDown(e, mouseIsDown) {
+    handleSliderThumbMouseUpDown(e, mouseIsDown) {
         const sliderType = e.target.id.replace(/.*-hue__thumb/g, "hue").replace(/.*-alpha__thumb/g, "alpha");
         const touchPoint = e.clientX - document.getElementById(e.target.id).getBoundingClientRect().x;
 
-        if (sliderType === "hue") this.setState({ ...this.state, hueSliderMouseDown: mouseIsDown, sliderTouchPoint: mouseIsDown ? touchPoint : 0 });
-        if (sliderType === "alpha") this.setState({ ...this.state, alphaSliderMouseDown: mouseIsDown, sliderTouchPoint: mouseIsDown ? touchPoint : 0 });
+        if (sliderType === "hue") this.setState({ ...this.state, hueSliderMouseDown: mouseIsDown, sliderTouchPoint: mouseIsDown ? touchPoint : 0, sliderEventFrom: "thumb" });
+        if (sliderType === "alpha") this.setState({ ...this.state, alphaSliderMouseDown: mouseIsDown, sliderTouchPoint: mouseIsDown ? touchPoint : 0, sliderEventFrom: "thumb" });
     }
 
 
 
-    // when react componentDidMount is called non of the elems are in the DOM
-    // getting elements multiple times in mouse events comes at the expense of performance
-    // set state when component is mounted and rendered, first mousemove seems to be a smooth way to prime state without slowing performance 
-    primeDOMElements() {
-        this.setState({
-            ...this.state,
-            alphaSlider: document.getElementById((this.props.id || "") + "-alpha"),
-            hueSlider: document.getElementById((this.props.id || "") + "-hue"),
-            alphaSliderThumb: document.getElementById((this.props.id || "") + "-alpha__thumb"),
-            hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
-            sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue__thumb").getBoundingClientRect().left,
-            hueColorPoints: document.getElementById((this.props.id || "") + "-hue-color-points"),
-            paletteCursor: document.getElementById((this.props.id || "") + "-color-palette-cursor"),
-        }, () => { this.drawHueCanvas(); });
+    handleSliderMouseDown(e) {
+        e.persist(); // because synt. event is reused in async setState, it would be nullified by React, thus e.target is not available in callback
+
+        const sliderType = e.target.id.replace(/.*-hue-color-points/g, "hue").replace(/.*-alpha/g, "alpha");
+        const touchPoint = e.clientX - document.getElementById(e.target.id).getBoundingClientRect().x;
+
+        if (sliderType === "hue") this.setState({ ...this.state, hueSliderMouseDown: true, sliderTouchPoint: touchPoint, sliderEventFrom: "slider" }
+            , () => this.handleColorPickerMouseMove(e));
+        if (sliderType === "alpha") this.setState({ ...this.state, alphaSliderMouseDown: true, sliderTouchPoint: touchPoint, sliderEventFrom: "slider" }
+            , () => this.handleColorPickerMouseMove(e));
     }
 
 
@@ -134,14 +148,20 @@ export default class ColorPicker extends Component {
         const sliderType = this.state.hueSliderMouseDown ? "hue" : this.state.alphaSliderMouseDown ? "alpha" : "";
 
         if (sliderType) {
-            const target = sliderType === "hue" ? this.state.hueSliderThumb : this.state.alphaSliderThumb;
+            // set the new position of slider thumb
             const maxX = this.state.alphaSlider.getBoundingClientRect().width; // hue & alpha has same width
-            let diffX = e.clientX - this.state.sliderThumbsMinOffset - this.state.sliderTouchPoint;
+            const target = sliderType === "hue" ? this.state.hueSliderThumb : this.state.alphaSliderThumb;
+            let diffX = 0;
+
+            if (this.state.sliderEventFrom === "thumb") diffX = e.clientX - this.state.sliderThumbsMinOffset - this.state.sliderTouchPoint;
+            if (this.state.sliderEventFrom === "slider") diffX = e.clientX - this.state.sliderThumbsMinOffset - 11;
 
             if (diffX < 0) diffX = 0;
             if (diffX > maxX - 1) diffX = maxX - 1;
 
             target.style.left = diffX + "px";
+
+            // react on hue or alpha changes
             if (sliderType === "hue") {
                 const ctx = this.state.hueColorPoints.getContext("2d");
                 const [r, g, b] = [...ctx.getImageData(diffX, 3, 1, 1).data];
@@ -478,15 +498,17 @@ export default class ColorPicker extends Component {
                         <div className="ColorPicker__lower-box">
                             <div className="ColorPicker__hue-slider">
                                 <div className="ColorPicker__slider-bg">
-                                    <div className="ColorPicker__hue" id={(this.props.id || "") + "-hue"}>
+                                    <div className="ColorPicker__hue"
+                                        id={(this.props.id || "") + "-hue"}
+                                        onMouseDown={e => this.handleSliderMouseDown(e)}>
                                         <canvas id={(this.props.id || "") + "-hue-color-points"}></canvas>
 
                                         <div
                                             id={(this.props.id || "") + "-hue__thumb"}
                                             className={`ColorPicker__slider-thumb ${this.state.hueSliderMouseDown ? "thumb-hover" : ""}`}
                                             style={{ backgroundImage: `url(${sliderThumb})` }}
-                                            onMouseDown={e => this.handleSliderMouseUpDown(e, true)}
-                                            onMouseUp={e => this.handleSliderMouseUpDown(e, false)}>
+                                            onMouseDown={e => this.handleSliderThumbMouseUpDown(e, true)}
+                                            onMouseUp={e => this.handleSliderThumbMouseUpDown(e, false)}>
                                         </div>
                                     </div>
                                 </div>
@@ -499,13 +521,15 @@ export default class ColorPicker extends Component {
                                             <div
                                                 className="ColorPicker__alpha"
                                                 id={(this.props.id || "") + "-alpha"}
-                                                style={{ background: `${this.state.browser.prefix}linear-gradient(left, ${this.state.color.code.rgb}, transparent)` }}>
+                                                style={{ background: `${this.state.browser.prefix}linear-gradient(left, ${this.state.color.code.rgb}, transparent)` }}
+                                                onMouseDown={e => this.handleSliderMouseDown(e)}>
+
                                                 <div
                                                     id={(this.props.id || "") + "-alpha__thumb"}
                                                     className={`ColorPicker__slider-thumb ${this.state.alphaSliderMouseDown ? "thumb-hover" : ""}`}
                                                     style={{ backgroundImage: `url(${sliderThumb})` }}
-                                                    onMouseDown={e => this.handleSliderMouseUpDown(e, true)}
-                                                    onMouseUp={e => this.handleSliderMouseUpDown(e, false)}>
+                                                    onMouseDown={e => this.handleSliderThumbMouseUpDown(e, true)}
+                                                    onMouseUp={e => this.handleSliderThumbMouseUpDown(e, false)}>
                                                 </div>
                                             </div>
                                         </div>
