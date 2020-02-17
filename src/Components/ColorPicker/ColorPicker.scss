@@ -169,17 +169,33 @@ $border: 1px solid $borderColor;
         flex-direction: column;
         justify-content: space-between;
         align-items: flex-end;
+        cursor: default;
         > div {
             display: flex;
             padding-left: 20%;
             justify-content: space-between;
-            color: #c2c2c2;
+            color: #eee;
             input {
                 background: #1b1b1b;
-                color: #c2c2c2;
+                color: #eee;
                 text-align: center;
                 width: 60%;
                 border: $border;
+            }
+        }
+        > p {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            cursor: default;
+            > span:first-child {
+                padding-left: 18%;
+                width: 20%;
+            }
+            > span:last-child {
+                width: 50%;
+                text-align: center;
+                color: #eee;
             }
         }
     }

@@ -318,7 +318,7 @@ export default class ColorPicker extends Component {
         if (colorType !== "invalid") {
             a = (a === undefined) ? 1 : a; // a can be 0 which is falsy
             safe = isWebSafe(hex);
-            name = (require("./json/colors.json").find(c => hex === c.hex.toLowerCase()) || { name: "" }).name.toLowerCase();
+            name = require("./json/cssColors.json")["#" + hex];
         }
 
         return ({
@@ -327,8 +327,8 @@ export default class ColorPicker extends Component {
             rgb: { r: r, g: g, b: b },
             hex: hex,
             hsl: { h: h, s: s, l: l },
-            colorName: name,
             alpha: a,
+            name: name,
             code: {
                 rgb: `rgb(${r}, ${g}, ${b})`,
                 rgba: `rgba(${r}, ${g}, ${b}, ${a})`,
@@ -475,23 +475,26 @@ export default class ColorPicker extends Component {
                             </div>
 
                             <div className="ColorPicker__text-inputs">
-                                <div>R <input type="text" tabIndex={2} value={this.state.color.rgb.r} onChange={e => this.handleInputOnchange(e)} /></div>
+                                <div title="red">R <input type="text" tabIndex={2} value={this.state.color.rgb.r} onChange={e => this.handleInputOnchange(e)} /></div>
 
-                                <div>G <input type="text" tabIndex={3} value={this.state.color.rgb.g} /></div>
+                                <div title="green">G <input type="text" tabIndex={3} value={this.state.color.rgb.g} /></div>
 
-                                <div>B <input type="text" tabIndex={4} value={this.state.color.rgb.b} /></div>
+                                <div title="blue">B <input type="text" tabIndex={4} value={this.state.color.rgb.b} /></div>
 
-                                <div>A <input type="text" tabIndex={5} value={this.state.color.alpha} /></div>
+                                <div title="transparency">A <input type="text" tabIndex={5} value={this.state.color.alpha} /></div>
 
-                                <div>H <input type="text" tabIndex={6} value={this.state.color.hsl.h} /></div>
+                                <div title="hue">H <input type="text" tabIndex={6} value={this.state.color.hsl.h} /></div>
 
-                                <div>S <input type="text" tabIndex={7} value={this.state.color.hsl.s} /></div>
+                                <div title="saturation">S <input type="text" tabIndex={7} value={this.state.color.hsl.s} /></div>
 
-                                <div>L <input type="text" tabIndex={8} value={this.state.color.hsl.l} /></div>
+                                <div title="lightness">L <input type="text" tabIndex={8} value={this.state.color.hsl.l} /></div>
 
-                                <div># <input type="text" tabIndex={9} value={this.state.color.hex} /></div>
+                                <div title="hexadecimal value"># <input type="text" tabIndex={9} value={this.state.color.hex} /></div>
 
-                                <div>! <input type="text" tabIndex={9} value={this.state.color.colorName} /></div>
+                                <p title={(this.state.color.websafe ? "websafe" : "notweb safe") + " color"}>
+                                    {!this.state.color.websafe ? <span style={{ color: "deeppink" }}>&#9888;</span> : <span style={{ color: "#2eff71" }}>&#9960;</span>}
+                                    <span title="css color string">{this.state.color.name ? this.state.color.name : <span>&nbsp;</span>}</span>
+                                </p>
                             </div>
                         </div>
 
