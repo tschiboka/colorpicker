@@ -20,6 +20,10 @@ $border: 1px solid $borderColor;
     -o-border-radius: 5px;
     box-shadow: 5px 5px 5px #000;
     z-index: 1;
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
     .ColorPicker--button-theme {
         background: -moz-linear-gradient(top, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
         background: -ms-linear-gradient(top, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);

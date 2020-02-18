@@ -223,12 +223,6 @@ export default class ColorPicker extends Component {
 
 
 
-    handleInputOnchange(e) {
-        console.log(this.getColorObj("hsla(180, 100, 50, 0.3)"));
-    }
-
-
-
     // input can be any color or color code or text eg: red, #ff0000ff, rgba(255, 0, 0, 0.5)
     getColorObj(colorStr) {
         const isRgb = str => /^rgb\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)$/g.test(str)
@@ -414,6 +408,78 @@ export default class ColorPicker extends Component {
 
 
 
+    findAndSetColorByInput(type, values) {
+        console.log(type, values);
+        values = values.map(Number);
+        let hue, rgb;
+
+        switch (type) {
+            case "rgb": {
+                hue = this.rgbToHsl(...values)[0];
+                rgb = values;
+                break;
+            }
+            default: { return; }
+        }
+
+        // set hue slider to the corresponding hue
+        const hueSlider = this.state.hueSlider;
+        const width = Math.floor(hueSlider.getBoundingClientRect().width);
+        const hueCanvas = this.state.hueColorPoints;
+        const hueCtx = hueCanvas.getContext("2d");
+        let newSliderX = 0;
+
+        for (let i = 0; i < width; i++) {
+            const [r, g, b] = [...hueCtx.getImageData(i, 3, 1, 1).data];
+            const pixelHue = this.rgbToHsl(r, g, b)[0]
+
+            if (pixelHue >= hue) { newSliderX = i; break; }
+        }
+
+        const sliderThumb = this.state.hueSliderThumb;
+        sliderThumb.style.left = newSliderX + "px";
+
+        const newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
+        this.setState({ ...this.state, color: newColorObj }, () => {
+            this.drawColorPaletteCanvas();
+
+            // find and set appropriate position on palette
+            const palette = this.state.colorPalette;
+            const rect = palette.getBoundingClientRect();
+            const [width, height] = [Math.floor(rect.width), Math.floor(rect.height)];
+            const paletteCtx = palette.getContext("2d");
+            let paletteCursorX, paletteCursorY;
+            const pixels = [...paletteCtx.getImageData(1, 1, width, height).data];
+            console.log(pixels)
+
+            //            for (let w = 0; w <= width; w++) {
+            //                let found = false;
+            //                for (let h = 0; h <= height; h++) {
+            //                    if (r === rgb[0] && g === rgb[1] && b === rgb[2]) {
+            //                        console.log("FOUND", w, h);
+            //                        found = true;
+            //                        paletteCursorX = w;
+            //                        paletteCursorY = h;
+            //                        break;
+            //                    }
+            //                }
+            //                console.log(w);
+            //                if (found) { break; }
+            //            }
+
+            if (paletteCursorX && paletteCursorY) {
+                const cursor = this.state.paletteCursor;
+                console.log(paletteCursorX, paletteCursorY);
+                console.log(cursor);
+            }
+            else {
+                console.log("NOT FOUND");
+            }
+        });
+    }
+
+
+
     render() {
         return (
             this.props.visible ? (
@@ -422,9 +488,9 @@ export default class ColorPicker extends Component {
                     style={{ left: (this.props.X || 0) + "px", top: (this.props.Y || 0) + "px" }}
                     onClick={e => e.stopPropagation()}
                     //onBlur={() => this.props.close()}
+                    //ref={component => { if (ReactDOM.findDOMNode(component)) ReactDOM.findDOMNode(component).focus() }}
                     onKeyDown={e => { if (e.keyCode === 27) this.props.close(); }}
                     tabIndex={1}
-                //ref={component => { if (ReactDOM.findDOMNode(component)) ReactDOM.findDOMNode(component).focus() }}
                 >
                     <div className="ColorPicker__header">
                         <div className="ColorPicker__result-colors">
@@ -475,9 +541,27 @@ export default class ColorPicker extends Component {
                             </div>
 
                             <div className="ColorPicker__text-inputs">
-                                <div title="red">R <input type="text" tabIndex={2} value={this.state.color.rgb.r} onChange={e => this.handleInputOnchange(e)} /></div>
+                                <div title="red">R
+                                    <input
+                                        type="text"
+                                        tabIndex={2}
+                                        value={this.state.input_r !== undefined ? this.state.input_r : this.state.color.rgb.r}
+                                        onFocus={() => this.setState({ ...this.state, input_r: this.state.color.rgb.r })}
+                                        onChange={e => this.setState({ ...this.state, input_r: e.target.value })}
+                                        onBlur={() => { this.findAndSetColorByInput("rgb", [this.state.input_r, this.state.color.rgb.g, this.state.color.rgb.b]) }}
+                                    />
+                                </div>
 
-                                <div title="green">G <input type="text" tabIndex={3} value={this.state.color.rgb.g} /></div>
+                                <div title="green">G
+                                    <input
+                                        type="text"
+                                        tabIndex={3}
+                                        value={this.state.input_g !== undefined ? this.state.input_g : this.state.color.rgb.g}
+                                        onFocus={() => this.setState({ ...this.state, input_g: this.state.color.rgb.g })}
+                                        onChange={e => this.setState({ ...this.state, input_g: e.target.value })}
+                                        onBlur={() => { this.findAndSetColorByInput("rgb", [this.state.color.rgb.r, this.state.input_g, this.state.color.rgb.b]); }}
+                                    />
+                                </div>
 
                                 <div title="blue">B <input type="text" tabIndex={4} value={this.state.color.rgb.b} /></div>
 
@@ -493,7 +577,8 @@ export default class ColorPicker extends Component {
 
                                 <p title={(this.state.color.websafe ? "websafe" : "notweb safe") + " color"}>
                                     {!this.state.color.websafe ? <span style={{ color: "deeppink" }}>&#9888;</span> : <span style={{ color: "#2eff71" }}>&#9960;</span>}
-                                    <span title="css color string">{this.state.color.name ? this.state.color.name : <span>&nbsp;</span>}</span>
+
+                                    <span title="css color string">{this.state.color.name ? this.state.color.name : <span>none</span>}</span>
                                 </p>
                             </div>
                         </div>
