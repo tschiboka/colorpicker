@@ -465,14 +465,36 @@ export default class ColorPicker extends Component {
                 }
             }
 
+            // place cursor
             const x = closest.px % width, y = Math.round(closest.px / width);
             const thumb = this.state.paletteCursor;
             thumb.style.left = x - 11 + "px";
             thumb.style.top = y - 11 + "px";
-            console.log(x, y, closest, thumb);
 
-
+            // reset state inputs
+            this.setState({ ...this.state, input_r: undefined, input_g: undefined, input_b: undefined, input_h: undefined, input_s: undefined, input_l: undefined, input_hex: undefined });
         });
+    }
+
+
+
+    handleColorTextInputOnChange(e, inputName) {
+        let value = Number(e.target.value);
+
+        if (inputName === "r" || inputName === "g" || inputName === "b") {
+            if (isNaN(value) || value < 0 || value > 255) value = 255; // user input error results max value
+            const newState = Object.assign(this.state, {});
+            let [r, g, b] = [this.state.color.rgb.r, this.state.color.rgb.g, this.state.color.rgb.b]
+
+            switch (inputName) {
+                case "r": { newState.input_r = value; r = value; break; }
+                case "g": { newState.input_g = value; g = value; break; }
+                case "b": { newState.input_b = value; b = value; break; }
+                default: { throw Error(`No such input name ${inputName}`) }
+            }
+
+            this.setState(newState, () => { this.findAndSetColorByInput("rgb", [r, g, b]) });
+        }
     }
 
 
@@ -544,8 +566,7 @@ export default class ColorPicker extends Component {
                                         tabIndex={2}
                                         value={this.state.input_r !== undefined ? this.state.input_r : this.state.color.rgb.r}
                                         onFocus={() => this.setState({ ...this.state, input_r: this.state.color.rgb.r })}
-                                        onChange={e => this.setState({ ...this.state, input_r: e.target.value })}
-                                        onBlur={() => { this.findAndSetColorByInput("rgb", [this.state.input_r, this.state.color.rgb.g, this.state.color.rgb.b]) }}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "r")}
                                     />
                                 </div>
 
@@ -555,8 +576,7 @@ export default class ColorPicker extends Component {
                                         tabIndex={3}
                                         value={this.state.input_g !== undefined ? this.state.input_g : this.state.color.rgb.g}
                                         onFocus={() => this.setState({ ...this.state, input_g: this.state.color.rgb.g })}
-                                        onChange={e => this.setState({ ...this.state, input_g: e.target.value })}
-                                        onBlur={() => { this.findAndSetColorByInput("rgb", [this.state.color.rgb.r, this.state.input_g, this.state.color.rgb.b]); }}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "g")}
                                     />
                                 </div>
 
@@ -566,8 +586,7 @@ export default class ColorPicker extends Component {
                                         tabIndex={4}
                                         value={this.state.input_b !== undefined ? this.state.input_b : this.state.color.rgb.b}
                                         onFocus={() => this.setState({ ...this.state, input_b: this.state.color.rgb.b })}
-                                        onChange={e => this.setState({ ...this.state, input_b: e.target.value })}
-                                        onBlur={() => { this.findAndSetColorByInput("rgb", [this.state.color.rgb.r, this.state.color.rgb.g, this.state.input_b]); }}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "b")}
                                     />
                                 </div>
 
