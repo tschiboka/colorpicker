@@ -409,40 +409,7 @@ export default class ColorPicker extends Component {
 
 
     findAndSetColorByInput(type, values) {
-        console.log(type, values);
-        values = values.map(Number);
-        let hue, rgb;
-
-        switch (type) {
-            case "rgb": {
-                hue = this.rgbToHsl(...values)[0];
-                rgb = values;
-                break;
-            }
-            default: { return; }
-        }
-
-        // set hue slider to the corresponding hue
-        const hueSlider = this.state.hueSlider;
-        const width = Math.floor(hueSlider.getBoundingClientRect().width);
-        const hueCanvas = this.state.hueColorPoints;
-        const hueCtx = hueCanvas.getContext("2d");
-        let newSliderX = 0;
-
-        for (let i = 0; i < width; i++) {
-            const [r, g, b] = [...hueCtx.getImageData(i, 3, 1, 1).data];
-            const pixelHue = this.rgbToHsl(r, g, b)[0]
-
-            if (pixelHue >= hue) { newSliderX = i; break; }
-        }
-
-        const sliderThumb = this.state.hueSliderThumb;
-        sliderThumb.style.left = newSliderX + "px";
-
-        const newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
-        this.setState({ ...this.state, color: newColorObj }, () => {
-            this.drawColorPaletteCanvas();
-
+        const updatePaletteCursorPosition = () => {
             // find and set appropriate position on palette
             const palette = this.state.colorPalette;
             const rect = palette.getBoundingClientRect();
@@ -459,7 +426,7 @@ export default class ColorPicker extends Component {
                     px++;
                     const dif = (n1, n2) => Math.abs(n1 - n2);
                     const totDiff = dif(red, pixelRgb[0]) + dif(green, pixelRgb[1], dif(blue, pixelRgb[2]));
-                    if (totDiff === 0) { closest = { diff: totDiff, px: px }; console.log("BREAK"); break; }
+                    if (totDiff === 0) { closest = { diff: totDiff, px: px }; break; }
                     if (totDiff < closest.diff) closest = { diff: totDiff, px: px };
                     pixelRgb = [];
                 }
@@ -470,9 +437,61 @@ export default class ColorPicker extends Component {
             const thumb = this.state.paletteCursor;
             thumb.style.left = x - 11 + "px";
             thumb.style.top = y - 11 + "px";
+        }
 
-            // reset state inputs
-            this.setState({ ...this.state, input_r: undefined, input_g: undefined, input_b: undefined, input_h: undefined, input_s: undefined, input_l: undefined, input_hex: undefined });
+        const resetTextInputs = () => { this.setState({ ...this.state, input_r: undefined, input_g: undefined, input_b: undefined, input_h: undefined, input_s: undefined, input_l: undefined, input_hex: undefined }); }
+
+        const adjustHueSlider = () => {
+            // set hue slider to the corresponding hue
+            const hueSlider = this.state.hueSlider;
+            const width = Math.floor(hueSlider.getBoundingClientRect().width);
+            const hueCanvas = this.state.hueColorPoints;
+            const hueCtx = hueCanvas.getContext("2d");
+            let newSliderX = 0;
+
+            for (let i = 0; i < width; i++) {
+                const [r, g, b] = [...hueCtx.getImageData(i, 3, 1, 1).data];
+                const pixelHue = this.rgbToHsl(r, g, b)[0]
+
+                if (pixelHue >= hue) { newSliderX = i; break; }
+            }
+
+            const sliderThumb = this.state.hueSliderThumb;
+            sliderThumb.style.left = newSliderX + "px";
+        }
+
+        values = values.map(Number);
+        let hue, rgb, newColorObj;
+
+        switch (type) {
+            case "h": {
+                hue = values[0];
+                rgb = this.hslToRgb(...values);
+                newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
+                adjustHueSlider();
+                break;
+            }
+            case "rgb": {
+                hue = this.rgbToHsl(...values)[0];
+                rgb = values;
+                newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
+                adjustHueSlider();
+                break;
+            }
+            case "sl": {
+                hue = values[0];
+                rgb = this.hslToRgb(...values);
+                newColorObj = this.getColorObj("hsl(" + values.join(",") + ")");
+                break;
+            }
+            default: { return; }
+        }
+
+
+        this.setState({ ...this.state, color: newColorObj }, () => {
+            this.drawColorPaletteCanvas();
+            updatePaletteCursorPosition();
+            resetTextInputs();
         });
     }
 
@@ -484,16 +503,37 @@ export default class ColorPicker extends Component {
         if (inputName === "r" || inputName === "g" || inputName === "b") {
             if (isNaN(value) || value < 0 || value > 255) value = 255; // user input error results max value
             const newState = Object.assign(this.state, {});
-            let [r, g, b] = [this.state.color.rgb.r, this.state.color.rgb.g, this.state.color.rgb.b]
+            let [r, g, b] = [this.state.color.rgb.r, this.state.color.rgb.g, this.state.color.rgb.b];
 
             switch (inputName) {
                 case "r": { newState.input_r = value; r = value; break; }
                 case "g": { newState.input_g = value; g = value; break; }
                 case "b": { newState.input_b = value; b = value; break; }
-                default: { throw Error(`No such input name ${inputName}`) }
+                default: { }
             }
 
-            this.setState(newState, () => { this.findAndSetColorByInput("rgb", [r, g, b]) });
+            this.setState(newState, () => { this.findAndSetColorByInput("rgb", [r, g, b]); });
+        }
+
+        if (inputName === "h") {
+            if (isNaN(value) || value < 0 || value > 359) value = 0; // 360deg = 0deg
+
+            this.setState({ ...this.state, input_h: value },
+                () => { this.findAndSetColorByInput("h", [value, this.state.color.hsl.s, this.state.color.hsl.l]); });
+        }
+
+        if (inputName === "s" || inputName === "l") {
+            if (isNaN(value) || value < 0 || value > 100) value = 100;
+            const newState = Object.assign(this.state, {});
+            let [h, s, l] = [this.state.color.hsl.h, this.state.color.hsl.s, this.state.color.hsl.l];
+
+            switch (inputName) {
+                case "s": { newState.input_s = value; s = value; break; }
+                case "l": { newState.input_l = value; l = value; break; }
+                default: { }
+            }
+
+            this.setState(newState, () => { this.findAndSetColorByInput("sl", [h, s, l], true); });
         }
     }
 
@@ -590,13 +630,42 @@ export default class ColorPicker extends Component {
                                     />
                                 </div>
 
-                                <div title="transparency">A <input type="text" tabIndex={5} value={this.state.color.alpha} /></div>
+                                <div title="transparency">A
+                                    <input
+                                        type="text"
+                                        tabIndex={5}
+                                        value={this.state.color.alpha}
+                                    />
+                                </div>
 
-                                <div title="hue">H <input type="text" tabIndex={6} value={this.state.color.hsl.h} /></div>
+                                <div title="hue">H
+                                    <input
+                                        type="text"
+                                        tabIndex={6}
+                                        value={this.state.input_h !== undefined ? this.state.input_h : this.state.color.hsl.h}
+                                        onFocus={() => this.setState({ ...this.state, input_h: this.state.color.hsl.h })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "h")}
+                                    />
+                                </div>
 
-                                <div title="saturation">S <input type="text" tabIndex={7} value={this.state.color.hsl.s} /></div>
+                                <div title="saturation">S
+                                    <input
+                                        type="text"
+                                        tabIndex={7}
+                                        value={this.state.input_s !== undefined ? this.state.input_s : this.state.color.hsl.s}
+                                        onFocus={() => this.setState({ ...this.state, input_s: this.state.color.hsl.s })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "s")}
+                                    />
+                                </div>
 
-                                <div title="lightness">L <input type="text" tabIndex={8} value={this.state.color.hsl.l} /></div>
+                                <div title="lightness">L
+                                    <input
+                                        type="text"
+                                        tabIndex={8}
+                                        value={this.state.input_l !== undefined ? this.state.input_l : this.state.color.hsl.l}
+                                        onFocus={() => this.setState({ ...this.state, input_l: this.state.color.hsl.l })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "l")}
+                                    /></div>
 
                                 <div title="hexadecimal value"># <input type="text" tabIndex={9} value={this.state.color.hex} /></div>
 
