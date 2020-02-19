@@ -448,33 +448,30 @@ export default class ColorPicker extends Component {
             const rect = palette.getBoundingClientRect();
             const [width, height] = [Math.floor(rect.width), Math.floor(rect.height)];
             const paletteCtx = palette.getContext("2d");
-            let paletteCursorX, paletteCursorY;
-            const pixels = [...paletteCtx.getImageData(1, 1, width, height).data];
-            console.log(pixels)
+            const imgData = paletteCtx.getImageData(1, 1, width, height).data;
+            let pixelRgb = [], px = 0, closest = { diff: 766, px: -1 };
+            const [red, green, blue] = [this.state.color.rgb.r, this.state.color.rgb.g, this.state.color.rgb.b];
 
-            //            for (let w = 0; w <= width; w++) {
-            //                let found = false;
-            //                for (let h = 0; h <= height; h++) {
-            //                    if (r === rgb[0] && g === rgb[1] && b === rgb[2]) {
-            //                        console.log("FOUND", w, h);
-            //                        found = true;
-            //                        paletteCursorX = w;
-            //                        paletteCursorY = h;
-            //                        break;
-            //                    }
-            //                }
-            //                console.log(w);
-            //                if (found) { break; }
-            //            }
+            // find the pixel with the smallest color difference
+            for (let i = 0; i <= imgData.length; i++) {
+                if (i % 4 !== 3) pixelRgb.push(imgData[i]);
+                else {
+                    px++;
+                    const dif = (n1, n2) => Math.abs(n1 - n2);
+                    const totDiff = dif(red, pixelRgb[0]) + dif(green, pixelRgb[1], dif(blue, pixelRgb[2]));
+                    if (totDiff === 0) { closest = { diff: totDiff, px: px }; console.log("BREAK"); break; }
+                    if (totDiff < closest.diff) closest = { diff: totDiff, px: px };
+                    pixelRgb = [];
+                }
+            }
 
-            if (paletteCursorX && paletteCursorY) {
-                const cursor = this.state.paletteCursor;
-                console.log(paletteCursorX, paletteCursorY);
-                console.log(cursor);
-            }
-            else {
-                console.log("NOT FOUND");
-            }
+            const x = closest.px % width, y = Math.round(closest.px / width);
+            const thumb = this.state.paletteCursor;
+            thumb.style.left = x - 11 + "px";
+            thumb.style.top = y - 11 + "px";
+            console.log(x, y, closest, thumb);
+
+
         });
     }
 
@@ -563,7 +560,16 @@ export default class ColorPicker extends Component {
                                     />
                                 </div>
 
-                                <div title="blue">B <input type="text" tabIndex={4} value={this.state.color.rgb.b} /></div>
+                                <div title="blue">B
+                                    <input
+                                        type="text"
+                                        tabIndex={4}
+                                        value={this.state.input_b !== undefined ? this.state.input_b : this.state.color.rgb.b}
+                                        onFocus={() => this.setState({ ...this.state, input_b: this.state.color.rgb.b })}
+                                        onChange={e => this.setState({ ...this.state, input_b: e.target.value })}
+                                        onBlur={() => { this.findAndSetColorByInput("rgb", [this.state.color.rgb.r, this.state.color.rgb.g, this.state.input_b]); }}
+                                    />
+                                </div>
 
                                 <div title="transparency">A <input type="text" tabIndex={5} value={this.state.color.alpha} /></div>
 
