@@ -43,7 +43,7 @@ export default class ColorPicker extends Component {
 
 
 
-    // when react componentDidMount is called non of the elems are in the DOM
+    // when react componentDidMount is called none of the elems are in the DOM
     // getting elements multiple times in mouse events comes at the expense of performance
     // set state when component is mounted and rendered, first mousemove seems to be a smooth way to prime state without slowing performance 
     primeDOMElements() {
@@ -83,7 +83,10 @@ export default class ColorPicker extends Component {
     }
 
 
-
+    /* Function draws a canvas rectangle which will be the colorpicker palette.
+     * First gradient is vertical grayscale from white top to black bottom.
+     * The second is a horizontal gradient from left transparent to right current hue. 
+     * The current hue is taken from the states color object. */
     drawColorPaletteCanvas() {
         const box = this.state.colorPaletteBox;
         const rect = box.getBoundingClientRect();
@@ -118,9 +121,10 @@ export default class ColorPicker extends Component {
 
 
 
+    // Hue and alpha sliders behave the same way on mouse up/down, therefore they share a common handle function.
     handleSliderThumbMouseUpDown(e, mouseIsDown) {
         const sliderType = e.target.id.replace(/.*-hue__thumb/g, "hue").replace(/.*-alpha__thumb/g, "alpha");
-        const touchPoint = e.clientX - document.getElementById(e.target.id).getBoundingClientRect().x;
+        const touchPoint = e.clientX - document.getElementById(e.target.id).getBoundingClientRect().x; // where the mouse lands on the thumb
 
         if (sliderType === "hue") this.setState({ ...this.state, hueSliderMouseDown: mouseIsDown, sliderTouchPoint: mouseIsDown ? touchPoint : 0, sliderEventFrom: "thumb" });
         if (sliderType === "alpha") this.setState({ ...this.state, alphaSliderMouseDown: mouseIsDown, sliderTouchPoint: mouseIsDown ? touchPoint : 0, sliderEventFrom: "thumb" });
@@ -128,6 +132,8 @@ export default class ColorPicker extends Component {
 
 
 
+    /* Sliders can be set by clicking on them, it is not neccesary to use the thumbs.
+     * Only mousedown event is written, the mouseup is coming from the body of the colorpicker */
     handleSliderMouseDown(e) {
         e.persist(); // because synt. event is reused in async setState, it would be nullified by React, thus e.target is not available in callback
 
@@ -142,8 +148,10 @@ export default class ColorPicker extends Component {
 
 
 
+    /* The mousemove event is coming from the color pickers body in order to make sliding smoother.
+     * Mouse down must be on sliders thumb or the slider itself, mouse move has to be in the range of the colorpicker. */
     handleColorPickerMouseMove(e) {
-        if (!this.state.sliderThumbsMinOffset) this.primeDOMElements();
+        if (!this.state.sliderThumbsMinOffset) this.primeDOMElements(); // the first mousemove sets all neccessary div in comp state
 
         const sliderType = this.state.hueSliderMouseDown ? "hue" : this.state.alphaSliderMouseDown ? "alpha" : "";
 
@@ -182,7 +190,7 @@ export default class ColorPicker extends Component {
 
 
 
-    // function can be invoked from mousemove on palette or from hue slider
+    // Function can be invoked from mousemove on palette or from the hue slider.
     getColorUnderPaletteCursor(x, y, callback) {
         x = x || Number(window.getComputedStyle(this.state.paletteCursor).left.match(/-?\d*\.?\d*/g)[0]) + 11;
         y = y || Number(window.getComputedStyle(this.state.paletteCursor).top.match(/-?\d*\.?\d*/g)[0]) + 11;
@@ -200,7 +208,7 @@ export default class ColorPicker extends Component {
 
 
     handleColorPaletteOnMouseMove(e) {
-        // find out mouse cursor position and add correction 
+        // find out mouse cursor position
         const target = this.state.colorPalette;
         const rect = target.getBoundingClientRect();
         const [maxX, maxY] = [rect.width, rect.height];
@@ -216,15 +224,18 @@ export default class ColorPicker extends Component {
         cursor.style.left = (x - curWidth / 2) + "px";
         cursor.style.top = (y - curHeight / 2) + "px";
 
-        // set state
+        // set the state with a new color
         const [r, g, b] = [...this.getColorUnderPaletteCursor(x, y)];
         this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${this.state.color.alpha})`) });
     }
 
 
 
-    // input can be any color or color code or text eg: red, #ff0000ff, rgba(255, 0, 0, 0.5)
+    /* Function input can be any color or color code or text eg: red, #ff0000ff, rgba(255, 0, 0, 0.5).
+     * The return will be a color object with all the possible variations of the given color. 
+     * Additional informations are available eg valid, websafe, and code obj. (see below) */
     getColorObj(colorStr) {
+        // color type functions return a flag in case of a matching color string
         const isRgb = str => /^rgb\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)$/g.test(str)
             ? str.match(/\d*/g).filter(m => !!m).map(Number).every(d => d >= 0 && d <= 255)
             : false;
@@ -260,9 +271,11 @@ export default class ColorPicker extends Component {
         }
         const isWebSafe = hex => /^((00)|(33)|(66)|(99)|(CC)|(FF)){3}$/gi.test(hex);
 
+        // get color type
         let r, g, b, hex, h, s, l, a, name, safe = undefined;
         const colorType = ["rgb", "rgba", "hex", "hsl", "hsla", "invalid"][[isRgb(colorStr), isRgba(colorStr), isHex(colorStr), isHsl(colorStr), isHsla(colorStr), true].findIndex(e => !!e)];
 
+        // get color values (r, g, b, h, s, l, hex) for all the possible input variations
         switch (colorType) {
             case "rgb": {
                 const digits = colorStr.match(/\d*/g).filter(m => !!m).map(Number);
@@ -309,6 +322,7 @@ export default class ColorPicker extends Component {
             default: { console.log("Invalid color : ", colorStr); }
         }
 
+        // get alpha, websafe, color name info for all valid inputs
         if (colorType !== "invalid") {
             a = (a === undefined) ? 1 : a; // a can be 0 which is falsy
             safe = isWebSafe(hex);
@@ -316,25 +330,27 @@ export default class ColorPicker extends Component {
         }
 
         return ({
-            valid: colorType !== "invalid",
-            websafe: safe,
-            rgb: { r: r, g: g, b: b },
-            hex: hex,
-            hsl: { h: h, s: s, l: l },
-            alpha: a,
-            name: name,
-            code: {
-                rgb: `rgb(${r}, ${g}, ${b})`,
-                rgba: `rgba(${r}, ${g}, ${b}, ${a})`,
-                hex: `#${hex}`,
-                hsl: `hsl(${h}, ${s}%, ${l}%)`,
-                hsla: `hsla(${h}, ${s}%, ${l}%, ${a})`,
-                name: name
-            }
-        })
+            valid: colorType !== "invalid",             // if color is invalid the rest of obj props are undefined
+            websafe: safe,                              // flag if color is a web safe 
+            rgb: { r: r, g: g, b: b },                  // object format for rgb
+            hex: hex,                                   // hex values, no hashtag!
+            hsl: { h: h, s: s, l: l },                  // hsl obj values
+            alpha: Math.round(a * 100),                 // transparency is given as percentage eg 57 rather than a float .57 (for easier text input manipulation)
+            name: name,                                 // the css name of the color or undefined
+            code: colorType !== "invalid" ? {           // code object has all the code formats of the color
+                rgb: `rgb(${r}, ${g}, ${b})`,           // rgb(r, g, b)
+                rgba: `rgba(${r}, ${g}, ${b}, ${a})`,   // rgba(r, g, b, a) a 0 - 1
+                hex: `#${hex}`,                         // # + 6 digit format
+                hsl: `hsl(${h}, ${s}%, ${l}%)`,         // hsl(0 - 360, 0 - 100%, 0 - 100%)
+                hsla: `hsla(${h}, ${s}%, ${l}%, ${a})`, // hsla(h, s, l, a) a 0 - 1
+                name: name                              // the css name of the color or undefined
+            } : undefined                               // invalid color results code: undefined
+        });
     }
 
 
+
+    // Series of color format functions
     hexToRgb(hex) {
         const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;  // Expand shorthand form "03F" to full form "0033FF"
         hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
@@ -499,18 +515,17 @@ export default class ColorPicker extends Component {
     setAlphaSliderTo(percentage) {
         const thumb = this.state.alphaSliderThumb;
         const width = this.state.alphaSlider.getBoundingClientRect().width;
-        const left = width - Math.floor(percentage * width);
+        const left = width - Math.floor((percentage / 100) * width);
 
         thumb.style.left = left + "px";
-        const color = Object.assign(this.state.color);
-        color.alpha = percentage;
+        const color = this.getColorObj(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${percentage / 100})`);
         this.setState({ ...this.state, color: color, input_a: undefined });
     }
 
 
 
     handleColorTextInputOnChange(e, inputName) {
-        let value = inputName === "a" ? e.target.value : Number(e.target.value);
+        let value = inputName === "hex" ? e.target.value : Number(e.target.value);
 
         if (inputName === "r" || inputName === "g" || inputName === "b") {
             if (isNaN(value) || value < 0 || value > 255) value = 255; // user input error results max value
@@ -528,8 +543,7 @@ export default class ColorPicker extends Component {
         }
 
         if (inputName === "a") {
-            if (value.length > 4) value = ("" + value).substr(0, 4);
-            if (isNaN(value) || value < 0 || value > 1) value = 1;
+            if (isNaN(value) || value < 0 || value > 100) value = 100;
 
             this.setState({ ...this.state, input_a: value }, () => this.setAlphaSliderTo(this.state.input_a));
         }
@@ -553,6 +567,11 @@ export default class ColorPicker extends Component {
             }
 
             this.setState(newState, () => { this.findAndSetColorByInput("sl", [h, s, l], true); });
+        }
+
+        if (inputName === "hex") {
+            console.log(value);
+            if (/[a-f0-9]{0,6}/gi.test(value)) console.log(true);
         }
     }
 
@@ -689,7 +708,15 @@ export default class ColorPicker extends Component {
                                         onChange={e => this.handleColorTextInputOnChange(e, "l")}
                                     /></div>
 
-                                <div title="hexadecimal value"># <input type="text" tabIndex={9} value={this.state.color.hex} /></div>
+                                <div title="hexadecimal value">#
+                                    <input
+                                        type="text"
+                                        tabIndex={9}
+                                        value={this.state.input_hex !== undefined ? this.state.input_hex : this.state.color.hex}
+                                        onFocus={() => this.setState({ ...this.state, input_hex: this.state.color.hex })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "hex")}
+                                    />
+                                </div>
 
                                 <p title={(this.state.color.websafe ? "websafe" : "notweb safe") + " color"}>
                                     {!this.state.color.websafe ? <span style={{ color: "deeppink" }}>&#9888;</span> : <span style={{ color: "#2eff71" }}>&#9960;</span>}
