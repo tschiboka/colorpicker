@@ -174,15 +174,15 @@ export default class ColorPicker extends Component {
                 const ctx = this.state.hueColorPoints.getContext("2d");
                 const [r, g, b] = [...ctx.getImageData(diffX, 3, 1, 1).data];
 
-                this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${this.state.color.alpha})`) }, () => {
+                this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${(this.state.color.alpha / 100).toFixed(2)})`) }, () => {
                     this.drawColorPaletteCanvas()
                     const [r, g, b] = [...this.getColorUnderPaletteCursor()];
-                    this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${this.state.color.alpha})`) });
+                    this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${(this.state.color.alpha / 100).toFixed(2)})`) });
                 });
             }
             else {
-                const alpha = Number((1 - (Math.round((diffX / maxX) * 100) / 100)).toFixed(2));
-                const colorObj = this.getColorObj(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${alpha})`);
+                const alpha = 100 - Math.round((diffX / maxX) * 100);
+                const colorObj = this.getColorObj(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${(alpha / 100).toFixed(2)})`);
                 this.setState({ ...this.state, color: colorObj });
             }
         }
@@ -226,7 +226,7 @@ export default class ColorPicker extends Component {
 
         // set the state with a new color
         const [r, g, b] = [...this.getColorUnderPaletteCursor(x, y)];
-        this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${this.state.color.alpha})`) });
+        this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${(this.state.color.alpha / 100).toFixed(2)})`) });
     }
 
 
@@ -502,7 +502,6 @@ export default class ColorPicker extends Component {
             }
             case "hex": {
                 rgb = this.hexToRgb("#" + values);
-                console.log("HEX", values, "RGB", rgb);
                 hue = this.rgbToHsl(...values)[0];
                 newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
                 adjustHueSlider();
