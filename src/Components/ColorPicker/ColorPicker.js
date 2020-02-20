@@ -487,7 +487,6 @@ export default class ColorPicker extends Component {
             default: { return; }
         }
 
-
         this.setState({ ...this.state, color: newColorObj }, () => {
             this.drawColorPaletteCanvas();
             updatePaletteCursorPosition();
@@ -497,8 +496,21 @@ export default class ColorPicker extends Component {
 
 
 
+    setAlphaSliderTo(percentage) {
+        const thumb = this.state.alphaSliderThumb;
+        const width = this.state.alphaSlider.getBoundingClientRect().width;
+        const left = width - Math.floor(percentage * width);
+
+        thumb.style.left = left + "px";
+        const color = Object.assign(this.state.color);
+        color.alpha = percentage;
+        this.setState({ ...this.state, color: color, input_a: undefined });
+    }
+
+
+
     handleColorTextInputOnChange(e, inputName) {
-        let value = Number(e.target.value);
+        let value = inputName === "a" ? e.target.value : Number(e.target.value);
 
         if (inputName === "r" || inputName === "g" || inputName === "b") {
             if (isNaN(value) || value < 0 || value > 255) value = 255; // user input error results max value
@@ -513,6 +525,13 @@ export default class ColorPicker extends Component {
             }
 
             this.setState(newState, () => { this.findAndSetColorByInput("rgb", [r, g, b]); });
+        }
+
+        if (inputName === "a") {
+            if (value.length > 4) value = ("" + value).substr(0, 4);
+            if (isNaN(value) || value < 0 || value > 1) value = 1;
+
+            this.setState({ ...this.state, input_a: value }, () => this.setAlphaSliderTo(this.state.input_a));
         }
 
         if (inputName === "h") {
@@ -634,7 +653,10 @@ export default class ColorPicker extends Component {
                                     <input
                                         type="text"
                                         tabIndex={5}
-                                        value={this.state.color.alpha}
+                                        value={this.state.input_a !== undefined ? this.state.input_a : this.state.color.alpha}
+                                        onFocus={() => this.setState({ ...this.state, input_a: this.state.color.alpha })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "a")}
+
                                     />
                                 </div>
 
