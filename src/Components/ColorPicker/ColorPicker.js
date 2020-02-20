@@ -476,7 +476,7 @@ export default class ColorPicker extends Component {
             sliderThumb.style.left = newSliderX + "px";
         }
 
-        values = values.map(Number);
+        if (type !== "hex") values = values.map(Number);
         let hue, rgb, newColorObj;
 
         switch (type) {
@@ -498,6 +498,14 @@ export default class ColorPicker extends Component {
                 hue = values[0];
                 rgb = this.hslToRgb(...values);
                 newColorObj = this.getColorObj("hsl(" + values.join(",") + ")");
+                break;
+            }
+            case "hex": {
+                rgb = this.hexToRgb("#" + values);
+                console.log("HEX", values, "RGB", rgb);
+                hue = this.rgbToHsl(...values)[0];
+                newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
+                adjustHueSlider();
                 break;
             }
             default: { return; }
@@ -566,12 +574,18 @@ export default class ColorPicker extends Component {
                 default: { }
             }
 
-            this.setState(newState, () => { this.findAndSetColorByInput("sl", [h, s, l], true); });
+            this.setState(newState, () => { this.findAndSetColorByInput("sl", [h, s, l]); });
         }
 
         if (inputName === "hex") {
-            console.log(value);
-            if (/[a-f0-9]{0,6}/gi.test(value)) console.log(true);
+            if (value.length > 6) value = value.substr(0, 6); // trim if hex input is too long
+
+            value = value.replace(/[^a-f0-9]/gi, ""); // don't let in valid values appear in text input
+            const isCorrectHex = /^[a-f0-9]{6}$/gi.test(value);
+
+            this.setState({ ...this.state, input_hex: value });
+
+            if (isCorrectHex) this.findAndSetColorByInput("hex", value);
         }
     }
 
