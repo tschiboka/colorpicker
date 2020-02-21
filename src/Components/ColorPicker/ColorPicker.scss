@@ -1,4 +1,4 @@
-$primaryBg: #222222;
+$primaryBg: #181719;
 $primarytColor: #c2c2c2;
 $borderColor: #111;
 $border: 1px solid $borderColor;
@@ -178,10 +178,11 @@ $border: 1px solid $borderColor;
             display: flex;
             padding-left: 20%;
             justify-content: space-between;
-            color: #eee;
+            color: #ddd1e4dc;
+            text-shadow: -2px -2px 2px black;
             input {
-                background: #1b1b1b;
-                color: #eee;
+                background: rgba(255, 255, 255, 0.035);
+                color: #fff;
                 text-align: center;
                 width: 60%;
                 border: $border;
@@ -341,4 +342,8 @@ $border: 1px solid $borderColor;
         transform: translate(-11px, -9.5px) rotate(180deg);
         -webkit-transform: translate(-11px, -9.5px) rotate(180deg);
     }
+}
+
+@media only screen and (max-width: 500px) {
+
 }

@@ -11,6 +11,7 @@ export default class ColorPicker extends Component {
         super(props);
 
         this.state = {
+            id: this.props.id,
             browser: { // gradients won't work without sniffing the browser
                 agent: navigator.userAgent.match(/(Chrome|Firefox|MSIE|Egde|Safari|Opera)/g)[0],
                 prefix: `-${(Array.prototype.slice.call(window.getComputedStyle(document.documentElement, '')).join('').match(/-(moz|webkit|ms)-/))[1]}-`
@@ -21,16 +22,17 @@ export default class ColorPicker extends Component {
             alphaSliderMouseDown: false,
             colorPaletteMouseDown: false,
             sliderThumbsMinOffset: undefined,
-            alphaSliderThumb: document.getElementById((this.props.id || "") + "-alpha__thumb"),
-            hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
-            hueCanvasColorSequenceDrawn: false, // the hue thats color will picked need to be drawn when component is visible (first mouseover event)
+            hueCanvasColorSequenceDrawn: false, // the hue that's color will picked need to be drawn when component is visible (first mouseover event)
             colorPaletteDrawn: false, // same goes for color palette (as soon as component is visible)
         };
     }
 
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
+        console.log(prevProps);
         if (!this.state.colorPaletteDrawn && document.getElementById((this.props.id || "") + "-color-palette")) {
+            if (!prevProps.visible) { this.primeDOMElements(); console.log("HERE") }
+            console.log("HERE", this.state);
             this.setState({
                 ...this.state,
                 colorPaletteDrawn: true,
@@ -149,7 +151,7 @@ export default class ColorPicker extends Component {
 
 
     /* The mousemove event is coming from the color pickers body in order to make sliding smoother.
-     * Mouse down must be on sliders thumb or the slider itself, mouse move has to be in the range of the colorpicker. */
+    * Mouse down must be on sliders thumb or the slider itself, mouse move has to be in the range of the colorpicker. */
     handleColorPickerMouseMove(e) {
         if (!this.state.sliderThumbsMinOffset) this.primeDOMElements(); // the first mousemove sets all neccessary div in comp state
 
@@ -183,6 +185,8 @@ export default class ColorPicker extends Component {
             else {
                 const alpha = 100 - Math.round((diffX / maxX) * 100);
                 const colorObj = this.getColorObj(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${(alpha / 100).toFixed(2)})`);
+                console.log(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${(alpha / 100).toFixed(2)})`, colorObj);
+                console.log("MOUSEMOVE", this.state);
                 this.setState({ ...this.state, color: colorObj });
             }
         }
@@ -520,6 +524,7 @@ export default class ColorPicker extends Component {
 
 
     setAlphaSliderTo(percentage) {
+        console.log("ALPHA", this.state);
         const thumb = this.state.alphaSliderThumb;
         const width = this.state.alphaSlider.getBoundingClientRect().width;
         const left = width - Math.floor((percentage / 100) * width);
@@ -590,6 +595,13 @@ export default class ColorPicker extends Component {
 
 
 
+    handleCloseBtnOnClick() {
+        this.setState({ ...this.state, colorPaletteDrawn: false });
+        this.props.close(this.state);
+    }
+
+
+
     render() {
         return (
             this.props.visible ? (
@@ -622,7 +634,7 @@ export default class ColorPicker extends Component {
                         </div>
                         <button
                             className="close-btn ColorPicker--button-theme"
-                            onClick={() => this.props.close()}
+                            onClick={() => this.handleCloseBtnOnClick()}
                             title="close [Esc]"
                         >&times;</button>
                     </div>
