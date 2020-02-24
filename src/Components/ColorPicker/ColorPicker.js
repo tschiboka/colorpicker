@@ -165,8 +165,9 @@ export default class ColorPicker extends Component {
 
     // Hue and alpha sliders behave the same way on mouse up/down, therefore they share a common handle function.
     handleSliderThumbMouseUpDown(e, mouseIsDown) {
+        const clientX = (e.clientX || (e.touches.length ? e.touches[0].clientX : 0));
         const sliderType = e.target.id.replace(/.*-hue__thumb/g, "hue").replace(/.*-alpha__thumb/g, "alpha");
-        const touchPoint = e.clientX - document.getElementById(e.target.id).getBoundingClientRect().x; // where the mouse lands on the thumb
+        const touchPoint = clientX - document.getElementById(e.target.id).getBoundingClientRect().x; // where the mouse lands on the thumb
 
         if (sliderType === "hue") this.setState({ ...this.state, hueSliderMouseDown: mouseIsDown, sliderTouchPoint: mouseIsDown ? touchPoint : 0, sliderEventFrom: "thumb" });
         if (sliderType === "alpha") this.setState({ ...this.state, alphaSliderMouseDown: mouseIsDown, sliderTouchPoint: mouseIsDown ? touchPoint : 0, sliderEventFrom: "thumb" });
@@ -177,10 +178,12 @@ export default class ColorPicker extends Component {
     /* Sliders can be set by clicking on them, it is not neccesary to use the thumbs.
      * Only mousedown event is written, the mouseup is coming from the body of the colorpicker */
     handleSliderMouseDown(e) {
+        console.log("CLICK ON SLIDER");
         e.persist(); // because synt. event is reused in async setState, it would be nullified by React, thus e.target is not available in callback
 
+        const clientX = (e.clientX || (e.touches.length ? e.touches[0].clientX : 0));
         const sliderType = e.target.id.replace(/.*-hue-color-points/g, "hue").replace(/.*-alpha/g, "alpha");
-        const touchPoint = e.clientX - document.getElementById(e.target.id).getBoundingClientRect().x;
+        const touchPoint = clientX - document.getElementById(e.target.id).getBoundingClientRect().x;
 
         if (sliderType === "hue") this.setState({ ...this.state, hueSliderMouseDown: true, sliderTouchPoint: touchPoint, sliderEventFrom: "slider" }
             , () => this.handleColorPickerMouseMove(e));
@@ -201,10 +204,11 @@ export default class ColorPicker extends Component {
             // set the new position of slider thumb
             const maxX = this.state.alphaSlider.getBoundingClientRect().width; // hue & alpha has same width
             const target = sliderType === "hue" ? this.state.hueSliderThumb : this.state.alphaSliderThumb;
+            const clientX = e.clientX || e.touches[0].clientX;
             let diffX = 0;
 
-            if (this.state.sliderEventFrom === "thumb") diffX = e.clientX - this.state.sliderThumbsMinOffset - this.state.sliderTouchPoint + 11;
-            if (this.state.sliderEventFrom === "slider") diffX = e.clientX - this.state.sliderThumbsMinOffset;
+            if (this.state.sliderEventFrom === "thumb") diffX = clientX - this.state.sliderThumbsMinOffset - this.state.sliderTouchPoint + 11;
+            if (this.state.sliderEventFrom === "slider") diffX = clientX - this.state.sliderThumbsMinOffset;
 
             if (diffX < 0) diffX = 0;
             if (diffX > maxX - 1) diffX = maxX - 1;
@@ -680,7 +684,9 @@ export default class ColorPicker extends Component {
                 <div
                     className="ColorPicker__body"
                     onMouseMove={e => { this.handleColorPickerMouseMove(e); this.state.colorPaletteMouseDown && this.handleColorPaletteOnMouseMove(e); }}
+                    onTouchMove={e => { this.handleColorPickerMouseMove(e); this.state.colorPaletteMouseDown && this.handleColorPaletteOnMouseMove(e); }}
                     onMouseUp={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
+                    onTouchEnd={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
                     onMouseLeave={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
                 >
                     <div className="ColorPicker__upper-box">
@@ -794,7 +800,8 @@ export default class ColorPicker extends Component {
                             <div className="ColorPicker__slider-bg">
                                 <div className="ColorPicker__hue"
                                     id={(this.props.id || "") + "-hue"}
-                                    onMouseDown={e => this.handleSliderMouseDown(e)}>
+                                    onMouseDown={e => this.handleSliderMouseDown(e)}
+                                    onTouchStart={e => this.handleSliderMouseDown(e)} >
                                     <canvas id={(this.props.id || "") + "-hue-color-points"}></canvas>
 
                                     <div
@@ -802,7 +809,9 @@ export default class ColorPicker extends Component {
                                         className={`ColorPicker__slider-thumb ${this.state.hueSliderMouseDown ? "thumb-hover" : ""}`}
                                         style={{ backgroundImage: `url(${sliderThumb})` }}
                                         onMouseDown={e => this.handleSliderThumbMouseUpDown(e, true)}
-                                        onMouseUp={e => this.handleSliderThumbMouseUpDown(e, false)}>
+                                        onMouseUp={e => this.handleSliderThumbMouseUpDown(e, false)}
+                                        onTouchStart={e => this.handleSliderThumbMouseUpDown(e, true)}
+                                        onTouchEnd={e => this.handleSliderThumbMouseUpDown(e, false)}>
                                     </div>
                                 </div>
                             </div>
@@ -816,14 +825,16 @@ export default class ColorPicker extends Component {
                                             className="ColorPicker__alpha"
                                             id={(this.props.id || "") + "-alpha"}
                                             style={{ background: `${this.state.browser.prefix}linear-gradient(left, ${this.state.color.code.rgb}, transparent)` }}
-                                            onMouseDown={e => this.handleSliderMouseDown(e)}>
-
+                                            onMouseDown={e => this.handleSliderMouseDown(e)}
+                                            onTouchStart={e => this.handleSliderMouseDown(e)}>
                                             <div
                                                 id={(this.props.id || "") + "-alpha__thumb"}
                                                 className={`ColorPicker__slider-thumb ${this.state.alphaSliderMouseDown ? "thumb-hover" : ""}`}
                                                 style={{ backgroundImage: `url(${sliderThumb})` }}
                                                 onMouseDown={e => this.handleSliderThumbMouseUpDown(e, true)}
-                                                onMouseUp={e => this.handleSliderThumbMouseUpDown(e, false)}>
+                                                onMouseUp={e => this.handleSliderThumbMouseUpDown(e, false)}
+                                                onTouchStart={e => this.handleSliderThumbMouseUpDown(e, true)}
+                                                onTouchEnd={e => this.handleSliderThumbMouseUpDown(e, false)}>
                                             </div>
                                         </div>
                                     </div>
