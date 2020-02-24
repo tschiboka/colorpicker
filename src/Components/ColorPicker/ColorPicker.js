@@ -73,10 +73,10 @@ export default class ColorPicker extends Component {
         const componentWidth = component ? component.getBoundingClientRect().width : 500;
         const componentHeight = component ? component.getBoundingClientRect().height : 350;
         const componentLeft = component ? component.getBoundingClientRect().left : x;
-        const componentBottom = component ? component.getBoundingClientRect().bottom : x;
+        const componentTop = component ? component.getBoundingClientRect().top : y;
 
         if (viewportWidth - (componentWidth + componentLeft) <= 0) x = Math.floor(viewportWidth - componentWidth);
-        if (viewportHeight - (componentHeight + componentBottom <= 0)) y = Math.floor(viewportHeight - componentHeight);
+        if (viewportHeight - (componentHeight + componentTop) <= 0) y = Math.floor(viewportHeight - componentHeight);
 
         if (!axis) return [x, y];
         if (axis === "x" || axis === "X") return x;
@@ -178,7 +178,6 @@ export default class ColorPicker extends Component {
     /* Sliders can be set by clicking on them, it is not neccesary to use the thumbs.
      * Only mousedown event is written, the mouseup is coming from the body of the colorpicker */
     handleSliderMouseDown(e) {
-        console.log("CLICK ON SLIDER");
         e.persist(); // because synt. event is reused in async setState, it would be nullified by React, thus e.target is not available in callback
 
         const clientX = (e.clientX || (e.touches.length ? e.touches[0].clientX : 0));
@@ -259,7 +258,9 @@ export default class ColorPicker extends Component {
         const rect = target.getBoundingClientRect();
         const [maxX, maxY] = [rect.width, rect.height];
         const [left, top] = [rect.left, rect.top];
-        let [x, y] = [e.clientX - left, e.clientY - top];
+        const clientX = e.clientX || e.touches[0].clientX;
+        const clientY = e.clientY || e.touches[0].clientY;
+        let [x, y] = [clientX - left, clientY - top];
         x = x < 1 ? 1 : x > maxX ? maxX : x;
         y = y < 1 ? 1 : y > maxY ? maxY : y;
 
@@ -694,6 +695,7 @@ export default class ColorPicker extends Component {
                             <canvas
                                 id={(this.props.id || "") + "-color-palette"}
                                 onMouseDown={e => { this.setState({ ...this.state, colorPaletteMouseDown: true }); }}
+                                onTouchStart={e => { this.setState({ ...this.state, colorPaletteMouseDown: true }); }}
                                 onClick={e => this.handleColorPaletteOnMouseMove(e)}
                             ></canvas>
 
@@ -701,6 +703,7 @@ export default class ColorPicker extends Component {
                                 id={(this.props.id || "") + "-color-palette-cursor"}
                                 className="ColorPicker__color-palette-cursor"
                                 onMouseDown={() => this.setState({ ...this.state, colorPaletteMouseDown: true })}
+                                onTouchStart={e => { this.setState({ ...this.state, colorPaletteMouseDown: true }); }}
                             >
                                 <div><div></div></div> {/* inner white and black circles */}
                             </div>
