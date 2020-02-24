@@ -68,17 +68,15 @@ export default class ColorPicker extends Component {
         let y = this.props.Y || this.props.y || 0;
 
         const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
         const component = document.getElementById(this.props.id);
         const componentWidth = component ? component.getBoundingClientRect().width : 500;
+        const componentHeight = component ? component.getBoundingClientRect().height : 350;
         const componentLeft = component ? component.getBoundingClientRect().left : x;
+        const componentBottom = component ? component.getBoundingClientRect().bottom : x;
 
         if (viewportWidth - (componentWidth + componentLeft) <= 0) x = Math.floor(viewportWidth - componentWidth);
-
-        console.log(Math.floor(viewportWidth - componentWidth))
-        console.log(viewportWidth, componentWidth, componentLeft);
-
-        //console.log(viewportWidth, componentWidth);
-        //console.log(component ? component.getBoundingClientRect() : "");
+        if (viewportHeight - (componentHeight + componentBottom <= 0)) y = Math.floor(viewportHeight - componentHeight);
 
         if (!axis) return [x, y];
         if (axis === "x" || axis === "X") return x;
@@ -634,11 +632,6 @@ export default class ColorPicker extends Component {
 
 
 
-    handleCloseBtnOnClick() {
-        this.props.close(this.state);
-    }
-
-
     /* The component displays if props visible is true. The reason behind not choosing conditional rendering is
      * for performance reasons (eg. on mousemove getting DOM elements is expensive therefore sliders were lagging)
      * heavily used DOM references are stored in the state. When component is closed it would loose the references to
@@ -679,7 +672,7 @@ export default class ColorPicker extends Component {
                     </div>
                     <button
                         className="close-btn ColorPicker--button-theme"
-                        onClick={() => this.handleCloseBtnOnClick()}
+                        onClick={() => this.props.close(this.state)}
                         title="close [Esc]"
                     >&times;</button>
                 </div>
