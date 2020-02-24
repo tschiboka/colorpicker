@@ -16,6 +16,8 @@ export default class ColorPicker extends Component {
                 agent: navigator.userAgent.match(/(Chrome|Firefox|MSIE|Egde|Safari|Opera)/g)[0],
                 prefix: `-${(Array.prototype.slice.call(window.getComputedStyle(document.documentElement, '')).join('').match(/-(moz|webkit|ms)-/))[1]}-`
             },
+            x: this.getPositionXY("X"),
+            y: this.getPositionXY("Y"),
             color: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
             originalcolor: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
             hueSliderMouseDown: false,
@@ -29,19 +31,58 @@ export default class ColorPicker extends Component {
 
 
 
-    componentDidUpdate(prevProps) {
-        console.log(prevProps);
-        if (!this.state.colorPaletteDrawn && document.getElementById((this.props.id || "") + "-color-palette")) {
-            if (!prevProps.visible) { this.primeDOMElements(); console.log("HERE") }
-            console.log("HERE", this.state);
+    componentDidMount() {
+        window.addEventListener("resize", () => {
             this.setState({
                 ...this.state,
+                sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue-color-points").getBoundingClientRect().left,
+                x: this.getPositionXY("X"),
+                y: this.getPositionXY("Y"),
+            });
+        });
+    }
+
+
+
+    componentDidUpdate(prevProps) {
+        if (!this.state.colorPaletteDrawn && document.getElementById((this.props.id || "") + "-color-palette")) {
+            if (!prevProps.visible) { this.primeDOMElements(); }
+            this.setState({
+                ...this.state,
+                x: this.getPositionXY("X"),
+                y: this.getPositionXY("Y"),
                 colorPaletteDrawn: true,
                 colorPaletteBox: document.getElementById((this.props.id || "") + "-color-palette-box"),
                 colorPalette: document.getElementById((this.props.id || "") + "-color-palette"),
+                sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue-color-points").getBoundingClientRect().left,
             },
                 () => this.drawColorPaletteCanvas());
         }
+    }
+
+
+
+    // set the components x and y postions, and override props in case of overflow.
+    getPositionXY(axis) {
+        let x = this.props.X || this.props.x || 0; // props x, y can be capitalised
+        let y = this.props.Y || this.props.y || 0;
+
+        const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+        const component = document.getElementById(this.props.id);
+        const componentWidth = component ? component.getBoundingClientRect().width : 500;
+        const componentLeft = component ? component.getBoundingClientRect().left : x;
+
+        if (viewportWidth - (componentWidth + componentLeft) <= 0) x = Math.floor(viewportWidth - componentWidth);
+
+        console.log(Math.floor(viewportWidth - componentWidth))
+        console.log(viewportWidth, componentWidth, componentLeft);
+
+        //console.log(viewportWidth, componentWidth);
+        //console.log(component ? component.getBoundingClientRect() : "");
+
+        if (!axis) return [x, y];
+        if (axis === "x" || axis === "X") return x;
+        if (axis === "y" || axis === "Y") return y;
     }
 
 
@@ -56,7 +97,7 @@ export default class ColorPicker extends Component {
             hueSlider: document.getElementById((this.props.id || "") + "-hue"),
             alphaSliderThumb: document.getElementById((this.props.id || "") + "-alpha__thumb"),
             hueSliderThumb: document.getElementById((this.props.id || "") + "-hue__thumb"),
-            sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue__thumb").getBoundingClientRect().left,
+            sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue-color-points").getBoundingClientRect().left,
             hueColorPoints: document.getElementById((this.props.id || "") + "-hue-color-points"),
             paletteCursor: document.getElementById((this.props.id || "") + "-color-palette-cursor"),
         }, () => { this.drawHueCanvas(); });
@@ -164,8 +205,8 @@ export default class ColorPicker extends Component {
             const target = sliderType === "hue" ? this.state.hueSliderThumb : this.state.alphaSliderThumb;
             let diffX = 0;
 
-            if (this.state.sliderEventFrom === "thumb") diffX = e.clientX - this.state.sliderThumbsMinOffset - this.state.sliderTouchPoint;
-            if (this.state.sliderEventFrom === "slider") diffX = e.clientX - this.state.sliderThumbsMinOffset - 11;
+            if (this.state.sliderEventFrom === "thumb") diffX = e.clientX - this.state.sliderThumbsMinOffset - this.state.sliderTouchPoint + 11;
+            if (this.state.sliderEventFrom === "slider") diffX = e.clientX - this.state.sliderThumbsMinOffset;
 
             if (diffX < 0) diffX = 0;
             if (diffX > maxX - 1) diffX = maxX - 1;
@@ -186,8 +227,6 @@ export default class ColorPicker extends Component {
             else {
                 const alpha = 100 - Math.round((diffX / maxX) * 100);
                 const colorObj = this.getColorObj(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${(alpha / 100).toFixed(2)})`);
-                console.log(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${(alpha / 100).toFixed(2)})`, colorObj);
-                console.log("MOUSEMOVE", this.state);
                 this.setState({ ...this.state, color: colorObj });
             }
         }
@@ -324,7 +363,7 @@ export default class ColorPicker extends Component {
                 hex = this.rgbToHex(r, g, b);
                 break;
             }
-            default: { console.log("Invalid color : ", colorStr); }
+            default: { throw Error("Invalid color : " + colorStr); }
         }
 
         // get alpha, websafe, color name info for all valid inputs
@@ -525,7 +564,6 @@ export default class ColorPicker extends Component {
 
 
     setAlphaSliderTo(percentage) {
-        console.log("ALPHA", this.state);
         const thumb = this.state.alphaSliderThumb;
         const width = this.state.alphaSlider.getBoundingClientRect().width;
         const left = width - Math.floor((percentage / 100) * width);
@@ -602,14 +640,19 @@ export default class ColorPicker extends Component {
 
 
     /* The component displays if props visible is true. The reason behind not choosing conditional rendering is
-     * for performance reasons (eg. on mousemove getting DOM elements is expensive therefore sliders are lagging)
+     * for performance reasons (eg. on mousemove getting DOM elements is expensive therefore sliders were lagging)
      * heavily used DOM references are stored in the state. When component is closed it would loose the references to
      * certain ids. This case user experience takes priority over keeping the DOM unpolluted. */
     render() {
         return (
             <div
+                id={this.props.id}
                 className="ColorPicker"
-                style={{ left: (this.props.X || 0) + "px", top: (this.props.Y || 0) + "px", display: this.props.visible ? "block" : "none" }}
+                style={{
+                    left: (this.state.x) + "px",
+                    top: (this.state.y) + "px",
+                    display: this.props.visible ? "block" : "none"
+                }}
                 onClick={e => e.stopPropagation()}
                 //onBlur={() => this.props.close()}
                 //ref={component => { if (ReactDOM.findDOMNode(component)) ReactDOM.findDOMNode(component).focus() }}

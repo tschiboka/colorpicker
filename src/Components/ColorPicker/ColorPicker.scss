@@ -345,5 +345,11 @@ $border: 1px solid $borderColor;
 }
 
 @media only screen and (max-width: 500px) {
-
+    .ColorPicker {
+        position: absolute;
+        left: 1vw !important;
+        top: 0.5vh !important;
+        width: 98vw;
+        height: 99vh;
+    }
 }
