@@ -670,6 +670,21 @@ export default class ColorPicker extends Component {
 
 
 
+    renderColorNames() {
+        const colors = require("./json/colors.json");
+        return colors.map((color, i) => (
+            <tr key={i + "colorName"} className="ColorPicker__color-name">
+                <td className="ColorPicker__color-name__sample" style={{ backgroundColor: "#" + color.hex }}></td>
+
+                <td className="ColorPicker__color-name__name">{color.name}</td>
+
+                <td className="ColorPicker__color-name__hex">{"#" + color.hex}</td>
+            </tr>
+        ));
+    }
+
+
+
     /* The component displays if props visible is true. The reason behind not choosing conditional rendering is
      * for performance reasons (eg. on mousemove getting DOM elements is expensive therefore sliders were lagging)
      * heavily used DOM references are stored in the state. When component is closed it would loose the references to
@@ -945,7 +960,11 @@ export default class ColorPicker extends Component {
                     {this.state.mode === "names" && <div
                         className="ColorPicker__body--names-mode"
                     >
-                        Names
+                        <table className="ColorPicker__color-names">
+                            <tbody>
+                                {this.renderColorNames()}
+                            </tbody>
+                        </table>
                     </div>}
                 </div>
             </div>
