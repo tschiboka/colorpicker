@@ -168,6 +168,34 @@ export default class ColorPicker extends Component {
 
 
 
+    handleColorFormatOnClick() {
+        switch (this.state.preferredFormat) {
+            case "rgb": { this.setState({ ...this.state, preferredFormat: "hsl" }); console.log("HERE"); break; }
+            case "hsl": { this.setState({ ...this.state, preferredFormat: "hex" }); break; }
+            case "hex": { this.setState({ ...this.state, preferredFormat: "rgb" }); break; }
+            default: { throw Error("Incorrect color format"); }
+        }
+    }
+
+
+
+    getPreferredColorFormatCode() {
+        switch (this.state.preferredFormat) {
+            case "rgb": {
+                if (this.state.color.alpha !== 100) return this.state.color.code.rgba;
+                else return this.state.color.code.rgb;
+            }
+            case "hsl": {
+                if (this.state.color.alpha !== 100) return this.state.color.code.hsla;
+                else return this.state.color.code.hsl;
+            }
+            case "hex": { return this.state.color.code.hex; }
+            default: { throw Error("Incorrect color format"); }
+        }
+    }
+
+
+
     // Hue and alpha sliders behave the same way on mouse up/down, therefore they share a common handle function.
     handleSliderThumbMouseUpDown(e, mouseIsDown) {
         const clientX = (e.clientX || (e.touches.length ? e.touches[0].clientX : 0));
@@ -683,15 +711,15 @@ export default class ColorPicker extends Component {
                         </div>
                     </div>
 
-                    <div className="color-code">
-                        rgb(255, 255, 255)
+                    <div className="color-code"                    >
+                        {this.getPreferredColorFormatCode()}
                     </div>
 
                     <div className="button-box">
                         <button
                             className="ColorPicker--button-theme"
                             title="preferred format"
-                            onClick={() => this.setState({ ...this.state })}
+                            onClick={() => this.handleColorFormatOnClick()}
                         >
                             {this.state.preferredFormat}
                         </button>
