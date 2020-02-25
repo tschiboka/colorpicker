@@ -21,7 +21,8 @@ export default class ColorPicker extends Component {
             },
             x: this.getPositionXY("X"),
             y: this.getPositionXY("Y"),
-            mode: "palette", // (palette, history, names, format)
+            mode: "palette", // (palette, history, names)
+            preferredFormat: "rgb", // (rgb, hex, hsl)
             color: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
             originalcolor: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
             hueSliderMouseDown: false,
@@ -682,7 +683,18 @@ export default class ColorPicker extends Component {
                         </div>
                     </div>
 
+                    <div className="color-code">
+                        rgb(255, 255, 255)
+                    </div>
+
                     <div className="button-box">
+                        <button
+                            className="ColorPicker--button-theme"
+                            title="preferred format"
+                            onClick={() => this.setState({ ...this.state })}
+                        >
+                            {this.state.preferredFormat}
+                        </button>
                         <button
                             className="color-palette-mode-btn ColorPicker--button-theme"
                             title="color list"
