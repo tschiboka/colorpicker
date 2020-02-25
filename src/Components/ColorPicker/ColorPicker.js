@@ -3,6 +3,9 @@ import "./ColorPicker.scss";
 import transparentCheckerdBg from "./images/transparent_checkered_bg.png";
 import checkeredRect from "./images/checkered_rect.png";
 import sliderThumb from "./images/hue_slider_thumb.png";
+import hueBtnBg from "./images/hue_btn.png";
+import starBtnBg from "./images/star.png";
+import colorsBtnBg from "./images/colors.png";
 
 
 
@@ -18,6 +21,7 @@ export default class ColorPicker extends Component {
             },
             x: this.getPositionXY("X"),
             y: this.getPositionXY("Y"),
+            mode: "palette", // (palette, history, names, format)
             color: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
             originalcolor: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
             hueSliderMouseDown: false,
@@ -663,6 +667,7 @@ export default class ColorPicker extends Component {
                             id={(this.props.id || "") + "-prev-color"}
                             className="ColorPicker__prev-color"
                             style={{ backgroundImage: `url(${checkeredRect})` }}
+                            title="original color"
                         >
                             <div style={{ backgroundColor: this.state.originalcolor.code.rgba }}></div>
                         </div>
@@ -671,15 +676,46 @@ export default class ColorPicker extends Component {
                             id={(this.props.id || "") + "-curr-color"}
                             className="ColorPicker__curr-color"
                             style={{ backgroundImage: `url(${checkeredRect})` }}
+                            title="current color"
                         >
                             <div style={{ backgroundColor: this.state.color.code.rgba }}></div>
                         </div>
                     </div>
-                    <button
-                        className="close-btn ColorPicker--button-theme"
-                        onClick={() => this.props.close(this.state)}
-                        title="close [Esc]"
-                    >&times;</button>
+
+                    <div className="button-box">
+                        <button
+                            className="color-palette-mode-btn ColorPicker--button-theme"
+                            title="color list"
+                        >
+                            <div style={{ backgroundImage: `url(${colorsBtnBg})` }}>
+                                {this.state.mode === "names" && <div className="active-sign"></div>}
+                            </div>
+                        </button>
+
+                        <button
+                            className="color-palette-mode-btn ColorPicker--button-theme"
+                            title="history"
+                        >
+                            <div style={{ backgroundImage: `url(${starBtnBg})` }}>
+                                {this.state.mode === "history" && <div className="active-sign"></div>}
+                            </div>
+                        </button>
+
+                        <button
+                            className="color-palette-mode-btn ColorPicker--button-theme"
+                            title="color palette"
+                        >
+                            <div style={{ backgroundImage: `url(${hueBtnBg})` }}>
+                                {this.state.mode === "palette" && <div className="active-sign"></div>}
+                            </div>
+                        </button>
+
+                        <button
+                            className="close-btn ColorPicker--button-theme"
+                            onClick={() => this.props.close(this.state)}
+                            title="close [Esc]"
+                        >&times;</button>
+                    </div>
                 </div>
 
                 <div
@@ -846,7 +882,10 @@ export default class ColorPicker extends Component {
                         </div>
 
                         <div className="ColorPicker__ok-btn-box">
-                            <button className="ColorPicker--button-theme">OK</button>
+                            <button
+                                className="ColorPicker--button-theme"
+                                onClick={() => this.props.close(this.state)}
+                            >OK</button>
                         </div>
                     </div>
                 </div>
