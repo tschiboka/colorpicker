@@ -686,6 +686,7 @@ export default class ColorPicker extends Component {
                         <button
                             className="color-palette-mode-btn ColorPicker--button-theme"
                             title="color list"
+                            onClick={() => this.setState({ ...this.state, mode: "names" })}
                         >
                             <div style={{ backgroundImage: `url(${colorsBtnBg})` }}>
                                 {this.state.mode === "names" && <div className="active-sign"></div>}
@@ -695,6 +696,7 @@ export default class ColorPicker extends Component {
                         <button
                             className="color-palette-mode-btn ColorPicker--button-theme"
                             title="history"
+                            onClick={() => this.setState({ ...this.state, mode: "history" })}
                         >
                             <div style={{ backgroundImage: `url(${starBtnBg})` }}>
                                 {this.state.mode === "history" && <div className="active-sign"></div>}
@@ -704,6 +706,7 @@ export default class ColorPicker extends Component {
                         <button
                             className="color-palette-mode-btn ColorPicker--button-theme"
                             title="color palette"
+                            onClick={() => this.setState({ ...this.state, mode: "palette" })}
                         >
                             <div style={{ backgroundImage: `url(${hueBtnBg})` }}>
                                 {this.state.mode === "palette" && <div className="active-sign"></div>}
@@ -720,174 +723,190 @@ export default class ColorPicker extends Component {
 
                 <div
                     className="ColorPicker__body"
-                    onMouseMove={e => { this.handleColorPickerMouseMove(e); this.state.colorPaletteMouseDown && this.handleColorPaletteOnMouseMove(e); }}
-                    onTouchMove={e => { this.handleColorPickerMouseMove(e); this.state.colorPaletteMouseDown && this.handleColorPaletteOnMouseMove(e); }}
-                    onMouseUp={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
-                    onTouchEnd={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
-                    onMouseLeave={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
                 >
-                    <div className="ColorPicker__upper-box">
-                        <div className="ColorPicker__palette" id={(this.props.id || "") + "-color-palette-box"}>
-                            <canvas
-                                id={(this.props.id || "") + "-color-palette"}
-                                onMouseDown={e => { this.setState({ ...this.state, colorPaletteMouseDown: true }); }}
-                                onTouchStart={e => { this.setState({ ...this.state, colorPaletteMouseDown: true }); }}
-                                onClick={e => this.handleColorPaletteOnMouseMove(e)}
-                            ></canvas>
+                    <div
+                        className="ColorPicker__body--palette-mode"
+                        onMouseMove={e => { this.handleColorPickerMouseMove(e); this.state.colorPaletteMouseDown && this.handleColorPaletteOnMouseMove(e); }}
+                        onTouchMove={e => { this.handleColorPickerMouseMove(e); this.state.colorPaletteMouseDown && this.handleColorPaletteOnMouseMove(e); }}
+                        onMouseUp={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
+                        onTouchEnd={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
+                        onMouseLeave={() => this.setState({ ...this.state, hueSliderMouseDown: false, alphaSliderMouseDown: false, sliderTouchPoint: 0, colorPaletteMouseDown: false })}
+                    >
+                        <div className="ColorPicker__upper-box">
+                            <div className="ColorPicker__palette" id={(this.props.id || "") + "-color-palette-box"}>
+                                <canvas
+                                    id={(this.props.id || "") + "-color-palette"}
+                                    onMouseDown={e => { this.setState({ ...this.state, colorPaletteMouseDown: true }); }}
+                                    onTouchStart={e => { this.setState({ ...this.state, colorPaletteMouseDown: true }); }}
+                                    onClick={e => this.handleColorPaletteOnMouseMove(e)}
+                                ></canvas>
 
-                            <div
-                                id={(this.props.id || "") + "-color-palette-cursor"}
-                                className="ColorPicker__color-palette-cursor"
-                                onMouseDown={() => this.setState({ ...this.state, colorPaletteMouseDown: true })}
-                                onTouchStart={e => { this.setState({ ...this.state, colorPaletteMouseDown: true }); }}
-                            >
-                                <div><div></div></div> {/* inner white and black circles */}
+                                <div
+                                    id={(this.props.id || "") + "-color-palette-cursor"}
+                                    className="ColorPicker__color-palette-cursor"
+                                    onMouseDown={() => this.setState({ ...this.state, colorPaletteMouseDown: true })}
+                                    onTouchStart={e => { this.setState({ ...this.state, colorPaletteMouseDown: true }); }}
+                                >
+                                    <div><div></div></div> {/* inner white and black circles */}
+                                </div>
+                            </div>
+
+                            <div className="ColorPicker__text-inputs">
+                                <div title="red">R
+                                    <input
+                                        type="text"
+                                        tabIndex={2}
+                                        value={this.state.input_r !== undefined ? this.state.input_r : this.state.color.rgb.r}
+                                        onFocus={() => this.setState({ ...this.state, input_r: this.state.color.rgb.r })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "r")}
+                                    />
+                                </div>
+
+                                <div title="green">G
+                                    <input
+                                        type="text"
+                                        tabIndex={3}
+                                        value={this.state.input_g !== undefined ? this.state.input_g : this.state.color.rgb.g}
+                                        onFocus={() => this.setState({ ...this.state, input_g: this.state.color.rgb.g })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "g")}
+                                    />
+                                </div>
+
+                                <div title="blue">B
+                                    <input
+                                        type="text"
+                                        tabIndex={4}
+                                        value={this.state.input_b !== undefined ? this.state.input_b : this.state.color.rgb.b}
+                                        onFocus={() => this.setState({ ...this.state, input_b: this.state.color.rgb.b })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "b")}
+                                    />
+                                </div>
+
+                                <div title="transparency">A
+                                    <input
+                                        type="text"
+                                        tabIndex={5}
+                                        value={this.state.input_a !== undefined ? this.state.input_a : this.state.color.alpha}
+                                        onFocus={() => this.setState({ ...this.state, input_a: this.state.color.alpha })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "a")}
+
+                                    />
+                                </div>
+
+                                <div title="hue">H
+                                    <input
+                                        type="text"
+                                        tabIndex={6}
+                                        value={this.state.input_h !== undefined ? this.state.input_h : this.state.color.hsl.h}
+                                        onFocus={() => this.setState({ ...this.state, input_h: this.state.color.hsl.h })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "h")}
+                                    />
+                                </div>
+
+                                <div title="saturation">S
+                                    <input
+                                        type="text"
+                                        tabIndex={7}
+                                        value={this.state.input_s !== undefined ? this.state.input_s : this.state.color.hsl.s}
+                                        onFocus={() => this.setState({ ...this.state, input_s: this.state.color.hsl.s })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "s")}
+                                    />
+                                </div>
+
+                                <div title="lightness">L
+                                    <input
+                                        type="text"
+                                        tabIndex={8}
+                                        value={this.state.input_l !== undefined ? this.state.input_l : this.state.color.hsl.l}
+                                        onFocus={() => this.setState({ ...this.state, input_l: this.state.color.hsl.l })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "l")}
+                                    /></div>
+
+                                <div title="hexadecimal value">#
+                                    <input
+                                        type="text"
+                                        tabIndex={9}
+                                        value={this.state.input_hex !== undefined ? this.state.input_hex : this.state.color.hex}
+                                        onFocus={() => this.setState({ ...this.state, input_hex: this.state.color.hex })}
+                                        onChange={e => this.handleColorTextInputOnChange(e, "hex")}
+                                    />
+                                </div>
+
+                                <p title={(this.state.color.websafe ? "websafe" : "notweb safe") + " color"}>
+                                    {!this.state.color.websafe ? <span style={{ color: "deeppink" }}>&#9888;</span> : <span style={{ color: "#2eff71" }}>&#9960;</span>}
+
+                                    <span title="css color string">{this.state.color.name ? this.state.color.name : <span>none</span>}</span>
+                                </p>
                             </div>
                         </div>
 
-                        <div className="ColorPicker__text-inputs">
-                            <div title="red">R
-                                    <input
-                                    type="text"
-                                    tabIndex={2}
-                                    value={this.state.input_r !== undefined ? this.state.input_r : this.state.color.rgb.r}
-                                    onFocus={() => this.setState({ ...this.state, input_r: this.state.color.rgb.r })}
-                                    onChange={e => this.handleColorTextInputOnChange(e, "r")}
-                                />
-                            </div>
+                        <div className="ColorPicker__lower-box">
+                            <div className="ColorPicker__hue-slider">
+                                <div className="ColorPicker__slider-bg">
+                                    <div className="ColorPicker__hue"
+                                        id={(this.props.id || "") + "-hue"}
+                                        onMouseDown={e => this.handleSliderMouseDown(e)}
+                                        onTouchStart={e => this.handleSliderMouseDown(e)} >
+                                        <canvas id={(this.props.id || "") + "-hue-color-points"}></canvas>
 
-                            <div title="green">G
-                                    <input
-                                    type="text"
-                                    tabIndex={3}
-                                    value={this.state.input_g !== undefined ? this.state.input_g : this.state.color.rgb.g}
-                                    onFocus={() => this.setState({ ...this.state, input_g: this.state.color.rgb.g })}
-                                    onChange={e => this.handleColorTextInputOnChange(e, "g")}
-                                />
-                            </div>
-
-                            <div title="blue">B
-                                    <input
-                                    type="text"
-                                    tabIndex={4}
-                                    value={this.state.input_b !== undefined ? this.state.input_b : this.state.color.rgb.b}
-                                    onFocus={() => this.setState({ ...this.state, input_b: this.state.color.rgb.b })}
-                                    onChange={e => this.handleColorTextInputOnChange(e, "b")}
-                                />
-                            </div>
-
-                            <div title="transparency">A
-                                    <input
-                                    type="text"
-                                    tabIndex={5}
-                                    value={this.state.input_a !== undefined ? this.state.input_a : this.state.color.alpha}
-                                    onFocus={() => this.setState({ ...this.state, input_a: this.state.color.alpha })}
-                                    onChange={e => this.handleColorTextInputOnChange(e, "a")}
-
-                                />
-                            </div>
-
-                            <div title="hue">H
-                                    <input
-                                    type="text"
-                                    tabIndex={6}
-                                    value={this.state.input_h !== undefined ? this.state.input_h : this.state.color.hsl.h}
-                                    onFocus={() => this.setState({ ...this.state, input_h: this.state.color.hsl.h })}
-                                    onChange={e => this.handleColorTextInputOnChange(e, "h")}
-                                />
-                            </div>
-
-                            <div title="saturation">S
-                                    <input
-                                    type="text"
-                                    tabIndex={7}
-                                    value={this.state.input_s !== undefined ? this.state.input_s : this.state.color.hsl.s}
-                                    onFocus={() => this.setState({ ...this.state, input_s: this.state.color.hsl.s })}
-                                    onChange={e => this.handleColorTextInputOnChange(e, "s")}
-                                />
-                            </div>
-
-                            <div title="lightness">L
-                                    <input
-                                    type="text"
-                                    tabIndex={8}
-                                    value={this.state.input_l !== undefined ? this.state.input_l : this.state.color.hsl.l}
-                                    onFocus={() => this.setState({ ...this.state, input_l: this.state.color.hsl.l })}
-                                    onChange={e => this.handleColorTextInputOnChange(e, "l")}
-                                /></div>
-
-                            <div title="hexadecimal value">#
-                                    <input
-                                    type="text"
-                                    tabIndex={9}
-                                    value={this.state.input_hex !== undefined ? this.state.input_hex : this.state.color.hex}
-                                    onFocus={() => this.setState({ ...this.state, input_hex: this.state.color.hex })}
-                                    onChange={e => this.handleColorTextInputOnChange(e, "hex")}
-                                />
-                            </div>
-
-                            <p title={(this.state.color.websafe ? "websafe" : "notweb safe") + " color"}>
-                                {!this.state.color.websafe ? <span style={{ color: "deeppink" }}>&#9888;</span> : <span style={{ color: "#2eff71" }}>&#9960;</span>}
-
-                                <span title="css color string">{this.state.color.name ? this.state.color.name : <span>none</span>}</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="ColorPicker__lower-box">
-                        <div className="ColorPicker__hue-slider">
-                            <div className="ColorPicker__slider-bg">
-                                <div className="ColorPicker__hue"
-                                    id={(this.props.id || "") + "-hue"}
-                                    onMouseDown={e => this.handleSliderMouseDown(e)}
-                                    onTouchStart={e => this.handleSliderMouseDown(e)} >
-                                    <canvas id={(this.props.id || "") + "-hue-color-points"}></canvas>
-
-                                    <div
-                                        id={(this.props.id || "") + "-hue__thumb"}
-                                        className={`ColorPicker__slider-thumb ${this.state.hueSliderMouseDown ? "thumb-hover" : ""}`}
-                                        style={{ backgroundImage: `url(${sliderThumb})` }}
-                                        onMouseDown={e => this.handleSliderThumbMouseUpDown(e, true)}
-                                        onMouseUp={e => this.handleSliderThumbMouseUpDown(e, false)}
-                                        onTouchStart={e => this.handleSliderThumbMouseUpDown(e, true)}
-                                        onTouchEnd={e => this.handleSliderThumbMouseUpDown(e, false)}>
+                                        <div
+                                            id={(this.props.id || "") + "-hue__thumb"}
+                                            className={`ColorPicker__slider-thumb ${this.state.hueSliderMouseDown ? "thumb-hover" : ""}`}
+                                            style={{ backgroundImage: `url(${sliderThumb})` }}
+                                            onMouseDown={e => this.handleSliderThumbMouseUpDown(e, true)}
+                                            onMouseUp={e => this.handleSliderThumbMouseUpDown(e, false)}
+                                            onTouchStart={e => this.handleSliderThumbMouseUpDown(e, true)}
+                                            onTouchEnd={e => this.handleSliderThumbMouseUpDown(e, false)}>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="ColorPicker__alpha-box">
-                            <div className="ColorPicker__alpha-slider">
-                                <div className="ColorPicker__slider-bg">
-                                    <div className="ColorPicker__alpha-bg" style={{ backgroundImage: `url(${transparentCheckerdBg})` }}>
-                                        <div
-                                            className="ColorPicker__alpha"
-                                            id={(this.props.id || "") + "-alpha"}
-                                            style={{ background: `${this.state.browser.prefix}linear-gradient(left, ${this.state.color.code.rgb}, transparent)` }}
-                                            onMouseDown={e => this.handleSliderMouseDown(e)}
-                                            onTouchStart={e => this.handleSliderMouseDown(e)}>
+                            <div className="ColorPicker__alpha-box">
+                                <div className="ColorPicker__alpha-slider">
+                                    <div className="ColorPicker__slider-bg">
+                                        <div className="ColorPicker__alpha-bg" style={{ backgroundImage: `url(${transparentCheckerdBg})` }}>
                                             <div
-                                                id={(this.props.id || "") + "-alpha__thumb"}
-                                                className={`ColorPicker__slider-thumb ${this.state.alphaSliderMouseDown ? "thumb-hover" : ""}`}
-                                                style={{ backgroundImage: `url(${sliderThumb})` }}
-                                                onMouseDown={e => this.handleSliderThumbMouseUpDown(e, true)}
-                                                onMouseUp={e => this.handleSliderThumbMouseUpDown(e, false)}
-                                                onTouchStart={e => this.handleSliderThumbMouseUpDown(e, true)}
-                                                onTouchEnd={e => this.handleSliderThumbMouseUpDown(e, false)}>
+                                                className="ColorPicker__alpha"
+                                                id={(this.props.id || "") + "-alpha"}
+                                                style={{ background: `${this.state.browser.prefix}linear-gradient(left, ${this.state.color.code.rgb}, transparent)` }}
+                                                onMouseDown={e => this.handleSliderMouseDown(e)}
+                                                onTouchStart={e => this.handleSliderMouseDown(e)}>
+                                                <div
+                                                    id={(this.props.id || "") + "-alpha__thumb"}
+                                                    className={`ColorPicker__slider-thumb ${this.state.alphaSliderMouseDown ? "thumb-hover" : ""}`}
+                                                    style={{ backgroundImage: `url(${sliderThumb})` }}
+                                                    onMouseDown={e => this.handleSliderThumbMouseUpDown(e, true)}
+                                                    onMouseUp={e => this.handleSliderThumbMouseUpDown(e, false)}
+                                                    onTouchStart={e => this.handleSliderThumbMouseUpDown(e, true)}
+                                                    onTouchEnd={e => this.handleSliderThumbMouseUpDown(e, false)}>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="ColorPicker__ok-btn-box">
-                            <button
-                                className="ColorPicker--button-theme"
-                                onClick={() => this.props.close(this.state)}
-                            >OK</button>
+                            <div className="ColorPicker__ok-btn-box">
+                                <button
+                                    className="ColorPicker--button-theme"
+                                    onClick={() => this.props.close(this.state)}
+                                >OK</button>
+                            </div>
                         </div>
-                    </div>
+                    </div> {/* end of palette mode */}
+
+                    {this.state.mode === "history" && <div
+                        className="ColorPicker__body--history-mode"
+                    >
+                        History
+                    </div>}
+
+                    {this.state.mode === "names" && <div
+                        className="ColorPicker__body--names-mode"
+                    >
+                        Names
+                    </div>}
                 </div>
             </div>
         );
