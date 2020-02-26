@@ -439,13 +439,18 @@ $border: 1px solid $borderColor;
         height: 5%;
         .ColorPicker__color-name {
             display: flex;
-            .ColorPicker__color-name__sample {
-                width: 50%;
-            }
+            &:hover { .ColorPicker__color-name__name, .ColorPicker__color-name__hex { background-color: rgba(255, 255, 255, 0.05); }}
+            .ColorPicker__color-name__sample { width: 50%; }
             .ColorPicker__color-name__name {
+                display: flex;
+                justify-content: space-between;
                 width: 35%;
                 padding-left: 10px;
                 text-align: left;
+                span {
+                    color: #555f64;
+                    font-style: italic;
+                }
             }
             .ColorPicker__color-name__hex {
                 width: 15%;

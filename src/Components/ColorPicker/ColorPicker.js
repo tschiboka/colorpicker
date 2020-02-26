@@ -691,11 +691,19 @@ export default class ColorPicker extends Component {
             });
         }
 
+        switch (this.state.colorNamesMode.sortBy) {
+            case "name": { colors = colors.sort((a, b) => a.name.toUpperCase() > b.name.toUpperCase()); break; }
+            case "hex": { colors = colors.sort((a, b) => a.hex.toUpperCase() > b.hex.toUpperCase()); break; }
+            default: {
+
+            }
+        }
+
         return colors.map((color, i) => (
             <tr key={i + "colorName"} className="ColorPicker__color-name">
                 <td className="ColorPicker__color-name__sample" style={{ backgroundColor: "#" + color.hex }}></td>
 
-                <td className="ColorPicker__color-name__name">{color.name}</td>
+                <td className="ColorPicker__color-name__name">{color.name}{color.css && <span>css</span>}</td>
 
                 <td className="ColorPicker__color-name__hex">{"#" + color.hex}</td>
             </tr>
@@ -1001,19 +1009,10 @@ export default class ColorPicker extends Component {
                             <button
                                 className="ColorPicker--button-theme"
                                 title="sort by color groups"
-                                onClick={() => this.setState({ ...this.state, colorNamesMode: { sortBy: "color", css: this.state.colorNamesMode.css, grid: this.state.colorNamesMode.grid } })}
+                                onClick={() => this.setState({ ...this.state, colorNamesMode: { sortBy: "groups", css: this.state.colorNamesMode.css, grid: this.state.colorNamesMode.grid } })}
                             >
-                                color
+                                groups
                                 {this.state.colorNamesMode.sortBy === "color" && <div className="ColorPicker__active-sign"></div>}
-                            </button>
-
-                            <button
-                                className="ColorPicker--button-theme"
-                                title="sort from lighter to darker"
-                                onClick={() => this.setState({ ...this.state, colorNamesMode: { sortBy: "lightness", css: this.state.colorNamesMode.css, grid: this.state.colorNamesMode.grid } })}
-                            >
-                                lightness
-                                {this.state.colorNamesMode.sortBy === "lightness" && <div className="ColorPicker__active-sign"></div>}
                             </button>
 
                             <button
