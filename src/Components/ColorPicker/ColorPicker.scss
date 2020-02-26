@@ -117,6 +117,19 @@ $border: 1px solid $borderColor;
                 background-position: center;
                 background-repeat: no-repeat;
                 background-size: contain;
+                .ColorPicker__active-sign {
+                    position: absolute;
+                    top: 5%;
+                    right: 5%;
+                    width: 5px;
+                    height: 5px;
+                    background: #4cc3f1;
+                    border-radius: 3px 0 0 0;
+                    -webkit-border-radius: 5px;
+                    -moz-border-radius: 5px;
+                    -ms-border-radius: 5px;
+                    -o-border-radius: 5px;
+                }
             }
             &:hover { 
                 font-size: 14px;
@@ -124,19 +137,6 @@ $border: 1px solid $borderColor;
                     transform: scale(0.9);
                     -webkit-transform: scale(0.9);
                 }
-            }
-            .active-sign {
-                position: absolute;
-                top: 5%;
-                right: 5%;
-                width: 5px;
-                height: 5px;
-                background: #4cc3f1;
-                border-radius: 3px 0 0 0;
-                -webkit-border-radius: 5px;
-                -moz-border-radius: 5px;
-                -ms-border-radius: 5px;
-                -o-border-radius: 5px;
             }
         }
         .close-btn {
@@ -409,6 +409,7 @@ $border: 1px solid $borderColor;
         justify-content: flex-end;
         align-items: center;
         button {
+            position: relative;
             width: 16.6%;
             display: flex;
             justify-content: center;
@@ -417,6 +418,19 @@ $border: 1px solid $borderColor;
             height: 100%;
             color: #aadae9;
             font-size: 16px;
+            .ColorPicker__active-sign {
+                position: absolute;
+                top: 5%;
+                right: 5%;
+                width: 5px;
+                height: 5px;
+                background: #4cc3f1;
+                border-radius: 3px 0 0 0;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                -ms-border-radius: 5px;
+                -o-border-radius: 5px;
+            }
             &:hover { font-size: 14px; }
         }
     }

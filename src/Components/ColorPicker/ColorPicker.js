@@ -672,7 +672,25 @@ export default class ColorPicker extends Component {
 
 
     renderColorNames() {
-        const colors = require("./json/colors.json");
+        let colorsCss = require("./json/cssColors.json");
+        const colors1500 = require("./json/colors.json");
+
+        let colors;
+
+        // format css colors the same way colors 1500 is formatted (eg: [{name: "color name", hex: "eeaa44"}, ...]) and add css property
+        colorsCss = Object.keys(colorsCss).map((key, i) => ({ name: colorsCss[key], hex: key.replace(/#/, "").toUpperCase(), css: true }));
+
+        if (this.state.colorNamesMode.css) colors = colorsCss;
+        else {
+            // get rid of duplicates
+            const hexs = [...(new Set([...(colorsCss.map(c => c.hex)), ...(colors1500.map(c => c.hex))]))]; // merge only unique hex values
+            colors = hexs.map(hex => {
+                let color = colorsCss.find(c => c.hex === hex);
+                if (!color) color = colors1500.find(c => c.hex === hex);
+                return color;
+            });
+        }
+
         return colors.map((color, i) => (
             <tr key={i + "colorName"} className="ColorPicker__color-name">
                 <td className="ColorPicker__color-name__sample" style={{ backgroundColor: "#" + color.hex }}></td>
@@ -745,7 +763,7 @@ export default class ColorPicker extends Component {
                             onClick={() => this.setState({ ...this.state, mode: "names" })}
                         >
                             <div style={{ backgroundImage: `url(${colorsBtnBg})` }}>
-                                {this.state.mode === "names" && <div className="active-sign"></div>}
+                                {this.state.mode === "names" && <div className="ColorPicker__active-sign"></div>}
                             </div>
                         </button>
 
@@ -755,7 +773,7 @@ export default class ColorPicker extends Component {
                             onClick={() => this.setState({ ...this.state, mode: "history" })}
                         >
                             <div style={{ backgroundImage: `url(${starBtnBg})` }}>
-                                {this.state.mode === "history" && <div className="active-sign"></div>}
+                                {this.state.mode === "history" && <div className="ColorPicker__active-sign"></div>}
                             </div>
                         </button>
 
@@ -765,7 +783,7 @@ export default class ColorPicker extends Component {
                             onClick={() => this.setState({ ...this.state, mode: "palette" })}
                         >
                             <div style={{ backgroundImage: `url(${hueBtnBg})` }}>
-                                {this.state.mode === "palette" && <div className="active-sign"></div>}
+                                {this.state.mode === "palette" && <div className="ColorPicker__active-sign"></div>}
                             </div>
                         </button>
 
@@ -962,20 +980,59 @@ export default class ColorPicker extends Component {
                         className="ColorPicker__body--names-mode"
                     >
                         <div className="ColorPicker__color-names__header">
-                            <button className="ColorPicker--button-theme" title="sort by name">
+                            <button
+                                className="ColorPicker--button-theme"
+                                title="sort by name"
+                                onClick={() => this.setState({ ...this.state, colorNamesMode: { sortBy: "name", css: this.state.colorNamesMode.css, grid: this.state.colorNamesMode.grid } })}
+                            >
                                 name
-                                {this.state.colorNamesMode.sortBy === "name" && <div className="active-sign"></div>}
+                                {this.state.colorNamesMode.sortBy === "name" && <div className="ColorPicker__active-sign"></div>}
                             </button>
 
-                            <button className="ColorPicker--button-theme" title="sort by hex code">hex</button>
+                            <button
+                                className="ColorPicker--button-theme"
+                                title="sort by hex code"
+                                onClick={() => this.setState({ ...this.state, colorNamesMode: { sortBy: "hex", css: this.state.colorNamesMode.css, grid: this.state.colorNamesMode.grid } })}
+                            >
+                                hex
+                                {this.state.colorNamesMode.sortBy === "hex" && <div className="ColorPicker__active-sign"></div>}
+                            </button>
 
-                            <button className="ColorPicker--button-theme" title="sort by color groups">color</button>
+                            <button
+                                className="ColorPicker--button-theme"
+                                title="sort by color groups"
+                                onClick={() => this.setState({ ...this.state, colorNamesMode: { sortBy: "color", css: this.state.colorNamesMode.css, grid: this.state.colorNamesMode.grid } })}
+                            >
+                                color
+                                {this.state.colorNamesMode.sortBy === "color" && <div className="ColorPicker__active-sign"></div>}
+                            </button>
 
-                            <button className="ColorPicker--button-theme" title="sort from lighter to darker">light</button>
+                            <button
+                                className="ColorPicker--button-theme"
+                                title="sort from lighter to darker"
+                                onClick={() => this.setState({ ...this.state, colorNamesMode: { sortBy: "lightness", css: this.state.colorNamesMode.css, grid: this.state.colorNamesMode.grid } })}
+                            >
+                                lightness
+                                {this.state.colorNamesMode.sortBy === "lightness" && <div className="ColorPicker__active-sign"></div>}
+                            </button>
 
-                            <button className="ColorPicker--button-theme" title="only css color names">css</button>
+                            <button
+                                className="ColorPicker--button-theme"
+                                title="only css color names"
+                                onClick={() => this.setState({ ...this.state, colorNamesMode: { sortBy: this.state.colorNamesMode.sortBy, css: !this.state.colorNamesMode.css, grid: this.state.colorNamesMode.grid } })}
+                            >
+                                css
+                                {this.state.colorNamesMode.css && <div className="ColorPicker__active-sign"></div>}
+                            </button>
 
-                            <button className="ColorPicker--button-theme" title="grid/row layout">grid</button>
+                            <button
+                                className="ColorPicker--button-theme"
+                                title="grid/row layout"
+                                onClick={() => this.setState({ ...this.state, colorNamesMode: { sortBy: this.state.colorNamesMode.sortBy, css: this.state.colorNamesMode.css, grid: !this.state.colorNamesMode.grid } })}
+                            >
+                                grid
+                                {this.state.colorNamesMode.grid && <div className="ColorPicker__active-sign"></div>}
+                            </button>
                         </div>
 
                         <table className="ColorPicker__color-names">
