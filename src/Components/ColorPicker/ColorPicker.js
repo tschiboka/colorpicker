@@ -22,6 +22,7 @@ export default class ColorPicker extends Component {
             x: this.getPositionXY("X"),
             y: this.getPositionXY("Y"),
             mode: "palette", // (palette, history, names)
+            colorNamesMode: { sortBy: "name", css: false, grid: false },
             preferredFormat: "rgb", // (rgb, hex, hsl)
             color: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
             originalcolor: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
@@ -960,6 +961,23 @@ export default class ColorPicker extends Component {
                     {this.state.mode === "names" && <div
                         className="ColorPicker__body--names-mode"
                     >
+                        <div className="ColorPicker__color-names__header">
+                            <button className="ColorPicker--button-theme" title="sort by name">
+                                name
+                                {this.state.colorNamesMode.sortBy === "name" && <div className="active-sign"></div>}
+                            </button>
+
+                            <button className="ColorPicker--button-theme" title="sort by hex code">hex</button>
+
+                            <button className="ColorPicker--button-theme" title="sort by color groups">color</button>
+
+                            <button className="ColorPicker--button-theme" title="sort from lighter to darker">light</button>
+
+                            <button className="ColorPicker--button-theme" title="only css color names">css</button>
+
+                            <button className="ColorPicker--button-theme" title="grid/row layout">grid</button>
+                        </div>
+
                         <table className="ColorPicker__color-names">
                             <tbody>
                                 {this.renderColorNames()}
