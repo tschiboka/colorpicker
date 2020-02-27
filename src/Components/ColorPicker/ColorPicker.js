@@ -684,6 +684,11 @@ export default class ColorPicker extends Component {
         let colorsCss = require("./json/cssColors.json");
         const colors1500 = require("./json/colors.json");
         const hexToRgb = h => h.match(/../g).map(v => parseInt(v, 16));
+        const contrast = hex => {
+            const [R, G, B] = hexToRgb(hex);
+            const brightness = ((R * 299) + (G * 587) + (B * 114)) / 1000;
+            return brightness >= 128 ? "#111" : "#eee";
+        }
         let colors;
 
         // format css colors the same way colors 1500 is formatted (eg: [{name: "color name", hex: "eeaa44"}, ...]) and add css property
@@ -713,30 +718,46 @@ export default class ColorPicker extends Component {
                     { name: "purple", hex: "800080", colors: [] },
                     { name: "blue", hex: "0000FF", colors: [] },
                     { name: "cyan", hex: "00FFFF", colors: [] },
+                    { name: "green", hex: "008000", colors: [] },
                     { name: "brown", hex: "A52A2A", colors: [] },
                     { name: "grey", hex: "808080", colors: [] },
                     { name: "black", hex: "000000", colors: [] },
                 ];
 
                 colors.forEach(c => {
-                    const [cR, cG, cB] = hexToRgb(c.hex);
-                    let closest = { colorGroupName: "", minDist: 766 };
+                    const cRgb = hexToRgb(c.hex);
+                    const [cH, cS, cV] = this.rgbToHsl(...cRgb);
+                    let closest = { colorGroupName: "", minDist: 10000 };
                     groups.forEach(g => {
-                        const [gR, gG, gB] = hexToRgb(g.hex);
-                        const dist = Math.abs(cR - gR) + Math.abs(cG - gG) + Math.abs(cB - gB);
+                        const gRgb = hexToRgb(g.hex);
+                        const [gH, gS, gL] = this.rgbToHsl(...gRgb);
+                        const dist = Math.abs(cH - gH) + Math.abs(cS - gS) + Math.abs(cV - gL);
+                        //console.log(g.name, cH, cS, cV, gH, gS, gL, dist, closest);
                         if (dist < closest.minDist) closest = { colorGroupName: g.name, minDist: dist };
                     });
                     groups[groups.findIndex(e => e.name === closest.colorGroupName)].colors.push(c);
                 });
 
-                console.log(groups);
-            }
-        }
+                return groups.map(group => (
+                    <table className="ColorPicker__color-names" key={"color-group" + group.name}>
+                        <caption>{group.name.toUpperCase()}</caption>
+                        <tbody>
+                            {group.colors.map((color, i) => (
+                                <tr key={i + group.name + color.name} className="ColorPicker__color-name" data-hex={color.hex}>
+                                    <td
+                                        className="ColorPicker__color-name__sample"
+                                        style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}
+                                        data-hex={color.hex}>
+                                        {color.name} {color.css && <span data-hex={color.hex}>css</span>}
+                                    </td>
 
-        const contrast = hex => {
-            const [R, G, B] = hexToRgb(hex);
-            const brightness = ((R * 299) + (G * 587) + (B * 114)) / 1000;
-            return brightness >= 128 ? "#111" : "#eee";
+                                    <td className="ColorPicker__color-name__hex" data-hex={color.hex}>{"#" + color.hex}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                ))
+            }
         }
 
         return colors.map((color, i) => (
@@ -1077,11 +1098,13 @@ export default class ColorPicker extends Component {
                             </button>
                         </div>
 
-                        <table className="ColorPicker__color-names" onClick={e => this.handleColorNameOnClick(e)}>
+                        {this.state.colorNamesMode.sortBy !== "groups" && <table className="ColorPicker__color-names" onClick={e => this.handleColorNameOnClick(e)}>
                             <tbody>
                                 {this.renderColorNames()}
                             </tbody>
-                        </table>
+                        </table>}
+
+                        {this.state.colorNamesMode.sortBy === "groups" && this.renderColorNames()}
                     </div>}
                 </div>
             </div>
