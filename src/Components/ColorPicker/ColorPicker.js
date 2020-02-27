@@ -171,7 +171,7 @@ export default class ColorPicker extends Component {
 
     handleColorFormatOnClick() {
         switch (this.state.preferredFormat) {
-            case "rgb": { this.setState({ ...this.state, preferredFormat: "hsl" }); console.log("HERE"); break; }
+            case "rgb": { this.setState({ ...this.state, preferredFormat: "hsl" }); break; }
             case "hsl": { this.setState({ ...this.state, preferredFormat: "hex" }); break; }
             case "hex": { this.setState({ ...this.state, preferredFormat: "rgb" }); break; }
             default: { throw Error("Incorrect color format"); }
@@ -683,7 +683,7 @@ export default class ColorPicker extends Component {
     renderColorNames() {
         let colorsCss = require("./json/cssColors.json");
         const colors1500 = require("./json/colors.json");
-
+        const hexToRgb = h => h.match(/../g).map(v => parseInt(v, 16));
         let colors;
 
         // format css colors the same way colors 1500 is formatted (eg: [{name: "color name", hex: "eeaa44"}, ...]) and add css property
@@ -704,12 +704,37 @@ export default class ColorPicker extends Component {
             case "name": { colors = colors.sort((a, b) => a.name.toUpperCase() > b.name.toUpperCase()); break; }
             case "hex": { colors = colors.sort((a, b) => a.hex.toUpperCase() > b.hex.toUpperCase()); break; }
             default: {
+                const groups = [
+                    { name: "white", hex: "FFFFFF", colors: [] },
+                    { name: "yellow", hex: "FFFF00", colors: [] },
+                    { name: "orange", hex: "FFA500", colors: [] },
+                    { name: "pink", hex: "FFC0CB", colors: [] },
+                    { name: "red", hex: "FF0000", colors: [] },
+                    { name: "purple", hex: "800080", colors: [] },
+                    { name: "blue", hex: "0000FF", colors: [] },
+                    { name: "cyan", hex: "00FFFF", colors: [] },
+                    { name: "brown", hex: "A52A2A", colors: [] },
+                    { name: "grey", hex: "808080", colors: [] },
+                    { name: "black", hex: "000000", colors: [] },
+                ];
 
+                colors.forEach(c => {
+                    const [cR, cG, cB] = hexToRgb(c.hex);
+                    let closest = { colorGroupName: "", minDist: 766 };
+                    groups.forEach(g => {
+                        const [gR, gG, gB] = hexToRgb(g.hex);
+                        const dist = Math.abs(cR - gR) + Math.abs(cG - gG) + Math.abs(cB - gB);
+                        if (dist < closest.minDist) closest = { colorGroupName: g.name, minDist: dist };
+                    });
+                    groups[groups.findIndex(e => e.name === closest.colorGroupName)].colors.push(c);
+                });
+
+                console.log(groups);
             }
         }
 
         const contrast = hex => {
-            const [R, G, B] = [parseInt(hex.substring(0, 2), 16), parseInt(hex.substring(2, 4), 16), parseInt(hex.substring(4, 6), 16)];
+            const [R, G, B] = hexToRgb(hex);
             const brightness = ((R * 299) + (G * 587) + (B * 114)) / 1000;
             return brightness >= 128 ? "#111" : "#eee";
         }
