@@ -699,11 +699,19 @@ export default class ColorPicker extends Component {
             }
         }
 
+        const contrast = hex => {
+            const [R, G, B] = [parseInt(hex.substring(0, 2), 16), parseInt(hex.substring(2, 4), 16), parseInt(hex.substring(4, 6), 16)];
+            const brightness = ((R * 299) + (G * 587) + (B * 114)) / 1000;
+            return brightness >= 128 ? "#111" : "#eee";
+        }
+
         return colors.map((color, i) => (
             <tr key={i + "colorName"} className="ColorPicker__color-name">
-                <td className="ColorPicker__color-name__sample" style={{ backgroundColor: "#" + color.hex }}></td>
-
-                <td className="ColorPicker__color-name__name">{color.name}{color.css && <span>css</span>}</td>
+                <td
+                    className="ColorPicker__color-name__sample"
+                    style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}>
+                    {color.name} {color.css && <span>css</span>}
+                </td>
 
                 <td className="ColorPicker__color-name__hex">{"#" + color.hex}</td>
             </tr>
