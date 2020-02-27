@@ -556,6 +556,7 @@ export default class ColorPicker extends Component {
             const sliderThumb = this.state.hueSliderThumb;
             sliderThumb.style.left = newSliderX + "px";
         }
+        this.setAlphaSliderTo(this.state.color.alpha); // in case it was called form different part of comonent eg color names
 
         if (type !== "hex") values = values.map(Number);
         let hue, rgb, newColorObj;
@@ -671,6 +672,14 @@ export default class ColorPicker extends Component {
 
 
 
+    handleColorNameOnClick(e) {
+        const hex = e.target.dataset.hex;
+        const colorObj = this.getColorObj("#" + hex);
+        this.setState({ ...this.state, color: colorObj }, () => this.findAndSetColorByInput("hex", hex));
+    }
+
+
+
     renderColorNames() {
         let colorsCss = require("./json/cssColors.json");
         const colors1500 = require("./json/colors.json");
@@ -706,14 +715,15 @@ export default class ColorPicker extends Component {
         }
 
         return colors.map((color, i) => (
-            <tr key={i + "colorName"} className="ColorPicker__color-name">
+            <tr key={i + "colorName"} className="ColorPicker__color-name" data-hex={color.hex}>
                 <td
                     className="ColorPicker__color-name__sample"
-                    style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}>
-                    {color.name} {color.css && <span>css</span>}
+                    style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}
+                    data-hex={color.hex}>
+                    {color.name} {color.css && <span data-hex={color.hex}>css</span>}
                 </td>
 
-                <td className="ColorPicker__color-name__hex">{"#" + color.hex}</td>
+                <td className="ColorPicker__color-name__hex" data-hex={color.hex}>{"#" + color.hex}</td>
             </tr>
         ));
     }
@@ -1042,7 +1052,7 @@ export default class ColorPicker extends Component {
                             </button>
                         </div>
 
-                        <table className="ColorPicker__color-names">
+                        <table className="ColorPicker__color-names" onClick={e => this.handleColorNameOnClick(e)}>
                             <tbody>
                                 {this.renderColorNames()}
                             </tbody>
