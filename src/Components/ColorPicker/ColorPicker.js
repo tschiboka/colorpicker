@@ -584,7 +584,7 @@ export default class ColorPicker extends Component {
             }
             case "hex": {
                 rgb = this.hexToRgb("#" + values);
-                hue = this.rgbToHsl(...values)[0];
+                hue = this.rgbToHsl(...rgb)[0];
                 newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
                 adjustHueSlider();
                 break;
@@ -725,35 +725,49 @@ export default class ColorPicker extends Component {
                 ];
 
                 colors.forEach(c => {
-                    const cRgb = hexToRgb(c.hex);
-                    const [cH, cS, cV] = this.rgbToHsl(...cRgb);
-                    let closest = { colorGroupName: "", minDist: 10000 };
-                    groups.forEach(g => {
-                        const gRgb = hexToRgb(g.hex);
-                        const [gH, gS, gL] = this.rgbToHsl(...gRgb);
-                        const dist = Math.abs(cH - gH) + Math.abs(cS - gS) + Math.abs(cV - gL);
-                        //console.log(g.name, cH, cS, cV, gH, gS, gL, dist, closest);
-                        if (dist < closest.minDist) closest = { colorGroupName: g.name, minDist: dist };
-                    });
-                    groups[groups.findIndex(e => e.name === closest.colorGroupName)].colors.push(c);
+                    const [H, S, L] = this.rgbToHsl(...hexToRgb(c.hex));
+                    if (L < 10) return groups[groups.findIndex(e => e.name === "black")].colors.push(c);
+                    if (L >= 95) return groups[groups.findIndex(e => e.name === "white")].colors.push(c);
+
+                    if (S <= 10) return groups[groups.findIndex(e => e.name === "grey")].colors.push(c);
+
+                    /*
+                    
+                                        if (H < 15) return groups[groups.findIndex(e => e.name === "red")].colors.push(c);
+                                        if (H < 100 && S > 50 && L > 50) return groups[groups.findIndex(e => e.name === "orange")].colors.push(c);
+                                        if (H < 100 && S > 50 && L < 50) return groups[groups.findIndex(e => e.name === "brown")].colors.push(c);
+                                        if (H < 75) return groups[groups.findIndex(e => e.name === "yellow")].colors.push(c);
+                                        if (H < 165) return groups[groups.findIndex(e => e.name === "green")].colors.push(c);
+                                        if (H < 190) return groups[groups.findIndex(e => e.name === "cyan")].colors.push(c);
+                                        if (H < 270) return groups[groups.findIndex(e => e.name === "blue")].colors.push(c);
+                                        if (H < 290) return groups[groups.findIndex(e => e.name === "purple")].colors.push(c);
+                                        if (H < 345) return groups[groups.findIndex(e => e.name === "pink")].colors.push(c);
+                                        if (H < 360) return groups[groups.findIndex(e => e.name === "red")].colors.push(c);*/
                 });
 
                 return groups.map(group => (
                     <table className="ColorPicker__color-names" key={"color-group" + group.name}>
                         <caption>{group.name.toUpperCase()}</caption>
                         <tbody>
-                            {group.colors.map((color, i) => (
-                                <tr key={i + group.name + color.name} className="ColorPicker__color-name" data-hex={color.hex}>
-                                    <td
-                                        className="ColorPicker__color-name__sample"
-                                        style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}
-                                        data-hex={color.hex}>
-                                        {color.name} {color.css && <span data-hex={color.hex}>css</span>}
-                                    </td>
+                            {group.colors
+                                .sort((a, b) => {
+                                    const [aH, aS, aL] = this.rgbToHsl(...hexToRgb(a.hex));
+                                    const [bH, bS, bL] = this.rgbToHsl(...hexToRgb(b.hex));
+                                    console.log(aL + aS, bL + bS);
+                                    return aL + aS < bL + bS ? 1 : -1;
+                                })
+                                .map((color, i) => (
+                                    <tr key={i + group.name + color.name} className="ColorPicker__color-name" data-hex={color.hex}>
+                                        <td
+                                            className="ColorPicker__color-name__sample"
+                                            style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}
+                                            data-hex={color.hex}>
+                                            {color.name} {color.css && <span data-hex={color.hex}>css</span>}
+                                        </td>
 
-                                    <td className="ColorPicker__color-name__hex" data-hex={color.hex}>{"#" + color.hex}</td>
-                                </tr>
-                            ))}
+                                        <td className="ColorPicker__color-name__hex" data-hex={color.hex}>{"#" + color.hex}</td>
+                                    </tr>
+                                ))}
                         </tbody>
                     </table>
                 ))
