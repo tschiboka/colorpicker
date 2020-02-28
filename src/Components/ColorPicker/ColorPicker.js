@@ -709,10 +709,13 @@ export default class ColorPicker extends Component {
             case "name": { colors = colors.sort((a, b) => a.name.toUpperCase() > b.name.toUpperCase()); break; }
             case "hex": { colors = colors.sort((a, b) => a.hex.toUpperCase() > b.hex.toUpperCase()); break; }
             default: {
+                const placeColorInGroup = (group, color) => groups[groups.findIndex(e => e.name === group)].colors.push(color);
                 const groups = [
                     { name: "white", hex: "FFFFFF", colors: [] },
-                    { name: "yellow", hex: "FFFF00", colors: [] },
+                    { name: "grey", hex: "808080", colors: [] },
                     { name: "orange", hex: "FFA500", colors: [] },
+                    { name: "black", hex: "000000", colors: [] },
+                    { name: "yellow", hex: "FFFF00", colors: [] },
                     { name: "pink", hex: "FFC0CB", colors: [] },
                     { name: "red", hex: "FF0000", colors: [] },
                     { name: "purple", hex: "800080", colors: [] },
@@ -720,21 +723,24 @@ export default class ColorPicker extends Component {
                     { name: "cyan", hex: "00FFFF", colors: [] },
                     { name: "green", hex: "008000", colors: [] },
                     { name: "brown", hex: "A52A2A", colors: [] },
-                    { name: "grey", hex: "808080", colors: [] },
-                    { name: "black", hex: "000000", colors: [] },
                 ];
 
                 colors.forEach(c => {
                     const [H, S, L] = this.rgbToHsl(...hexToRgb(c.hex));
-                    if (L < 10) return groups[groups.findIndex(e => e.name === "black")].colors.push(c);
-                    if (L >= 95) return groups[groups.findIndex(e => e.name === "white")].colors.push(c);
+                    // greyscale
+                    if (L >= 90 || (L >= 88 && S > 50)) return placeColorInGroup("white", c);
+                    if (L < 10) return placeColorInGroup("black", c);
+                    if (S <= 15 && L <= 88 && L >= 10) return placeColorInGroup("grey", c);
 
-                    if (S <= 10) return groups[groups.findIndex(e => e.name === "grey")].colors.push(c);
+                    // red hues
+                    if (H < 15) return placeColorInGroup("red", c);
+                    if (H >= 15 && H < 40 && L >= 50) return placeColorInGroup("orange", c);
+                    if (H >= 15 && H < 40 && L < 50) return placeColorInGroup("brown", c);
+
 
                     /*
                     
                                         if (H < 15) return groups[groups.findIndex(e => e.name === "red")].colors.push(c);
-                                        if (H < 100 && S > 50 && L > 50) return groups[groups.findIndex(e => e.name === "orange")].colors.push(c);
                                         if (H < 100 && S > 50 && L < 50) return groups[groups.findIndex(e => e.name === "brown")].colors.push(c);
                                         if (H < 75) return groups[groups.findIndex(e => e.name === "yellow")].colors.push(c);
                                         if (H < 165) return groups[groups.findIndex(e => e.name === "green")].colors.push(c);
@@ -750,12 +756,7 @@ export default class ColorPicker extends Component {
                         <caption>{group.name.toUpperCase()}</caption>
                         <tbody>
                             {group.colors
-                                .sort((a, b) => {
-                                    const [aH, aS, aL] = this.rgbToHsl(...hexToRgb(a.hex));
-                                    const [bH, bS, bL] = this.rgbToHsl(...hexToRgb(b.hex));
-                                    console.log(aL + aS, bL + bS);
-                                    return aL + aS < bL + bS ? 1 : -1;
-                                })
+                                .sort((a, b, aL = this.rgbToHsl(...hexToRgb(a.hex))[2], bL = this.rgbToHsl(...hexToRgb(b.hex))[2]) => aL < bL)
                                 .map((color, i) => (
                                     <tr key={i + group.name + color.name} className="ColorPicker__color-name" data-hex={color.hex}>
                                         <td
