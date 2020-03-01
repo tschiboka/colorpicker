@@ -728,14 +728,14 @@ export default class ColorPicker extends Component {
                 colors.forEach(c => {
                     const [H, S, L] = this.rgbToHsl(...hexToRgb(c.hex));
                     // greyscale
-                    if (L >= 90 || (L >= 88 && S > 50)) return placeColorInGroup("white", c);
+                    if (L >= 90) return placeColorInGroup("white", c);
                     if (L < 10) return placeColorInGroup("black", c);
                     if (S <= 15 && L <= 88 && L >= 10) return placeColorInGroup("grey", c);
 
                     // red hues
                     if (H < 15) return placeColorInGroup("red", c);
-                    if (H >= 15 && H < 40 && L >= 50) return placeColorInGroup("orange", c);
-                    if (H >= 15 && H < 40 && L < 50) return placeColorInGroup("brown", c);
+                    if (H >= 24 && H < 40 && S >= 20 && L >= 50) return placeColorInGroup("orange", c);
+                    if (H >= 24 && H < 40 && S >= 20 && L < 50 && L >= 10) return placeColorInGroup("brown", c);
 
 
                     /*
