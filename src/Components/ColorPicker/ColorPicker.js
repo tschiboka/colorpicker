@@ -710,24 +710,13 @@ export default class ColorPicker extends Component {
             case "hex": { colors = colors.sort((a, b) => a.hex.toUpperCase() > b.hex.toUpperCase()); break; }
             default: {
                 const placeColorInGroup = (group, color) => groups[groups.findIndex(e => e.name === group)].colors.push(color);
-                const groups = [
-                    { name: "white", hex: "FFFFFF", colors: [] },
-                    { name: "grey", hex: "808080", colors: [] },
-                    { name: "pink", hex: "FFC0CB", colors: [] },
-                    { name: "red", hex: "FF0000", colors: [] },
-                    { name: "orange", hex: "FFA500", colors: [] },
-                    { name: "brown", hex: "A52A2A", colors: [] },
-                    { name: "yellow", hex: "FFFF00", colors: [] },
-                    { name: "purple", hex: "800080", colors: [] },
-                    { name: "blue", hex: "0000FF", colors: [] },
-                    { name: "cyan", hex: "00FFFF", colors: [] },
-                    { name: "green", hex: "008000", colors: [] },
-                    { name: "black", hex: "000000", colors: [] },
-                ];
+                const groups = ["white", "grey", "pink", "red", "orange", "brown", "yellow", "green", "cyan", "blue", "magenta", "black"]
+                    .map(colorName => ({ name: colorName, colors: [] }));
 
                 colors.forEach(c => {
-                    const [H, S, L] = this.rgbToHsl(...hexToRgb(c.hex));
                     // reference: www.workwithcolor.com (color ranges)
+                    const [H, S, L] = this.rgbToHsl(...hexToRgb(c.hex));
+
                     // greyscale
                     if (L >= 90) return placeColorInGroup("white", c);
                     if (L < 10) return placeColorInGroup("black", c);
@@ -736,21 +725,19 @@ export default class ColorPicker extends Component {
                     // red hues (pink, red, orange, brown)
                     if ((H >= 337 || H < 15) && L >= 60) return placeColorInGroup("pink", c);
                     if (H >= 337 || H < 15) return placeColorInGroup("red", c);
-                    if (H >= 15 && H < 40 && S >= 20 && L >= 50) return placeColorInGroup("orange", c);
-                    if (H >= 15 && H < 40 && S >= 20 && L < 50 && L >= 10) return placeColorInGroup("brown", c);
+                    if (H >= 15 && H < 40 && S >= 20 && L >= 40) return placeColorInGroup("orange", c);
+                    if (H >= 15 && H < 40) return placeColorInGroup("brown", c);
 
+                    // green hues (brown, yellow, green)
+                    if (H >= 40 && H < 68 && L <= 15) return placeColorInGroup("brown", c);
+                    if (H >= 40 && H < 68 && L > 15) return placeColorInGroup("yellow", c);
+                    if (H >= 68 && H < 140) return placeColorInGroup("green", c);
 
-                    /*
-                    
-                                        if (H < 15) return groups[groups.findIndex(e => e.name === "red")].colors.push(c);
-                                        if (H < 100 && S > 50 && L < 50) return groups[groups.findIndex(e => e.name === "brown")].colors.push(c);
-                                        if (H < 75) return groups[groups.findIndex(e => e.name === "yellow")].colors.push(c);
-                                        if (H < 165) return groups[groups.findIndex(e => e.name === "green")].colors.push(c);
-                                        if (H < 190) return groups[groups.findIndex(e => e.name === "cyan")].colors.push(c);
-                                        if (H < 270) return groups[groups.findIndex(e => e.name === "blue")].colors.push(c);
-                                        if (H < 290) return groups[groups.findIndex(e => e.name === "purple")].colors.push(c);
-                                        if (H < 345) return groups[groups.findIndex(e => e.name === "pink")].colors.push(c);
-                                        if (H < 360) return groups[groups.findIndex(e => e.name === "red")].colors.push(c);*/
+                    // blue hues (cyan, blue, magenta, pink)
+                    if (H >= 140 && H < 180) return placeColorInGroup("cyan", c);
+                    if (H >= 180 && H < 255) return placeColorInGroup("blue", c);
+                    if (H >= 255 && H < 337 && L < 75) return placeColorInGroup("magenta", c);
+                    if (H >= 255 && H < 337 && L >= 75) return placeColorInGroup("pink", c);
                 });
 
                 return groups.map(group => (
