@@ -713,29 +713,31 @@ export default class ColorPicker extends Component {
                 const groups = [
                     { name: "white", hex: "FFFFFF", colors: [] },
                     { name: "grey", hex: "808080", colors: [] },
-                    { name: "orange", hex: "FFA500", colors: [] },
-                    { name: "black", hex: "000000", colors: [] },
-                    { name: "yellow", hex: "FFFF00", colors: [] },
                     { name: "pink", hex: "FFC0CB", colors: [] },
                     { name: "red", hex: "FF0000", colors: [] },
+                    { name: "orange", hex: "FFA500", colors: [] },
+                    { name: "brown", hex: "A52A2A", colors: [] },
+                    { name: "yellow", hex: "FFFF00", colors: [] },
                     { name: "purple", hex: "800080", colors: [] },
                     { name: "blue", hex: "0000FF", colors: [] },
                     { name: "cyan", hex: "00FFFF", colors: [] },
                     { name: "green", hex: "008000", colors: [] },
-                    { name: "brown", hex: "A52A2A", colors: [] },
+                    { name: "black", hex: "000000", colors: [] },
                 ];
 
                 colors.forEach(c => {
                     const [H, S, L] = this.rgbToHsl(...hexToRgb(c.hex));
+                    // reference: www.workwithcolor.com (color ranges)
                     // greyscale
                     if (L >= 90) return placeColorInGroup("white", c);
                     if (L < 10) return placeColorInGroup("black", c);
                     if (S <= 15 && L <= 88 && L >= 10) return placeColorInGroup("grey", c);
 
-                    // red hues
-                    if (H < 15) return placeColorInGroup("red", c);
-                    if (H >= 24 && H < 40 && S >= 20 && L >= 50) return placeColorInGroup("orange", c);
-                    if (H >= 24 && H < 40 && S >= 20 && L < 50 && L >= 10) return placeColorInGroup("brown", c);
+                    // red hues (pink, red, orange, brown)
+                    if ((H >= 337 || H < 15) && L >= 60) return placeColorInGroup("pink", c);
+                    if (H >= 337 || H < 15) return placeColorInGroup("red", c);
+                    if (H >= 15 && H < 40 && S >= 20 && L >= 50) return placeColorInGroup("orange", c);
+                    if (H >= 15 && H < 40 && S >= 20 && L < 50 && L >= 10) return placeColorInGroup("brown", c);
 
 
                     /*
@@ -752,7 +754,7 @@ export default class ColorPicker extends Component {
                 });
 
                 return groups.map(group => (
-                    <table className="ColorPicker__color-names" key={"color-group" + group.name}>
+                    <table className="ColorPicker__color-names" key={"color-group" + group.name} onClick={e => this.handleColorNameOnClick(e)}>
                         <caption>{group.name.toUpperCase()}</caption>
                         <tbody>
                             {group.colors
@@ -1091,7 +1093,7 @@ export default class ColorPicker extends Component {
                                 onClick={() => this.setState({ ...this.state, colorNamesMode: { sortBy: "groups", css: this.state.colorNamesMode.css, grid: this.state.colorNamesMode.grid } })}
                             >
                                 groups
-                                {this.state.colorNamesMode.sortBy === "color" && <div className="ColorPicker__active-sign"></div>}
+                                {this.state.colorNamesMode.sortBy === "groups" && <div className="ColorPicker__active-sign"></div>}
                             </button>
 
                             <button
