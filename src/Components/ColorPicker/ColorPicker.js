@@ -674,6 +674,7 @@ export default class ColorPicker extends Component {
 
     handleColorNameOnClick(e) {
         const hex = e.target.dataset.hex;
+        if (!hex) return;
         const colorObj = this.getColorObj("#" + hex);
         this.setState({ ...this.state, color: colorObj }, () => this.findAndSetColorByInput("hex", hex));
     }
@@ -764,18 +765,62 @@ export default class ColorPicker extends Component {
             }
         }
 
-        return colors.map((color, i) => (
-            <tr key={i + "colorName"} className="ColorPicker__color-name" data-hex={color.hex}>
-                <td
-                    className="ColorPicker__color-name__sample"
-                    style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}
-                    data-hex={color.hex}>
-                    {color.name} {color.css && <span data-hex={color.hex}>css</span>}
-                </td>
+        const chunkSize = 8;
 
-                <td className="ColorPicker__color-name__hex" data-hex={color.hex}>{"#" + color.hex}</td>
-            </tr>
-        ));
+        return !this.state.colorNamesMode.grid ?
+            colors.map((color, i) =>
+                (<tr
+                    key={i + "colorName"}
+                    className="ColorPicker__color-name"
+                    data-hex={color.hex}>
+                    <td
+                        className="ColorPicker__color-name__sample"
+                        style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}
+                        data-hex={color.hex}>
+                        {color.name} {color.css && <span data-hex={color.hex}>css</span>}
+                    </td>
+
+                    <td className="ColorPicker__color-name__hex" data-hex={color.hex}>{"#" + color.hex}</td>
+                </tr>)
+            )
+            : Array(Math.ceil(colors.length / chunkSize))
+                .fill()
+                .map((_, i) => i * chunkSize)
+                .map(startI => colors.slice(startI, startI + chunkSize))
+                .map((chunk, i) => (
+                    <tr
+                        key={i + "colorRow"}
+                        className="ColorPicker__color-row"
+                    >
+                        {
+                            chunk.map((color, ind) => (
+                                <td
+                                    key={i + "colorRow" + ind}
+                                    className="ColorPicker__color-name__sample"
+                                    style={{
+                                        backgroundColor: "#" + color.hex,
+                                        color: contrast(color.hex),
+                                    }}
+                                    data-hex={color.hex}
+                                    title={color.name}
+                                >
+                                    {color.hex}
+                                </td>
+                            ))
+                        }
+                    </tr>
+                ));
+        /*(<tr
+            key={i + "colorName"}
+            className="ColorPicker__color-name"
+            data-hex={color.hex}>
+            <td
+                className="ColorPicker__color-name__sample"
+                style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}
+                data-hex={color.hex}
+                title={color.name + " " + color.hex}
+            ></td>
+        </tr>)*/
     }
 
 
@@ -1102,13 +1147,13 @@ export default class ColorPicker extends Component {
                             </button>
                         </div>
 
-                        {this.state.colorNamesMode.sortBy !== "groups" && <table className="ColorPicker__color-names" onClick={e => this.handleColorNameOnClick(e)}>
+                        {this.state.colorNamesMode.sortBy !== "groups" ? <table className="ColorPicker__color-names" onClick={e => this.handleColorNameOnClick(e)}>
                             <tbody>
                                 {this.renderColorNames()}
                             </tbody>
-                        </table>}
-
-                        {this.state.colorNamesMode.sortBy === "groups" && this.renderColorNames()}
+                        </table>
+                            : this.renderColorNames()
+                        }
                     </div>}
                 </div>
             </div>
