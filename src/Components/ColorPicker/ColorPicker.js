@@ -690,6 +690,7 @@ export default class ColorPicker extends Component {
             const brightness = ((R * 299) + (G * 587) + (B * 114)) / 1000;
             return brightness >= 128 ? "#111" : "#eee";
         }
+        const chunkSize = 8;
         let colors;
 
         // format css colors the same way colors 1500 is formatted (eg: [{name: "color name", hex: "eeaa44"}, ...]) and add css property
@@ -711,7 +712,7 @@ export default class ColorPicker extends Component {
             case "hex": { colors = colors.sort((a, b) => a.hex.toUpperCase() > b.hex.toUpperCase()); break; }
             default: {
                 const placeColorInGroup = (group, color) => groups[groups.findIndex(e => e.name === group)].colors.push(color);
-                const groups = ["white", "grey", "pink", "red", "orange", "brown", "yellow", "green", "cyan", "blue", "magenta", "black"]
+                let groups = ["white", "grey", "pink", "red", "orange", "brown", "yellow", "green", "cyan", "blue", "magenta", "black"]
                     .map(colorName => ({ name: colorName, colors: [] }));
 
                 colors.forEach(c => {
@@ -741,31 +742,64 @@ export default class ColorPicker extends Component {
                     if (H >= 255 && H < 337 && L >= 75) return placeColorInGroup("pink", c);
                 });
 
+                groups = groups.map(group => {
+                    group.colors = group.colors.sort((a, b, aL = this.rgbToHsl(...hexToRgb(a.hex))[2], bL = this.rgbToHsl(...hexToRgb(b.hex))[2]) => aL < bL);
+                    return group;
+                });
+
                 return groups.map(group => (
                     <table className="ColorPicker__color-names" key={"color-group" + group.name} onClick={e => this.handleColorNameOnClick(e)}>
                         <caption>{group.name.toUpperCase()}</caption>
-                        <tbody>
-                            {group.colors
-                                .sort((a, b, aL = this.rgbToHsl(...hexToRgb(a.hex))[2], bL = this.rgbToHsl(...hexToRgb(b.hex))[2]) => aL < bL)
-                                .map((color, i) => (
-                                    <tr key={i + group.name + color.name} className="ColorPicker__color-name" data-hex={color.hex}>
-                                        <td
-                                            className="ColorPicker__color-name__sample"
-                                            style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}
-                                            data-hex={color.hex}>
-                                            {color.name} {color.css && <span data-hex={color.hex}>css</span>}
-                                        </td>
 
-                                        <td className="ColorPicker__color-name__hex" data-hex={color.hex}>{"#" + color.hex}</td>
-                                    </tr>
-                                ))}
+                        <tbody>
+                            {!this.state.colorNamesMode.grid
+                                ? group.colors
+                                    .map((color, i) => (
+                                        <tr key={i + group.name + color.name} className="ColorPicker__color-name" data-hex={color.hex}>
+                                            <td
+                                                className="ColorPicker__color-name__sample"
+                                                style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}
+                                                data-hex={color.hex}>
+                                                {color.name} {color.css && <span data-hex={color.hex}>css</span>}
+                                            </td>
+
+                                            <td className="ColorPicker__color-name__hex" data-hex={color.hex}>{"#" + color.hex}</td>
+                                        </tr>
+                                    ))
+                                : Array(Math.ceil(group.colors.length / chunkSize))
+                                    .fill()
+                                    .map((_, i) => i * chunkSize)
+                                    .map(startI => group.colors.slice(startI, startI + chunkSize))
+                                    .map((chunk, i) => (
+                                        <tr
+                                            key={i + "colorRow"}
+                                            className="ColorPicker__color-row"
+                                        >
+                                            {
+                                                chunk.map((color, ind) => (
+                                                    <td
+                                                        key={i + "colorRow" + ind}
+                                                        className="ColorPicker__color-name__sample"
+                                                        style={{
+                                                            backgroundColor: "#" + color.hex,
+                                                            color: contrast(color.hex),
+                                                        }}
+                                                        data-hex={color.hex}
+                                                        title={color.name}
+                                                    >
+                                                        {color.hex}
+                                                    </td>
+                                                ))
+                                            }
+                                        </tr>
+                                    ))
+                            }
                         </tbody>
                     </table>
                 ))
             }
         }
 
-        const chunkSize = 8;
 
         return !this.state.colorNamesMode.grid ?
             colors.map((color, i) =>
@@ -810,17 +844,12 @@ export default class ColorPicker extends Component {
                         }
                     </tr>
                 ));
-        /*(<tr
-            key={i + "colorName"}
-            className="ColorPicker__color-name"
-            data-hex={color.hex}>
-            <td
-                className="ColorPicker__color-name__sample"
-                style={{ backgroundColor: "#" + color.hex, color: contrast(color.hex) }}
-                data-hex={color.hex}
-                title={color.name + " " + color.hex}
-            ></td>
-        </tr>)*/
+    }
+
+
+
+    renderHistory() {
+
     }
 
 
@@ -1094,7 +1123,7 @@ export default class ColorPicker extends Component {
                     {this.state.mode === "history" && <div
                         className="ColorPicker__body--history-mode"
                     >
-                        History
+                        {this.renderHistory()}
                     </div>}
 
                     {this.state.mode === "names" && <div
@@ -1147,11 +1176,12 @@ export default class ColorPicker extends Component {
                             </button>
                         </div>
 
-                        {this.state.colorNamesMode.sortBy !== "groups" ? <table className="ColorPicker__color-names" onClick={e => this.handleColorNameOnClick(e)}>
-                            <tbody>
-                                {this.renderColorNames()}
-                            </tbody>
-                        </table>
+                        {this.state.colorNamesMode.sortBy !== "groups"
+                            ? <table className="ColorPicker__color-names" onClick={e => this.handleColorNameOnClick(e)}>
+                                <tbody>
+                                    {this.renderColorNames()}
+                                </tbody>
+                            </table>
                             : this.renderColorNames()
                         }
                     </div>}
