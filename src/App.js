@@ -10,6 +10,7 @@ export default class App extends Component {
 
     this.state = {
       colorPicker1IsVisible: false,
+      history: ["#34e2a1", "red", "rgb(33, 88, 77)"]
     };
   }
 

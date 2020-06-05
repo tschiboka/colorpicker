@@ -849,7 +849,28 @@ export default class ColorPicker extends Component {
 
 
     renderHistory() {
+        return (this.props.history || []).map(color => (
+            <div>
 
+            </div>
+        ));
+    }
+
+
+
+    saveAndClose() {
+        const history = localStorage.color_picker_history;
+        console.log(history);
+
+        if (!history) { localStorage.setItem("color_picker_history", JSON.stringify([this.state.color.code.rgba])); }
+        else {
+            let updatedHistory = JSON.parse(history);
+            updatedHistory.push(this.state.color.code.rgba);
+            updatedHistory = JSON.stringify([...(new Set(updatedHistory))]);
+            localStorage.setItem("color_picker_history", updatedHistory);
+            console.log(updatedHistory);
+        }
+        this.props.close(this.state);
     }
 
 
@@ -1114,7 +1135,7 @@ export default class ColorPicker extends Component {
                             <div className="ColorPicker__ok-btn-box">
                                 <button
                                     className="ColorPicker--button-theme"
-                                    onClick={() => this.props.close(this.state)}
+                                    onClick={() => this.saveAndClose()}
                                 >OK</button>
                             </div>
                         </div>
@@ -1186,7 +1207,7 @@ export default class ColorPicker extends Component {
                         }
                     </div>}
                 </div>
-            </div>
+            </div >
         );
     }
 }
