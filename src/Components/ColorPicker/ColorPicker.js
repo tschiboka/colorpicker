@@ -849,9 +849,14 @@ export default class ColorPicker extends Component {
 
 
     renderHistory() {
-        return (this.props.history || []).map(color => (
-            <div>
+        const history = JSON.parse(localStorage.color_picker_history).filter((_, i) => i < 100);
 
+        return (history || []).map((color, i) => (
+            <div key={`history_${i}`} style={{ backgroundImage: `url(${checkeredRect})` }}>
+                <div
+                    style={{ backgroundColor: color }}
+                    title={color}
+                    onClick={() => this.setState({ ...this.state, color: this.getColorObj(color) })}></div>
             </div>
         ));
     }
@@ -860,17 +865,32 @@ export default class ColorPicker extends Component {
 
     saveAndClose() {
         const history = localStorage.color_picker_history;
-        console.log(history);
 
         if (!history) { localStorage.setItem("color_picker_history", JSON.stringify([this.state.color.code.rgba])); }
         else {
             let updatedHistory = JSON.parse(history);
+            const maxHistoryLength = 100;
+
+            if (updatedHistory.length >= maxHistoryLength) {
+                updatedHistory = updatedHistory.slice(Math.max(updatedHistory.length - maxHistoryLength, 0));
+            }
+
             updatedHistory.push(this.state.color.code.rgba);
             updatedHistory = JSON.stringify([...(new Set(updatedHistory))]);
             localStorage.setItem("color_picker_history", updatedHistory);
-            console.log(updatedHistory);
         }
+
         this.props.close(this.state);
+    }
+
+
+
+    handleKeyPress(e) {
+        switch (e.keyCode) {
+            case 13: { this.saveAndClose(); break; }
+            case 27: { this.props.close(); break; }
+            default: { }
+        }
     }
 
 
@@ -892,7 +912,7 @@ export default class ColorPicker extends Component {
                 onClick={e => e.stopPropagation()}
                 //onBlur={() => this.props.close()}
                 //ref={component => { if (ReactDOM.findDOMNode(component)) ReactDOM.findDOMNode(component).focus() }}
-                onKeyDown={e => { if (e.keyCode === 27) this.props.close(); }}
+                onKeyDown={e => this.handleKeyPress(e)}
                 tabIndex={1}
             >
                 <div className="ColorPicker__header">
@@ -1135,6 +1155,7 @@ export default class ColorPicker extends Component {
                             <div className="ColorPicker__ok-btn-box">
                                 <button
                                     className="ColorPicker--button-theme"
+                                    title="Select Color [Enter]"
                                     onClick={() => this.saveAndClose()}
                                 >OK</button>
                             </div>

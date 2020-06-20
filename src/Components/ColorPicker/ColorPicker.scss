@@ -400,6 +400,23 @@ $border: 1px solid $borderColor;
     z-index: 3;
 }
 
+.ColorPicker__body--history-mode {
+    display: flex;
+    justify-content: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    & > div {
+        margin: 3px;
+        min-width: calc(8% - 3px);
+        height: 20px;
+        border: $border; 
+        div {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
 .ColorPicker__body--names-mode {
     overflow: auto;
     font-weight: normal;
@@ -483,6 +500,7 @@ $border: 1px solid $borderColor;
         flex-wrap: wrap;
         > div {max-height: 50%;}
         .color-code {
+            width: 100%;
             order: 3;
             flex-grow: 2;
             text-align: center;
