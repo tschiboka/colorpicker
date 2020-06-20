@@ -17,11 +17,19 @@ export default class App extends Component {
 
 
   render() {
+    const defaultGradient = {
+      direction: 90,
+      colors: [
+        { color: "rgba(255, 0, 0, 1)", stop: 0 },
+        { color: "rgba(0, 0, 255, 1)", stop: 100 }
+      ]
+    }
+
     return (
       <div
         className="App"
       >
-        <ResultDisplay />
+        <ResultDisplay gradient={this.state.gradient || defaultGradient} />
 
         <ColorPicker
           id="color1" /* ID is important if we want to store prev states of comp */
