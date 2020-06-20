@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import "./App.scss";
 import ColorPicker from "./Components/ColorPicker/ColorPicker";
+import ResultDisplay from "./Components/ResultDisplay/ResultDisplay";
 
 
 
@@ -10,7 +11,6 @@ export default class App extends Component {
 
     this.state = {
       colorPicker1IsVisible: false,
-      history: ["#34e2a1", "red", "rgb(33, 88, 77)"]
     };
   }
 
@@ -21,6 +21,8 @@ export default class App extends Component {
       <div
         className="App"
       >
+        <ResultDisplay />
+
         <ColorPicker
           id="color1" /* ID is important if we want to store prev states of comp */
           visible={this.state.colorPicker1IsVisible}
@@ -29,7 +31,7 @@ export default class App extends Component {
           close={() => this.setState({ ...this.state, colorPicker1IsVisible: false })}
         />
 
-        <button onClick={() => this.setState({ ...this.state, colorPicker1IsVisible: true })}>ColorPicker</button>
+        {/*<button onClick={() => this.setState({ ...this.state, colorPicker1IsVisible: true })}>ColorPicker</button>*/}
       </div>
     );
   }

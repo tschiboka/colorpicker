@@ -1,0 +1,14 @@
+$primaryBg: #181719;
+$primarytColor: #c2c2c2;
+$borderColor: #111;
+$border: 1px solid $borderColor;
+
+.ResultDisplay {
+    width: 70%;
+    height: 50%;
+    border: $border;
+    .ResultDisplay__checkered-bg, .ResultDisplay__color-bg {
+        width: 100%;
+        height: 100%;
+    }
+}
