@@ -41,6 +41,10 @@ export default class ResultDisplay extends Component {
 
 
 
+    closeMenu() { this.setState({ ...this.state, menuIsOpen: false }); }
+
+
+
     render() {
         return (
             <div className="ResultDisplay">
@@ -66,6 +70,7 @@ export default class ResultDisplay extends Component {
                             <ResultDisplayMenu
                                 bgIsCheckered={this.state.bgIsCheckered}
                                 changeDisplayBg={this.changeDisplayBg.bind(this)}
+                                closeMenu={this.closeMenu.bind(this)}
                             />
                         )}
                     </div>

@@ -24,14 +24,16 @@ $border: 1px solid $borderColor;
     div div {
         display: flex;
         justify-content: space-between;
+        &:hover { background: rgba(255, 255, 255, 0.05); }
         label {
             cursor: pointer;
         }
     }
     button {
         font-size: 16px;
-        border: $border;
-        background: $primarytColor;
-        &:hover { font-weight: bold; }
+        border: 1px solid $primarytColor;
+        background: transparent;
+        color: $primarytColor;
+        &:hover { background: rgba(255, 255, 255, 0.05); }
     }
 }

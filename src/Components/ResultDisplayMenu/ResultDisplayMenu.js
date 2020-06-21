@@ -19,31 +19,38 @@ export default class ResultDisplayMenu extends Component {
 
                 <div>
                     <div>
-                        <label htmlFor="ResultDisplayMenu__radio--checkered">Checkered</label>
+                        <label
+                            htmlFor="ResultDisplayMenu__radio--checkered"
+                            title="checkered background"
+                        >Checkered</label>
 
                         <input
                             id="ResultDisplayMenu__radio--checkered"
                             type="radio"
                             name="result-display-bg"
+                            title="checkered background"
                             onChange={() => this.props.changeDisplayBg(true)}
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="ResultDisplayMenu__radio--white">White</label>
+                        <label
+                            htmlFor="ResultDisplayMenu__radio--white"
+                            title="white background"
+                        >White</label>
 
                         <input
                             id="ResultDisplayMenu__radio--white"
                             type="radio"
                             name="result-display-bg"
+                            title="white background"
                             onChange={() => this.props.changeDisplayBg(false)}
                         />
                     </div>
                 </div>
 
-                <button>Close</button>
+                <button onClick={() => this.props.closeMenu()}>Close</button>
             </div>
-
         )
     }
 }
