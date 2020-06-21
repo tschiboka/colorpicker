@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import "./App.scss";
 import ColorPicker from "./Components/ColorPicker/ColorPicker";
 import ResultDisplay from "./Components/ResultDisplay/ResultDisplay";
+import GradientList from "./Components/GradientList/GradientList";
+import Code from "./Components/Code/Code";
 
 
 
@@ -38,10 +40,12 @@ export default class App extends Component {
     ];
 
     return (
-      <div
-        className="App"
-      >
+      <div className="App">
         <ResultDisplay gradients={this.state.gradient || defaultGradient} />
+
+        <GradientList />
+
+        <Code />
 
         <ColorPicker
           id="color1" /* ID is important if we want to store prev states of comp */

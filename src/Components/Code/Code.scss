@@ -1,0 +1,8 @@
+$borderColor: #111;
+$border: 1px solid $borderColor;
+
+.Code {
+    width: 50%;
+    background: blue;
+    border: $border;
+}
