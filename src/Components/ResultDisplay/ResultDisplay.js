@@ -19,7 +19,6 @@ export default class ResultDisplay extends Component {
 
 
     getStyleObj(isCheckered = false) {
-        console.log("HERE")
         const checkeredStyle = { backgroundImage: `url(${checkeredRect})` };
         const whiteStyle = { backgroundColor: "white" };
         return isCheckered ? checkeredStyle : whiteStyle;
@@ -30,6 +29,14 @@ export default class ResultDisplay extends Component {
     render() {
         return (
             <div className="ResultDisplay">
+                <div className="ResultDisplay__header">
+                    <span>Gradient</span>
+
+                    <button className="ResultDisplay__menu-btn">
+                        &#9776;
+                    </button>
+                </div>
+
                 <div
                     className="ResultDisplay__checkered-bg"
                     style={this.getStyleObj(this.props.checkered)}>
