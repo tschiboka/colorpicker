@@ -37,7 +37,10 @@ $border: 1px solid $borderColor;
         border: $border;
     }
     .ResultDisplay__checkered-bg { height: 93%; }
-    .ResultDisplay__color-bg { height: 100%; }
+    .ResultDisplay__color-bg { 
+        position: relative;
+        height: 100%;
+    }
 }
 
 @media only screen and (max-width: 500px) and (orientation: portrait) {

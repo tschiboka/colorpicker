@@ -41,9 +41,7 @@ export default class App extends Component {
       <div
         className="App"
       >
-        <ResultDisplay
-          gradients={this.state.gradient || defaultGradient}
-          checkered={this.state.checkered} />
+        <ResultDisplay gradients={this.state.gradient || defaultGradient} />
 
         <ColorPicker
           id="color1" /* ID is important if we want to store prev states of comp */

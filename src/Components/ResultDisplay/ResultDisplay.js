@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
+import ResultDisplayMenu from "../ResultDisplayMenu/ResultDisplayMenu";
 import "./ResultDisplay.scss";
 
 
 
 export default class ResultDisplay extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            menuIsOpen: false,
+            bgIsCheckered: true,
+        };
+    }
+
+
+
     gradientObjToStr(grdObj) {
         return grdObj.map(grad => {
             const { colors } = grad;
@@ -26,24 +37,37 @@ export default class ResultDisplay extends Component {
 
 
 
+    changeDisplayBg(isCheckered) { this.setState({ ...this.state, bgIsCheckered: isCheckered }, () => { console.log(this.state.bgIsCheckered) }); }
+
+
+
     render() {
         return (
             <div className="ResultDisplay">
                 <div className="ResultDisplay__header">
-                    <span>Gradient</span>
+                    <span>Gradient Display</span>
 
-                    <button className="ResultDisplay__menu-btn">
+                    <button
+                        className="ResultDisplay__menu-btn"
+                        onClick={() => this.setState({ ...this.state, menuIsOpen: !this.state.menuIsOpen })}>
                         &#9776;
                     </button>
                 </div>
 
                 <div
                     className="ResultDisplay__checkered-bg"
-                    style={this.getStyleObj(this.props.checkered)}>
+                    style={this.getStyleObj(this.state.bgIsCheckered)}>
                     <div
                         className="ResultDisplay__color-bg"
                         title="Result Gradient"
                         style={{ background: this.gradientObjToStr(this.props.gradients) }}>
+
+                        {this.state.menuIsOpen && (
+                            <ResultDisplayMenu
+                                bgIsCheckered={this.state.bgIsCheckered}
+                                changeDisplayBg={this.changeDisplayBg.bind(this)}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

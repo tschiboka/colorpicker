@@ -1,0 +1,37 @@
+$primarytColor: #c2c2c2;
+$borderColor: #111;
+$border: 1px solid $borderColor;
+
+.ResultDisplayMenu {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30%;
+    min-width: 120px    ;
+    max-width: 150px;
+    padding: 10px;
+    background: #202020;
+    color: $primarytColor;
+    display: flex;
+    flex-direction: column;
+    h2 {
+        font-size: 16px;
+        text-align: center;
+    }
+    div {
+        padding: 5px 0;
+    }
+    div div {
+        display: flex;
+        justify-content: space-between;
+        label {
+            cursor: pointer;
+        }
+    }
+    button {
+        font-size: 16px;
+        border: $border;
+        background: $primarytColor;
+        &:hover { font-weight: bold; }
+    }
+}
