@@ -1,10 +1,24 @@
 $primarytColor: #c2c2c2;
 
 .GradientList {
+    position: relative;
     height: 100%;
     width: 50%;
     order: 3;
     color: $primarytColor;
+    overflow-y: auto;
+    & > header button {
+        border: none;
+        background: transparent;
+        color: $primarytColor;
+        font-size: 22px;
+        font-weight: bold;
+        margin-right: 5px;
+        &:hover {
+            font-size: 18px;
+            color: lightblue;
+        }
+    }
     .gradients {
         display: flex;
         flex-direction: column;

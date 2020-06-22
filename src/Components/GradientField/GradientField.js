@@ -97,13 +97,13 @@ export default class GradientField extends Component {
                         <button
                             title="visibility"
                             onClick={() => this.toggleVisibility()}
-                        >&#128065;
-                            <div>
-                                {!this.props.gradient.visible && this.renderRedDiagonalLine()}
-                            </div>
+                        >&#128065;<div>{!this.props.gradient.visible && this.renderRedDiagonalLine()}</div>
                         </button>
 
-                        <button title="delete gradient">&times;</button>
+                        <button
+                            title="delete gradient"
+                            onClick={() => this.props.confirmDeleteGradient(this.props.gradient, this.props.index)}
+                        >&times;</button>
                     </div>
                 </header>
 

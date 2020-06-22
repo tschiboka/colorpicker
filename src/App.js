@@ -3,6 +3,7 @@ import ColorPicker from "./Components/ColorPicker/ColorPicker";
 import ResultDisplay from "./Components/ResultDisplay/ResultDisplay";
 import GradientList from "./Components/GradientList/GradientList";
 import Code from "./Components/Code/Code";
+import { defaultGradientObj } from "./functions/gradient";
 import "./App.scss";
 
 
@@ -14,17 +15,7 @@ export default class App extends Component {
     this.state = {
       colorPicker1IsVisible: false,
       checkered: true,
-      gradients: [
-        {
-          name: "",
-          visible: true,
-          direction: "90",
-          colors: [
-            { color: "rgba(0, 0, 0, 1)", stop: 0 },
-            { color: "rgba(255, 255, 255, 0.5)", stop: 100 }
-          ]
-        },
-      ]
+      gradients: [defaultGradientObj]
     };
   }
 
