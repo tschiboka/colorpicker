@@ -30,6 +30,12 @@ $primarytColor: #c2c2c2;
         }
         .GradientField__name {
             cursor: text;
+            input {
+                background: #ddd;
+                border-style: none;
+                color: #222;
+                font-size: 14px;
+            }
         }
         & > div:last-child {
             margin-left: auto;

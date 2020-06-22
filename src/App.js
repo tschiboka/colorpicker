@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import "./App.scss";
 import ColorPicker from "./Components/ColorPicker/ColorPicker";
 import ResultDisplay from "./Components/ResultDisplay/ResultDisplay";
 import GradientList from "./Components/GradientList/GradientList";
 import Code from "./Components/Code/Code";
+import "./App.scss";
 
 
 
@@ -30,12 +30,19 @@ export default class App extends Component {
 
 
 
+  updateGradients(gradients) { this.setState({ ...this.state, gradients: gradients }); }
+
+
+
   render() {
     return (
       <div className="App">
         <ResultDisplay gradients={this.state.gradients} />
 
-        <GradientList gradients={this.state.gradients} />
+        <GradientList
+          gradients={this.state.gradients}
+          updateGradients={this.updateGradients.bind(this)}
+        />
 
         <Code />
 
