@@ -1,7 +1,12 @@
+$primarytColor: #c2c2c2;
+
 .GradientList {
     height: 100%;
     width: 50%;
     order: 3;
-    margin-left: 10px;
-    background: red;
+    color: $primarytColor;
+    .gradients {
+        display: flex;
+        flex-direction: column;
+    }
 }

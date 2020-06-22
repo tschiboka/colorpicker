@@ -14,36 +14,28 @@ export default class App extends Component {
     this.state = {
       colorPicker1IsVisible: false,
       checkered: true,
+      gradients: [
+        {
+          name: "",
+          visible: true,
+          direction: "90",
+          colors: [
+            { color: "rgba(0, 0, 0, 1)", stop: 0 },
+            { color: "rgba(255, 255, 255, 1)", stop: 100 }
+          ]
+        },
+      ]
     };
   }
 
 
 
   render() {
-    const defaultGradient = [
-      {
-        direction: "-190",
-        colors: [
-          { color: "rgba(255, 0, 0, 1)", stop: 0 },
-          { color: "rgba(255, 255, 0, 1)", stop: 12 },
-          { color: "rgba(0, 0, 255, 0)", stop: 100 }
-        ]
-      },
-      {
-        direction: "3",
-        colors: [
-          { color: "rgba(25, 70, 40, 1)", stop: 0 },
-          { color: "rgba(0, 0, 0, 0.2)", stop: 50 },
-          { color: "rgba(0, 30, 25, 0)", stop: 100 }
-        ]
-      }
-    ];
-
     return (
       <div className="App">
-        <ResultDisplay gradients={this.state.gradient || defaultGradient} />
+        <ResultDisplay gradients={this.state.gradients} />
 
-        <GradientList />
+        <GradientList gradients={this.state.gradients} />
 
         <Code />
 

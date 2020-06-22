@@ -48,7 +48,7 @@ export default class ResultDisplay extends Component {
     render() {
         return (
             <div className="ResultDisplay">
-                <div className="ResultDisplay__header">
+                <header className="ResultDisplay__header">
                     <span>Gradient Display</span>
 
                     <button
@@ -56,7 +56,7 @@ export default class ResultDisplay extends Component {
                         onClick={() => this.setState({ ...this.state, menuIsOpen: !this.state.menuIsOpen })}>
                         &#9776;
                     </button>
-                </div>
+                </header>
 
                 <div
                     className="ResultDisplay__checkered-bg"

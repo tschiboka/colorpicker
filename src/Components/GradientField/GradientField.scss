@@ -1,0 +1,65 @@
+$primarytColor: #c2c2c2;
+
+.GradientField {
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(221, 221, 221, 0.5);
+    border-bottom: 1px solid rgba(221, 221, 221, 0.5);
+    header {
+        height: 22px;
+        width: 100%;
+        padding: 0 5px 0 0;
+        background: rgba(0, 0, 0, 0.1);
+        font-size: 16px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        border-bottom: 1px solid rgba(221, 221, 221, 0.1);
+        cursor: default;
+        .GradientField__index {
+            width: 18px;
+            height: 18px;
+            margin: 0 15px 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ddd;
+            color: #222;
+            font-size: 14px;
+            text-align: center;
+            border-radius: 50%;
+        }
+        .GradientField__name {
+            cursor: text;
+        }
+        & > div:last-child {
+            margin-left: auto;
+        }
+        .GradientField__button-box {
+            height: 100%;
+            display: flex;
+            button {
+                height: 100%;
+                width: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: transparent;
+                border: none;
+                color: $primarytColor;
+                font-size: 22px;
+                line-height: 22px;
+                vertical-align: middle;
+                cursor: pointer;
+                &:hover {
+                    color: lightblue;
+                    font-size: 18px;
+                }
+                &:last-child:hover { color: deeppink; }
+            }
+        }
+    }
+    .GradientField__body {
+        width: 70px;
+        height: 100%;
+    }
+}

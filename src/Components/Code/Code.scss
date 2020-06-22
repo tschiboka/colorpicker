@@ -1,8 +1,7 @@
-$borderColor: #111;
-$border: 1px solid $borderColor;
+$primarytColor: #c2c2c2;
 
 .Code {
     width: 50%;
-    background: blue;
-    border: $border;
+    height: 40%;
+    color: $primarytColor;
 }
