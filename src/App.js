@@ -21,7 +21,7 @@ export default class App extends Component {
           direction: "90",
           colors: [
             { color: "rgba(0, 0, 0, 1)", stop: 0 },
-            { color: "rgba(255, 255, 255, 1)", stop: 100 }
+            { color: "rgba(255, 255, 255, 0.5)", stop: 100 }
           ]
         },
       ]
@@ -30,7 +30,7 @@ export default class App extends Component {
 
 
 
-  updateGradients(gradients) { this.setState({ ...this.state, gradients: gradients }); }
+  updateGradients(gradients) { this.setState({ ...this.state, gradients: gradients }, () => console.log(this.state.gradients)); }
 
 
 

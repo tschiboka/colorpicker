@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
+import { gradientObjsToStr } from "../../functions/gradient";
 import "./GradientField.scss";
 
 
@@ -30,11 +32,10 @@ export default class GradientField extends Component {
 
         if (key === 13 || key === "Enter") {
             const onlyWhiteSpace = str => /^\s*$/g.test(str);
+            if (onlyWhiteSpace(input.value)) input.value = null;
 
-            if (!onlyWhiteSpace(input.value)) {
-                const updatedGradient = Object.assign({}, this.props.gradient, { name: input.value });
-                this.props.updateGradient(updatedGradient, this.props.index);
-            }
+            const updatedGradient = Object.assign({}, this.props.gradient, { name: input.value });
+            this.props.updateGradient(updatedGradient, this.props.index);
 
             closeInput();
         }
@@ -87,7 +88,13 @@ export default class GradientField extends Component {
                 </header>
 
                 <div className="GradientField__body">
-                    BODY
+                    <div className="GradientField__preview" title="preview">
+                        <div style={{ background: `${gradientObjsToStr([this.props.gradient].reverse())}, url(${checkeredRect})` }}></div>
+                    </div>
+
+                    <div className="GradientField__settings">
+
+                    </div>
                 </div>
             </div>
         );

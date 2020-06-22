@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
 import ResultDisplayMenu from "../ResultDisplayMenu/ResultDisplayMenu";
+import { gradientObjsToStr } from "../../functions/gradient";
 import "./ResultDisplay.scss";
 
 
@@ -13,20 +14,6 @@ export default class ResultDisplay extends Component {
             bgIsCheckered: true,
         };
     }
-
-
-
-    gradientObjToStr(grdObj) {
-        return grdObj.map(grad => {
-            const { colors } = grad;
-            const prefix = (grad.direction === "radial" ? "radial" : "linear") + "-gradient";
-            const degree = grad.direction === "radial" ? "" : grad.direction + "deg, ";
-            const colorStops = colors.map(c => `${c.color} ${c.stop}%`).join(",");
-
-            return `${prefix}(${degree}${colorStops})`;
-        }).join(",");
-    }
-
 
 
     getStyleObj(isCheckered = false) {
@@ -64,7 +51,7 @@ export default class ResultDisplay extends Component {
                     <div
                         className="ResultDisplay__color-bg"
                         title="Result Gradient"
-                        style={{ background: this.gradientObjToStr(this.props.gradients) }}>
+                        style={{ background: gradientObjsToStr(this.props.gradients) }}>
 
                         {this.state.menuIsOpen && (
                             <ResultDisplayMenu
