@@ -43,6 +43,19 @@ export default class GradientField extends Component {
 
 
 
+    toggleVisibility() {
+        const updatedGradient = Object.assign({}, this.props.gradient, { visible: !this.props.gradient.visible });
+        this.props.updateGradient(updatedGradient, this.props.index);
+    }
+
+
+
+    renderRedDiagonalLine() {
+        return <svg height="100%" width="100%"><line x1="0" y1="100%" x2="100%" y2="0" style={{ stroke: "red", "stroke-width": 2 }} /></svg>
+    }
+
+
+
     renderName() {
         if (!this.state.nameInputVisible) {
             return this.props.gradient.name || `Untitled ${this.props.index + 1}`;
@@ -81,7 +94,14 @@ export default class GradientField extends Component {
 
                         <button title="reposition gradient">&#8645;</button>
 
-                        <button title="visibility">&#128065;</button>
+                        <button
+                            title="visibility"
+                            onClick={() => this.toggleVisibility()}
+                        >&#128065;
+                            <div>
+                                {!this.props.gradient.visible && this.renderRedDiagonalLine()}
+                            </div>
+                        </button>
 
                         <button title="delete gradient">&times;</button>
                     </div>
@@ -89,7 +109,12 @@ export default class GradientField extends Component {
 
                 <div className="GradientField__body">
                     <div className="GradientField__preview" title="preview">
-                        <div style={{ background: `${gradientObjsToStr([this.props.gradient].reverse())}, url(${checkeredRect})` }}></div>
+                        <div
+                            style={{ background: `${gradientObjsToStr([this.props.gradient].reverse())}, url(${checkeredRect})` }}
+                            onClick={() => this.toggleVisibility()}
+                        >
+                            {!this.props.gradient.visible && this.renderRedDiagonalLine()}
+                        </div>
                     </div>
 
                     <div className="GradientField__settings">
