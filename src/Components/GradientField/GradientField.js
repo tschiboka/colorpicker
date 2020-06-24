@@ -52,7 +52,7 @@ export default class GradientField extends Component {
 
 
     renderRedDiagonalLine() {
-        return <svg height="100%" width="100%"><line x1="0" y1="100%" x2="100%" y2="0" style={{ stroke: "red", "stroke-width": 2 }} /></svg>
+        return <svg height="100%" width="100%"><line x1="0" y1="100%" x2="100%" y2="0" style={{ stroke: "red", strokeWidth: 2 }} /></svg>
     }
 
 

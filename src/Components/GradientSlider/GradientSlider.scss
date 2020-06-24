@@ -1,17 +1,19 @@
 .GradientSlider {
+    position: relative;
     width: 100%;
+    padding: 0 10px;
     display: flex;
     flex-direction: column;
     > div {
         width: 100%;
     }
     .GradientSlider__text-box {
-        background: red;
+        height: 33.3%;
     }
     .GradientSlider__line-box {
-        background: green;
+        height: 33.3%;
     }
-    .GradientSlider__line-box {
-        background: yellow;
+    .GradientSlider__thumbs-box {
+        height: 33.3%;
     }
 }

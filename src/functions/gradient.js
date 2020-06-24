@@ -17,6 +17,7 @@ export const defaultGradientObj = {
     name: "",
     visible: true,
     direction: "90",
+    repeating: false,
     colors: [
         { color: "rgba(0, 0, 0, 1)", stop: 0 },
         { color: "rgba(255, 255, 255, 0.5)", stop: 100 }
