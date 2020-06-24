@@ -1,0 +1,17 @@
+.GradientSlider {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    > div {
+        width: 100%;
+    }
+    .GradientSlider__text-box {
+        background: red;
+    }
+    .GradientSlider__line-box {
+        background: green;
+    }
+    .GradientSlider__line-box {
+        background: yellow;
+    }
+}

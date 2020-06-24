@@ -40,7 +40,7 @@ $primarytColor: #c2c2c2;
         & > div:last-child {
             margin-left: auto;
         }
-        .GradientField__button-box {
+        .GradientField__header__button-box {
             height: 100%;
             display: flex;
             button {
@@ -71,7 +71,7 @@ $primarytColor: #c2c2c2;
         }
     }
     .GradientField__body {
-        max-height: 70px;
+        max-height: 100px;
         width: 100%;
         display: flex;
         .GradientField__preview {
@@ -84,6 +84,19 @@ $primarytColor: #c2c2c2;
                 width: 50px;
                 height: 50px;
                 border: 1px solid #ddd;
+            }
+        }
+        .GradientField__settings {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(221, 221, 221, 0.1);
+            .GradientSlider {
+                height: 50%;
+                border-bottom: 1px solid rgba(221, 221, 221, 0.1);
+            }
+            .GradientField__button-box {
+                height: 50%;
             }
         }
     }

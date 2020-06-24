@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
 import { gradientObjsToStr } from "../../functions/gradient";
+import GradientSlider from "../GradientSlider/GradientSlider";
 import "./GradientField.scss";
 
 
@@ -87,7 +88,7 @@ export default class GradientField extends Component {
                         {this.renderName()}
                     </div>
 
-                    <div className="GradientField__button-box">
+                    <div className="GradientField__header__button-box">
                         <button title="insert new gradient above">&#8613;</button>
 
                         <button title="insert new gradient below">&#8615;</button>
@@ -118,7 +119,9 @@ export default class GradientField extends Component {
                     </div>
 
                     <div className="GradientField__settings">
+                        <GradientSlider />
 
+                        <div className="GradientField__button-box"></div>
                     </div>
                 </div>
             </div>
