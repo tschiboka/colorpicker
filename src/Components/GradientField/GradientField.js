@@ -119,7 +119,7 @@ export default class GradientField extends Component {
                     </div>
 
                     <div className="GradientField__settings">
-                        <GradientSlider />
+                        <GradientSlider gradient={this.props.gradient} />
 
                         <div className="GradientField__button-box"></div>
                     </div>

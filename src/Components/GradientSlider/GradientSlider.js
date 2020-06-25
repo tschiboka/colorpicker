@@ -21,6 +21,21 @@ export default class GradientSlider extends Component {
 
 
 
+    renderThumbs() {
+        const getThumbPosition = colorStopAt => {
+            if (!this.props.gradient.repeating) return `${colorStopAt.stop}%`;
+        }
+
+        return this.props.gradient.colors.map((colorStop, i) => (
+            <div
+                key={`colorStopThumb${i}`}
+                style={{ left: getThumbPosition(colorStop) }}
+            >{i}</div>
+        ));
+    }
+
+
+
     render() {
         return (
             <div className="GradientSlider">
@@ -29,7 +44,9 @@ export default class GradientSlider extends Component {
 
                     <div className="GradientSlider__ruler-box">{this.renderRuler()}</div>
 
-                    <div className="GradientSlider__thumbs-box"></div>
+                    <div className="GradientSlider__thumbs-box">
+                        {this.renderThumbs()}
+                    </div>
                 </div>
 
                 <div className="GradientSlider__btn-box">

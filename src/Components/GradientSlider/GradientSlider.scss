@@ -15,7 +15,11 @@
             display: flex;
         }
         .GradientSlider__thumbs-box {
+            position: relative;
             height: 33.3%;
+            > div {
+                position: absolute;
+            }
         }
     }
     .GradientSlider__btn-box {
