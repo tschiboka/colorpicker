@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
+import { getCumulativeOffset } from "../../functions/slider";
 import "./GradientSlider.scss";
 
 
@@ -10,7 +11,8 @@ export default class GradientSlider extends Component {
 
         this.state = {
             activeThumb: undefined,
-            thumbMoved: false
+            thumbMoved: false,
+            mouseStartPos: undefined
         }
     }
 
@@ -18,8 +20,17 @@ export default class GradientSlider extends Component {
 
     handleThumbMouseDown(event) {
         const activeThumb = (event.target.id.match(/\d+$/g) || [null])[0];
-        if (activeThumb) this.setState({ ...this.state, activeThumb });
-        else console.log(activeThumb);
+
+        if (activeThumb) {
+            const thumbBoxDiv = document.querySelector(`#GradientSlider__thumbs-box${this.props.index}`);
+            const mouseAbsoluteStartPos = event.clientX || event.pageX;
+            const offsetLeft = getCumulativeOffset(thumbBoxDiv);
+            const mouseRelativeStartPos = mouseAbsoluteStartPos - offsetLeft;
+
+            console.log(mouseRelativeStartPos);
+
+            this.setState({ ...this.state, activeThumb, });
+        }
     }
 
 
@@ -133,6 +144,7 @@ export default class GradientSlider extends Component {
                     <div className="GradientSlider__ruler-box">{this.renderRuler()}</div>
 
                     <div
+                        id={`GradientSlider__thumbs-box${this.props.index}`}
                         className="GradientSlider__thumbs-box"
                         onMouseDown={e => this.handleThumbMouseDown(e)}
                         onMouseUp={() => this.handleThumbMouseUp()}
@@ -147,7 +159,7 @@ export default class GradientSlider extends Component {
 
                     <button>Del</button>
                 </div>
-            </div >
+            </div>
         );
     }
 }
