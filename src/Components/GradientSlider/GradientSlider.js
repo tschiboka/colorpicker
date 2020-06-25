@@ -5,6 +5,35 @@ import "./GradientSlider.scss";
 
 
 export default class GradientSlider extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            activeThumb: undefined,
+            thumbMoved: false
+        }
+    }
+
+
+
+    handleThumbMouseDown(event) {
+        const activeThumb = (event.target.id.match(/\d+$/g) || [null])[0];
+        if (activeThumb) this.setState({ ...this.state, activeThumb });
+        else console.log(activeThumb);
+    }
+
+
+
+    handleThumbMouseUp() { this.setState({ ...this.state, activeThumb: undefined }); }
+
+
+
+    handleThumbOnMouseMove() {
+        if (this.state.activeThumb) this.setState({ ...this.state, thumbMoved: true });
+    }
+
+
+
     renderMeasureText() {
         return this.props.gradient.colors.map((colorStop, i) => {
             if (!this.props.gradient.repeating) {
@@ -58,6 +87,7 @@ export default class GradientSlider extends Component {
 
         return this.props.gradient.colors.map((colorStop, i) => (
             <div
+                id={`GradientSlider${this.props.index}_${i}`}
                 key={`colorStopThumb${i}`}
                 title={`${colorStop.color}`}
                 style={{
@@ -95,13 +125,19 @@ export default class GradientSlider extends Component {
         return (
             <div className="GradientSlider">
                 <div className="GradientSlider__ruler">
-                    <div className="GradientSlider__helper-lines">{this.renderHelperLines()}</div>
+                    <div
+                        className="GradientSlider__helper-lines">{this.renderHelperLines()}</div>
 
                     <div className="GradientSlider__measure-text-box">{this.renderMeasureText()}</div>
 
                     <div className="GradientSlider__ruler-box">{this.renderRuler()}</div>
 
-                    <div className="GradientSlider__thumbs-box">
+                    <div
+                        className="GradientSlider__thumbs-box"
+                        onMouseDown={e => this.handleThumbMouseDown(e)}
+                        onMouseUp={() => this.handleThumbMouseUp()}
+                        onMouseMove={() => this.handleThumbOnMouseMove()}
+                    >
                         {this.renderThumbs()}
                     </div>
                 </div>
@@ -111,7 +147,7 @@ export default class GradientSlider extends Component {
 
                     <button>Del</button>
                 </div>
-            </div>
+            </div >
         );
     }
 }
