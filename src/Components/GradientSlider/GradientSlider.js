@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { gradientObjsToStr } from "../../functions/gradient";
+import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
 import "./GradientSlider.scss";
 
 
@@ -29,8 +31,12 @@ export default class GradientSlider extends Component {
         return this.props.gradient.colors.map((colorStop, i) => (
             <div
                 key={`colorStopThumb${i}`}
-                style={{ left: getThumbPosition(colorStop) }}
-            >{i}</div>
+                title={`${colorStop.color}`}
+                style={{
+                    background: `linear-gradient(${colorStop.color} 0%, ${colorStop.color} 100%), url(${checkeredRect}`,
+                    left: `calc(${getThumbPosition(colorStop)} - 7px)`
+                }}
+            ></div>
         ));
     }
 
