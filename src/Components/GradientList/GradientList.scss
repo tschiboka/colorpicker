@@ -7,6 +7,7 @@ $primarytColor: #c2c2c2;
     order: 3;
     color: $primarytColor;
     overflow-y: auto;
+    overflow-x: hidden;
     & > header button {
         border: none;
         background: transparent;

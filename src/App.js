@@ -13,7 +13,6 @@ export default class App extends Component {
     super(props);
 
     const resizeWithFrequency = freq => {
-      console.log(this.state.canResize);
       if (this.state.canResize) {
         this.forceUpdate();
         this.setState({ ...this.state, canResize: false });

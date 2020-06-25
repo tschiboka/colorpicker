@@ -51,6 +51,7 @@ export default class GradientSlider extends Component {
 
 
     renderThumbs() {
+        const strokeColor = "rgba(255, 255, 255, 0.5)";
         const getThumbPosition = colorStopAt => {
             if (!this.props.gradient.repeating) return `${colorStopAt.stop}%`;
         }
@@ -61,18 +62,31 @@ export default class GradientSlider extends Component {
                 title={`${colorStop.color}`}
                 style={{
                     background: `linear-gradient(${colorStop.color} 0%, ${colorStop.color} 100%), url(${checkeredRect}`,
-                    left: `calc(${getThumbPosition(colorStop)} - 7.5px)`
+                    left: `calc(${getThumbPosition(colorStop)} - 7.5px)`,
+                    border: `1px solid ${strokeColor}`
                 }}
             >
                 <svg width="14" height="14">
-                    <line x1="0" y1="14px" x2="7px" y2="7px" style={{ stroke: "#ddd", strokeWidth: 1 }} />
+                    <line x1="0" y1="14px" x2="7px" y2="7px" style={{ stroke: strokeColor, strokeWidth: 1 }} />
 
-                    <line x1="7px" y1="7px" x2="14px" y2="14px" style={{ stroke: "#ddd", strokeWidth: 1 }} />
+                    <line x1="7px" y1="7px" x2="14px" y2="14px" style={{ stroke: strokeColor, strokeWidth: 1 }} />
 
-                    <line x1="0" y1="14px" x2="14px" y2="14px" style={{ stroke: "#ddd", strokeWidth: 1 }} />
+                    <line x1="0" y1="14px" x2="14px" y2="14px" style={{ stroke: strokeColor, strokeWidth: 1 }} />
                 </svg>
             </div>
         ));
+    }
+
+
+
+    renderHelperLines() {
+        return this.props.gradient.colors.map((color, i) => {
+            const left = this.props.gradient.repeating ? "" : color.stop + "%";
+
+            return <svg key={`helperLine_${i}`} width="100%" height="100%" style={{ left: left }}>
+                <line x1={color.colorStop} y1="0" x2={color.colorStop} y2="100%" strokeDasharray="3" style={{ stroke: "#777", strokeWidth: 2 }} />
+            </svg>
+        })
     }
 
 
@@ -81,6 +95,8 @@ export default class GradientSlider extends Component {
         return (
             <div className="GradientSlider">
                 <div className="GradientSlider__ruler">
+                    <div className="GradientSlider__helper-lines">{this.renderHelperLines()}</div>
+
                     <div className="GradientSlider__measure-text-box">{this.renderMeasureText()}</div>
 
                     <div className="GradientSlider__ruler-box">{this.renderRuler()}</div>
