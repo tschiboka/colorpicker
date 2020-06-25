@@ -12,10 +12,27 @@ export default class App extends Component {
   constructor(props) {
     super(props);
 
+    const resizeWithFrequency = freq => {
+      console.log(this.state.canResize);
+      if (this.state.canResize) {
+        this.forceUpdate();
+        this.setState({ ...this.state, canResize: false });
+      }
+      else {
+        const resizeTimer = setTimeout(() => {
+          this.setState({ ...this.state, canResize: true });
+          clearInterval(resizeTimer);
+        }, freq);
+      }
+    }
+
+    window.addEventListener("resize", () => { resizeWithFrequency(100) });
+
     this.state = {
       colorPicker1IsVisible: false,
       checkered: true,
-      gradients: [defaultGradientObj]
+      gradients: [defaultGradientObj],
+      canResize: true
     };
   }
 
