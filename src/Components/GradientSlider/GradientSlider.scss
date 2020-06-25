@@ -1,19 +1,42 @@
 .GradientSlider {
     position: relative;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 0 0 10px;
     display: flex;
-    flex-direction: column;
-    > div {
-        width: 100%;
+    .GradientSlider__ruler {
+        display: flex;
+        flex-direction: column;
+        width: calc(100% - 50px);
+        .GradientSlider__text-box {
+            height: 33.3%;
+        }
+        .GradientSlider__ruler-box {
+            height: 33.3%;
+            display: flex;
+        }
+        .GradientSlider__thumbs-box {
+            height: 33.3%;
+        }
     }
-    .GradientSlider__text-box {
-        height: 33.3%;
-    }
-    .GradientSlider__line-box {
-        height: 33.3%;
-    }
-    .GradientSlider__thumbs-box {
-        height: 33.3%;
+    .GradientSlider__btn-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: 10px;
+        width: 50px;
+        height: 100%;
+        border-left: 1px solid rgba(221, 221, 221, 0.1);
+        button {
+            height: 100%;
+            border: none;
+            background: transparent;
+            color: #ddd;
+            font-size: 16px;
+            &:first-child { border-bottom: 1px solid rgba(221, 221, 221, 0.1); }
+            &:hover {
+                background: rgba(255, 255, 255, 0.1);
+                font-size: 14px;
+            }
+        }    
     }
 }

@@ -24,11 +24,19 @@ export default class GradientSlider extends Component {
     render() {
         return (
             <div className="GradientSlider">
-                <div className="GradientSlider__text-box"></div>
+                <div className="GradientSlider__ruler">
+                    <div className="GradientSlider__text-box"></div>
 
-                <div className="GradientSlider__line-box">{this.renderRuler()}</div>
+                    <div className="GradientSlider__ruler-box">{this.renderRuler()}</div>
 
-                <div className="GradientSlider__thumbs-box"></div>
+                    <div className="GradientSlider__thumbs-box"></div>
+                </div>
+
+                <div className="GradientSlider__btn-box">
+                    <button>Add</button>
+
+                    <button>Del</button>
+                </div>
             </div>
         );
     }
