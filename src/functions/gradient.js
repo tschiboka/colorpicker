@@ -34,7 +34,5 @@ export const getDefaultGradientObj = () => {
         colors: [...defaultGradientObj.colors.map(color => Object.assign({}, color))]
     };
 
-    console.log(gradient);
-
     return gradient;
 }

@@ -49,9 +49,7 @@ export const filterIdenticalColorPercentages = gradient => {
         })
         .reverse();
 
-    const filteredGradient = { ...gradient, colors: filteredGradientColors };
-
-    return filteredGradient;
+    return { ...gradient, colors: filteredGradientColors };
 }
 
 
@@ -59,8 +57,12 @@ export const filterIdenticalColorPercentages = gradient => {
 // all gradients need to have a 0% and a 100% color stop
 // if any missing give default color stops
 export const correctGradientEdges = gradient => {
-    const updatedGradient = { ...gradient };
-    const defaultGradient = getDefaultGradientObj();
-    console.log(defaultGradient);
-    //if (updatedGradient.colors[0].stop != 0) gradient.colors.unshift()
+    let updatedGradientColors = { ...gradient }.colors;
+    const [_0Percent, _100Percent] = { ...getDefaultGradientObj() }.colors;
+
+    if (gradient.colors[0].stop !== 0) updatedGradientColors = [_0Percent, ...updatedGradientColors];
+
+    if (gradient.colors[gradient.colors.length - 1].stop !== 100) updatedGradientColors = [...updatedGradientColors, _100Percent];
+
+    return { ...gradient, colors: updatedGradientColors };
 }

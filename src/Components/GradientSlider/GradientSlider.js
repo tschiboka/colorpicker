@@ -80,8 +80,7 @@ export default class GradientSlider extends Component {
                 const filtered = filterIdenticalColorPercentages(sorted);
                 const updatedGradient = correctGradientEdges(filtered);
 
-                console.log(updatedGradient);
-                //                this.props.updateGradient(updatedGradient, this.props.index);
+                this.props.updateGradient(updatedGradient, this.props.index);
             }
 
             this.setState({
