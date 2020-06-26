@@ -66,3 +66,13 @@ export const correctGradientEdges = gradient => {
 
     return { ...gradient, colors: updatedGradientColors };
 }
+
+
+
+export const setZIndexAscending = index => {
+    const measureBoxChildren = document.getElementById(`GradientSlider__measure-text-box${index}`).children;
+    const thumbBoxChildren = document.getElementById(`GradientSlider__thumbs-box${index}`).children;
+    const elemGroups = [...thumbBoxChildren].map((_, i) => [measureBoxChildren[i], thumbBoxChildren[i]]);
+
+    elemGroups.forEach((children, i) => children.forEach(child => child.style.zIndex = i));
+};

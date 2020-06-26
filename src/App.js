@@ -30,7 +30,7 @@ export default class App extends Component {
 
 
     this.state = {
-      colorPicker1IsVisible: false,
+      colorPickerIsVisible: false,
       checkered: true,
       gradients: [{ ...getDefaultGradientObj() }],
       canResize: true
@@ -43,6 +43,10 @@ export default class App extends Component {
 
 
 
+  openColorPicker() { this.setState({ ...this.state, colorPickerIsVisible: true }); }
+
+
+
   render() {
     return (
       <div className="App">
@@ -51,19 +55,17 @@ export default class App extends Component {
         <GradientList
           gradients={this.state.gradients}
           updateGradients={this.updateGradients.bind(this)}
+          openColorPicker={this.openColorPicker.bind(this)}
         />
 
         <Code />
 
+
         <ColorPicker
           id="color1" /* ID is important if we want to store prev states of comp */
-          visible={this.state.colorPicker1IsVisible}
-          X={100}
-          Y={100}
-          close={() => this.setState({ ...this.state, colorPicker1IsVisible: false })}
+          visible={this.state.colorPickerIsVisible}
+          close={() => this.setState({ ...this.state, colorPickerIsVisible: false })}
         />
-
-        {/*<button onClick={() => this.setState({ ...this.state, colorPicker1IsVisible: true })}>ColorPicker</button>*/}
       </div>
     );
   }

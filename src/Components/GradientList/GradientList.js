@@ -25,6 +25,7 @@ export default class GradientList extends Component {
                 index={i}
                 updateGradient={this.updateGradient.bind(this)}
                 confirmDeleteGradient={this.confirmDeleteGradient.bind(this)}
+                openColorPicker={this.props.openColorPicker}
             />
         ));
     }
@@ -60,7 +61,6 @@ export default class GradientList extends Component {
 
     handleAddGradientOnClick() {
         const updatedGradientList = [...this.props.gradients, { ...getDefaultGradientObj() }];
-        console.log(updatedGradientList);
         this.props.updateGradients(updatedGradientList);
     }
 

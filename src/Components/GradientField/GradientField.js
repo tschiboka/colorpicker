@@ -123,6 +123,7 @@ export default class GradientField extends Component {
                             gradient={this.props.gradient}
                             index={this.props.index}
                             updateGradient={this.props.updateGradient}
+                            openColorPicker={this.props.openColorPicker}
                         />
 
                         <div className="GradientField__button-box"></div>

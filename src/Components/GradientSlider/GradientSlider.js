@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
 import { mousePos } from "../../functions/slider";
-import { sortGradientByColorStopsPercentage, filterIdenticalColorPercentages, correctGradientEdges } from "../../functions/slider";
+import { sortGradientByColorStopsPercentage, filterIdenticalColorPercentages, correctGradientEdges, setZIndexAscending } from "../../functions/slider";
 import "./GradientSlider.scss";
 
 
@@ -66,30 +66,26 @@ export default class GradientSlider extends Component {
 
 
     handleThumbMouseUp() {
-        if (this.state.activeThumb) {
-            const setZIndexAscending = () => {
-                const measureBoxChildren = document.getElementById(`GradientSlider__measure-text-box${this.props.index}`).children;
-                const thumbBoxChildren = document.getElementById(`GradientSlider__thumbs-box${this.props.index}`).children;
-                const elemGroups = [...thumbBoxChildren].map((group, i) => [measureBoxChildren[i], thumbBoxChildren[i]]);
-
-                elemGroups.forEach((children, i) => children.forEach(child => child.style.zIndex = i));
-            };
-
-            if (!this.props.gradient.repeating) {
-                const sorted = sortGradientByColorStopsPercentage(this.props.gradient);
-                const filtered = filterIdenticalColorPercentages(sorted);
-                const updatedGradient = correctGradientEdges(filtered);
-
-                this.props.updateGradient(updatedGradient, this.props.index);
-            }
-
-            this.setState({
-                ...this.state,
-                activeThumb: undefined,
-                thumbMoved: false,
-                mousePos: undefined
-            }, () => { setZIndexAscending(); });
+        if (!this.state.thumbMoved) {
+            this.props.openColorPicker();
         }
+        else {
+            if (this.state.activeThumb) {
+                if (!this.props.gradient.repeating) {
+                    const sorted = sortGradientByColorStopsPercentage(this.props.gradient);
+                    const filtered = filterIdenticalColorPercentages(sorted);
+                    const updatedGradient = correctGradientEdges(filtered);
+
+                    this.props.updateGradient(updatedGradient, this.props.index);
+                }
+            }
+        }
+        this.setState({
+            ...this.state,
+            activeThumb: undefined,
+            thumbMoved: false,
+            mousePos: undefined
+        }, () => { setZIndexAscending(this.props.index); });
     }
 
 

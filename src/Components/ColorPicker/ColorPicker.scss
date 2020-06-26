@@ -5,10 +5,9 @@ $border: 1px solid $borderColor;
 
 .ColorPicker {
     position: absolute;
-    width: 500px;
+    width: 500px !important;
+    max-width: 500px;
     height: 350px;
-    left: 40px;
-    top: 40px;
     color: $primarytColor;
     background: $primaryBg;
     font-family: "Abel";
@@ -19,11 +18,12 @@ $border: 1px solid $borderColor;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     box-shadow: 5px 5px 5px #000;
-    z-index: 1;
+    z-index: 10000;
     -webkit-user-select: none; /* Safari */        
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
+    box-sizing: content-box;
     .ColorPicker--button-theme {
         background: -moz-linear-gradient(top, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
         background: -ms-linear-gradient(top, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
@@ -179,6 +179,9 @@ $border: 1px solid $borderColor;
             right: -10px;
             width: 20px;
             height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             border: 2px solid #222;
             border-radius: 50%;
             -webkit-border-radius: 50%;
@@ -188,9 +191,9 @@ $border: 1px solid $borderColor;
             z-index: 2;
             cursor: none;
             > div {
-                width: calc(100% - 8px);
-                height: calc(100% - 8px);
-                border: 4px solid white;
+                width: calc(100%);
+                height: calc(100%);
+                border: 3px solid white;
                 border-radius: 50%;
                 -webkit-border-radius: 50%;
                 -moz-border-radius: 50%;
@@ -198,9 +201,9 @@ $border: 1px solid $borderColor;
                 -o-border-radius: 50%;
                 cursor: none;
                 > div {
-                    width: calc(100% - 2px);
-                    height: calc(100% - 2px);
-                    border: 1px solid black;
+                    width: calc(100%);
+                    height: calc(100%);
+                    border: 2px solid black;
                     border-radius: 50%;
                     -webkit-border-radius: 50%;
                     -moz-border-radius: 50%;
@@ -490,10 +493,10 @@ $border: 1px solid $borderColor;
 @media only screen and (max-width: 500px) and (orientation: portrait) {
     .ColorPicker {
         position: absolute;
-        left: 1vw !important;
-        top: 0.5vh !important;
-        width: 98vw;
-        height: 99vh;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100%;
+        height: 100%;
     }
     .ColorPicker__header {
         height: 8.5vh;
