@@ -22,14 +22,14 @@ export default class GradientSlider extends Component {
         const activeThumb = event.target.id.match(/GradientSlider\d+_\d+$/g) ? event.target : null;
 
         if (activeThumb) {
-            console.log(activeThumb.getBoundingClientRect().left);
+            const measureText = document.getElementById(`gradient-mesure${this.state.index}_${activeThumb.id.match(/\d+$/)}`);
+            activeThumb.style.zIndex = 1000;
+            measureText.style.zIndex = 1000;
+
             this.setState({
                 ...this.state,
                 activeThumb,
-                mousePos: {
-                    mouseTouchedX: mousePos(event, this.props.index, event.target),
-                    current: undefined
-                },
+                mousePos: mousePos(event, this.props.index),
             });
         }
     }
@@ -37,12 +37,22 @@ export default class GradientSlider extends Component {
 
 
     handleThumbMouseUp() {
-        this.setState({
-            ...this.state,
-            activeThumb: undefined,
-            thumbMoved: false,
-            mousePos: undefined
-        });
+        if (this.state.activeThumb) {
+            const setZIndexAscending = (() => {
+                const measureBoxChildren = document.getElementById(`GradientSlider__measure-text-box${this.props.index}`).children;
+                const thumbBoxChildren = document.getElementById(`GradientSlider__thumbs-box${this.props.index}`).children;
+                const elemGroups = [...thumbBoxChildren].map((group, i) => [measureBoxChildren[i], thumbBoxChildren[i]]);
+
+                elemGroups.forEach((children, i) => children.forEach(child => child.style.zIndex = i));
+            })();
+
+            this.setState({
+                ...this.state,
+                activeThumb: undefined,
+                thumbMoved: false,
+                mousePos: undefined
+            });
+        }
     }
 
 
@@ -51,29 +61,25 @@ export default class GradientSlider extends Component {
         const moveActiveThumb = () => {
             const thumbBox = document.getElementById(`GradientSlider__thumbs-box${this.props.index}`);
             const thumbBoxWidth = Math.round(thumbBox.getBoundingClientRect().width);
-            const newThumbX = this.state.mousePos.current - this.state.mousePos.mouseTouchedX;
+            const newThumbX = this.state.mousePos;
 
             if (!this.props.gradient.repeating) {
                 const newPercentage = (newThumbX / thumbBoxWidth * 100);
-                const colorIndex = this.state.activeThumb.id.match(/\d+$/)[0];
+                if (newPercentage >= 0 && newPercentage <= 100) {
+                    const colorIndex = this.state.activeThumb.id.match(/\d+$/)[0];
+                    const newGradient = { ...this.props.gradient, colors: [...this.props.gradient.colors] };
+                    newGradient.colors[colorIndex].stop = newPercentage.toFixed(newPercentage % 1 !== 0 ? 1 : 0);
 
-                const newGradient = { ...this.props.gradient, colors: [...this.props.gradient.colors] };
-                newGradient.colors[colorIndex].stop = newPercentage.toFixed(newPercentage % 1 !== 0 ? 1 : 0);
-
-                this.props.updateGradient(newGradient);
+                    this.props.updateGradient(newGradient);
+                }
             }
-
-            console.log(newThumbX / thumbBoxWidth * 100);
         }
 
         if (this.state.activeThumb) {
             this.setState({
                 ...this.state,
                 thumbMoved: true,
-                mousePos: {
-                    ...this.state.mousePos,
-                    current: mousePos(event, this.props.index)
-                },
+                mousePos: mousePos(event, this.props.index),
             }, () => moveActiveThumb());
         }
     }
@@ -84,7 +90,8 @@ export default class GradientSlider extends Component {
         return this.props.gradient.colors.map((colorStop, i) => {
             if (!this.props.gradient.repeating) {
                 return <span
-                    key={`gradient-mesure${i}`}
+                    id={`gradient-mesure${this.state.index}_${i}`}
+                    key={`gradient-mesure${this.state.index}_${i}`}
                     style={{ left: `calc(${colorStop.stop}% - 20px)` }}
                 >{colorStop.stop}%</span>
             }
@@ -171,10 +178,14 @@ export default class GradientSlider extends Component {
         return (
             <div className="GradientSlider">
                 <div className="GradientSlider__ruler">
-                    <div
-                        className="GradientSlider__helper-lines">{this.renderHelperLines()}</div>
+                    <div className="GradientSlider__helper-lines">{this.renderHelperLines()}</div>
 
-                    <div className="GradientSlider__measure-text-box">{this.renderMeasureText()}</div>
+                    <div
+                        id={`GradientSlider__measure-text-box${this.props.index}`}
+                        className="GradientSlider__measure-text-box"
+                    >
+                        {this.renderMeasureText()}
+                    </div>
 
                     <div className="GradientSlider__ruler-box">{this.renderRuler()}</div>
 
