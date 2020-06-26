@@ -13,6 +13,8 @@ export default class ColorPicker extends Component {
     constructor(props) {
         super(props);
 
+        this.handleResize = this.handleResize.bind(this);
+
         this.state = {
             id: this.props.id,
             browser: { // gradients won't work without sniffing the browser
@@ -31,21 +33,14 @@ export default class ColorPicker extends Component {
             colorPaletteMouseDown: false,
             sliderThumbsMinOffset: undefined,
             hueCanvasColorSequenceDrawn: false, // the hue that's color will picked need to be drawn when component is visible (first mouseover event)
-            colorPaletteDrawn: false, // same goes for color palette (as soon as component is visible)
+            colorPaletteDrawn: false, // same goes for color palette (as soon as component is visible
         };
     }
 
 
 
     componentDidMount() {
-        window.addEventListener("resize", () => {
-            this.setState({
-                ...this.state,
-                sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue-color-points").getBoundingClientRect().left,
-                x: this.getPositionXY("X"),
-                y: this.getPositionXY("Y"),
-            });
-        });
+        window.addEventListener("resize", this.handleResize);
 
         this.primeDOMElements();
 
@@ -75,6 +70,23 @@ export default class ColorPicker extends Component {
             },
                 () => { this.drawColorPaletteCanvas(); });
         }
+    }
+
+
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.handleResize);
+    }
+
+
+
+    handleResize() {
+        this.setState({
+            ...this.state,
+            sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue-color-points").getBoundingClientRect().left,
+            x: this.getPositionXY("X"),
+            y: this.getPositionXY("Y"),
+        });
     }
 
 
