@@ -13,14 +13,28 @@ export function gradientObjsToStr(grdObj) {
 
 
 
-export const defaultGradientObj = {
+const defaultGradientObj = {
     name: "",
     visible: true,
     direction: "90",
     repeating: false,
     colors: [
         { color: "rgba(0, 0, 0, 1)", stop: 0 },
-        { color: "rgba(255, 255, 0, 0.5)", stop: 46 },
         { color: "rgba(255, 255, 255, 0.5)", stop: 100 },
     ]
 };
+
+
+
+
+// fix mutability issues of gradient obj by spreading
+export const getDefaultGradientObj = () => {
+    const gradient = {
+        ...defaultGradientObj,
+        colors: [...defaultGradientObj.colors.map(color => Object.assign({}, color))]
+    };
+
+    console.log(gradient);
+
+    return gradient;
+}

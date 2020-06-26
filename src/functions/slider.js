@@ -1,3 +1,8 @@
+import { getDefaultGradientObj } from "./gradient";
+
+
+
+// get elements left distance from window
 export const getCumulativeOffset = elem => {
     let left = 0;
     do {
@@ -13,10 +18,10 @@ export const getCumulativeOffset = elem => {
 export const mousePos = (event, index) => {
     const thumbBoxDiv = document.querySelector(`#GradientSlider__thumbs-box${index}`);
     const offsetLeft = getCumulativeOffset(thumbBoxDiv);
-    const mouseAbsoluteStartPos = event.clientX || event.pageX;
-    const mouseRelativeStartPos = mouseAbsoluteStartPos - offsetLeft;
+    const mouseAbsolutePos = event.clientX || event.pageX;
+    const mouseRelativePos = mouseAbsolutePos - offsetLeft;
 
-    return mouseRelativeStartPos;
+    return mouseRelativePos;
 }
 
 
@@ -47,4 +52,15 @@ export const filterIdenticalColorPercentages = gradient => {
     const filteredGradient = { ...gradient, colors: filteredGradientColors };
 
     return filteredGradient;
+}
+
+
+
+// all gradients need to have a 0% and a 100% color stop
+// if any missing give default color stops
+export const correctGradientEdges = gradient => {
+    const updatedGradient = { ...gradient };
+    const defaultGradient = getDefaultGradientObj();
+    console.log(defaultGradient);
+    //if (updatedGradient.colors[0].stop != 0) gradient.colors.unshift()
 }

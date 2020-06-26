@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
 import { mousePos } from "../../functions/slider";
-import { sortGradientByColorStopsPercentage } from "../../functions/slider";
-import { filterIdenticalColorPercentages } from "../../functions/slider";
+import { sortGradientByColorStopsPercentage, filterIdenticalColorPercentages, correctGradientEdges } from "../../functions/slider";
 import "./GradientSlider.scss";
 
 
@@ -38,31 +37,6 @@ export default class GradientSlider extends Component {
 
 
 
-    handleThumbMouseUp() {
-        if (this.state.activeThumb) {
-            const setZIndexAscending = () => {
-                const measureBoxChildren = document.getElementById(`GradientSlider__measure-text-box${this.props.index}`).children;
-                const thumbBoxChildren = document.getElementById(`GradientSlider__thumbs-box${this.props.index}`).children;
-                const elemGroups = [...thumbBoxChildren].map((group, i) => [measureBoxChildren[i], thumbBoxChildren[i]]);
-
-                elemGroups.forEach((children, i) => children.forEach(child => child.style.zIndex = i));
-            };
-
-            const sorted = sortGradientByColorStopsPercentage(this.props.gradient);
-            const filtered = filterIdenticalColorPercentages(sorted);
-            this.props.updateGradient(filtered, this.props.index);
-
-            this.setState({
-                ...this.state,
-                activeThumb: undefined,
-                thumbMoved: false,
-                mousePos: undefined
-            }, () => { setZIndexAscending(); });
-        }
-    }
-
-
-
     handleThumbOnMouseMove(event) {
         const moveActiveThumb = () => {
             const thumbBox = document.getElementById(`GradientSlider__thumbs-box${this.props.index}`);
@@ -87,6 +61,35 @@ export default class GradientSlider extends Component {
                 thumbMoved: true,
                 mousePos: mousePos(event, this.props.index),
             }, () => moveActiveThumb());
+        }
+    }
+
+
+    handleThumbMouseUp() {
+        if (this.state.activeThumb) {
+            const setZIndexAscending = () => {
+                const measureBoxChildren = document.getElementById(`GradientSlider__measure-text-box${this.props.index}`).children;
+                const thumbBoxChildren = document.getElementById(`GradientSlider__thumbs-box${this.props.index}`).children;
+                const elemGroups = [...thumbBoxChildren].map((group, i) => [measureBoxChildren[i], thumbBoxChildren[i]]);
+
+                elemGroups.forEach((children, i) => children.forEach(child => child.style.zIndex = i));
+            };
+
+            if (!this.props.gradient.repeating) {
+                const sorted = sortGradientByColorStopsPercentage(this.props.gradient);
+                const filtered = filterIdenticalColorPercentages(sorted);
+                const updatedGradient = correctGradientEdges(filtered);
+
+                console.log(updatedGradient);
+                //                this.props.updateGradient(updatedGradient, this.props.index);
+            }
+
+            this.setState({
+                ...this.state,
+                activeThumb: undefined,
+                thumbMoved: false,
+                mousePos: undefined
+            }, () => { setZIndexAscending(); });
         }
     }
 

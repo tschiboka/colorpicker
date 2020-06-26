@@ -3,7 +3,7 @@ import ColorPicker from "./Components/ColorPicker/ColorPicker";
 import ResultDisplay from "./Components/ResultDisplay/ResultDisplay";
 import GradientList from "./Components/GradientList/GradientList";
 import Code from "./Components/Code/Code";
-import { defaultGradientObj } from "./functions/gradient";
+import { getDefaultGradientObj } from "./functions/gradient";
 import "./App.scss";
 
 
@@ -27,10 +27,12 @@ export default class App extends Component {
 
     window.addEventListener("resize", () => { resizeWithFrequency(100) });
 
+
+
     this.state = {
       colorPicker1IsVisible: false,
       checkered: true,
-      gradients: [defaultGradientObj],
+      gradients: [{ ...getDefaultGradientObj() }],
       canResize: true
     };
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import GradientField from "../GradientField/GradientField";
 import DeleteConfirmMsg from "../DeleteConfirmMsg/DeleteConfirmMsg";
-import { defaultGradientObj } from "../../functions/gradient";
+import { getDefaultGradientObj } from "../../functions/gradient";
 import "./GradientList.scss";
 
 
@@ -59,7 +59,8 @@ export default class GradientList extends Component {
 
 
     handleAddGradientOnClick() {
-        const updatedGradientList = [defaultGradientObj, ...this.props.gradients];
+        const updatedGradientList = [...this.props.gradients, { ...getDefaultGradientObj() }];
+        console.log(updatedGradientList);
         this.props.updateGradients(updatedGradientList);
     }
 
