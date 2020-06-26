@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
-import { getCumulativeOffset } from "../../functions/slider";
+import { mousePos } from "../../functions/slider";
 import "./GradientSlider.scss";
 
 
@@ -12,35 +12,70 @@ export default class GradientSlider extends Component {
         this.state = {
             activeThumb: undefined,
             thumbMoved: false,
-            mouseStartPos: undefined
+            mousePos: undefined,
         }
     }
 
 
 
     handleThumbMouseDown(event) {
-        const activeThumb = (event.target.id.match(/\d+$/g) || [null])[0];
+        const activeThumb = event.target.id.match(/GradientSlider\d+_\d+$/g) ? event.target : null;
 
         if (activeThumb) {
-            const thumbBoxDiv = document.querySelector(`#GradientSlider__thumbs-box${this.props.index}`);
-            const mouseAbsoluteStartPos = event.clientX || event.pageX;
-            const offsetLeft = getCumulativeOffset(thumbBoxDiv);
-            const mouseRelativeStartPos = mouseAbsoluteStartPos - offsetLeft;
-
-            console.log(mouseRelativeStartPos);
-
-            this.setState({ ...this.state, activeThumb, });
+            console.log(activeThumb.getBoundingClientRect().left);
+            this.setState({
+                ...this.state,
+                activeThumb,
+                mousePos: {
+                    mouseTouchedX: mousePos(event, this.props.index, event.target),
+                    current: undefined
+                },
+            });
         }
     }
 
 
 
-    handleThumbMouseUp() { this.setState({ ...this.state, activeThumb: undefined }); }
+    handleThumbMouseUp() {
+        this.setState({
+            ...this.state,
+            activeThumb: undefined,
+            thumbMoved: false,
+            mousePos: undefined
+        });
+    }
 
 
 
-    handleThumbOnMouseMove() {
-        if (this.state.activeThumb) this.setState({ ...this.state, thumbMoved: true });
+    handleThumbOnMouseMove(event) {
+        const moveActiveThumb = () => {
+            const thumbBox = document.getElementById(`GradientSlider__thumbs-box${this.props.index}`);
+            const thumbBoxWidth = Math.round(thumbBox.getBoundingClientRect().width);
+            const newThumbX = this.state.mousePos.current - this.state.mousePos.mouseTouchedX;
+
+            if (!this.props.gradient.repeating) {
+                const newPercentage = (newThumbX / thumbBoxWidth * 100);
+                const colorIndex = this.state.activeThumb.id.match(/\d+$/)[0];
+
+                const newGradient = { ...this.props.gradient, colors: [...this.props.gradient.colors] };
+                newGradient.colors[colorIndex].stop = newPercentage.toFixed(newPercentage % 1 !== 0 ? 1 : 0);
+
+                this.props.updateGradient(newGradient);
+            }
+
+            console.log(newThumbX / thumbBoxWidth * 100);
+        }
+
+        if (this.state.activeThumb) {
+            this.setState({
+                ...this.state,
+                thumbMoved: true,
+                mousePos: {
+                    ...this.state.mousePos,
+                    current: mousePos(event, this.props.index)
+                },
+            }, () => moveActiveThumb());
+        }
     }
 
 
@@ -148,7 +183,7 @@ export default class GradientSlider extends Component {
                         className="GradientSlider__thumbs-box"
                         onMouseDown={e => this.handleThumbMouseDown(e)}
                         onMouseUp={() => this.handleThumbMouseUp()}
-                        onMouseMove={() => this.handleThumbOnMouseMove()}
+                        onMouseMove={e => this.handleThumbOnMouseMove(e)}
                     >
                         {this.renderThumbs()}
                     </div>
