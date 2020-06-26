@@ -46,6 +46,17 @@ export default class ColorPicker extends Component {
                 y: this.getPositionXY("Y"),
             });
         });
+
+        this.primeDOMElements();
+
+        const setSlidersTimer = setTimeout(() => {
+            this.handleColorTextInputOnChange(undefined, "r", this.state.color.r);
+            this.handleColorTextInputOnChange(undefined, "g", this.state.color.g);
+            this.handleColorTextInputOnChange(undefined, "b", this.state.color.b);
+            this.handleColorTextInputOnChange(undefined, "a", this.state.color.alpha);
+
+            clearTimeout(setSlidersTimer);
+        }, 10);
     }
 
 
@@ -62,7 +73,7 @@ export default class ColorPicker extends Component {
                 colorPalette: document.getElementById((this.props.id || "") + "-color-palette"),
                 sliderThumbsMinOffset: document.getElementById((this.props.id || "") + "-hue-color-points").getBoundingClientRect().left,
             },
-                () => this.drawColorPaletteCanvas());
+                () => { this.drawColorPaletteCanvas(); });
         }
     }
 
@@ -615,8 +626,10 @@ export default class ColorPicker extends Component {
 
 
 
-    handleColorTextInputOnChange(e, inputName) {
-        let value = inputName === "hex" ? e.target.value : Number(e.target.value);
+    handleColorTextInputOnChange(e, inputName, inputValue) {
+        let value;
+        if (e) value = inputName === "hex" ? e.target.value : Number(e.target.value);
+        else value = inputValue;
 
         if (inputName === "r" || inputName === "g" || inputName === "b") {
             if (isNaN(value) || value < 0 || value > 255) value = 255; // user input error results max value
@@ -881,6 +894,8 @@ export default class ColorPicker extends Component {
             updatedHistory = JSON.stringify([...(new Set(updatedHistory))]);
             localStorage.setItem("color_picker_history", updatedHistory);
         }
+
+        this.props.returnColor(this.state.color);
 
         this.props.close(this.state);
     }

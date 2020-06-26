@@ -67,7 +67,10 @@ export default class GradientSlider extends Component {
 
     handleThumbMouseUp() {
         if (!this.state.thumbMoved) {
-            this.props.openColorPicker();
+            const thumbIndex = this.state.activeThumb.id.match(/\d+$/)[0];
+            const color = this.props.gradient.colors[thumbIndex].color;
+
+            this.props.openColorPicker(this.props.index, thumbIndex, color);
         }
         else {
             if (this.state.activeThumb) {
