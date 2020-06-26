@@ -30,9 +30,12 @@ export default class GradientList extends Component {
     }
 
 
-    updateGradient(gradient, i) {
+    updateGradient(gradient, index) {
+        if (index === undefined) throw new Error("Function updateGradient must have index parameter! ");
+
         const updatedGradientList = [...this.props.gradients];
-        updatedGradientList[i] = gradient;
+        updatedGradientList[index] = gradient;
+
         this.props.updateGradients(updatedGradientList);
     }
 

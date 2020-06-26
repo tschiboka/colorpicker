@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
 import { mousePos } from "../../functions/slider";
+import { sortGradientByColorStopsPercentage } from "../../functions/slider";
+import { filterIdenticalColorPercentages } from "../../functions/slider";
 import "./GradientSlider.scss";
 
 
@@ -38,20 +40,24 @@ export default class GradientSlider extends Component {
 
     handleThumbMouseUp() {
         if (this.state.activeThumb) {
-            const setZIndexAscending = (() => {
+            const setZIndexAscending = () => {
                 const measureBoxChildren = document.getElementById(`GradientSlider__measure-text-box${this.props.index}`).children;
                 const thumbBoxChildren = document.getElementById(`GradientSlider__thumbs-box${this.props.index}`).children;
                 const elemGroups = [...thumbBoxChildren].map((group, i) => [measureBoxChildren[i], thumbBoxChildren[i]]);
 
                 elemGroups.forEach((children, i) => children.forEach(child => child.style.zIndex = i));
-            })();
+            };
+
+            const sorted = sortGradientByColorStopsPercentage(this.props.gradient);
+            const filtered = filterIdenticalColorPercentages(sorted);
+            this.props.updateGradient(filtered, this.props.index);
 
             this.setState({
                 ...this.state,
                 activeThumb: undefined,
                 thumbMoved: false,
                 mousePos: undefined
-            });
+            }, () => { setZIndexAscending(); });
         }
     }
 
@@ -68,9 +74,9 @@ export default class GradientSlider extends Component {
                 if (newPercentage >= 0 && newPercentage <= 100) {
                     const colorIndex = this.state.activeThumb.id.match(/\d+$/)[0];
                     const newGradient = { ...this.props.gradient, colors: [...this.props.gradient.colors] };
-                    newGradient.colors[colorIndex].stop = newPercentage.toFixed(newPercentage % 1 !== 0 ? 1 : 0);
+                    newGradient.colors[colorIndex].stop = Number(newPercentage.toFixed(newPercentage % 1 !== 0 ? 1 : 0));
 
-                    this.props.updateGradient(newGradient);
+                    this.props.updateGradient(newGradient, this.props.index);
                 }
             }
         }
