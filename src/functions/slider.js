@@ -44,10 +44,11 @@ export const filterIdenticalColorPercentages = (gradient, activeThumbIndex) => {
     if (activeThumbIndex !== undefined) {
         const colorStopToFilter = updatedGradient.colors[activeThumbIndex].stop;
         updatedGradient.colors = updatedGradient.colors.filter((color, index) => {
-            if (index === activeThumbIndex || color.stop !== colorStopToFilter) return color;
+            return index === activeThumbIndex || color.stop !== colorStopToFilter;
         });
-
     }
+
+
 
     // filter out identical colorStops even if no active thumb 
     // is provided in order to make sure stops will not collide
@@ -64,7 +65,6 @@ export const filterIdenticalColorPercentages = (gradient, activeThumbIndex) => {
             else return false;
         })
         .reverse();
-
     return { ...gradient, colors: filteredGradientColors };
 }
 

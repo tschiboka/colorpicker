@@ -18,7 +18,8 @@ export default class GradientSlider extends Component {
             thumbMoved: false,
             mousePos: undefined,
             addButtonOn: false,
-            delButtonOn: false
+            delButtonOn: false,
+            activeTextInput: undefined,
         }
     }
 
@@ -30,7 +31,7 @@ export default class GradientSlider extends Component {
 
         if (activeThumb) {
             if (this.state.delButtonOn) { return this.deleteColorStop(activeThumb.id); }
-            const measureText = document.getElementById(`gradient-mesure${this.state.index}_${activeThumbIndex}`);
+            const measureText = document.getElementById(`gradient-mesure${this.props.index}_${activeThumbIndex}`);
             activeThumb.style.zIndex = 1000;
             measureText.style.zIndex = 1000;
 
@@ -129,9 +130,21 @@ export default class GradientSlider extends Component {
 
 
 
-    handleMeasureTextOnClick(event) {
-        if (this.state.delButtonOn) { this.deleteColorStop(event.target.id); }
+    handleMeasureTextOnClick(event, index) {
+        if (this.state.delButtonOn) this.deleteColorStop(event.target.id);
+        else this.setState({ ...this.state, activeTextInput: index });
     }
+
+
+
+    handleMeasureTextKeyDown(event, index) {
+        const key = event.which || event.keyCode || event.key;
+
+        if (key === 27 || key === "Escape" || key === "Esc") this.setState({ ...this.state, activeTextInput: undefined });
+
+        if (key === 13 || key === "Enter") this.setColorStopFromInput(index)
+    }
+
 
 
 
@@ -163,22 +176,61 @@ export default class GradientSlider extends Component {
 
 
 
+    setColorStopFromInput(i) {
+        const input = document.getElementById(`gradient-mesure__input${this.props.index}_${i}`);
+
+        if (!this.props.gradient.repeating) {
+            const isValid = input.validity.valid && !isNaN(parseFloat(input.value));
+            if (isValid) {
+                let newGradient = getImmutableGradientCopy(this.props.gradient);
+                newGradient.colors[i].stop = Number(input.value);
+                const sortedGradient = sortGradientByColorStopsPercentage(newGradient);
+                const filteredGradient = filterIdenticalColorPercentages(sortedGradient, i);
+                const updatedGradient = correctGradientEdges(filteredGradient);
+
+                this.props.updateGradient(updatedGradient, this.props.index);
+            }
+        }
+        this.setState({ ...this.state, activeTextInput: undefined });
+    }
+
+
+
     renderMeasureText() {
+        const renderSpan = (colorStop, i) => (
+            <span
+                id={`gradient-mesure__span${this.props.index}_${i}`}
+                key={`gradient-mesure__span${this.props.index}_${i}`}
+                onClick={e => this.handleMeasureTextOnClick(e, i)}
+            >{colorStop.stop}%</span>
+        )
+
+        const renderInput = (i) => (
+            <input
+                type="text"
+                id={`gradient-mesure__input${this.props.index}_${i}`}
+                key={`gradient-mesure__input${this.props.index}_${i}`}
+                min={0}
+                pattern={this.props.gradient.repeating ? "\\d{3}" : "\\d{1,2}|\\d{1,2}\\.\\d|100"}
+                onBlur={() => this.setColorStopFromInput(i)}
+                onKeyDown={e => this.handleMeasureTextKeyDown(e, i)}
+                autoFocus={true}
+            />
+        )
+
+
+
         return this.props.gradient.colors.map((colorStop, i) => {
             if (!this.props.gradient.repeating) {
                 return <div
-                    id={`gradient-mesure${this.state.index}_${i}`}
-                    key={`gradient-mesure${this.state.index}_${i}`}
+                    id={`gradient-mesure${this.props.index}_${i}`}
+                    key={`gradient-mesure${this.props.index}_${i}`}
                     style={{
                         left: `calc(${colorStop.stop}% - 20px)`,
                         border: this.state.delButtonOn && "1px dotted deeppink"
                     }}
                 >
-                    <span
-                        id={`gradient-mesure__span${this.state.index}_${i}`}
-                        key={`gradient-mesure__span${this.state.index}_${i}`}
-                        onClick={e => this.handleMeasureTextOnClick(e)}
-                    >{colorStop.stop}%</span>
+                    {this.state.activeTextInput === i ? renderInput(i) : renderSpan(colorStop, i)}
                 </div>
             }
 

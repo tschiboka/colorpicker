@@ -75,6 +75,21 @@ $activeBtnBg: #4cc3f1;
                 border-bottom: 1px solid rgba(221, 221, 221, 0.5);
                 border-top: none;
                 cursor: default;
+                & > input {
+                    max-width: 40px;
+                    height: 100%;
+                    border: none;
+                    background: transparent;
+                    color: #ddd;
+                    text-align: center;
+                    font-size: inherit;
+                }
+                input:invalid {
+                    border: none;
+                    color: deeppink;
+                    border-top: 1px dotted deeppink;
+                    border-bottom: 1px dotted deeppink;
+                }
             }
         }
         .GradientSlider__ruler-box {
