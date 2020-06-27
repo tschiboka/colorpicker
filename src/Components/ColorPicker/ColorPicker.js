@@ -25,7 +25,7 @@ export default class ColorPicker extends Component {
             y: this.getPositionXY("Y"),
             mode: "palette", // (palette, history, names)
             colorNamesMode: { sortBy: "name", css: false, grid: false },
-            preferredFormat: "rgb", // (rgb, hex, hsl)
+            preferredFormat: this.setInitialPreferredColorFormat(this.props.color), // (rgb, hex, hsl)
             color: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
             originalcolor: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
             hueSliderMouseDown: false,
@@ -87,11 +87,19 @@ export default class ColorPicker extends Component {
 
 
     adjustSliders() {
-        console.log("ADJUST", this.state.color.alpha);
         this.handleColorTextInputOnChange(undefined, "r", this.state.color.rgb.r);
-        //this.handleColorTextInputOnChange(undefined, "g", this.state.color.rgb.g);
-        //this.handleColorTextInputOnChange(undefined, "b", this.state.color.rgb.b);
+        this.handleColorTextInputOnChange(undefined, "g", this.state.color.rgb.g);
+        this.handleColorTextInputOnChange(undefined, "b", this.state.color.rgb.b);
         this.handleColorTextInputOnChange(undefined, "a", this.state.color.alpha);
+    }
+
+
+
+    setInitialPreferredColorFormat(color) {
+        let preferredFormat = color.match(/^(rgb|#|hsl)/gi)[0];
+        if (preferredFormat === "#") preferredFormat = "hex";
+
+        return preferredFormat;
     }
 
 
@@ -384,7 +392,7 @@ export default class ColorPicker extends Component {
 
         // get color type
         let r, g, b, hex, h, s, l, a, name, safe = undefined;
-        const colorType = ["rgb", "rgba", "hex", "hsl", "hsla", "invalid"][[isRgb(colorStr), isRgba(colorStr), isHex(colorStr), isHsl(colorStr), isHsla(colorStr), true].findIndex(e => !!e)];
+        const colorType = ["rgb", "rgba", "hex", "hsl", "hsla", "invalid"][[isRgb(colorStr), isRgba(colorStr), isHex(colorStr), isHsl(colorStr.replace(/%/g, "")), isHsla(colorStr.replace(/%/g, "")), true].findIndex(e => !!e)];
 
         // get color values (r, g, b, h, s, l, hex) for all the possible input variations
         switch (colorType) {
@@ -914,9 +922,7 @@ export default class ColorPicker extends Component {
             localStorage.setItem("color_picker_history", updatedHistory);
         }
 
-        this.props.returnColor(this.state.color);
-
-        this.props.close(this.state);
+        this.props.returnColor(this.getPreferredColorFormatCode(), this.props.gradientIndex, this.props.thumbIndex, this.props.close);
     }
 
 

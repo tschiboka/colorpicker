@@ -43,18 +43,30 @@ export default class App extends Component {
 
 
 
-  openColorPicker(gradIndex, thumbIndex, color) {
+  openColorPicker(gradientIndex, thumbIndex, color) {
     this.setState(
       {
         ...this.state,
-        colorPicker: { visible: true, gradIndex, thumbIndex, color }
+        colorPicker: { visible: true, gradientIndex, thumbIndex, color }
       });
   }
 
 
 
-  returnColor(color) {
-    console.log(color);
+  returnColor(color, gradientIndex, thumbIndex, closeFunction) {
+    const newState = {
+      ...this.state,
+      gradients: [
+        ...this.state.gradients.map(grad => ({
+          ...grad,
+          colors: [...grad.colors].map(color => ({ ...color }))
+        })),
+      ]
+    };
+
+    newState.gradients[gradientIndex].colors[thumbIndex].color = color;
+
+    this.setState(newState, () => closeFunction(this.state));
   }
 
 
@@ -77,8 +89,10 @@ export default class App extends Component {
           id="color1" /* ID is important if we want to store prev states of comp */
           visible={this.state.colorPicker}
           color={this.state.colorPicker.color}
+          gradientIndex={this.state.colorPicker.gradientIndex}
+          thumbIndex={this.state.colorPicker.thumbIndex}
           returnColor={this.returnColor.bind(this)}
-          close={() => this.setState({ ...this.state, colorPicker: undefined })}
+          close={() => { this.setState({ ...this.state, colorPicker: undefined }); }}
         />}
       </div>
     );
