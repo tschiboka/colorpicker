@@ -44,13 +44,10 @@ export default class ColorPicker extends Component {
 
         this.primeDOMElements();
 
-        const setSlidersTimer = setTimeout(() => {
-            this.handleColorTextInputOnChange(undefined, "r", this.state.color.r);
-            this.handleColorTextInputOnChange(undefined, "g", this.state.color.g);
-            this.handleColorTextInputOnChange(undefined, "b", this.state.color.b);
-            this.handleColorTextInputOnChange(undefined, "a", this.state.color.alpha);
+        const slidersTimer = setTimeout(() => {
+            this.adjustSliders();
 
-            clearTimeout(setSlidersTimer);
+            clearTimeout(slidersTimer);
         }, 10);
     }
 
@@ -74,9 +71,7 @@ export default class ColorPicker extends Component {
 
 
 
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.handleResize);
-    }
+    componentWillUnmount() { window.removeEventListener("resize", this.handleResize); }
 
 
 
@@ -87,6 +82,16 @@ export default class ColorPicker extends Component {
             x: this.getPositionXY("X"),
             y: this.getPositionXY("Y"),
         });
+    }
+
+
+
+    adjustSliders() {
+        console.log("ADJUST", this.state.color.alpha);
+        this.handleColorTextInputOnChange(undefined, "r", this.state.color.rgb.r);
+        //this.handleColorTextInputOnChange(undefined, "g", this.state.color.rgb.g);
+        //this.handleColorTextInputOnChange(undefined, "b", this.state.color.rgb.b);
+        this.handleColorTextInputOnChange(undefined, "a", this.state.color.alpha);
     }
 
 
@@ -617,6 +622,8 @@ export default class ColorPicker extends Component {
             default: { return; }
         }
 
+        newColorObj.alpha = this.state.color.alpha;
+
         this.setState({ ...this.state, color: newColorObj }, () => {
             this.drawColorPaletteCanvas();
             updatePaletteCursorPosition();
@@ -645,7 +652,7 @@ export default class ColorPicker extends Component {
 
         if (inputName === "r" || inputName === "g" || inputName === "b") {
             if (isNaN(value) || value < 0 || value > 255) value = 255; // user input error results max value
-            const newState = Object.assign(this.state, {});
+            const newState = Object.assign({}, this.state);
             let [r, g, b] = [this.state.color.rgb.r, this.state.color.rgb.g, this.state.color.rgb.b];
 
             switch (inputName) {
@@ -883,7 +890,7 @@ export default class ColorPicker extends Component {
                 <div
                     style={{ backgroundColor: color }}
                     title={color}
-                    onClick={() => this.setState({ ...this.state, color: this.getColorObj(color) })}></div>
+                    onClick={() => this.setState({ ...this.state, color: this.getColorObj(color) }, () => this.adjustSliders())}></div>
             </div>
         ));
     }
