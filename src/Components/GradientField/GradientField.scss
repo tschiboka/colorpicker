@@ -1,4 +1,5 @@
 $primarytColor: #c2c2c2;
+$activeBtnBg: #4cc3f1;
 
 .GradientField {
     background: rgba(0, 0, 0, 0.3);
@@ -63,7 +64,7 @@ $primarytColor: #c2c2c2;
                     height: 100%;              
                 }
                 &:hover {
-                    color: lightblue;
+                    color: $activeBtnBg;
                     font-size: 18px;
                 }
                 &:last-child:hover { color: deeppink; }

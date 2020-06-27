@@ -76,3 +76,17 @@ export const setZIndexAscending = index => {
 
     elemGroups.forEach((children, i) => children.forEach(child => child.style.zIndex = i));
 };
+
+
+
+export const getPercentToFixed = (wholeInput, fractionInput, decimalPlaces = 1, limit0_to_100 = true) => {
+    let percentage = fractionInput / wholeInput * 100;
+    percentage = Number(percentage.toFixed(percentage % 1 !== 0 ? decimalPlaces : 0));
+
+    if (limit0_to_100) {
+        if (percentage > 100) percentage = 100;
+        if (percentage < 0) percentage = 0;
+    }
+
+    return percentage;
+}

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
 import { mousePos } from "../../functions/slider";
-import { sortGradientByColorStopsPercentage, filterIdenticalColorPercentages, correctGradientEdges, setZIndexAscending } from "../../functions/slider";
+import { sortGradientByColorStopsPercentage, filterIdenticalColorPercentages } from "../../functions/slider";
+import { correctGradientEdges, setZIndexAscending, getPercentToFixed } from "../../functions/slider";
 import "./GradientSlider.scss";
 
 
@@ -11,9 +12,12 @@ export default class GradientSlider extends Component {
         super(props);
 
         this.state = {
+            activeRuler: true,
             activeThumb: undefined,
             thumbMoved: false,
             mousePos: undefined,
+            addButtonOn: false,
+            delButton: false
         }
     }
 
@@ -44,14 +48,12 @@ export default class GradientSlider extends Component {
             const newThumbX = this.state.mousePos;
 
             if (!this.props.gradient.repeating) {
-                const newPercentage = (newThumbX / thumbBoxWidth * 100);
-                if (newPercentage >= 0 && newPercentage <= 100) {
-                    const colorIndex = this.state.activeThumb.id.match(/\d+$/)[0];
-                    const newGradient = { ...this.props.gradient, colors: [...this.props.gradient.colors] };
-                    newGradient.colors[colorIndex].stop = Number(newPercentage.toFixed(newPercentage % 1 !== 0 ? 1 : 0));
+                const newPercentage = getPercentToFixed(thumbBoxWidth, newThumbX);
+                const colorIndex = this.state.activeThumb.id.match(/\d+$/)[0];
+                const newGradient = { ...this.props.gradient, colors: [...this.props.gradient.colors] };
+                newGradient.colors[colorIndex].stop = newPercentage;
 
-                    this.props.updateGradient(newGradient, this.props.index);
-                }
+                this.props.updateGradient(newGradient, this.props.index);
             }
         }
 
@@ -66,14 +68,15 @@ export default class GradientSlider extends Component {
 
 
     handleThumbMouseUp() {
-        if (!this.state.thumbMoved) {
-            const thumbIndex = this.state.activeThumb.id.match(/\d+$/)[0];
-            const color = this.props.gradient.colors[thumbIndex].color;
+        if (this.state.activeThumb) {
+            if (!this.state.thumbMoved) {
+                const thumbIndex = this.state.activeThumb.id.match(/\d+$/)[0];
+                const color = this.props.gradient.colors[thumbIndex].color;
 
-            this.props.openColorPicker(this.props.index, thumbIndex, color);
-        }
-        else {
-            if (this.state.activeThumb) {
+                this.props.openColorPicker(this.props.index, thumbIndex, color);
+            }
+            else {
+
                 if (!this.props.gradient.repeating) {
                     const sorted = sortGradientByColorStopsPercentage(this.props.gradient);
                     const filtered = filterIdenticalColorPercentages(sorted);
@@ -82,13 +85,58 @@ export default class GradientSlider extends Component {
                     this.props.updateGradient(updatedGradient, this.props.index);
                 }
             }
+            this.setState({
+                ...this.state,
+                activeThumb: undefined,
+                thumbMoved: false,
+                mousePos: undefined
+            }, () => { setZIndexAscending(this.props.index); });
         }
-        this.setState({
-            ...this.state,
-            activeThumb: undefined,
-            thumbMoved: false,
-            mousePos: undefined
-        }, () => { setZIndexAscending(this.props.index); });
+    }
+
+
+
+    handleAddBtnOnClick() {
+        console.log(this.state.addButtonOn);
+        if (!this.state.addButtonOn) {
+            this.setState({ ...this.state, addButtonOn: !this.state.addButtonOn, activeRuler: false });
+        }
+    }
+
+
+
+    handleShadowOnBlur() { setTimeout(() => { this.setState({ ...this.state, addButtonOn: false, activeRuler: true }) }, 200) }
+
+
+
+    handleShadowOnMouseMove(event) {
+        const element = document.getElementById(`GradientSlider__shadow-${this.props.index}`);
+        const mouseX = mousePos(event, this.props.index);
+        const elementWidth = event.target.getBoundingClientRect().width;
+        const percent = getPercentToFixed(elementWidth, mouseX);
+        const titleDiv = element.children[0];
+
+        titleDiv.innerHTML = percent + "%";
+        titleDiv.style.right = elementWidth - mouseX + 10 + "px";
+
+        console.log();
+
+    }
+
+
+
+    addNewColorStop(event) {
+        const mouseX = mousePos(event, this.props.index);
+        const elementWidth = event.target.getBoundingClientRect().width;
+        const newGradient = { ...this.props.gradient, colors: [...this.props.gradient.colors.map(color => ({ ...color }))] };
+
+        if (!this.props.gradient.repeating) {
+            newGradient.colors.push({ color: "rgb(255, 255, 255)", stop: getPercentToFixed(elementWidth, mouseX) });
+            const sorted = sortGradientByColorStopsPercentage(newGradient);
+            const filtered = filterIdenticalColorPercentages(sorted);
+            this.props.updateGradient(filtered, this.props.index);
+        }
+        this.setState({ ...this.state, activeRuler: true, addButtonOn: false });
     }
 
 
@@ -181,11 +229,27 @@ export default class GradientSlider extends Component {
 
 
 
+    renderAddColorStopShadow() {
+        return <button
+            id={`GradientSlider__shadow-${this.props.index}`}
+            className="GradientSlider__shadow"
+            onBlur={e => this.handleShadowOnBlur(e)}
+            onClick={e => this.addNewColorStop(e)}
+            onMouseMove={e => this.handleShadowOnMouseMove(e)}
+            tabIndex={1}
+            autoFocus={true}
+        ><div>---</div></button>
+    }
+
+
+
     render() {
         return (
             <div className="GradientSlider">
-                <div className="GradientSlider__ruler">
+                <div className={`GradientSlider__ruler ${this.state.activeRuler ? "" : "GradientSlider__ruler--inactive"}`}>
                     <div className="GradientSlider__helper-lines">{this.renderHelperLines()}</div>
+
+                    {this.state.addButtonOn && this.renderAddColorStopShadow()}
 
                     <div
                         id={`GradientSlider__measure-text-box${this.props.index}`}
@@ -208,11 +272,23 @@ export default class GradientSlider extends Component {
                 </div>
 
                 <div className="GradientSlider__btn-box">
-                    <button>Add</button>
+                    <button
+                        title="add new color [stop click on slider]"
+                        onClick={() => this.handleAddBtnOnClick()}
+                    >
+                        Add
+                            <div className={`btn--${this.state.addButtonOn ? "active" : "inactive"}`}></div>
+                    </button>
 
-                    <button>Del</button>
+                    <button
+                        title="delete color stop [click on slider thumb]"
+                        onClick={() => this.handleAddBtnOnClick()
+                        }>
+                        Del
+                        <div className={`btn--${this.state.addButtonOn ? "active" : "inactive"}`}></div>
+                    </button>
                 </div>
-            </div>
+            </div >
         );
     }
 }

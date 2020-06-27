@@ -1,8 +1,20 @@
+$activeBtnBg: #4cc3f1;
+
 .GradientSlider {
     position: relative;
     width: 100%;
     padding: 0 0 0 20px;
     display: flex;
+    .GradientSlider__ruler--inactive {
+        .GradientSlider__measure-text-box, .GradientSlider__thumbs-box {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .GradientSlider__ruler-box {
+            z-index: 1501;
+            pointer-events: none;
+        } 
+    }
     .GradientSlider__ruler {
         position: relative;
         display: flex;
@@ -18,6 +30,34 @@
             background: transparent;
             pointer-events: none;
             svg { position: absolute; }
+        }
+        .GradientSlider__shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: calc(100% - 1px);
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            z-index: 1500;
+            cursor: pointer;
+            & > div {
+                position: absolute;
+                min-width: 50px;
+                height: 18px;
+                top: 1px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 2px 5px;
+                border: 1px dotted #555;
+                border-top: none;
+                border-left: none;
+                background: #111;
+                color: $activeBtnBg;
+                font-size: 12px;
+                pointer-events: none;
+            }
         }
         .GradientSlider__measure-text-box {
             position: relative;
@@ -77,6 +117,17 @@
                 background: rgba(255, 255, 255, 0.1);
                 font-size: 14px;
             }
+            & > div {
+                position: absolute;
+                width: 6px;
+                height: 6px;
+                top: 3px;
+                right: 3px;
+                border-radius: 5px;
+                border: 1px solid rgba(221, 221, 221, 0.2);
+            }
+            .btn--active { background: $activeBtnBg; }
+            .btn--inactive { background: rgba(0, 0, 0, 0.7); }
         }    
     }
 }
