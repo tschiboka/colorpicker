@@ -3,8 +3,10 @@ $activeBtnBg: #4cc3f1;
 .GradientSlider {
     position: relative;
     width: 100%;
+    height: 60%;
     padding: 0 0 0 20px;
     display: flex;
+    border-bottom: 1px solid rgba(221, 221, 221, 0.1);
     .GradientSlider__ruler--inactive {
         .GradientSlider__measure-text-box, .GradientSlider__thumbs-box {
             opacity: 0.3;
@@ -87,7 +89,6 @@ $activeBtnBg: #4cc3f1;
                 input:invalid {
                     border: none;
                     color: deeppink;
-                    border-top: 1px dotted deeppink;
                     border-bottom: 1px dotted deeppink;
                 }
             }

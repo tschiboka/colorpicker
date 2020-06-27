@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
 import { gradientObjsToStr } from "../../functions/gradient";
 import GradientSlider from "../GradientSlider/GradientSlider";
+import GradientButtons from "../GradientButtons/GradientButtons";
 import "./GradientField.scss";
 
 
@@ -126,7 +127,7 @@ export default class GradientField extends Component {
                             openColorPicker={this.props.openColorPicker}
                         />
 
-                        <div className="GradientField__button-box"></div>
+                        <GradientButtons />
                     </div>
                 </div>
             </div>

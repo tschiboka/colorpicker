@@ -92,13 +92,6 @@ $activeBtnBg: #4cc3f1;
             display: flex;
             flex-direction: column;
             border-left: 1px solid rgba(221, 221, 221, 0.1);
-            .GradientSlider {
-                height: 60%;
-                border-bottom: 1px solid rgba(221, 221, 221, 0.1);
-            }
-            .GradientField__button-box {
-                height: 40%;
-            }
         }
     }
 }
