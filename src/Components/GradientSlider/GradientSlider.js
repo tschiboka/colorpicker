@@ -260,6 +260,7 @@ export default class GradientSlider extends Component {
             onBlur={e => this.handleShadowOnBlur(e)}
             onClick={e => this.addNewColorStop(e)}
             onMouseMove={e => this.handleShadowOnMouseMove(e)}
+            onTouchMove={e => this.handleShadowOnMouseMove(e)}
             tabIndex={1}
             autoFocus={true}
         ><div>---</div></button>
@@ -288,8 +289,11 @@ export default class GradientSlider extends Component {
                         id={`GradientSlider__thumbs-box${this.props.index}`}
                         className="GradientSlider__thumbs-box"
                         onMouseDown={e => this.handleThumbMouseDown(e)}
+                        onTouchStart={e => this.handleThumbMouseDown(e)}
                         onMouseUp={() => this.handleThumbMouseUp()}
+                        onTouchEnd={() => this.handleThumbMouseUp()}
                         onMouseMove={e => this.handleThumbOnMouseMove(e)}
+                        onTouchMove={e => this.handleThumbOnMouseMove(e)}
                     >
                         {this.renderThumbs()}
                     </div>

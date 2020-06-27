@@ -116,6 +116,7 @@ $activeBtnBg: #4cc3f1;
             &:first-child { border-bottom: 1px solid rgba(221, 221, 221, 0.1); }
             &:hover {
                 background: rgba(255, 255, 255, 0.1);
+                color: $activeBtnBg;
                 font-size: 14px;
             }
             & > div {

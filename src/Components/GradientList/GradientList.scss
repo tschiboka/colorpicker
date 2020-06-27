@@ -1,4 +1,5 @@
 $primarytColor: #c2c2c2;
+$activeBtnBg: #4cc3f1;
 
 .GradientList {
     position: relative;
@@ -12,12 +13,12 @@ $primarytColor: #c2c2c2;
         border: none;
         background: transparent;
         color: $primarytColor;
-        font-size: 22px;
+        font-size: 24px;
         font-weight: bold;
         margin-right: 5px;
         &:hover {
-            font-size: 18px;
-            color: lightblue;
+            font-size: 20px;
+            color: $activeBtnBg;
         }
     }
     .gradients {

@@ -18,7 +18,7 @@ export const getCumulativeOffset = elem => {
 export const mousePos = (event, index) => {
     const thumbBoxDiv = document.querySelector(`#GradientSlider__thumbs-box${index}`);
     const offsetLeft = getCumulativeOffset(thumbBoxDiv);
-    const mouseAbsolutePos = event.clientX || event.pageX;
+    const mouseAbsolutePos = event.clientX || event.pageX || event || event.touches[0].clientX;
     const mouseRelativePos = mouseAbsolutePos - offsetLeft;
 
     return mouseRelativePos;
