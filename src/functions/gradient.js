@@ -36,3 +36,18 @@ export const getDefaultGradientObj = () => {
 
     return gradient;
 }
+
+
+
+export const getImmutableGradientCopy = gradient => {
+    const copy = {
+        ...gradient,
+        colors: [
+            ...gradient.colors.map(color => ({
+                ...color
+            }))
+        ]
+    }
+
+    return copy;
+}

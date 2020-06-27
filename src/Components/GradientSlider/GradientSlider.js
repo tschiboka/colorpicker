@@ -3,6 +3,7 @@ import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
 import { mousePos } from "../../functions/slider";
 import { sortGradientByColorStopsPercentage, filterIdenticalColorPercentages } from "../../functions/slider";
 import { correctGradientEdges, setZIndexAscending, getPercentToFixed } from "../../functions/slider";
+import { getImmutableGradientCopy } from "../../functions/gradient";
 import "./GradientSlider.scss";
 
 
@@ -17,7 +18,7 @@ export default class GradientSlider extends Component {
             thumbMoved: false,
             mousePos: undefined,
             addButtonOn: false,
-            delButton: false
+            delButtonOn: false
         }
     }
 
@@ -27,6 +28,7 @@ export default class GradientSlider extends Component {
         const activeThumb = event.target.id.match(/GradientSlider\d+_\d+$/g) ? event.target : null;
 
         if (activeThumb) {
+            if (this.state.delButtonOn) { return this.deleteColorStop(activeThumb.id); }
             const measureText = document.getElementById(`gradient-mesure${this.state.index}_${activeThumb.id.match(/\d+$/)}`);
             activeThumb.style.zIndex = 1000;
             measureText.style.zIndex = 1000;
@@ -50,7 +52,7 @@ export default class GradientSlider extends Component {
             if (!this.props.gradient.repeating) {
                 const newPercentage = getPercentToFixed(thumbBoxWidth, newThumbX);
                 const colorIndex = this.state.activeThumb.id.match(/\d+$/)[0];
-                const newGradient = { ...this.props.gradient, colors: [...this.props.gradient.colors] };
+                const newGradient = getImmutableGradientCopy(this.props.gradient);
                 newGradient.colors[colorIndex].stop = newPercentage;
 
                 this.props.updateGradient(newGradient, this.props.index);
@@ -69,7 +71,7 @@ export default class GradientSlider extends Component {
 
     handleThumbMouseUp() {
         if (this.state.activeThumb) {
-            if (!this.state.thumbMoved) {
+            if (!this.state.thumbMoved && !this.state.delButtonOn) {
                 const thumbIndex = this.state.activeThumb.id.match(/\d+$/)[0];
                 const color = this.props.gradient.colors[thumbIndex].color;
 
@@ -78,7 +80,8 @@ export default class GradientSlider extends Component {
             else {
 
                 if (!this.props.gradient.repeating) {
-                    const sorted = sortGradientByColorStopsPercentage(this.props.gradient);
+                    const gradientCopy = getImmutableGradientCopy(this.props.gradient)
+                    const sorted = sortGradientByColorStopsPercentage(gradientCopy);
                     const filtered = filterIdenticalColorPercentages(sorted);
                     const updatedGradient = correctGradientEdges(filtered);
 
@@ -97,11 +100,13 @@ export default class GradientSlider extends Component {
 
 
     handleAddBtnOnClick() {
-        console.log(this.state.addButtonOn);
         if (!this.state.addButtonOn) {
-            this.setState({ ...this.state, addButtonOn: !this.state.addButtonOn, activeRuler: false });
+            this.setState({ ...this.state, addButtonOn: !this.state.addButtonOn, activeRuler: false, delButtonOn: false });
         }
     }
+
+
+    handleDelBtnOnClick() { this.setState({ ...this.state, delButtonOn: !this.state.delButtonOn, addButtonOn: false }); }
 
 
 
@@ -118,9 +123,12 @@ export default class GradientSlider extends Component {
 
         titleDiv.innerHTML = percent + "%";
         titleDiv.style.right = elementWidth - mouseX + 10 + "px";
+    }
 
-        console.log();
 
+
+    handleMeasureTextOnClick(event) {
+        if (this.state.delButtonOn) { this.deleteColorStop(event.target.id); }
     }
 
 
@@ -128,7 +136,7 @@ export default class GradientSlider extends Component {
     addNewColorStop(event) {
         const mouseX = mousePos(event, this.props.index);
         const elementWidth = event.target.getBoundingClientRect().width;
-        const newGradient = { ...this.props.gradient, colors: [...this.props.gradient.colors.map(color => ({ ...color }))] };
+        const newGradient = getImmutableGradientCopy(this.props.gradient);
 
         if (!this.props.gradient.repeating) {
             newGradient.colors.push({ color: "rgb(255, 255, 255)", stop: getPercentToFixed(elementWidth, mouseX) });
@@ -141,13 +149,29 @@ export default class GradientSlider extends Component {
 
 
 
+    deleteColorStop(id) {
+        let newGradient = getImmutableGradientCopy(this.props.gradient);
+        const index = Number(id.match(/\d+$/)[0]);
+        newGradient.colors = newGradient.colors.filter((_, i) => i !== index);
+        newGradient = correctGradientEdges(newGradient);
+
+        this.props.updateGradient(newGradient, this.props.index);
+        this.setState({ ...this.state, delButtonOn: false });
+    }
+
+
+
     renderMeasureText() {
         return this.props.gradient.colors.map((colorStop, i) => {
             if (!this.props.gradient.repeating) {
                 return <span
                     id={`gradient-mesure${this.state.index}_${i}`}
                     key={`gradient-mesure${this.state.index}_${i}`}
-                    style={{ left: `calc(${colorStop.stop}% - 20px)` }}
+                    style={{
+                        left: `calc(${colorStop.stop}% - 20px)`,
+                        border: this.state.delButtonOn && "1px dotted deeppink"
+                    }}
+                    onClick={e => this.handleMeasureTextOnClick(e)}
                 >{colorStop.stop}%</span>
             }
 
@@ -201,7 +225,7 @@ export default class GradientSlider extends Component {
                 style={{
                     background: `linear-gradient(${colorStop.color} 0%, ${colorStop.color} 100%), url(${checkeredRect}`,
                     left: `calc(${getThumbPosition(colorStop)} - 7.5px)`,
-                    border: `1px solid ${strokeColor}`
+                    border: this.state.delButtonOn ? `1px dotted deeppink` : `1px solid ${strokeColor}`
                 }}
             >
                 <svg width="14" height="14">
@@ -282,13 +306,13 @@ export default class GradientSlider extends Component {
 
                     <button
                         title="delete color stop [click on slider thumb]"
-                        onClick={() => this.handleAddBtnOnClick()
-                        }>
+                        onClick={() => this.handleDelBtnOnClick()}
+                    >
                         Del
-                        <div className={`btn--${this.state.addButtonOn ? "active" : "inactive"}`}></div>
+                        <div className={`btn--${this.state.delButtonOn ? "active" : "inactive"}`}></div>
                     </button>
                 </div>
-            </div >
+            </div>
         );
     }
 }
