@@ -26,16 +26,18 @@ export default class GradientSlider extends Component {
 
     handleThumbMouseDown(event) {
         const activeThumb = event.target.id.match(/GradientSlider\d+_\d+$/g) ? event.target : null;
+        const activeThumbIndex = activeThumb ? Number(activeThumb.id.match(/\d+$/)[0]) : undefined;
 
         if (activeThumb) {
             if (this.state.delButtonOn) { return this.deleteColorStop(activeThumb.id); }
-            const measureText = document.getElementById(`gradient-mesure${this.state.index}_${activeThumb.id.match(/\d+$/)}`);
+            const measureText = document.getElementById(`gradient-mesure${this.state.index}_${activeThumbIndex}`);
             activeThumb.style.zIndex = 1000;
             measureText.style.zIndex = 1000;
 
             this.setState({
                 ...this.state,
                 activeThumb,
+                activeThumbIndex,
                 mousePos: mousePos(event, this.props.index),
             });
         }
@@ -51,7 +53,7 @@ export default class GradientSlider extends Component {
 
             if (!this.props.gradient.repeating) {
                 const newPercentage = getPercentToFixed(thumbBoxWidth, newThumbX);
-                const colorIndex = this.state.activeThumb.id.match(/\d+$/)[0];
+                const colorIndex = this.state.activeThumbIndex;
                 const newGradient = getImmutableGradientCopy(this.props.gradient);
                 newGradient.colors[colorIndex].stop = newPercentage;
 
@@ -72,7 +74,7 @@ export default class GradientSlider extends Component {
     handleThumbMouseUp() {
         if (this.state.activeThumb) {
             if (!this.state.thumbMoved && !this.state.delButtonOn) {
-                const thumbIndex = this.state.activeThumb.id.match(/\d+$/)[0];
+                const thumbIndex = this.state.activeThumbIndex;
                 const color = this.props.gradient.colors[thumbIndex].color;
 
                 this.props.openColorPicker(this.props.index, thumbIndex, color);
@@ -82,7 +84,7 @@ export default class GradientSlider extends Component {
                 if (!this.props.gradient.repeating) {
                     const gradientCopy = getImmutableGradientCopy(this.props.gradient)
                     const sorted = sortGradientByColorStopsPercentage(gradientCopy);
-                    const filtered = filterIdenticalColorPercentages(sorted);
+                    const filtered = filterIdenticalColorPercentages(sorted, this.state.activeThumbIndex);
                     const updatedGradient = correctGradientEdges(filtered);
 
                     this.props.updateGradient(updatedGradient, this.props.index);
@@ -141,7 +143,7 @@ export default class GradientSlider extends Component {
         if (!this.props.gradient.repeating) {
             newGradient.colors.push({ color: "rgb(255, 255, 255)", stop: getPercentToFixed(elementWidth, mouseX) });
             const sorted = sortGradientByColorStopsPercentage(newGradient);
-            const filtered = filterIdenticalColorPercentages(sorted);
+            const filtered = filterIdenticalColorPercentages(sorted, this.state.activeThumbIndex);
             this.props.updateGradient(filtered, this.props.index);
         }
         this.setState({ ...this.state, activeRuler: true, addButtonOn: false });
@@ -164,15 +166,20 @@ export default class GradientSlider extends Component {
     renderMeasureText() {
         return this.props.gradient.colors.map((colorStop, i) => {
             if (!this.props.gradient.repeating) {
-                return <span
+                return <div
                     id={`gradient-mesure${this.state.index}_${i}`}
                     key={`gradient-mesure${this.state.index}_${i}`}
                     style={{
                         left: `calc(${colorStop.stop}% - 20px)`,
                         border: this.state.delButtonOn && "1px dotted deeppink"
                     }}
-                    onClick={e => this.handleMeasureTextOnClick(e)}
-                >{colorStop.stop}%</span>
+                >
+                    <span
+                        id={`gradient-mesure__span${this.state.index}_${i}`}
+                        key={`gradient-mesure__span${this.state.index}_${i}`}
+                        onClick={e => this.handleMeasureTextOnClick(e)}
+                    >{colorStop.stop}%</span>
+                </div>
             }
 
             return {}

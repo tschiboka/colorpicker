@@ -62,7 +62,7 @@ $activeBtnBg: #4cc3f1;
         .GradientSlider__measure-text-box {
             position: relative;
             height: 33.3%;
-            span {
+            & > div {
                 position: absolute;
                 display: flex;
                 justify-content: center;

@@ -35,10 +35,26 @@ export const sortGradientByColorStopsPercentage = gradient => {
 
 
 
-export const filterIdenticalColorPercentages = gradient => {
+export const filterIdenticalColorPercentages = (gradient, activeThumbIndex) => {
+    const updatedGradient = { ...gradient };
+
+    // filter out identical colorStops if active thumb is provided active index 
+    // will overwrite any existing colorStops with the same colorStop stop value
+
+    if (activeThumbIndex !== undefined) {
+        const colorStopToFilter = updatedGradient.colors[activeThumbIndex].stop;
+        updatedGradient.colors = updatedGradient.colors.filter((color, index) => {
+            if (index === activeThumbIndex || color.stop !== colorStopToFilter) return color;
+        });
+
+    }
+
+    // filter out identical colorStops even if no active thumb 
+    // is provided in order to make sure stops will not collide
+
     const existingColorStops = [];
 
-    const filteredGradientColors = gradient.colors
+    const filteredGradientColors = updatedGradient.colors
         .reverse() // reverse in order to delete the one below
         .filter(colorStop => {
             if (existingColorStops.indexOf(colorStop.stop) === -1) {
