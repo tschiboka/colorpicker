@@ -132,7 +132,10 @@ export default class GradientSlider extends Component {
 
     handleMeasureTextOnClick(event, index) {
         if (this.state.delButtonOn) this.deleteColorStop(event.target.id);
-        else this.setState({ ...this.state, activeTextInput: index });
+        else this.setState({ ...this.state, activeTextInput: index }, () => {
+            const textDiv = document.getElementById(`gradient-mesure${this.props.index}_${index}`);
+            textDiv.style.zIndex = 1000;
+        });
     }
 
 
@@ -140,7 +143,7 @@ export default class GradientSlider extends Component {
     handleMeasureTextKeyDown(event, index) {
         const key = event.which || event.keyCode || event.key;
 
-        if (key === 27 || key === "Escape" || key === "Esc") this.setState({ ...this.state, activeTextInput: undefined });
+        if (key === 27 || key === "Escape" || key === "Esc") this.setState({ ...this.state, activeTextInput: undefined }, () => setZIndexAscending(this.props.index));
 
         if (key === 13 || key === "Enter") this.setColorStopFromInput(index)
     }
@@ -191,7 +194,7 @@ export default class GradientSlider extends Component {
                 this.props.updateGradient(updatedGradient, this.props.index);
             }
         }
-        this.setState({ ...this.state, activeTextInput: undefined });
+        this.setState({ ...this.state, activeTextInput: undefined }, () => setZIndexAscending(this.props.index));
     }
 
 

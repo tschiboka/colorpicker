@@ -85,6 +85,7 @@ $activeBtnBg: #4cc3f1;
                     color: #ddd;
                     text-align: center;
                     font-size: inherit;
+                    z-index: 1000;
                 }
                 input:invalid {
                     border: none;
