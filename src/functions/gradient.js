@@ -3,8 +3,8 @@ export function gradientObjsToStr(grdObj) {
         .filter(grad => grad.visible)
         .map(grad => {
             const { colors } = grad;
-            const prefix = (grad.direction === "radial" ? "radial" : "linear") + "-gradient";
-            const degree = grad.direction === "radial" ? "" : grad.direction + "deg, ";
+            const prefix = (grad.angle === "radial" ? "radial" : "linear") + "-gradient";
+            const degree = grad.angle === "radial" ? "" : grad.angle + "deg, ";
             const colorStops = colors.map(c => `${c.color} ${c.stop}%`).join(",");
 
             return `${prefix}(${degree}${colorStops})`;
@@ -16,7 +16,7 @@ export function gradientObjsToStr(grdObj) {
 const defaultGradientObj = {
     name: "",
     visible: true,
-    direction: "90",
+    angle: "90",
     repeating: false,
     colors: [
         { color: "rgba(0, 0, 0, 1)", stop: 0 },
