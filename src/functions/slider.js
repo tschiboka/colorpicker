@@ -11,18 +11,18 @@ export const getCumulativeOffset = elem => {
     } while (elem);
 
     return left;
-}
+};
 
 
 
 export const mousePos = (event, index) => {
     const thumbBoxDiv = document.querySelector(`#GradientSlider__thumbs-box${index}`);
     const offsetLeft = getCumulativeOffset(thumbBoxDiv);
-    const mouseAbsolutePos = event.clientX || event.pageX || event || event.touches[0].clientX;
+    const mouseAbsolutePos = event.clientX || event.pageX || event.touches[0].clientX;
     const mouseRelativePos = mouseAbsolutePos - offsetLeft;
 
     return mouseRelativePos;
-}
+};
 
 
 
@@ -31,7 +31,7 @@ export const sortGradientByColorStopsPercentage = gradient => {
     const sortedGradient = { ...gradient, colors: sortedColors };
 
     return sortedGradient;
-}
+};
 
 
 
@@ -66,7 +66,7 @@ export const filterIdenticalColorPercentages = (gradient, activeThumbIndex) => {
         })
         .reverse();
     return { ...gradient, colors: filteredGradientColors };
-}
+};
 
 
 
@@ -81,7 +81,7 @@ export const correctGradientEdges = gradient => {
     if (gradient.colors[gradient.colors.length - 1].stop !== 100) updatedGradientColors = [...updatedGradientColors, _100Percent];
 
     return { ...gradient, colors: updatedGradientColors };
-}
+};
 
 
 
@@ -105,4 +105,14 @@ export const getPercentToFixed = (wholeInput, fractionInput, decimalPlaces = 1, 
     }
 
     return percentage;
-}
+};
+
+
+
+export const calculateAngle = (startX, startY, currX, currY) => {
+    const deltaX = currX - startX;
+    const deltaY = currY - startY;
+    const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI + 90;
+
+    return Math.round(angle < 0 ? 360 + angle : angle);
+};

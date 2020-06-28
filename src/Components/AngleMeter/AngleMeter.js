@@ -5,7 +5,10 @@ import "./AngleMeter.scss";
 
 export default class AngleMeter extends Component {
     handleMeterOnMouseDown(event) {
-        //const mouseX = 
+        const mouseStartX = event.clientX || event.pageX || event.touches[0].clientX;
+        const mouseStartY = event.clientY || event.pageY || event.touches[0].clientY;
+
+        this.props.setAngleMeterIsActive(this.props.index, mouseStartX, mouseStartY);
     }
 
 

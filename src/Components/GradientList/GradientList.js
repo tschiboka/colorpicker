@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import GradientField from "../GradientField/GradientField";
 import DeleteConfirmMsg from "../DeleteConfirmMsg/DeleteConfirmMsg";
 import { getDefaultGradientObj } from "../../functions/gradient";
+import { calculateAngle } from "../../functions/slider";
 import "./GradientList.scss";
 
 
@@ -11,7 +12,10 @@ export default class GradientList extends Component {
         super(props);
         this.state = {
             deleteConfirmMsgVisible: false,
-            gradientToDelete: undefined
+            gradientToDelete: undefined,
+            activeAngleMeter: undefined,
+            activeAngleMeterStartX: undefined,
+            activeAngleMeterStartY: undefined
         }
     }
 
@@ -26,6 +30,7 @@ export default class GradientList extends Component {
                 updateGradient={this.updateGradient.bind(this)}
                 confirmDeleteGradient={this.confirmDeleteGradient.bind(this)}
                 openColorPicker={this.props.openColorPicker}
+                setAngleMeterIsActive={this.setAngleMeterIsActive.bind(this)}
             />
         ));
     }
@@ -66,9 +71,67 @@ export default class GradientList extends Component {
 
 
 
+    handleOnMouseMove(event) {
+        if (this.state.activeAngleMeter !== undefined) {
+            const mouseStartX = this.state.activeAngleMeterStartX;
+            const mouseStartY = this.state.activeAngleMeterStartY;
+            const mouseCurrX = event.clientX || event.pageX || event.touches[0].clientX;
+            const mouseCurrY = event.clientY || event.pageY || event.touches[0].clientY;
+
+            const newAngle = calculateAngle(mouseStartX, mouseStartY, mouseCurrX, mouseCurrY);
+            const updatedGradient = this.props.gradients[this.state.activeAngleMeter];
+
+            updatedGradient.angle = newAngle;
+
+            this.updateGradient(updatedGradient, this.state.activeAngleMeter);
+        }
+    }
+
+
+
+    handleOnMouseUp(event) {
+        console.log("UP", this.state.activeAngleMeter);
+        if (this.state.activeAngleMeter !== undefined) { this.stopAngleMeterMoving(); }
+    }
+
+
+
+    handleOnMouseLeave(event) {
+        if (this.state.activeAngleMeter !== undefined) { this.stopAngleMeterMoving(); }
+    }
+
+
+
+    stopAngleMeterMoving() {
+        this.setState({
+            ...this.state,
+            activeAngleMeter: undefined,
+            activeAngleMeterStartX: undefined,
+            activeAngleMeterStartY: undefined
+        });
+    }
+
+
+
+    setAngleMeterIsActive(activeAngleMeter, activeAngleMeterStartX, activeAngleMeterStartY) {
+        this.setState({
+            ...this.state,
+            activeAngleMeter,
+            activeAngleMeterStartX,
+            activeAngleMeterStartY
+        });
+    }
+
+
+
     render() {
         return (
-            <div className="GradientList">
+            <div
+                className="GradientList"
+                onMouseMove={e => this.handleOnMouseMove(e)}
+                onMouseUp={e => this.handleOnMouseUp(e)}
+                onMouseLeave={e => this.handleOnMouseLeave(e)}
+            >
                 <header>
                     <span>Gradient List</span>
 

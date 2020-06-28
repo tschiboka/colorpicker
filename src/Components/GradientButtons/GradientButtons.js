@@ -111,6 +111,7 @@ export default class GradientButtons extends Component {
                         gradient={this.props.gradient}
                         index={this.props.index}
                         updateGradient={this.props.updateGradient}
+                        setAngleMeterIsActive={this.props.setAngleMeterIsActive}
                      />
                     
                     <input type="text" placeholder={this.props.gradient.angle + '\u00B0'}/>

@@ -84,4 +84,11 @@ $primarytColor: #c2c2c2;
 
 @media only screen and (max-width: 500px) {
     .App .ColorPicker { max-width: 100%; }
+    .App .GradientField { 
+        height: 200px;
+        .GradientButtons {
+            height: 200px;
+        } 
+    }
+
 }
