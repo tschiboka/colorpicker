@@ -1,0 +1,10 @@
+.AngleMeter {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .AngleMeter__meter {
+        cursor: pointer;
+    }
+}

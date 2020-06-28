@@ -4,7 +4,7 @@ $border: 1px solid rgba(221, 221, 221, 0.1);
 
 .GradientButtons {
     display: flex;
-    height: 40%;
+    height: 45%;
     button {
         position: relative;
         border: none;
@@ -91,11 +91,26 @@ $border: 1px solid rgba(221, 221, 221, 0.1);
             }
         }
         &:nth-child(6) {
+            width: 20%;
             margin-left: auto;
-            button {
-                width: 100%;
-                height: 100%;
-                border-left: $border;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            input {
+                width: 40%;
+                height: 50%;
+                max-width: 40px;
+                background: #131313;
+                font-size: 14px;
+                border: 1px solid rgba(221, 221, 221, 0.1);
+                border-bottom: $border;
+                border-top: $border;
+                color: #ddd;
+                text-align: center;
+            }
+            input:invalid {
+                border: none;
+                color: deeppink;
             }
         }
     }

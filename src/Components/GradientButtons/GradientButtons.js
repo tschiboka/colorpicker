@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AngleMeter from "../AngleMeter/AngleMeter";
 import { getImmutableGradientCopy } from "../../functions/gradient";
 import "./GradientButtons.scss";
 
@@ -106,7 +107,13 @@ export default class GradientButtons extends Component {
                 </div>
 
                 <div>
-                    <button>degree</button>
+                    <AngleMeter
+                        gradient={this.props.gradient}
+                        index={this.props.index}
+                        updateGradient={this.props.updateGradient}
+                     />
+                    
+                    <input type="text" placeholder={this.props.gradient.angle + '\u00B0'}/>
                 </div>
             </div>
         );
