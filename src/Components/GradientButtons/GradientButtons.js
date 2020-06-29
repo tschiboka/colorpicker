@@ -10,17 +10,43 @@ export default class GradientButtons extends Component {
         super(props);
 
         this.state = {
-            repeatGradInputVisible: this.props.gradient.repeating
+            repeatGradInputVisible: this.props.gradient.repeating,
+            radientSpecififcationOn: false,
         }
     }
 
 
 
-    setGradientAngle(angle) {
-        const updatedGradient = getImmutableGradientCopy(this.props.gradient);
-        updatedGradient.angle = angle;
+    handleAngleInputKeyDown(event) {
+        const key = event.which || event.keyCode || event.key;
+        const value = event.target.value;
+        const target = event.target;
 
-        this.props.updateGradient(updatedGradient, this.props.index);
+        if (key === 27 || key === "Escape" || key === "Esc") { 
+            event.target.value = "";
+            event.target.blur();    
+        }
+
+        if (key === 13 || key === "Enter") this.setGradientAngle(value, target);
+    }
+
+
+
+    setGradientAngle(angle, resetInput) {
+        const newAngle = parseInt(angle);
+        const valid = !resetInput ? true : resetInput.validity.valid;
+
+        if (newAngle >= 0 && newAngle < 360 && valid) {
+            const updatedGradient = getImmutableGradientCopy(this.props.gradient);
+            updatedGradient.angle = newAngle;
+
+            this.props.updateGradient(updatedGradient, this.props.index);
+        }
+
+        if (resetInput) {
+            resetInput.value = "";
+            resetInput.blur();
+        }
     }
 
 
@@ -37,7 +63,7 @@ export default class GradientButtons extends Component {
 
     render() {
         return (
-            <div className="GradientButtons">
+            <div className="GradientButtons">    
                 <div>
                     <button title="90 degree" onClick={() => this.setGradientAngle(90)}>
                         &rarr;
@@ -103,7 +129,13 @@ export default class GradientButtons extends Component {
                 </div>
 
                 <div>
-                    <button title="diagonal gradient">&#9678;</button>
+                    <button
+                        title="diagonal gradient"
+                        onClick={() => this.setState({...this.state, radientSpecififcationOn: true})}
+                    >&#9678;
+                    
+                    <div className={`btn--${this.props.gradient.angle === "radial" ? "active": "inactive"}`}></div>
+                    </button>
                 </div>
 
                 <div>
@@ -114,8 +146,20 @@ export default class GradientButtons extends Component {
                         setAngleMeterIsActive={this.props.setAngleMeterIsActive}
                      />
                     
-                    <input type="text" placeholder={this.props.gradient.angle + '\u00B0'}/>
+                    <input
+                        type="text" 
+                        placeholder={this.props.gradient.angle + '\u00B0'}
+                        pattern="\d{1,2}|[1-2]\d\d|3[0-5]\d"
+                        onBlur={e => this.setGradientAngle(e.target.value, e.target)}
+                        onKeyDown={e => this.handleAngleInputKeyDown(e)}
+                    />
                 </div>
+
+
+                {this.state.radientSpecififcationOn && (
+                    <div className="GradientButtons__radiant-spec">
+
+                    </div>)}
             </div>
         );
     }
