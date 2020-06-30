@@ -1,0 +1,30 @@
+.ColorStop {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    & > div {
+        height: 33.3%;
+    }
+    .ColorStop__text-box {
+        
+    }
+    .ColorStop__line {  
+        pointer-events: none;
+    }
+    .ColorStop__thumb {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        svg {
+            height: 35%;
+        }
+        div {
+            height: 65%;
+            width: 14px;
+        }
+    }
+}
