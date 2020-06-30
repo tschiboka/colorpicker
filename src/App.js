@@ -39,7 +39,7 @@ export default class App extends Component {
 
 
 
-  updateGradients(gradients) { this.setState({ ...this.state, gradients: gradients }, () => console.log(this.state.gradients)) }
+  updateGradients(gradients) { this.setState({ ...this.state, gradients: gradients }/*, () => console.log(this.state.gradients)*/) }
 
 
 

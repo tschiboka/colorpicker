@@ -90,7 +90,7 @@ export const setZIndexAscending = index => {
     const thumbBoxChildren = document.getElementById(`GradientSlider__thumbs-box${index}`).children;
     const elemGroups = [...thumbBoxChildren].map((_, i) => [measureBoxChildren[i], thumbBoxChildren[i]]);
 
-    elemGroups.forEach((children, i) => children.forEach(child => child.style.zIndex = i));
+    elemGroups.forEach((children, i) => children.forEach(child => child.style.zIndex = i + 100));
 };
 
 

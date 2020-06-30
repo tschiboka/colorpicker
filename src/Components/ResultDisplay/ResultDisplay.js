@@ -24,7 +24,7 @@ export default class ResultDisplay extends Component {
 
 
 
-    changeDisplayBg(isCheckered) { this.setState({ ...this.state, bgIsCheckered: isCheckered }, () => { console.log(this.state.bgIsCheckered) }); }
+    changeDisplayBg(isCheckered) { this.setState({ ...this.state, bgIsCheckered: isCheckered }) }
 
 
 
@@ -52,6 +52,7 @@ export default class ResultDisplay extends Component {
                         className="ResultDisplay__color-bg"
                         title="Result Gradient"
                         style={{ background: gradientObjsToStr([...this.props.gradients].reverse()) }}>
+                        {console.log(gradientObjsToStr([...this.props.gradients].reverse()))}
 
                         {this.state.menuIsOpen && (
                             <ResultDisplayMenu
