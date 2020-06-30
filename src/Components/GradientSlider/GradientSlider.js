@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import GradientSliderRuler from "../GradientSliderRuler/GradientSliderRuler";
 import GradientSliderButtonBox from "../GradientSliderButtonBox/GradientSliderButtonBox";
 import "./GradientSlider.scss";
 
@@ -28,6 +29,7 @@ export default class GradientSlider extends Component {
                 <div
                     className="GradientSlider__slider"
                 >
+                    <GradientSliderRuler units={this.props.gradient.units} />
                 </div>
 
                 <GradientSliderButtonBox

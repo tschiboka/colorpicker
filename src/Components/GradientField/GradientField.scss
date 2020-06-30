@@ -5,6 +5,7 @@ $activeBtnBg: #4cc3f1;
     background: rgba(0, 0, 0, 0.3);
     border-top: 1px solid rgba(221, 221, 221, 0.5);
     border-bottom: 1px solid rgba(221, 221, 221, 0.5);
+    height: 150px;
     header {
         height: 22px;
         width: 100%;
@@ -72,10 +73,11 @@ $activeBtnBg: #4cc3f1;
         }
     }
     .GradientField__body {
-        max-height: 120px;
         width: 100%;
+        min-height: calc(100% - 22px);
         display: flex;
         .GradientField__preview {
+            min-height: 100%;
             width: 70px;
             display: flex;
             justify-content: center;
