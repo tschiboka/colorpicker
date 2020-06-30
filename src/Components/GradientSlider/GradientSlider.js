@@ -5,6 +5,20 @@ import "./GradientSlider.scss";
 
 
 export default class GradientSlider extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            buttonStates: { colorStopOn: true, colorHintOn: false, deleteOn: false }
+        }
+    }
+
+
+
+    setButtonStates(buttonStates) { this.setState({ ...this.state, buttonStates }); }
+
+
+
     render() {
         return (
             <div
@@ -17,7 +31,8 @@ export default class GradientSlider extends Component {
                 </div>
 
                 <GradientSliderButtonBox
-
+                    buttonStates={this.state.buttonStates}
+                    setButtonStates={this.setButtonStates.bind(this)}
                 />
             </div>
         );

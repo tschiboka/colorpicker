@@ -1,3 +1,54 @@
+$activeBtnBg: #4cc3f1;
+
 .GradientSliderButtonBox {
-    
+    display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 70px;
+        height: 100%;
+        border-left: 1px solid rgba(221, 221, 221, 0.1);
+        & > div {
+            width: 100%;
+            height: 50%;
+            display: flex;
+            &:first-child {
+                border-bottom: 1px solid rgba(221, 221, 221, 0.1);
+                button {
+                    width: 50%;
+                    font-size: 22px;
+                    &:first-child { border-right: 1px solid rgba(221, 221, 221, 0.1); }
+                    &:hover { font-size: 18px; }
+                }
+            }
+            &:last-child {
+                button {
+                    width: 100%;
+                }
+            }
+        }
+        button {
+            position: relative;
+            height: 100%;
+            border: none;
+            background: transparent;
+            color: #ddd;
+            font-size: 16px;
+            cursor: pointer;
+            &:hover {
+                background: rgba(255, 255, 255, 0.1);
+                color: $activeBtnBg;
+                font-size: 14px;
+            }
+            & > div {
+                position: absolute;
+                width: 6px;
+                height: 6px;
+                top: 3px;
+                right: 3px;
+                border-radius: 5px;
+                border: 1px solid rgba(221, 221, 221, 0.2);
+            }
+            .btn--active { background: $activeBtnBg; }
+            .btn--inactive { background: rgba(0, 0, 0, 0.7); }
+        }
 }

@@ -1,42 +1,42 @@
 import React, { Component } from 'react';
+import "./GradientSliderButtonBox.scss";
 
 
 
-export default class GradientSliderButtonBox extends Component {
-    render() {
-        return (
-            <div className="GradientSliderButtonBox">
-                <div>
-                    <button
-                        title="add color hint [click on the slider]"
-                    //onClick={() => this.setState({ ...this.state, colorHintButtonOn: true, colorStopButtonOn: false, delButtonOn: false })}
-                    >
-                        &#9675;
+export default function gradientSliderButtonBox(props) {
+    return (
+        <div className="GradientSliderButtonBox">
+            <div>
+                <button
+                    title="add color hint [click on the slider]"
+                    onClick={() => props.setButtonStates({...props.buttonStates, colorHintOn: true, colorStopOn: false})}
+                >
+                    &#9675;
 
-                            <div className={`btn--${this.state.colorHintButtonOn ? "active" : "inactive"}`}></div>
-                    </button>
+                    <div className={`btn--${props.buttonStates.colorHintOn ? "active" : "inactive"}`}></div>
+                </button>
 
-                    <button
-                        title="add color stop [click on the slider]"
-                    //onClick={() => this.setState({ ...this.state, colorHintButtonOn: false, colorStopButtonOn: true, delButtonOn: false })}
-                    >
-                        &#11216;
+                <button
+                    title="add color stop [click on the slider]"
+                onClick={() => props.setButtonStates({...props.buttonStates, colorStopOn: true, colorHintOn: false})}
+                >
+                    &#11216;
 
-                            <div className={`btn--${this.state.colorStopButtonOn ? "active" : "inactive"}`}></div>
-                    </button>
-                </div>
-
-                <div>
-                    <button
-                        title="delete color stop [click on slider thumb]"
-                    //onClick={() => this.handleDelBtnOnClick()}
-                    >
-                        Del
-                        <div className={`btn--${this.state.delButtonOn ? "active" : "inactive"}`}></div>
-                    </button>
-                </div>
+                    <div className={`btn--${props.buttonStates.colorStopOn ? "active" : "inactive"}`}></div>
+                </button>
             </div>
 
-        );
-    }
+            <div>
+                <button
+                    title="delete color stop [click on slider thumb]"
+                    onClick={() => props.setButtonStates({...props.buttonStates, deleteOn: !props.buttonStates.deleteOn})}
+                >
+                    Del
+                    
+                    <div className={`btn--${props.buttonStates.deleteOn ? "active" : "inactive"}`}></div>
+                </button>
+            </div>
+        </div>
+
+    );
 }

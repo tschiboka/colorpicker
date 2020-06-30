@@ -4,4 +4,12 @@
     height: 55%;
     display: flex;
     border-bottom: 1px solid rgba(221, 221, 221, 0.1);
+    .GradientSlider__slider {
+        padding: 0 20px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: calc(100% - 50px);
+        cursor: pointer;
+    }
 }
