@@ -9,9 +9,30 @@
         height: 33.3%;
     }
     .ColorStop__text-box {
-        
-    }
-    .ColorStop__line {  
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        background: #161616;
+        font-size: 10px;
+        border: none;
+        border-bottom: 1px solid rgba(221, 221, 221, 0.2);
+        & > input {
+            max-width: 40px;
+            height: 100%;
+            border: none;
+            background: transparent;
+            color: #ddd;
+            text-align: center;
+            font-size: inherit;
+        }
+        input:invalid {
+            border: none;
+            color: deeppink;
+            border-bottom: 1px dotted deeppink;
+        }
+    }        
+     .ColorStop__line {  
         pointer-events: none;
     }
     .ColorStop__thumb {
