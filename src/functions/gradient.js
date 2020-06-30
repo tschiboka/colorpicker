@@ -1,6 +1,11 @@
+import { sortGradientByColorStopsPercentage } from "./slider";
+
+
+
 export function gradientObjsToStr(gradientArray) {
-    console.log(gradientArray.map(grd => grd.colors));
-    return gradientArray
+    const sortedByPercentage = gradientArray.map(grad => sortGradientByColorStopsPercentage(getImmutableGradientCopy(grad)));
+
+    return sortedByPercentage
         .filter(grad => grad.visible)
         .map(grad => {
             const { colors } = grad;

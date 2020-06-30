@@ -35,9 +35,7 @@ export default function ColorStop(props) {
 
             <div className="ColorStop__line"></div>
 
-            <div
-                className="ColorStop__thumb"
-            >
+            <div className="ColorStop__thumb">
                 <svg width="14">
                     <line x1="0" y1="100%" x2="7" y2="0" style={{ stroke, strokeWidth: 1 }} />
 
@@ -52,6 +50,7 @@ export default function ColorStop(props) {
                         background: `linear-gradient(${props.color} 0%, ${props.color} 100%), url(${checkeredRect}`,
                         border: props.deleteOn ? `1px dotted deeppink` : `1px solid ${stroke}`
                     }}
+                    onMouseDown={() => props.setActiveColorStop(props.index)}
                 >
                 </div>
             </div>
