@@ -54,6 +54,7 @@ export default class GradientSlider extends Component {
             }
             if (this.state.activeColorHint !== undefined) {
                 gradientCopy.colorHints[this.state.activeColorHint] = this.state.mouseAtPercentage;
+                gradientCopy.colorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
 
                 this.props.updateGradient(gradientCopy, this.props.index);
             }
@@ -66,24 +67,26 @@ export default class GradientSlider extends Component {
     handleSliderOnMouseUp() {
         if (this.state.activeColorStopText !== undefined) return false;
 
-        if (this.state.buttonStates.deleteOn && this.state.activeColorStop !== undefined) {
-            this.deleteColorStop(this.state.activeColorStop);
-            this.resetStateToInactiveColorStops();
+        if (this.state.buttonStates.deleteOn) {
+            if (this.state.activeColorStop !== undefined) { this.deleteColorStop(this.state.activeColorStop); }
+            if (this.state.activeColorHint !== undefined) { this.deleteColorHint(this.state.activeColorHint); }
 
+            this.resetStateToInactiveColorStops();
             return false;
         }
 
         if (this.state.activeColorStop !== undefined) {
-            if (this.state.colorStopDragged) { this.upDateSortAndFilterGradients() }
-
-            else { this.props.openColorPicker(this.props.index, this.state.activeColorStop, this.props.gradient.colors[this.state.activeColorStop].color); }
+            if (this.state.colorStopDragged) { this.upDateSortAndFilterGradients(); }
+            else {
+                this.props.openColorPicker(this.props.index, this.state.activeColorStop, this.props.gradient.colors[this.state.activeColorStop].color);
+            }
+        }
+        else if (this.state.buttonStates.colorHintOn && this.state.activeColorHint === undefined) {
+            this.addNewColorHint();
         }
         else {
             if (!this.state.buttonStates.deleteOn) {
-                if (this.state.buttonStates.colorStopOn && this.state.activeColorHint === undefined) {
-                    console.log();
-                    this.addNewColorStop();
-                }
+                if (this.state.buttonStates.colorStopOn && this.state.activeColorHint === undefined) { this.addNewColorStop(); }
             }
         }
         this.resetStateToInactiveColorStops();
@@ -156,6 +159,15 @@ export default class GradientSlider extends Component {
 
 
 
+    deleteColorHint(index) {
+        const updatedGradient = getImmutableGradientCopy(this.props.gradient);
+        updatedGradient.colorHints = updatedGradient.colorHints.filter((_, i) => i !== index);
+
+        this.props.updateGradient(updatedGradient, this.props.index);
+    }
+
+
+
     upDateSortAndFilterGradients() {
         const gradientCopy = getImmutableGradientCopy(this.props.gradient);
         gradientCopy.colors[this.state.activeColorStop].stop = this.state.mouseAtPercentage;
@@ -178,6 +190,20 @@ export default class GradientSlider extends Component {
         const filteredGradient = filterIdenticalColorPercentages(gradientSorted, this.state.activeColorStop);
 
         this.props.updateGradient(filteredGradient, this.props.index);
+    }
+
+
+
+    addNewColorHint() {
+        const gradientCopy = getImmutableGradientCopy(this.props.gradient);
+        const newStop = this.state.mouseAtPercentage;
+        const updatedColorHints = gradientCopy.colorHints;
+
+        updatedColorHints.push(newStop);
+        gradientCopy.colorHints = updatedColorHints;
+        gradientCopy.colorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
+
+        this.props.updateGradient(gradientCopy, this.props.index);
     }
 
 
@@ -263,8 +289,6 @@ export default class GradientSlider extends Component {
                 });
             }
         });
-
-        console.log(colorHintsWithInfo);
 
         return colorHintsWithInfo.map((colorHint, index) => {
             return (

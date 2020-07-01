@@ -8,7 +8,7 @@ export default function ColorHint(props) {
     const stroke = "rgba(255, 255, 255, 0.5)";
     const border = props.deleteOn ? `2px dotted deeppink` : props.adjecentColors ? `2px solid #888` : `2px solid ${stroke}`;
     const background = props.adjecentColors ? `linear-gradient(90deg, ${props.adjecentColors[0]} 0% 50%, ${props.adjecentColors[1]} 50%), url(${checkeredRect}` : "transparent";
-
+    const title = `color hint ${props.index} ` + props.errorInfo;
 
 
     function validateInput(event) {
@@ -46,7 +46,6 @@ export default function ColorHint(props) {
 
 
     function renderAdjecentColors() {
-        console.log(props.adjecentColors);
         if (props.adjecentColors) {
             return props.adjecentColors.map((adjecentColor, i) => (
                 <div
@@ -77,7 +76,7 @@ export default function ColorHint(props) {
                 </svg>
 
                 <div
-                    title={"color hint"}
+                    title={title}
                     style={{ border, background }}
                     onMouseDown={() => props.setActiveColorHint(props.index)}
                 >
