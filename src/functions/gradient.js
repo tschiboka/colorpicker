@@ -51,7 +51,6 @@ export function gradientObjsToStr(gradientArray) {
 
                 return `${colorStop.color} ${colorStop.stop}${units}${hintStr}`
             }).join(",");
-            console.log(`${prefix}(${degree}${colorStops})`);
 
             return `${prefix}(${degree}${colorStops})`;
         }).join(",");
@@ -66,7 +65,7 @@ const defaultGradientObj = {
     units: "percentage",
     repeating: false,
     max: undefined,
-    colorHints: [10],
+    colorHints: [50],
     colors: [
         {
             color: "rgba(0, 0, 0, 1)",
@@ -77,8 +76,8 @@ const defaultGradientObj = {
             stop: 33
         },
         {
-            color: "rgba(255, 255, 255, 0.5)",
-            stop: 100
+            color: "red",
+            stop: 70
         },
     ]
 };

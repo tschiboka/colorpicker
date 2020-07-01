@@ -1,17 +1,13 @@
 import React from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
-import "./ColorStop.scss";
+import "./ColorHint.scss";
 
 
 
-export default function ColorStop(props) {
+export default function ColorHint(props) {
     const stroke = "rgba(255, 255, 255, 0.5)";
-
-
-
-    function handleThumbOnMouseDown(index) {
-        props.setActiveColorStop(index);
-    }
+    const border = props.deleteOn ? `2px dotted deeppink` : props.adjecentColors ? `2px solid #888` : `2px solid ${stroke}`;
+    const background = props.adjecentColors ? `linear-gradient(90deg, ${props.adjecentColors[0]} 0% 50%, ${props.adjecentColors[1]} 50%), url(${checkeredRect}` : "transparent";
 
 
 
@@ -49,43 +45,45 @@ export default function ColorStop(props) {
 
 
 
+    function renderAdjecentColors() {
+        console.log(props.adjecentColors);
+        if (props.adjecentColors) {
+            return props.adjecentColors.map((adjecentColor, i) => (
+                <div
+                    key={`adjecentColor_${props.index}-${i}`}
+                    style={{ background: adjecentColor }}
+                ></div>
+            ));
+        }
+    }
+
+
+
     return (
         <div
-            className="ColorStop"
+            className="ColorHint"
             style={{
                 left: `calc(${props.position}% - 20px)`,
                 zIndex: props.isActive ? 100 : 1
             }}
         >
-            <div className="ColorStop__text-box">
+            <div className="ColorHint__text-box">
                 {renderInput()}
             </div>
 
-            <div className="ColorStop__line">
+            <div className="ColorHint__thumb">
                 <svg width="100%" height="100%">
-                    <line x1="50%" y1="0" x2="50%" y2="100%" style={{ stroke: "rgba(221, 221, 221, 0.2)" }} />
-                </svg>
-            </div>
-
-            <div className="ColorStop__thumb">
-                <svg width="14">
-                    <line x1="0" y1="100%" x2="7" y2="0" style={{ stroke, strokeWidth: 1 }} />
-
-                    <line x1="7" y1="0" x2="14" y2="100%" style={{ stroke, strokeWidth: 1 }} />
-
-                    <line x1="0" y1="100%" x2="100%" y2="100%" style={{ stroke, strokeWidth: 1 }} />
+                    <line x1="50%" y1="0" x2="50%" y2="50%" style={{ stroke: "rgba(221, 221, 221, 0.2)" }} />
                 </svg>
 
                 <div
-                    title={props.color}
-                    style={{
-                        background: `linear-gradient(${props.color} 0%, ${props.color} 100%), url(${checkeredRect}`,
-                        border: props.deleteOn ? `2px dotted deeppink` : `1px solid ${stroke}`,
-                    }}
-                    onMouseDown={() => handleThumbOnMouseDown(props.index)}
+                    title={"color hint"}
+                    style={{ border, background }}
+                    onMouseDown={() => props.setActiveColorHint(props.index)}
                 >
+                    {renderAdjecentColors()}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
