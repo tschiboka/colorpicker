@@ -21,7 +21,7 @@ export default class GradientSlider extends Component {
                 colorHintOn: false,
                 deleteOn: false
             },
-            colorStopTextOpenIndex: undefined,
+            activeColorStopText: undefined,
             mouseAtPercentage: undefined,
             activeColorStop: undefined,
             colorStopDragged: false,
@@ -55,8 +55,11 @@ export default class GradientSlider extends Component {
 
 
     handleSliderOnMouseUp() {
+        if (this.state.activeColorStopText !== undefined) return false;
+
         if (this.state.activeColorStop !== undefined) {
             if (this.state.colorStopDragged) { this.upDateSortAndFilterGradients() }
+
             else { this.props.openColorPicker(this.props.index, this.state.activeColorStop, this.props.gradient.colors[this.state.activeColorStop].color); }
         }
         else { this.addNewColorStop() }
@@ -72,6 +75,53 @@ export default class GradientSlider extends Component {
 
             this.resetStateToInactiveColorStops();
         }
+    }
+
+
+
+    handleInputOnBlur(event) {
+        if (event.target.validity.valid && event.target.value.length) { this.setNewColorStopValue(event.target.value, this.state.activeColorStopText); }
+        this.clearInput(event.target);
+    }
+
+
+
+    handleInputOnKeyDown(event) {
+        const key = event.which || event.keyCode || event.key;
+
+        if (key === 27 || key === "Escape" || key === "Esc") {
+            this.clearInput(event.target);
+            event.target.blur();
+        }
+
+        if (key === 13 || key === "Enter") {
+            if (event.target.validity.valid && event.target.value.length) {
+                this.setNewColorStopValue(event.target.value, this.state.activeColorStopText);
+            }
+            this.clearInput(event.target);
+            event.target.blur();
+        }
+    }
+
+
+
+    clearInput(target) {
+        target.value = "";
+        target.setCustomValidity("");
+    }
+
+
+
+    setNewColorStopValue(value, index) {
+        console.log(value);
+        const gradientCopy = getImmutableGradientCopy(this.props.gradient);
+        gradientCopy.colors[index].stop = Number(value);
+        const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
+        const filteredGradient = filterIdenticalColorPercentages(gradientSorted, index);
+        console.log(filteredGradient);
+
+        this.props.updateGradient(filteredGradient, this.props.index);
+        const timer = setTimeout(() => { this.resetStateToInactiveColorStops(); clearTimeout(timer); }, 500);
     }
 
 
@@ -106,7 +156,8 @@ export default class GradientSlider extends Component {
         this.setState({
             ...this.state,
             colorStopDragged: false,
-            activeColorStop: undefined
+            activeColorStop: undefined,
+            activeColorStopText: undefined,
         });
     }
 
@@ -120,6 +171,10 @@ export default class GradientSlider extends Component {
 
 
 
+    setActiveColorStopText(activeColorStopText) { this.setState({ ...this.state, activeColorStopText }); }
+
+
+
     renderColorStops() {
         return this.props.gradient.colors.map((colorStop, index) => {
             const positionInPercentage = this.props.gradient.units === "percentage" ? colorStop.stop : undefined;
@@ -130,10 +185,13 @@ export default class GradientSlider extends Component {
                 color={colorStop.color}
                 index={index}
                 deleteOn={this.state.buttonStates.deleteOn}
-                textOpen={this.state.colorStopTextOpenIndex === index}
+                textOpen={this.state.activeColorStopText === index}
                 units={this.props.gradient.units}
-                setActiveColorStop={this.setActiveColorStop.bind(this)}
                 isActive={this.state.activeColorStop === index}
+                setActiveColorStop={this.setActiveColorStop.bind(this)}
+                setActiveColorStopText={this.setActiveColorStopText.bind(this)}
+                handleInputOnBlur={this.handleInputOnBlur.bind(this)}
+                handleInputOnKeyDown={this.handleInputOnKeyDown.bind(this)}
             />
         });
     }

@@ -7,20 +7,38 @@ import "./ColorStop.scss";
 export default function ColorStop(props) {
     const stroke = "rgba(255, 255, 255, 0.5)";
 
-    function renderTextOrInput() {
+
+
+    function validateInput(event) {
+        if (props.units === "percentage") {
+            const value = event.target.value;
+            const nonEmpty = value !== "";
+            const isNumber = typeof Number(value) === "number";
+            const lt5Char = value.length < 5;
+            const gt0 = Number(value) >= 0;
+            const lt100 = Number(value) <= 100
+            const isValid = isNumber && nonEmpty && lt5Char && gt0 && lt100;
+
+            event.target.setCustomValidity(isValid ? "" : " ");
+        }
+    }
+
+
+
+    function renderInput() {
         const textValue = props.units === "percentage" ? props.position + "%" : undefined;
 
-        const renderSpan = <span>{textValue}</span>
-
-        const renderInput = (
+        return (
             <input
+                placeholder={textValue}
                 type="text"
                 min={0}
-                autoFocus={true}
+                onChange={e => validateInput(e)}
+                onMouseDown={() => props.setActiveColorStopText(props.index)}
+                onBlur={e => props.handleInputOnBlur(e)}
+                onKeyDown={e => props.handleInputOnKeyDown(e)}
             />
-        )
-
-        return props.textOpen ? renderInput : renderSpan;
+        );
     }
 
 
@@ -34,7 +52,7 @@ export default function ColorStop(props) {
             }}
         >
             <div className="ColorStop__text-box">
-                {renderTextOrInput()}
+                {renderInput()}
             </div>
 
             <div className="ColorStop__line">
