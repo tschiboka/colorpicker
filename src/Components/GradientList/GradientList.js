@@ -90,7 +90,6 @@ export default class GradientList extends Component {
 
 
     handleOnMouseUp(event) {
-        console.log("UP", this.state.activeAngleMeter);
         if (this.state.activeAngleMeter !== undefined) { this.stopAngleMeterMoving(); }
     }
 
