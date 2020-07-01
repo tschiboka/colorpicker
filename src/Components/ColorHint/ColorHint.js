@@ -36,7 +36,7 @@ export default function ColorHint(props) {
                 type="text"
                 min={0}
                 onChange={e => validateInput(e)}
-                onMouseDown={() => props.setActiveColorStopText(props.index)}
+                onMouseDown={() => props.setActiveColorHintText(props.index)}
                 onBlur={e => props.handleInputOnBlur(e)}
                 onKeyDown={e => props.handleInputOnKeyDown(e)}
             />

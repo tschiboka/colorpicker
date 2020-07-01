@@ -58,7 +58,7 @@ export default class GradientSlider extends Component {
 
                 this.props.updateGradient(gradientCopy, this.props.index);
             }
-            if (!this.state.colorStopDragged) { this.setState({ ...this.state, colorStopDragged: true }); }
+            if (!this.state.colorStopDragged && this.state.activeColorStop !== undefined) { this.setState({ ...this.state, colorStopDragged: true }); }
         }
     }
 
@@ -66,6 +66,7 @@ export default class GradientSlider extends Component {
 
     handleSliderOnMouseUp() {
         if (this.state.activeColorStopText !== undefined) return false;
+        if (this.state.activeColorHintText !== undefined) return false;
 
         if (this.state.buttonStates.deleteOn) {
             if (this.state.activeColorStop !== undefined) { this.deleteColorStop(this.state.activeColorStop); }
@@ -105,13 +106,21 @@ export default class GradientSlider extends Component {
 
 
     handleInputOnBlur(event) {
-        if (event.target.validity.valid && event.target.value.length) { this.setNewColorStopValue(event.target.value, this.state.activeColorStopText); }
+        console.log("Onblur");
+        if (event.target.validity.valid && event.target.value.length) {
+            if (this.state.activeColorStopText !== undefined) { this.setNewColorStopValue(event.target.value, this.state.activeColorStopText); }
+            if (this.state.activeColorHintText !== undefined) { this.setNewColorHintValue(event.target.value, this.state.activeColorHintText); }
+        }
+
         this.clearInput(event.target);
+        const timer = setTimeout(() => { this.resetStateToInactiveColorStops(); clearTimeout(timer); }, 500);
     }
 
 
 
     handleInputOnKeyDown(event) {
+        console.log(this.state.activeColorStopText, this.state.activeColorHintText);
+
         const key = event.which || event.keyCode || event.key;
 
         if (key === 27 || key === "Escape" || key === "Esc") {
@@ -121,7 +130,8 @@ export default class GradientSlider extends Component {
 
         if (key === 13 || key === "Enter") {
             if (event.target.validity.valid && event.target.value.length) {
-                this.setNewColorStopValue(event.target.value, this.state.activeColorStopText);
+                if (this.state.activeColorStopText !== undefined) { this.setNewColorStopValue(event.target.value, this.state.activeColorStopText); }
+                if (this.state.activeColorHintText !== undefined) { this.setNewColorHintValue(event.target.value, this.state.activeColorHintText); }
             }
             this.clearInput(event.target);
             event.target.blur();
@@ -145,6 +155,19 @@ export default class GradientSlider extends Component {
         const filteredGradient = filterIdenticalColorPercentages(gradientSorted, index);
 
         this.props.updateGradient(filteredGradient, this.props.index);
+        const timer = setTimeout(() => { this.resetStateToInactiveColorStops(); clearTimeout(timer); }, 500);
+    }
+
+
+
+    setNewColorHintValue(value, index) {
+        const gradientCopy = getImmutableGradientCopy(this.props.gradient);
+        gradientCopy.colorHints[index] = Number(value);
+
+        const updatedColorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
+        gradientCopy.colorHints = updatedColorHints;
+
+        this.props.updateGradient(gradientCopy, this.props.index);
         const timer = setTimeout(() => { this.resetStateToInactiveColorStops(); clearTimeout(timer); }, 500);
     }
 
@@ -233,7 +256,14 @@ export default class GradientSlider extends Component {
 
 
 
-    setActiveColorStopText(activeColorStopText) { this.setState({ ...this.state, activeColorStopText }); }
+    setActiveColorStopText(activeColorStopText) { this.setState({ ...this.state, activeColorStopText, setActiveColorHintText: undefined }); }
+
+
+
+    setActiveColorHintText(activeColorHintText) {
+        console.log(activeColorHintText);
+        this.setState({ ...this.state, activeColorHintText, setActiveColorStopText: undefined }, () => console.log(this.state.activeColorHintText));
+    }
 
 
 
@@ -299,8 +329,11 @@ export default class GradientSlider extends Component {
                     units={this.props.gradient.units}
                     deleteOn={this.state.buttonStates.deleteOn}
                     setActiveColorHint={this.setActiveColorHint.bind(this)}
+                    setActiveColorHintText={this.setActiveColorHintText.bind(this)}
                     errorInfo={colorHint.error}
                     adjecentColors={colorHint.adjecentColors}
+                    handleInputOnBlur={this.handleInputOnBlur.bind(this)}
+                    handleInputOnKeyDown={this.handleInputOnKeyDown.bind(this)}
                 />
             )
         });
