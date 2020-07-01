@@ -42,7 +42,7 @@ export default class GradientSlider extends Component {
 
         this.setState({ ...this.state, mouseAtPercentage });
 
-        if (this.state.activeColorStop !== undefined) {
+        if (this.state.activeColorStop !== undefined && !this.state.buttonStates.deleteOn) {
             const gradientCopy = getImmutableGradientCopy(this.props.gradient);
             gradientCopy.colors[this.state.activeColorStop].stop = this.state.mouseAtPercentage;
 
@@ -57,12 +57,21 @@ export default class GradientSlider extends Component {
     handleSliderOnMouseUp() {
         if (this.state.activeColorStopText !== undefined) return false;
 
+        if (this.state.buttonStates.deleteOn && this.state.activeColorStop !== undefined) {
+            this.deleteColorStop(this.state.activeColorStop);
+            this.resetStateToInactiveColorStops();
+
+            return false;
+        }
+
         if (this.state.activeColorStop !== undefined) {
             if (this.state.colorStopDragged) { this.upDateSortAndFilterGradients() }
 
             else { this.props.openColorPicker(this.props.index, this.state.activeColorStop, this.props.gradient.colors[this.state.activeColorStop].color); }
         }
-        else { this.addNewColorStop() }
+        else {
+            if (!this.state.buttonStates.deleteOn) this.addNewColorStop();
+        }
 
         this.resetStateToInactiveColorStops();
     }
@@ -113,15 +122,23 @@ export default class GradientSlider extends Component {
 
 
     setNewColorStopValue(value, index) {
-        console.log(value);
         const gradientCopy = getImmutableGradientCopy(this.props.gradient);
         gradientCopy.colors[index].stop = Number(value);
+
         const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
         const filteredGradient = filterIdenticalColorPercentages(gradientSorted, index);
-        console.log(filteredGradient);
 
         this.props.updateGradient(filteredGradient, this.props.index);
         const timer = setTimeout(() => { this.resetStateToInactiveColorStops(); clearTimeout(timer); }, 500);
+    }
+
+
+
+    deleteColorStop(index) {
+        const updatedGradient = getImmutableGradientCopy(this.props.gradient);
+        updatedGradient.colors = updatedGradient.colors.filter((_, i) => i !== index);
+
+        this.props.updateGradient(updatedGradient, this.props.index);
     }
 
 
