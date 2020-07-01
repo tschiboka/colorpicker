@@ -3,7 +3,7 @@ import GradientSliderRuler from "../GradientSliderRuler/GradientSliderRuler";
 import GradientSliderButtonBox from "../GradientSliderButtonBox/GradientSliderButtonBox";
 import ColorStop from "../ColorStop/ColorStop";
 import { sortGradientByColorStopsPercentage, filterIdenticalColorPercentages } from "../../functions/slider";
-import { setZIndexAscending, getPercentToFixed, mousePos } from "../../functions/slider";
+import { getPercentToFixed, mousePos } from "../../functions/slider";
 import { getImmutableGradientCopy } from "../../functions/gradient";
 
 import "./GradientSlider.scss";
@@ -56,19 +56,53 @@ export default class GradientSlider extends Component {
 
     handleSliderOnMouseUp() {
         if (this.state.activeColorStop !== undefined) {
-            if (this.state.colorStopDragged) {
-                const gradientCopy = getImmutableGradientCopy(this.props.gradient);
-                gradientCopy.colors[this.state.activeColorStop].stop = this.state.mouseAtPercentage;
-                const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
-                const filteredGradient = filterIdenticalColorPercentages(gradientSorted, this.state.activeColorStop);
-
-                this.props.updateGradient(filteredGradient, this.props.index);
-            }
-            else {
-                this.props.openColorPicker(this.props.index, this.state.activeColorStop, this.props.gradient.colors[this.state.activeColorStop].color);
-            }
+            if (this.state.colorStopDragged) { this.upDateSortAndFilterGradients() }
+            else { this.props.openColorPicker(this.props.index, this.state.activeColorStop, this.props.gradient.colors[this.state.activeColorStop].color); }
         }
+        else { this.addNewColorStop() }
 
+        this.resetStateToInactiveColorStops();
+    }
+
+
+
+    handleSliderOnMouseLeave() {
+        if (this.state.activeColorStop !== undefined && this.state.colorStopDragged) {
+            this.upDateSortAndFilterGradients();
+
+            this.resetStateToInactiveColorStops();
+        }
+    }
+
+
+
+    upDateSortAndFilterGradients() {
+        const gradientCopy = getImmutableGradientCopy(this.props.gradient);
+        gradientCopy.colors[this.state.activeColorStop].stop = this.state.mouseAtPercentage;
+        const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
+        const filteredGradient = filterIdenticalColorPercentages(gradientSorted, this.state.activeColorStop);
+
+        this.props.updateGradient(filteredGradient, this.props.index);
+    }
+
+
+
+    addNewColorStop() {
+        const gradientCopy = getImmutableGradientCopy(this.props.gradient);
+        const updatedColorStops = gradientCopy.colors;
+
+        updatedColorStops.push({ color: "rgba(255, 255, 255, 0.5)", stop: this.state.mouseAtPercentage });
+        gradientCopy.colors = updatedColorStops;
+
+        const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
+        const filteredGradient = filterIdenticalColorPercentages(gradientSorted, this.state.activeColorStop);
+
+        this.props.updateGradient(filteredGradient, this.props.index);
+    }
+
+
+
+    resetStateToInactiveColorStops() {
         this.setState({
             ...this.state,
             colorStopDragged: false,
@@ -99,6 +133,7 @@ export default class GradientSlider extends Component {
                 textOpen={this.state.colorStopTextOpenIndex === index}
                 units={this.props.gradient.units}
                 setActiveColorStop={this.setActiveColorStop.bind(this)}
+                isActive={this.state.activeColorStop === index}
             />
         });
     }
@@ -114,7 +149,7 @@ export default class GradientSlider extends Component {
                     className="GradientSlider__slider"
                     onMouseMove={e => this.handleSliderOnMouseMove(e)}
                     onMouseUp={() => this.handleSliderOnMouseUp()}
-                    onMouseLeave={() => this.handleSliderOnMouseUp()}
+                    onMouseLeave={() => this.handleSliderOnMouseLeave()}
                 >
                     <GradientSliderRuler units={this.props.gradient.units} />
 

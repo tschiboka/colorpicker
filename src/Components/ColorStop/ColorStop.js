@@ -5,6 +5,8 @@ import "./ColorStop.scss";
 
 
 export default function ColorStop(props) {
+    const stroke = "rgba(255, 255, 255, 0.5)";
+
     function renderTextOrInput() {
         const textValue = props.units === "percentage" ? props.position + "%" : undefined;
 
@@ -22,18 +24,24 @@ export default function ColorStop(props) {
     }
 
 
-    const stroke = "rgba(255, 255, 255, 0.5)";
 
     return (
         <div
             className="ColorStop"
-            style={{ left: `calc(${props.position}% - 20px)` }}
+            style={{
+                left: `calc(${props.position}% - 20px)`,
+                zIndex: props.isActive ? 100 : 1
+            }}
         >
             <div className="ColorStop__text-box">
                 {renderTextOrInput()}
             </div>
 
-            <div className="ColorStop__line"></div>
+            <div className="ColorStop__line">
+                <svg width="100%" height="100%">
+                    <line x1="50%" y1="0" x2="50%" y2="100%" style={{ stroke: "rgba(221, 221, 221, 0.2)" }} />
+                </svg>
+            </div>
 
             <div className="ColorStop__thumb">
                 <svg width="14">
@@ -48,7 +56,7 @@ export default function ColorStop(props) {
                     title={props.color}
                     style={{
                         background: `linear-gradient(${props.color} 0%, ${props.color} 100%), url(${checkeredRect}`,
-                        border: props.deleteOn ? `1px dotted deeppink` : `1px solid ${stroke}`
+                        border: props.deleteOn ? `1px dotted deeppink` : `1px solid ${stroke}`,
                     }}
                     onMouseDown={() => props.setActiveColorStop(props.index)}
                 >

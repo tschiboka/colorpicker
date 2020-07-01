@@ -40,12 +40,14 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        pointer-events: none;
         svg {
             height: 35%;
         }
         div {
             height: 65%;
             width: 14px;
+            pointer-events: auto;
         }
     }
 }

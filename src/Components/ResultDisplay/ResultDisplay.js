@@ -52,7 +52,6 @@ export default class ResultDisplay extends Component {
                         className="ResultDisplay__color-bg"
                         title="Result Gradient"
                         style={{ background: gradientObjsToStr([...this.props.gradients].reverse()) }}>
-                        {console.log(gradientObjsToStr([...this.props.gradients].reverse()))}
 
                         {this.state.menuIsOpen && (
                             <ResultDisplayMenu
