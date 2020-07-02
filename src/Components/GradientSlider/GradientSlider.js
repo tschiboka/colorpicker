@@ -6,7 +6,6 @@ import ColorHint from "../ColorHint/ColorHint";
 import { sortGradientByColorStopsPercentage, filterIdenticalColorPercentages } from "../../functions/slider";
 import { getPercentToFixed, mousePos } from "../../functions/slider";
 import { getImmutableGradientCopy } from "../../functions/gradient";
-
 import "./GradientSlider.scss";
 
 
@@ -22,11 +21,11 @@ export default class GradientSlider extends Component {
                 colorHintOn: false,
                 deleteOn: false
             },
-            activeColorStopText: undefined,
-            activeColorHintText: undefined,
             mouseAtPercentage: undefined,
-            activeColorStop: undefined,
             activeColorHint: undefined,
+            activeColorHintText: undefined,
+            activeColorStop: undefined,
+            activeColorStopText: undefined,
             colorStopDragged: false,
         }
     }
@@ -34,93 +33,85 @@ export default class GradientSlider extends Component {
 
 
     handleSliderOnMouseMove(event) {
-        const sliderDiv = document.getElementById(this.state.id).children[0];
-        const width = Math.round(sliderDiv.getBoundingClientRect().width);
-        const mouseX = mousePos(event, "#" + this.state.id);
+        // Do nothing when delete button is on
+        if (this.state.buttonStates.deleteOn) return false;
 
-        let mouseAtPercentage;
-        if (mouseX <= 20) mouseAtPercentage = 0;
-        else if (mouseX >= width - 20) mouseAtPercentage = 100;
-        else mouseAtPercentage = getPercentToFixed(width - 40, mouseX - 20);
+        const colorStopPressed = this.state.activeColorStop !== undefined;
+        const colorHintPressed = this.state.activeColorHint !== undefined;
+        const thumbDragged = this.state.colorStopDragged;
+        const gradientCopy = (colorStopPressed || colorHintPressed) ? getImmutableGradientCopy(this.props.gradient) : undefined;
 
-        this.setState({ ...this.state, mouseAtPercentage });
+        // Set dragged state if mouse pressed on color stop or color hint
+        if (!thumbDragged && (colorStopPressed || colorHintPressed)) this.setState({ ...this.state, colorStopDragged: true });
 
-        if (!this.state.buttonStates.deleteOn) {
-            const gradientCopy = getImmutableGradientCopy(this.props.gradient);
-            if (this.state.activeColorStop !== undefined) {
-                gradientCopy.colors[this.state.activeColorStop].stop = this.state.mouseAtPercentage;
+        // Drag colors stop
+        if (colorStopPressed) {
+            gradientCopy.colors[this.state.activeColorStop].stop = this.getMousePosXInPercentage(event);
+            this.props.updateGradient(gradientCopy, this.props.index);
+        }
 
-                this.props.updateGradient(gradientCopy, this.props.index);
-            }
-            if (this.state.activeColorHint !== undefined) {
-                gradientCopy.colorHints[this.state.activeColorHint] = this.state.mouseAtPercentage;
-                gradientCopy.colorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
-
-                this.props.updateGradient(gradientCopy, this.props.index);
-            }
-            if (!this.state.colorStopDragged && this.state.activeColorStop !== undefined) { this.setState({ ...this.state, colorStopDragged: true }); }
+        // Drag color hint
+        if (colorHintPressed) {
+            gradientCopy.colorHints[this.state.activeColorHint] = this.getMousePosXInPercentage(event);
+            gradientCopy.colorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
+            this.props.updateGradient(gradientCopy, this.props.index);
         }
     }
 
 
 
-    handleSliderOnMouseUp() {
-        if (this.state.activeColorStopText !== undefined) return false;
-        if (this.state.activeColorHintText !== undefined) return false;
+    handleSliderOnMouseUp(event) {
+        // Do nothing if any text input is active on slider
+        const textActive = this.state.activeColorStopText !== undefined || this.state.activeColorHintText !== undefined;
+        if (textActive) return false;
 
-        if (this.state.buttonStates.deleteOn) {
-            if (this.state.activeColorStop !== undefined) { this.deleteColorStop(this.state.activeColorStop); }
-            if (this.state.activeColorHint !== undefined) { this.deleteColorHint(this.state.activeColorHint); }
+        const deleteOn = this.state.buttonStates.deleteOn;
+        const colorHintOn = this.state.buttonStates.colorHintOn;
+        const colorStopOn = this.state.buttonStates.colorStopOn;
+        const colorStopPressed = this.state.activeColorStop !== undefined;
+        const colorHintPressed = this.state.activeColorHint !== undefined;
+        const thumbDragged = this.state.colorStopDragged;
 
-            this.resetStateToInactiveColorStops();
+        // Delete color stop / color hint
+        if (deleteOn) {
+            if (colorStopPressed) this.deleteColorStop(this.state.activeColorStop);
+            if (colorHintPressed) this.deleteColorHint(this.state.activeColorHint);
+            this.resetStateTo();
             return false;
         }
 
-        if (this.state.activeColorStop !== undefined) {
-            if (this.state.colorStopDragged) { this.upDateSortAndFilterGradients(); }
-            else {
-                this.props.openColorPicker(this.props.index, this.state.activeColorStop, this.props.gradient.colors[this.state.activeColorStop].color);
-            }
-        }
-        else if (this.state.buttonStates.colorHintOn && this.state.activeColorHint === undefined) {
-            this.addNewColorHint();
+        // Color stop thumb can open color picker or leave thumb where it has been dragged 
+        else if (colorStopPressed) {
+            if (thumbDragged) this.sortAndFilterGradients();
+            else this.props.openColorPicker(this.props.index, this.state.activeColorStop, this.props.gradient.colors[this.state.activeColorStop].color);
         }
         else {
-            if (!this.state.buttonStates.deleteOn) {
-                if (this.state.buttonStates.colorStopOn && this.state.activeColorHint === undefined) { this.addNewColorStop(); }
+
+            // No items were dragged add color stop or color hint accordingly
+            if (!thumbDragged) {
+                if (colorHintOn && !colorHintPressed) this.addNewColorHint(event);
+                if (colorStopOn && !colorStopPressed) this.addNewColorStop(event);
             }
         }
-        this.resetStateToInactiveColorStops();
-    }
 
-
-
-    handleSliderOnMouseLeave() {
-        if (this.state.activeColorStop !== undefined && this.state.colorStopDragged) {
-            this.upDateSortAndFilterGradients();
-
-            this.resetStateToInactiveColorStops();
-        }
+        this.resetStateTo();
     }
 
 
 
     handleInputOnBlur(event) {
-        console.log("Onblur");
         if (event.target.validity.valid && event.target.value.length) {
             if (this.state.activeColorStopText !== undefined) { this.setNewColorStopValue(event.target.value, this.state.activeColorStopText); }
             if (this.state.activeColorHintText !== undefined) { this.setNewColorHintValue(event.target.value, this.state.activeColorHintText); }
         }
 
         this.clearInput(event.target);
-        const timer = setTimeout(() => { this.resetStateToInactiveColorStops(); clearTimeout(timer); }, 500);
+        const timer = setTimeout(() => { this.resetStateTo(); clearTimeout(timer); }, 500);
     }
 
 
 
     handleInputOnKeyDown(event) {
-        console.log(this.state.activeColorStopText, this.state.activeColorHintText);
-
         const key = event.which || event.keyCode || event.key;
 
         if (key === 27 || key === "Escape" || key === "Esc") {
@@ -140,6 +131,21 @@ export default class GradientSlider extends Component {
 
 
 
+    getMousePosXInPercentage(event) {
+        const sliderDiv = document.getElementById(this.state.id).children[0];
+        const width = Math.round(sliderDiv.getBoundingClientRect().width);
+        const mouseX = mousePos(event, "#" + this.state.id);
+
+        let mouseAtPercentage;
+        if (mouseX <= 20) mouseAtPercentage = 0;
+        else if (mouseX >= width - 20) mouseAtPercentage = 100;
+        else mouseAtPercentage = getPercentToFixed(width - 40, mouseX - 20);
+
+        return mouseAtPercentage;
+    }
+
+
+
     clearInput(target) {
         target.value = "";
         target.setCustomValidity("");
@@ -155,7 +161,7 @@ export default class GradientSlider extends Component {
         const filteredGradient = filterIdenticalColorPercentages(gradientSorted, index);
 
         this.props.updateGradient(filteredGradient, this.props.index);
-        const timer = setTimeout(() => { this.resetStateToInactiveColorStops(); clearTimeout(timer); }, 500);
+        const timer = setTimeout(() => { this.resetStateTo(); clearTimeout(timer); }, 500);
     }
 
 
@@ -168,7 +174,7 @@ export default class GradientSlider extends Component {
         gradientCopy.colorHints = updatedColorHints;
 
         this.props.updateGradient(gradientCopy, this.props.index);
-        const timer = setTimeout(() => { this.resetStateToInactiveColorStops(); clearTimeout(timer); }, 500);
+        const timer = setTimeout(() => { this.resetStateTo(); clearTimeout(timer); }, 500);
     }
 
 
@@ -191,9 +197,8 @@ export default class GradientSlider extends Component {
 
 
 
-    upDateSortAndFilterGradients() {
+    sortAndFilterGradients() {
         const gradientCopy = getImmutableGradientCopy(this.props.gradient);
-        gradientCopy.colors[this.state.activeColorStop].stop = this.state.mouseAtPercentage;
         const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
         const filteredGradient = filterIdenticalColorPercentages(gradientSorted, this.state.activeColorStop);
 
@@ -202,11 +207,11 @@ export default class GradientSlider extends Component {
 
 
 
-    addNewColorStop() {
+    addNewColorStop(event) {
         const gradientCopy = getImmutableGradientCopy(this.props.gradient);
         const updatedColorStops = gradientCopy.colors;
 
-        updatedColorStops.push({ color: "rgba(255, 255, 255, 0.5)", stop: this.state.mouseAtPercentage });
+        updatedColorStops.push({ color: "rgba(255, 255, 255, 0.5)", stop: this.getMousePosXInPercentage(event) });
         gradientCopy.colors = updatedColorStops;
 
         const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
@@ -217,9 +222,9 @@ export default class GradientSlider extends Component {
 
 
 
-    addNewColorHint() {
+    addNewColorHint(event) {
         const gradientCopy = getImmutableGradientCopy(this.props.gradient);
-        const newStop = this.state.mouseAtPercentage;
+        const newStop = this.getMousePosXInPercentage(event);
         const updatedColorHints = gradientCopy.colorHints;
 
         updatedColorHints.push(newStop);
@@ -231,15 +236,17 @@ export default class GradientSlider extends Component {
 
 
 
-    resetStateToInactiveColorStops() {
-        this.setState({
-            ...this.state,
-            colorStopDragged: false,
-            activeColorStop: undefined,
-            activeColorStopText: undefined,
-            activeColorHint: undefined,
-            activeColorHintText: undefined,
-        });
+    resetStateTo(newObject = {}) {
+        const newState = { ...this.state };
+
+        newState.colorStopDragged = newObject.colorStopDragged || false;
+        newState.activeColorStop = newObject.activeColorStop;
+        newState.activeColorStopText = newObject.activeColorStopText;
+        newState.activeColorHint = newObject.activeColorHint;
+        newState.activeColorHintText = newObject.activeColorHintText;
+        newState.mouseAtPercentage = newObject.mouseAtPercentage;
+
+        this.setState({ ...newState });
     }
 
 
@@ -248,11 +255,21 @@ export default class GradientSlider extends Component {
 
 
 
-    setActiveColorStop(activeColorStop) { this.setState({ ...this.state, activeColorStop }); }
+    setActiveColorStop(activeColorStop, event) {
+        this.resetStateTo({
+            activeColorStop,
+            mouseAtPercentage: this.getMousePosXInPercentage(event)
+        });
+    }
 
 
 
-    setActiveColorHint(activeColorHint) { this.setState({ ...this.state, activeColorHint }); }
+    setActiveColorHint(activeColorHint, event) {
+        this.resetStateTo({
+            activeColorHint,
+            mouseAtPercentage: this.getMousePosXInPercentage(event)
+        });
+    }
 
 
 
@@ -260,10 +277,7 @@ export default class GradientSlider extends Component {
 
 
 
-    setActiveColorHintText(activeColorHintText) {
-        console.log(activeColorHintText);
-        this.setState({ ...this.state, activeColorHintText, setActiveColorStopText: undefined }, () => console.log(this.state.activeColorHintText));
-    }
+    setActiveColorHintText(activeColorHintText) { this.setState({ ...this.state, activeColorHintText, setActiveColorStopText: undefined }); }
 
 
 
@@ -284,6 +298,7 @@ export default class GradientSlider extends Component {
                 setActiveColorStopText={this.setActiveColorStopText.bind(this)}
                 handleInputOnBlur={this.handleInputOnBlur.bind(this)}
                 handleInputOnKeyDown={this.handleInputOnKeyDown.bind(this)}
+                setMousePosition={this.getMousePosXInPercentage.bind(this)}
             />
         });
     }
@@ -293,12 +308,23 @@ export default class GradientSlider extends Component {
     renderColorHints() {
         const hints = [...this.props.gradient.colorHints].sort((a, b) => a - b);
 
-        // get adjecent colors if available and error message if hint is out of range or shadowed by other hints
+        //get adjecent colors if available and error message if hint is out of range or shadowed by other hints
         const colorHintsWithInfo = [];
+
+        if (!this.props.gradient.colors.length) hints.forEach(hint => {
+            colorHintsWithInfo.push({ error: "no color stops detected", position: hints[colorHintsWithInfo.length] });
+        });
 
         this.props.gradient.colors.forEach((colorStop, colorStopIndex, colorStopsArray) => {
             const currentColorPercentage = colorStop.stop;
             const nextColorPercentage = (colorStopsArray[colorStopIndex + 1] || {}).stop;
+
+            if (colorStopIndex === 0) {
+                const hintsOutOfRange = hints.filter(hint => hint < currentColorPercentage);
+                hintsOutOfRange.forEach(hintOutOfRange => {
+                    colorHintsWithInfo.push({ error: "out of range", position: hints[colorHintsWithInfo.length] });
+                });
+            }
 
             if (nextColorPercentage === undefined) {
                 const hintsOutOfRange = hints.filter(hint => hint > currentColorPercentage);
@@ -334,6 +360,7 @@ export default class GradientSlider extends Component {
                     adjecentColors={colorHint.adjecentColors}
                     handleInputOnBlur={this.handleInputOnBlur.bind(this)}
                     handleInputOnKeyDown={this.handleInputOnKeyDown.bind(this)}
+                    setMousePosition={this.getMousePosXInPercentage.bind(this)}
                 />
             )
         });
@@ -350,15 +377,14 @@ export default class GradientSlider extends Component {
                 <div
                     className="GradientSlider__slider"
                     onMouseMove={e => this.handleSliderOnMouseMove(e)}
-                    onMouseUp={() => this.handleSliderOnMouseUp()}
-                    onMouseLeave={() => this.handleSliderOnMouseLeave()}
+                    onTouchMove={e => this.handleSliderOnMouseMove(e)}
+                    onMouseUp={e => this.handleSliderOnMouseUp(e)}
+                    onTouchEnd={e => this.handleSliderOnMouseUp(e)}
                 >
                     <GradientSliderRuler units={this.props.gradient.units} />
 
-
                     <div className="GradientSlider__colorstops-and-colorhints">
                         {this.renderColorStops()}
-
                         {this.renderColorHints()}
                     </div>
                 </div>

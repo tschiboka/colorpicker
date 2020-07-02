@@ -11,6 +11,11 @@ export default function ColorHint(props) {
     const title = `color hint ${props.index} ` + props.errorInfo;
 
 
+
+    function handleThumbOnMouseDown(event) { props.setActiveColorHint(props.index, event); }
+
+
+
     function validateInput(event) {
         if (props.units === "percentage") {
             const value = event.target.value;
@@ -37,6 +42,7 @@ export default function ColorHint(props) {
                 min={0}
                 onChange={e => validateInput(e)}
                 onMouseDown={() => props.setActiveColorHintText(props.index)}
+                onTouchStart={() => props.setActiveColorHintText(props.index)}
                 onBlur={e => props.handleInputOnBlur(e)}
                 onKeyDown={e => props.handleInputOnKeyDown(e)}
             />
@@ -63,7 +69,7 @@ export default function ColorHint(props) {
             className="ColorHint"
             style={{
                 left: `calc(${props.position}% - 20px)`,
-                zIndex: props.isActive ? 100 : 1
+                zIndex: props.isActive ? 100 : Math.round(props.position || 0)
             }}
         >
             <div className="ColorHint__text-box">
@@ -78,11 +84,12 @@ export default function ColorHint(props) {
                 <div
                     title={title}
                     style={{ border, background }}
-                    onMouseDown={() => props.setActiveColorHint(props.index)}
+                    onMouseDown={e => handleThumbOnMouseDown(e)}
+                    onTouchStart={e => handleThumbOnMouseDown(e)}
                 >
                     {renderAdjecentColors()}
                 </div>
             </div>
-        </div >
+        </div>
     );
 }

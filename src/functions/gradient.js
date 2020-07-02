@@ -65,7 +65,7 @@ const defaultGradientObj = {
     units: "percentage",
     repeating: false,
     max: undefined,
-    colorHints: [50, 55],
+    colorHints: [50],
     colors: [
         {
             color: "rgba(0, 0, 0, 1)",

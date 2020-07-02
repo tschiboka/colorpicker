@@ -9,9 +9,7 @@ export default function ColorStop(props) {
 
 
 
-    function handleThumbOnMouseDown(index) {
-        props.setActiveColorStop(index);
-    }
+    function handleThumbOnMouseDown(event) { props.setActiveColorStop(props.index, event); }
 
 
 
@@ -41,6 +39,7 @@ export default function ColorStop(props) {
                 min={0}
                 onChange={e => validateInput(e)}
                 onMouseDown={() => props.setActiveColorStopText(props.index)}
+                onTouchStart={() => props.setActiveColorStopText(props.index)}
                 onBlur={e => props.handleInputOnBlur(e)}
                 onKeyDown={e => props.handleInputOnKeyDown(e)}
             />
@@ -54,7 +53,7 @@ export default function ColorStop(props) {
             className="ColorStop"
             style={{
                 left: `calc(${props.position}% - 20px)`,
-                zIndex: props.isActive ? 100 : 1
+                zIndex: props.isActive ? 100 : Math.round(props.position || 0)
             }}
         >
             <div className="ColorStop__text-box">
@@ -82,7 +81,8 @@ export default function ColorStop(props) {
                         background: `linear-gradient(${props.color} 0%, ${props.color} 100%), url(${checkeredRect}`,
                         border: props.deleteOn ? `2px dotted deeppink` : `1px solid ${stroke}`,
                     }}
-                    onMouseDown={() => handleThumbOnMouseDown(props.index)}
+                    onMouseDown={e => handleThumbOnMouseDown(e)}
+                    onTouchStart={e => handleThumbOnMouseDown(e)}
                 >
                 </div>
             </div>

@@ -85,16 +85,6 @@ export const correctGradientEdges = gradient => {
 
 
 
-export const setZIndexAscending = index => {
-    const measureBoxChildren = document.getElementById(`GradientSlider__measure-text-box${index}`).children;
-    const thumbBoxChildren = document.getElementById(`GradientSlider__thumbs-box${index}`).children;
-    const elemGroups = [...thumbBoxChildren].map((_, i) => [measureBoxChildren[i], thumbBoxChildren[i]]);
-
-    elemGroups.forEach((children, i) => children.forEach(child => child.style.zIndex = i + 100));
-};
-
-
-
 export const getPercentToFixed = (wholeInput, fractionInput, decimalPlaces = 1, limit0_to_100 = true) => {
     let percentage = fractionInput / wholeInput * 100;
     percentage = Number(percentage.toFixed(percentage % 1 !== 0 ? decimalPlaces : 0));
