@@ -158,6 +158,32 @@ export default class GradientButtons extends Component {
 
                 {this.state.radientSpecififcationOn && (
                     <div className="GradientButtons__radiant-spec">
+                        <div>
+                            <button>&#x25cb;</button>
+
+                            <button>&#11053;</button>
+                        </div>
+                        
+                        <div>
+                            <div>
+                                <button>closest</button>
+
+                                <button>farthest</button>
+                            </div>
+
+                            <div>
+                                <button>side</button>
+
+                                <button>corner</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            r:
+                            
+                            <input type="text"/>
+                        </div>
+
 
                     </div>)}
             </div>
