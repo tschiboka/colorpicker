@@ -61,6 +61,12 @@ export default class GradientButtons extends Component {
 
 
 
+    setRadialGradient() {
+        this.props.updateGradient({...this.props.gradient, type: "radial"}, this.props.index);
+    }
+
+
+
     render() {
         return (
             <div className="GradientButtons">    
@@ -130,7 +136,7 @@ export default class GradientButtons extends Component {
 
                 <div>
                     <button
-                        title="diagonal gradient"
+                        title="radial gradient"
                         onClick={() => this.setState({...this.state, radientSpecififcationOn: true})}
                     >&#9678;
                     
@@ -184,7 +190,11 @@ export default class GradientButtons extends Component {
                             <input type="text"/>
                         </div>
 
+                        <div>
+                            <button onClick={() => this.setRadialGradient()}>Apply</button>
 
+                            <button>Discard</button>
+                        </div>
                     </div>)}
             </div>
         );

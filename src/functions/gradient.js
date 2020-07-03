@@ -31,8 +31,8 @@ export function gradientObjsToStr(gradientArray) {
         .filter(grad => grad.visible)
         .map(grad => {
             const { colors } = grad;
-            const prefix = (grad.angle === "radial" ? "radial" : "linear") + "-gradient";
-            const degree = grad.angle === "radial" ? "" : grad.angle + "deg, ";
+            const prefix = grad.type + "-gradient";
+            const angle = grad.angle + "deg, ";
             const hints = [...grad.colorHints].sort((a, b) => a - b);
             const colorStops = colors.map((colorStop, index, colorStopArr) => {
                 let hintStr = "";
@@ -52,7 +52,9 @@ export function gradientObjsToStr(gradientArray) {
                 return `${colorStop.color} ${colorStop.stop}${units}${hintStr}`
             }).join(",");
 
-            return `${prefix}(${degree}${colorStops})`;
+            if (grad.type === "linear") return `${prefix}(${angle}${colorStops})`;
+
+            if (grad.type === "radial") return `radial-gradient(red, yellow)`;
         }).join(",");
 }
 
@@ -61,6 +63,7 @@ export function gradientObjsToStr(gradientArray) {
 const defaultGradientObj = {
     name: "",
     visible: true,
+    type: "linear",
     angle: "90",
     units: "percentage",
     repeating: false,
