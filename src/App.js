@@ -37,7 +37,8 @@ export default class App extends Component {
       canResize: true,
       appWidth: this.getWindowWidth(),
       colorPicker: undefined,
-      radiantSettingsOn: true,
+      radiantSettingsOn: false,
+      radientSettingsGradientIndex: undefined,
     };
   }
 
@@ -59,6 +60,18 @@ export default class App extends Component {
         ...this.state,
         colorPicker: { visible: true, gradientIndex, thumbIndex, color }
       });
+  }
+
+
+
+  openRadiantSettings(radiantSettingsOn, radientSettingsGradientIndex) {
+    this.setState(
+      {
+        ...this.state,
+        radiantSettingsOn,
+        radientSettingsGradientIndex
+      }
+    );
   }
 
 
@@ -96,6 +109,7 @@ export default class App extends Component {
           gradients={this.state.gradients}
           updateGradients={this.updateGradients.bind(this)}
           openColorPicker={this.openColorPicker.bind(this)}
+          openRadiantSettings={this.openRadiantSettings.bind(this)}
         />
 
         <Code />
@@ -111,7 +125,16 @@ export default class App extends Component {
           close={() => { this.setState({ ...this.state, colorPicker: undefined }); }}
         />}
 
-
+        {this.state.radiantSettingsOn && (
+          this.state.appWidth <= 500
+            ? this.renderRadientSettings()
+            : <div
+              className="fullscreen-box"
+              onClick={() => this.setState({ ...this.state, radiantSettingsOn: false })}
+            >
+              {this.renderRadientSettings()}
+            </div>
+        )}
       </div>
     );
   }

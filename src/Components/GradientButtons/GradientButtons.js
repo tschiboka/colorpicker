@@ -10,7 +10,6 @@ export default class GradientButtons extends Component {
         super(props);
 
         this.state = {
-            repeatGradInputVisible: this.props.gradient.repeating,
         }
     }
 
@@ -56,14 +55,6 @@ export default class GradientButtons extends Component {
         const activeStr = isActive ? "active" : "inactive";
 
         return `btn--${activeStr}`;
-    }
-
-
-
-    openRadientSettings() {
-        this.setState({...this.state, radientSettingsOn: true});
-
-        this.props.updateGradient({...this.props.gradient, type: "radial"}, this.props.index);
     }
 
 
@@ -153,22 +144,18 @@ export default class GradientButtons extends Component {
                 </div>
 
                 <div>
-                    <button title="repeating gradient">&#x25A5;</button>
-
-                    {this.state.repeatGradInputVisible && (
-                        <input
-                            type="text"
-                        />
-                    )}
+                    <button title="repeating gradient">&#x25A5;
+                        <div className={`btn--${this.props.gradient.repeating ? "active": "inactive"}`}></div>
+                    </button>
                 </div>
 
                 <div>
                     <button
                         title="radial gradient"
-                        onClick={() => this.openRadientSettings()}
+                        onClick={() => this.props.openRadiantSettings(true, this.props.index)}
                     >&#9678;
                     
-                    <div className={`btn--${this.props.gradient.angle === "radial" ? "active": "inactive"}`}></div>
+                    <div className={`btn--${this.props.gradient.type === "radial" ? "active": "inactive"}`}></div>
                     </button>
                 </div>
 
