@@ -133,7 +133,7 @@ export default class GradientField extends Component {
                             index={this.props.index}
                             updateGradient={this.props.updateGradient}
                             setAngleMeterIsActive={this.props.setAngleMeterIsActive}
-                            openRadiantSettings={this.props.openRadiantSettings}
+                            openRadialSettings={this.props.openRadialSettings}
                         />
                     </div>
                 </div>

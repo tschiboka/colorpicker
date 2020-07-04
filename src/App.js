@@ -3,7 +3,7 @@ import ColorPicker from "./Components/ColorPicker/ColorPicker";
 import ResultDisplay from "./Components/ResultDisplay/ResultDisplay";
 import GradientList from "./Components/GradientList/GradientList";
 import Code from "./Components/Code/Code";
-import RadiantSettings from "./Components/RadiantSettings/RadiantSettings";
+import RadialSettings from "./Components/RadialSettings/RadialSettings";
 import { getDefaultGradientObj } from "./functions/gradient";
 import "./App.scss";
 
@@ -38,8 +38,14 @@ export default class App extends Component {
       appWidth: this.getWindowWidth(),
       colorPicker: undefined,
       radiantSettingsOn: false,
-      radientSettingsGradientIndex: undefined,
+      radientSettings_GradientIndex: undefined,
     };
+  }
+
+
+
+  getWindowWidth() {
+    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   }
 
 
@@ -59,12 +65,6 @@ export default class App extends Component {
 
 
 
-  getWindowWidth() {
-    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-  }
-
-
-
   openColorPicker(gradientIndex, thumbIndex, color) {
     this.setState(
       {
@@ -75,12 +75,19 @@ export default class App extends Component {
 
 
 
-  openRadiantSettings(radiantSettingsOn, radientSettingsGradientIndex) {
+  openRadialSettings(radiantSettingsOn, radientSettings_GradientIndex, setToRadial) {
+    const gradients = [...this.state.gradients];
+    const type = setToRadial ? "radial" : "linear";
+    gradients[radientSettings_GradientIndex].type = type;
+
+    console.log(gradients);
+
     this.setState(
       {
         ...this.state,
+        gradients,
         radiantSettingsOn,
-        radientSettingsGradientIndex
+        radientSettings_GradientIndex
       }
     );
   }
@@ -105,11 +112,11 @@ export default class App extends Component {
 
 
 
-  renderRadientSettings() {
+  renderRadialSettings() {
     return (
-      <RadiantSettings
-        openRadiantSettings={this.openRadiantSettings.bind(this)}
-        index={this.state.radientSettingsGradientIndex}
+      <RadialSettings
+        openRadialSettings={this.openRadialSettings.bind(this)}
+        index={this.state.radientSettings_GradientIndex}
         gradients={this.state.gradients}
         updateGradient={this.updateGradient.bind(this)}
       />
@@ -128,7 +135,7 @@ export default class App extends Component {
           updateGradients={this.updateGradients.bind(this)}
           updateGradient={this.updateGradient.bind(this)}
           openColorPicker={this.openColorPicker.bind(this)}
-          openRadiantSettings={this.openRadiantSettings.bind(this)}
+          openRadialSettings={this.openRadialSettings.bind(this)}
         />
 
         <Code />
@@ -146,12 +153,12 @@ export default class App extends Component {
 
         {this.state.radiantSettingsOn && (
           this.state.appWidth <= 500
-            ? this.renderRadientSettings()
+            ? this.renderRadialSettings()
             : <div
               className="fullscreen-box"
-              onClick={() => this.setState({ ...this.state, radiantSettingsOn: false })}
+              onClick={() => this.openRadialSettings(false, this.state.radientSettings_GradientIndex, false)}
             >
-              {this.renderRadientSettings()}
+              {this.renderRadialSettings()}
             </div>
         )}
       </div>

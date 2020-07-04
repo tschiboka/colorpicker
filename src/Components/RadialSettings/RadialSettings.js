@@ -1,10 +1,11 @@
 import React from 'react';
-import "./RadiantSettings.scss";
+import "./RadialSettings.scss";
 
 
 
-export default function RadiantSettings(props) {
+export default function RadialSettings(props) {
     const gradient = props.gradients[props.index];
+    console.log("SETTINGS", gradient)
 
 
 
@@ -19,32 +20,32 @@ export default function RadiantSettings(props) {
 
     return (
         <div
-            className="RadiantSettings"
+            className="RadialSettings"
             onClick={(e) => { e.stopPropagation() }}
         >
-            <div className="RadiantSettings__header">
+            <div className="RadialSettings__header">
                 <span>
                     Radient Settings [
                     <span>{gradient.name || "Untitled " + props.index}</span>
                 ]</span>
 
-                <button onClick={() => props.openRadiantSettings(false)}                >
+                <button onClick={() => props.openRadialSettings(false, props.index, false)}>
                     &times;
                 </button>
             </div>
 
-            <div className="RadiantSettings__body">
-                <div className="RadiantSettings__section">
+            <div className="RadialSettings__body">
+                <div className="RadialSettings__section">
                     <div>Shape</div>
 
-                    <div className="RadiantSettings__shape-btns">
-                        <button onClick={() => updateGradientPropertyTo("shape", "ellipse")}>
+                    <div className="RadialSettings__shape-btns">
+                        <button onClick={() => updateGradientPropertyTo("shape", gradient.radial.shape === "ellipse" ? "" : "ellipse")}>
                             Ellipse
 
                             <div className={`btn--${gradient.radial.shape === "ellipse" ? "active" : "inactive"}`}></div>
                         </button>
 
-                        <button>
+                        <button onClick={() => updateGradientPropertyTo("shape", gradient.radial.shape === "circle" ? "" : "circle")}>
                             Circle
 
                             <div className={`btn--${gradient.radial.shape === "circle" ? "active" : "inactive"}`}></div>
@@ -52,11 +53,11 @@ export default function RadiantSettings(props) {
                     </div>
                 </div>
 
-                <div className="RadiantSettings__section">
+                <div className="RadialSettings__section">
                     <div>Size</div>
 
-                    <div className="RadiantSettings__size-btns">
-                        <div className="RadiantSettings__size-btns__named">
+                    <div className="RadialSettings__size-btns">
+                        <div className="RadialSettings__size-btns__named">
                             <div>
                                 <button>Closest</button>
 
@@ -70,17 +71,17 @@ export default function RadiantSettings(props) {
                             </div>
                         </div>
 
-                        <div className="RadiantSettings__size-btns__length">
+                        <div className="RadialSettings__size-btns__length">
                             Length:
                         <input type="text" />
                         </div>
                     </div>
                 </div>
 
-                <div className="RadiantSettings__section">
+                <div className="RadialSettings__section">
                     <div>Position</div>
 
-                    <div className="RadiantSettings__position-btns">
+                    <div className="RadialSettings__position-btns">
                         <div>
                             <div>
                                 <button>top</button>
@@ -120,11 +121,11 @@ export default function RadiantSettings(props) {
                 </div>
             </div>
 
-            <div className="RadiantSettings__apply-box">
-                <button>Apply</button>
+            <div className="RadialSettings__apply-box">
+                <button onClick={() => props.openRadialSettings(false, props.index, true)}>Apply</button>
 
-                <button>Discard</button>
+                <button onClick={() => props.openRadialSettings(false, props.index, false)}>Discard</button>
             </div>
-        </div>
+        </div >
     );
 }
