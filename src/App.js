@@ -3,6 +3,7 @@ import ColorPicker from "./Components/ColorPicker/ColorPicker";
 import ResultDisplay from "./Components/ResultDisplay/ResultDisplay";
 import GradientList from "./Components/GradientList/GradientList";
 import Code from "./Components/Code/Code";
+import RadiantSettings from "./Components/RadiantSettings/RadiantSettings";
 import { getDefaultGradientObj } from "./functions/gradient";
 import "./App.scss";
 
@@ -12,6 +13,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
 
+    // Do not let resize update to often otherwise it gets sluggish
     const resizeWithFrequency = freq => {
       if (this.state.canResize) {
         this.forceUpdate();
@@ -19,7 +21,7 @@ export default class App extends Component {
       }
       else {
         const resizeTimer = setTimeout(() => {
-          this.setState({ ...this.state, canResize: true });
+          this.setState({ ...this.state, canResize: true, appWidth: this.getWindowWidth() });
           clearInterval(resizeTimer);
         }, freq);
       }
@@ -30,16 +32,24 @@ export default class App extends Component {
 
 
     this.state = {
-      colorPicker: undefined,
       checkered: true,
       gradients: [{ ...getDefaultGradientObj() }],
       canResize: true,
+      appWidth: this.getWindowWidth(),
+      colorPicker: undefined,
+      radiantSettingsOn: true,
     };
   }
 
 
 
   updateGradients(gradients) { this.setState({ ...this.state, gradients: gradients }/*, () => console.log(this.state.gradients)*/) }
+
+
+
+  getWindowWidth() {
+    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  }
 
 
 
@@ -71,6 +81,12 @@ export default class App extends Component {
 
 
 
+  renderRadientSettings() {
+    return <RadiantSettings />
+  }
+
+
+
   render() {
     return (
       <div className="App">
@@ -94,6 +110,8 @@ export default class App extends Component {
           returnColor={this.returnColor.bind(this)}
           close={() => { this.setState({ ...this.state, colorPicker: undefined }); }}
         />}
+
+
       </div>
     );
   }

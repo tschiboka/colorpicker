@@ -31,6 +31,7 @@ export default class GradientList extends Component {
                 confirmDeleteGradient={this.confirmDeleteGradient.bind(this)}
                 openColorPicker={this.props.openColorPicker}
                 setAngleMeterIsActive={this.setAngleMeterIsActive.bind(this)}
+                preventMouseUp={this.state.activeAngleMeter !== undefined}
             />
         ));
     }

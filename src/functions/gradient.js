@@ -54,7 +54,11 @@ export function gradientObjsToStr(gradientArray) {
 
             if (grad.type === "linear") return `${prefix}(${angle}${colorStops})`;
 
-            if (grad.type === "radial") return `radial-gradient(red, yellow)`;
+            if (grad.type === "radial") {
+                const shape = grad.radient.shape ? grad.radient.shape + ", " : "circle ";
+                console.log(`radial-gradient(${shape}at top left, ${colorStops})`);
+                return `radial-gradient(${shape} at top left, ${colorStops})`;
+            }
         }).join(",");
 }
 
@@ -78,7 +82,11 @@ const defaultGradientObj = {
             color: "rgba(255, 255, 255, 0.5)",
             stop: 100
         },
-    ]
+    ],
+    radient: {
+        shape: undefined,
+        length: undefined,
+    }
 };
 
 
@@ -89,7 +97,8 @@ export const getDefaultGradientObj = () => {
     const gradient = {
         ...defaultGradientObj,
         colorHints: [...defaultGradientObj.colorHints],
-        colors: [...defaultGradientObj.colors.map(color => Object.assign({}, color))]
+        colors: [...defaultGradientObj.colors.map(color => Object.assign({}, color))],
+        radient: { ...defaultGradientObj.radient }
     };
 
     return gradient;
@@ -107,7 +116,8 @@ export const getImmutableGradientCopy = gradient => {
             ...gradient.colors.map(color => ({
                 ...color
             }))
-        ]
+        ],
+        radient: { ...gradient.radient }
     }
 
     return copy;

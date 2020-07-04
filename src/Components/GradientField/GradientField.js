@@ -125,6 +125,7 @@ export default class GradientField extends Component {
                             index={this.props.index}
                             updateGradient={this.props.updateGradient}
                             openColorPicker={this.props.openColorPicker}
+                            preventMouseUp={this.props.preventMouseUp}
                         />
 
                         <GradientButtons

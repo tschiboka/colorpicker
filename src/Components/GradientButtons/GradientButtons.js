@@ -11,7 +11,6 @@ export default class GradientButtons extends Component {
 
         this.state = {
             repeatGradInputVisible: this.props.gradient.repeating,
-            radientSpecififcationOn: false,
         }
     }
 
@@ -61,8 +60,37 @@ export default class GradientButtons extends Component {
 
 
 
+    openRadientSettings() {
+        this.setState({...this.state, radientSettingsOn: true});
+
+        this.props.updateGradient({...this.props.gradient, type: "radial"}, this.props.index);
+    }
+
+
+
     setRadialGradient() {
         this.props.updateGradient({...this.props.gradient, type: "radial"}, this.props.index);
+
+        this.setState({...this.state, radientSettingsOn: false});
+    }
+
+
+
+    discardRadialGradient() {
+        this.props.updateGradient({...this.props.gradient, type: "linear"}, this.props.index);
+
+        this.setState({...this.state, radientSettingsOn: false});
+    }
+
+
+
+    setRadialProperty(key, value) {
+        const newGradient = {...this.props.gradient};
+        const newRadientObj = {...this.props.gradient.radial};
+        
+        newRadientObj[key] = value;
+        newGradient.radient = newRadientObj;
+        this.props.updateGradient({...newGradient, type: "radial"}, this.props.index);
     }
 
 
@@ -137,7 +165,7 @@ export default class GradientButtons extends Component {
                 <div>
                     <button
                         title="radial gradient"
-                        onClick={() => this.setState({...this.state, radientSpecififcationOn: true})}
+                        onClick={() => this.openRadientSettings()}
                     >&#9678;
                     
                     <div className={`btn--${this.props.gradient.angle === "radial" ? "active": "inactive"}`}></div>
@@ -160,42 +188,6 @@ export default class GradientButtons extends Component {
                         onKeyDown={e => this.handleAngleInputKeyDown(e)}
                     />
                 </div>
-
-
-                {this.state.radientSpecififcationOn && (
-                    <div className="GradientButtons__radiant-spec">
-                        <div>
-                            <button>&#x25cb;</button>
-
-                            <button>&#11053;</button>
-                        </div>
-                        
-                        <div>
-                            <div>
-                                <button>closest</button>
-
-                                <button>farthest</button>
-                            </div>
-
-                            <div>
-                                <button>side</button>
-
-                                <button>corner</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            r:
-                            
-                            <input type="text"/>
-                        </div>
-
-                        <div>
-                            <button onClick={() => this.setRadialGradient()}>Apply</button>
-
-                            <button>Discard</button>
-                        </div>
-                    </div>)}
             </div>
         );
     }

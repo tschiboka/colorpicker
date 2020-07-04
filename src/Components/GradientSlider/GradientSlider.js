@@ -61,6 +61,7 @@ export default class GradientSlider extends Component {
 
 
     handleSliderOnMouseUp(event) {
+        if (this.props.preventMouseUp) return false;
         // Do nothing if any text input is active on slider
         const textActive = this.state.activeColorStopText !== undefined || this.state.activeColorHintText !== undefined;
         if (textActive) return false;
