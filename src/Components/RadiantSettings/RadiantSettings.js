@@ -4,15 +4,33 @@ import "./RadiantSettings.scss";
 
 
 export default function RadiantSettings(props) {
+    const gradient = props.gradients[props.index];
+
+
+
+    function updateGradientPropertyTo(key, value) {
+        const updatedGradient = { ...gradient };
+        updatedGradient.radial[key] = value;
+
+        props.updateGradient(updatedGradient, props.index);
+    }
+
+
+
     return (
         <div
             className="RadiantSettings"
             onClick={(e) => { e.stopPropagation() }}
         >
             <div className="RadiantSettings__header">
-                Radient Settings
+                <span>
+                    Radient Settings [
+                    <span>{gradient.name || "Untitled " + props.index}</span>
+                ]</span>
 
-                <button>&times;</button>
+                <button onClick={() => props.openRadiantSettings(false)}                >
+                    &times;
+                </button>
             </div>
 
             <div className="RadiantSettings__body">
@@ -20,9 +38,17 @@ export default function RadiantSettings(props) {
                     <div>Shape</div>
 
                     <div className="RadiantSettings__shape-btns">
-                        <button>Ellipse</button>
+                        <button onClick={() => updateGradientPropertyTo("shape", "ellipse")}>
+                            Ellipse
 
-                        <button>Circle</button>
+                            <div className={`btn--${gradient.radial.shape === "ellipse" ? "active" : "inactive"}`}></div>
+                        </button>
+
+                        <button>
+                            Circle
+
+                            <div className={`btn--${gradient.radial.shape === "circle" ? "active" : "inactive"}`}></div>
+                        </button>
                     </div>
                 </div>
 
@@ -45,7 +71,7 @@ export default function RadiantSettings(props) {
                         </div>
 
                         <div className="RadiantSettings__size-btns__length">
-                            Length
+                            Length:
                         <input type="text" />
                         </div>
                     </div>
@@ -63,13 +89,13 @@ export default function RadiantSettings(props) {
                             <div>
                                 <button>left</button>
 
-                                <button>bottom</button>
+                                <button>center</button>
 
                                 <button>right</button>
                             </div>
 
                             <div>
-                                <button>center</button>
+                                <button>bottom</button>
                             </div>
                         </div>
 
@@ -81,13 +107,13 @@ export default function RadiantSettings(props) {
                             <div>
                                 <button>left</button>
 
-                                <button>bottom</button>
+                                <button>center</button>
 
                                 <button>right</button>
                             </div>
 
                             <div>
-                                <button>center</button>
+                                <button>bottom</button>
                             </div>
                         </div>
                     </div>

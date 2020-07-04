@@ -1,4 +1,7 @@
 $primarytColor: #c2c2c2;
+$activeBtnBg: #4cc3f1;
+$border: 1px solid rgba(221, 221, 221, 0.1);
+
 
 .RadiantSettings {
     position: absolute;
@@ -7,17 +10,33 @@ $primarytColor: #c2c2c2;
     background: #161616;
     border: 1px solid rgba(221, 221, 221, 0.5);
     z-index: 1001;
+    font-size: 16px;
     color: $primarytColor;
     button {
+        position: relative;
         height: 26px;
         background: transparent;
         color: $primarytColor;
         font-size: 16px;
         border: none;
         border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
         cursor: pointer;
         &:hover {
             background: rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            color: $activeBtnBg;
+        }
+        & > div {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            top: 3px;
+            right: 3px;
+            border-radius: 5px;
+            border: 1px solid rgba(221, 221, 221, 0.2);
+            .btn--active { background: $activeBtnBg; }
+            .btn--inactive { background: rgba(0, 0, 0, 0.7); }
         }
     }
     .RadiantSettings__header {
@@ -27,9 +46,14 @@ $primarytColor: #c2c2c2;
         align-items: center;
         padding-left: 5px;
         border-bottom: 1px solid rgba(221, 221, 221, 0.5);
+        span span {
+            font-size: 14px;
+            color: #888;
+        }
         button {
             height: 30px;
             width: 30px;
+            color: deeppink;
         }
     }
     .RadiantSettings__body {
@@ -96,6 +120,22 @@ $primarytColor: #c2c2c2;
                     display: flex;
                     justify-content: space-evenly;
                     align-items: center;
+                    input {
+                        margin: 0 15px;
+                        height: 50%;
+                        max-width: 40px;
+                        background: #131313;
+                        font-size: 14px;
+                        border: 1px solid rgba(221, 221, 221, 0.1);
+                        border-bottom: $border;
+                        border-top: $border;
+                        color: #ddd;
+                        text-align: center;
+                    }
+                    input:invalid {
+                        color: deeppink;
+                        box-shadow: none;
+                    }        
                 }
             }
             .RadiantSettings__position-btns {

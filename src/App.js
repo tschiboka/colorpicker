@@ -48,6 +48,17 @@ export default class App extends Component {
 
 
 
+  updateGradient(gradient, index) {
+    if (index === undefined) throw new Error("Function updateGradient must have index parameter! ");
+
+    const updatedGradientList = [...this.state.gradients];
+    updatedGradientList[index] = gradient;
+
+    this.updateGradients(updatedGradientList);
+  }
+
+
+
   getWindowWidth() {
     return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   }
@@ -95,7 +106,14 @@ export default class App extends Component {
 
 
   renderRadientSettings() {
-    return <RadiantSettings />
+    return (
+      <RadiantSettings
+        openRadiantSettings={this.openRadiantSettings.bind(this)}
+        index={this.state.radientSettingsGradientIndex}
+        gradients={this.state.gradients}
+        updateGradient={this.updateGradient.bind(this)}
+      />
+    );
   }
 
 
@@ -108,6 +126,7 @@ export default class App extends Component {
         <GradientList
           gradients={this.state.gradients}
           updateGradients={this.updateGradients.bind(this)}
+          updateGradient={this.updateGradient.bind(this)}
           openColorPicker={this.openColorPicker.bind(this)}
           openRadiantSettings={this.openRadiantSettings.bind(this)}
         />

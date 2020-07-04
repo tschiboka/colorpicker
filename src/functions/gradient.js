@@ -3,6 +3,7 @@ import { sortGradientByColorStopsPercentage } from "./slider";
 
 
 export function gradientObjsToStr(gradientArray) {
+    console.log([...gradientArray]);
     gradientArray = gradientArray.map(grad => {
         // if no ColorStop provided let it be transparent
         if (!grad.colors.length) return {
@@ -83,7 +84,7 @@ const defaultGradientObj = {
             stop: 100
         },
     ],
-    radient: {
+    radial: {
         shape: undefined,
         length: undefined,
     }

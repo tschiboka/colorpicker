@@ -27,7 +27,7 @@ export default class GradientList extends Component {
                 key={`gradient_${i}`}
                 gradient={gradient}
                 index={i}
-                updateGradient={this.updateGradient.bind(this)}
+                updateGradient={this.props.updateGradient}
                 confirmDeleteGradient={this.confirmDeleteGradient.bind(this)}
                 setAngleMeterIsActive={this.setAngleMeterIsActive.bind(this)}
                 preventMouseUp={this.state.activeAngleMeter !== undefined}
@@ -35,16 +35,6 @@ export default class GradientList extends Component {
                 openRadiantSettings={this.props.openRadiantSettings}
             />
         ));
-    }
-
-
-    updateGradient(gradient, index) {
-        if (index === undefined) throw new Error("Function updateGradient must have index parameter! ");
-
-        const updatedGradientList = [...this.props.gradients];
-        updatedGradientList[index] = gradient;
-
-        this.props.updateGradients(updatedGradientList);
     }
 
 

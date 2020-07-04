@@ -152,7 +152,7 @@ export default class GradientButtons extends Component {
                 <div>
                     <button
                         title="radial gradient"
-                        onClick={() => this.props.openRadiantSettings(true, this.props.index)}
+                        onClick={() => this.props.openRadiantSettings(true, this.props.index, true)}
                     >&#9678;
                     
                     <div className={`btn--${this.props.gradient.type === "radial" ? "active": "inactive"}`}></div>
