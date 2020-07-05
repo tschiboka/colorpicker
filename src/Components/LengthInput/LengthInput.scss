@@ -10,11 +10,10 @@ $border: 1px solid rgba(221, 221, 221, 0.1);
     border: 1px solid rgba(221, 221, 221, 0.1);
     border-bottom: $border;
     border-top: $border;
-    font-size: 10px;
     input {
         max-width: 40px;
         background: #131313;
-        font-size: 14px;
+        font-size: 12px;
         border: none;
         color: #888;
         text-align: center;
@@ -30,14 +29,43 @@ $border: 1px solid rgba(221, 221, 221, 0.1);
         align-items: center;
         width: 15px;
         line-height: 20px;
-        &:first-child {
-            border-left: 1px solid rgba(221, 221, 221, 0.1);
+        color: #888;
+        &:nth-child(2) {
+            font-size: 14px;
             background: #131313;
         }
-        &:last-child {
+        &:nth-child(3) {
+            width: 20px;
             color: #888;
+            border-left: 1px solid rgba(221, 221, 221, 0.1);
             &:hover {
                 background: rgba(255, 255, 255, 0.1);
+            }
+        }
+        &:last-child {
+            position: relative;
+            width: 0;
+            height: 0;
+        }
+    }
+    .LengthInput__options {
+        position: absolute;
+        bottom: -48px;
+        right: -1px;
+        display: flex;
+        background: #161616;
+        border-radius: 0;
+        border: 1px solid rgba(221, 221, 221, 0.1);
+        z-index: 1002;
+        button {
+            background: #161616;
+            border: none !important;
+            padding: 0 5px;
+            font-size: 14px !important;
+            color:#888;
+            &:hover {
+                font-size: 14px;
+                color: $primarytColor;
             }
         }
     }

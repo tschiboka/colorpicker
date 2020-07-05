@@ -93,7 +93,9 @@ export default function RadialSettings(props) {
                         <div className="RadialSettings__size-btns__length">
                             length:
                         
-                            <LengthInput />
+                            <LengthInput id="radial-size1-input" />
+
+                            <LengthInput id="radial-size1-input" />
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AngleMeter from "../AngleMeter/AngleMeter";
+import LengthInput from "../LengthInput/LengthInput";
 import { getImmutableGradientCopy } from "../../functions/gradient";
 import "./GradientButtons.scss";
 
@@ -146,7 +147,10 @@ export default class GradientButtons extends Component {
                 <div>
                     <button title="repeating gradient">&#x25A5;
                         <div className={`btn--${this.props.gradient.repeating ? "active": "inactive"}`}></div>
+
                     </button>
+                    
+                    <LengthInput />
                 </div>
 
                 <div>
@@ -175,6 +179,7 @@ export default class GradientButtons extends Component {
                         onKeyDown={e => this.handleAngleInputKeyDown(e)}
                     />
                 </div>
+
             </div>
         );
     }
