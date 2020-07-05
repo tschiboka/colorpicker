@@ -31,6 +31,16 @@ export default class GradientButtons extends Component {
 
 
 
+    handleRepeatingInputChange(name, value, unit) {
+        const updatedGradient = getImmutableGradientCopy(this.props.gradient);
+
+        updatedGradient.max = value;
+        updatedGradient.maxUnit = unit;
+        this.props.updateGradient(updatedGradient, this.props.index);
+    }
+
+
+
     setGradientAngle(angle, resetInput) {
         const newAngle = parseInt(angle);
         const valid = !resetInput ? true : resetInput.validity.valid;
@@ -152,6 +162,11 @@ export default class GradientButtons extends Component {
                     
                     <LengthInput 
                         id="0"
+                        name="repeating-length"
+                        value={this.props.gradient.max ? this.props.gradient.max : "0"}
+                        unit={this.props.gradient.maxUnit ? this.props.gradient.maxUnit : "px"}
+                        units={["%", "px", "vw", "vh", "em", "rem"]}
+                        onChange={this.handleRepeatingInputChange.bind(this)}
                     />
                 </div>
 

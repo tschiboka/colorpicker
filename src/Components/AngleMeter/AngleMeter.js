@@ -28,6 +28,7 @@ export default class AngleMeter extends Component {
                         transform: `rotate(${this.props.gradient.angle}deg)`
                     }}
                     onMouseDown={e => this.handleMeterOnMouseDown(e)}
+                    onTouchStart={e => this.handleMeterOnMouseDown(e)}
                 >
                     <circle cx="25" cy="25" r="22" fill="transparent" stroke="#888" />
 

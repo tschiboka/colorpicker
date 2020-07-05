@@ -18,7 +18,7 @@ export const getCumulativeOffset = elem => {
 export const mousePos = (event, selector) => {
     const onMouseDiv = document.querySelector(selector);
     const offsetLeft = getCumulativeOffset(onMouseDiv);
-    const mouseAbsolutePos = event.clientX || event.pageX || event.touches[0].clientX;
+    const mouseAbsolutePos = event.clientX || event.pageX || (event.touches[0] || event.changedTouches[0]).clientX;
     const mouseRelativePos = mouseAbsolutePos - offsetLeft;
 
     return mouseRelativePos;

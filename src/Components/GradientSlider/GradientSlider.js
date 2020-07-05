@@ -46,13 +46,13 @@ export default class GradientSlider extends Component {
 
         // Drag colors stop
         if (colorStopPressed) {
-            gradientCopy.colors[this.state.activeColorStop].stop = this.getMousePosXInPercentage(event);
+            gradientCopy.colors[this.state.activeColorStop].stop = this.getMousePosXInPercentage({ ...event });
             this.props.updateGradient(gradientCopy, this.props.index);
         }
 
         // Drag color hint
         if (colorHintPressed) {
-            gradientCopy.colorHints[this.state.activeColorHint] = this.getMousePosXInPercentage(event);
+            gradientCopy.colorHints[this.state.activeColorHint] = this.getMousePosXInPercentage({ ...event });
             gradientCopy.colorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
             this.props.updateGradient(gradientCopy, this.props.index);
         }
@@ -87,11 +87,10 @@ export default class GradientSlider extends Component {
             else this.props.openColorPicker(this.props.index, this.state.activeColorStop, this.props.gradient.colors[this.state.activeColorStop].color);
         }
         else {
-
             // No items were dragged add color stop or color hint accordingly
             if (!thumbDragged) {
-                if (colorHintOn && !colorHintPressed) this.addNewColorHint(event);
-                if (colorStopOn && !colorStopPressed) this.addNewColorStop(event);
+                if (colorHintOn && !colorHintPressed) this.addNewColorHint({ ...event });
+                if (colorStopOn && !colorStopPressed) this.addNewColorStop({ ...event });
             }
         }
 
@@ -135,7 +134,7 @@ export default class GradientSlider extends Component {
     getMousePosXInPercentage(event) {
         const sliderDiv = document.getElementById(this.state.id).children[0];
         const width = Math.round(sliderDiv.getBoundingClientRect().width);
-        const mouseX = mousePos(event, "#" + this.state.id);
+        const mouseX = mousePos({ ...event }, "#" + this.state.id);
 
         let mouseAtPercentage;
         if (mouseX <= 20) mouseAtPercentage = 0;
@@ -212,7 +211,7 @@ export default class GradientSlider extends Component {
         const gradientCopy = getImmutableGradientCopy(this.props.gradient);
         const updatedColorStops = gradientCopy.colors;
 
-        updatedColorStops.push({ color: "rgba(255, 255, 255, 0.5)", stop: this.getMousePosXInPercentage(event) });
+        updatedColorStops.push({ color: "rgba(255, 255, 255, 0.5)", stop: this.getMousePosXInPercentage({ ...event }) });
         gradientCopy.colors = updatedColorStops;
 
         const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
@@ -225,7 +224,7 @@ export default class GradientSlider extends Component {
 
     addNewColorHint(event) {
         const gradientCopy = getImmutableGradientCopy(this.props.gradient);
-        const newStop = this.getMousePosXInPercentage(event);
+        const newStop = this.getMousePosXInPercentage({ ...event });
         const updatedColorHints = gradientCopy.colorHints;
 
         updatedColorHints.push(newStop);
@@ -259,7 +258,7 @@ export default class GradientSlider extends Component {
     setActiveColorStop(activeColorStop, event) {
         this.resetStateTo({
             activeColorStop,
-            mouseAtPercentage: this.getMousePosXInPercentage(event)
+            mouseAtPercentage: this.getMousePosXInPercentage({ ...event })
         });
     }
 
@@ -268,7 +267,7 @@ export default class GradientSlider extends Component {
     setActiveColorHint(activeColorHint, event) {
         this.resetStateTo({
             activeColorHint,
-            mouseAtPercentage: this.getMousePosXInPercentage(event)
+            mouseAtPercentage: this.getMousePosXInPercentage({ ...event })
         });
     }
 

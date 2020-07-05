@@ -77,7 +77,8 @@ const defaultGradientObj = {
     angle: "90",
     units: "percentage",
     repeating: false,
-    max: undefined,
+    maxValue: undefined,
+    maxUnit: "px",
     colorHints: [50],
     colors: [
         {
@@ -92,7 +93,7 @@ const defaultGradientObj = {
     radial: {
         shape: "ellipse",
         size: "farthest-corner",
-        position: ["50%", "50%"]
+        position: ["center", "center"]
     }
 };
 

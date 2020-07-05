@@ -75,7 +75,7 @@ export default class GradientList extends Component {
 
             updatedGradient.angle = newAngle;
 
-            this.updateGradient(updatedGradient, this.state.activeAngleMeter);
+            this.props.updateGradient(updatedGradient, this.state.activeAngleMeter);
         }
     }
 
@@ -120,7 +120,9 @@ export default class GradientList extends Component {
             <div
                 className="GradientList"
                 onMouseMove={e => this.handleOnMouseMove(e)}
+                onTouchMove={e => this.handleOnMouseMove(e)}
                 onMouseUp={e => this.handleOnMouseUp(e)}
+                onTouchEnd={e => this.handleOnMouseUp(e)}
                 onMouseLeave={e => this.handleOnMouseLeave(e)}
             >
                 <header>
