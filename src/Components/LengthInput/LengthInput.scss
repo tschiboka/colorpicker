@@ -1,0 +1,44 @@
+$primarytColor: #c2c2c2;
+$activeBtnBg: #4cc3f1;
+$border: 1px solid rgba(221, 221, 221, 0.1);
+
+.LengthInput {
+    display: flex;
+    justify-content: space-around;
+    //align-items: center;
+    border-radius: 2px;
+    border: 1px solid rgba(221, 221, 221, 0.1);
+    border-bottom: $border;
+    border-top: $border;
+    font-size: 10px;
+    input {
+        max-width: 40px;
+        background: #131313;
+        font-size: 14px;
+        border: none;
+        color: #888;
+        text-align: center;
+    }
+    input:invalid {
+        color: deeppink;
+        box-shadow: none;
+    }
+    & > div {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 15px;
+        line-height: 20px;
+        &:first-child {
+            border-left: 1px solid rgba(221, 221, 221, 0.1);
+            background: #131313;
+        }
+        &:last-child {
+            color: #888;
+            &:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+        }
+    }
+}
