@@ -40,10 +40,9 @@ export default class LengthInput extends Component {
 
 
 
-    validateInput(inputValue, event) {
+    validateInput(inputValue) {
         const value = inputValue || "0";
         const valid = value.length && document.getElementById(`LengthInput_${this.props.id}`).validity.valid;
-        console.log("VALIDATE", value, document.getElementById(`LengthInput_${this.props.id}`))
 
         this.setState({ ...this.state, valid }, () => {
             if (this.state.valid) this.props.onChange(this.props.name, Number(value), this.state.unit);

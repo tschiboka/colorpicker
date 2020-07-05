@@ -58,8 +58,9 @@ export function gradientObjsToStr(gradientArray) {
             if (grad.type === "radial") {
                 const shape = grad.radial.shape ? grad.radial.shape + " " : "";
                 const size = grad.radial.size ? grad.radial.size + " " : "";
-                const shapeAndSize = (shape || size) ? shape + size + ", " : "";
-                const gradientStr = `radial-gradient(${shapeAndSize}${colorStops})`;
+                const pos = grad.radial.position.join(" ");
+                const shapeSizePos = (shape || size || pos) ? shape + size + (pos && " at " + pos) + "," : "";
+                const gradientStr = `radial-gradient(${shapeSizePos}${colorStops})`;
 
                 console.log(gradientStr);
                 return gradientStr;

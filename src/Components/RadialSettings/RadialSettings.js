@@ -15,7 +15,7 @@ export default function RadialSettings(props) {
            value: size.match(/\d+/g)[0],
            unit: size.match(/%|px|vw|vh|rem|em/g)[0]}
         ));
-    console.log(sizeLengthsObj);
+    const position = gradient.radial.position;
 
 
 
@@ -33,17 +33,32 @@ export default function RadialSettings(props) {
 
 
 
+    function updatePosition(index, value) {
+        const updatedGradient = { ...gradient };
+        const oppositeAxisIndex = index === 0 ? 1 : 0;
+        const oppositePos = position[oppositeAxisIndex];
+        const oppositeAxis = (oppositePos === "top" || oppositePos === "bottom") ? "vertical" : (oppositePos === "left" || oppositePos === "right") ? "horizontal" : "center";
+
+        if (oppositeAxis === "vertical" && (value === "top" || value === "bottom")) updatedGradient.radial.position[oppositeAxisIndex] = "center";
+        if (oppositeAxis === "horizontal" && (value === "left" || value === "right")) updatedGradient.radial.position[oppositeAxisIndex] = "center";
+        updatedGradient.radial.position[index] = value;
+
+        props.updateGradient(updatedGradient, props.index);
+    }
+
+
+
     function handleSizeInputOnChange(inputName, value, unit) {
-        console.log("SET SIZE", inputName, value, unit, sizeLengthsObj)
         if (shape === "circle") {
             updateGradientPropertyTo("size", value + (unit || "px"));
         }
         else {
             if (!sizeLengthsObj.length) {
                 sizeLengthsObj.push(...[{value: value, unit: unit}, {value: value, unit: unit}]);
-                console.log("PUSHHHHH", sizeLengthsObj);
             }
+
             if (inputName === "size1") updateGradientPropertyTo("size", value + (unit || "px") + " " + (sizeLengthsObj[1].value || 0) + sizeLengthsObj[1].unit);
+
             if (inputName === "size2") updateGradientPropertyTo("size", (sizeLengthsObj[0].value || 0) + sizeLengthsObj[0].unit + " " + value + (unit || "px"));
         }
     }
@@ -154,37 +169,77 @@ export default function RadialSettings(props) {
                     <div className="RadialSettings__position-btns">
                         <div>
                             <div>
-                                <button>top</button>
+                                <button onClick={() => updatePosition(0, "top")}>
+                                    top
+
+                                    <div className={`btn--${position[0] === "top" ? "active" : "inactive"}`}></div>
+                                </button>
                             </div>
 
                             <div>
-                                <button>left</button>
+                                <button onClick={() => updatePosition(0, "left")}>
+                                    left
 
-                                <button>center</button>
+                                    <div className={`btn--${position[0] === "left" ? "active" : "inactive"}`}></div>
+                                </button>
 
-                                <button>right</button>
+                                <button onClick={() => updatePosition(0, "center")}>
+                                    center
+
+                                    <div className={`btn--${position[0] === "center" ? "active" : "inactive"}`}></div>
+                                </button>
+
+                                <button onClick={() => updatePosition(0, "right")}>
+                                    right
+
+                                    <div className={`btn--${position[0] === "right" ? "active" : "inactive"}`}></div>    
+                                </button>
                             </div>
 
                             <div>
-                                <button>bottom</button>
+                                <button onClick={() => updatePosition(0, "bottom")}>
+                                    bottom
+
+                                    <div className={`btn--${position[0] === "bottom" ? "active" : "inactive"}`}></div>
+                                </button>
                             </div>
                         </div>
 
                         <div>
                             <div>
-                                <button>top</button>
+                                <button onClick={() => updatePosition(1, "top")}>
+                                    top
+
+                                    <div className={`btn--${position[1] === "top" ? "active" : "inactive"}`}></div>
+                                </button>
                             </div>
 
                             <div>
-                                <button>left</button>
+                                <button onClick={() => updatePosition(1, "left")}>
+                                    left
 
-                                <button>center</button>
+                                    <div className={`btn--${position[1] === "left" ? "active" : "inactive"}`}></div>
+                                </button>
 
-                                <button>right</button>
+                                <button onClick={() => updatePosition(1, "center")}>
+                                    center
+
+                                    <div className={`btn--${position[1] === "center" ? "active" : "inactive"}`}></div>    
+                                </button>
+
+                                <button onClick={() => updatePosition(1, "right")}>
+                                    right
+
+                                    <div className={`btn--${position[1] === "right" ? "active" : "inactive"}`}></div>    
+                                </button>
                             </div>
 
                             <div>
-                                <button>bottom</button>
+                                <button onClick={() => updatePosition(1, "bottom")}>
+                                    bottom
+
+                                    <div className={`btn--${position[1] === "bottom" ? "active" : "inactive"}`}></div>
+                                </button>
                             </div>
                         </div>
                         <div>
