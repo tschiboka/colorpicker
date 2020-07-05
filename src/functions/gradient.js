@@ -32,7 +32,9 @@ export function gradientObjsToStr(gradientArray) {
         .filter(grad => grad.visible)
         .map(grad => {
             const { colors } = grad;
-            const prefix = grad.type + "-gradient";
+            const repeatingStr = grad.repeating ? "repeating-" : "";
+            console.log(grad.unit);
+            const prefix = repeatingStr + grad.type + "-gradient";
             const angle = grad.angle + "deg, ";
             const hints = [...grad.colorHints].sort((a, b) => a - b);
             const colorStops = colors.map((colorStop, index, colorStopArr) => {
@@ -53,7 +55,11 @@ export function gradientObjsToStr(gradientArray) {
                 return `${colorStop.color} ${colorStop.stop}${units}${hintStr}`
             }).join(",");
 
-            if (grad.type === "linear") return `${prefix}(${angle}${colorStops})`;
+            if (grad.type === "linear") {
+                console.log(`${prefix}(${angle}${colorStops})`);
+
+                return `${prefix}(${angle}${colorStops})`;
+            }
 
             if (grad.type === "radial") {
                 const shape = grad.radial.shape ? grad.radial.shape + " " : "";
@@ -62,9 +68,10 @@ export function gradientObjsToStr(gradientArray) {
                 const shapeSizePos = (shape || size || pos) ? shape + size + (pos && " at " + pos) + "," : "";
                 const gradientStr = `radial-gradient(${shapeSizePos}${colorStops})`;
 
-                console.log(gradientStr);
                 return gradientStr;
             }
+
+            return new Error("Illegal gradient type", grad.type);
         }).join(",");
 }
 
@@ -77,8 +84,8 @@ const defaultGradientObj = {
     angle: "90",
     units: "percentage",
     repeating: false,
-    maxValue: undefined,
-    maxUnit: "px",
+    max: 100,
+    unit: "px",
     colorHints: [50],
     colors: [
         {

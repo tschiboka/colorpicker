@@ -12,22 +12,23 @@ export default function RadialSettings(props) {
     const sizeNamed = isSizeNamed ? size.split("-") : [];
     const sizeLengths = size.match(/(\d+(%|px|vw|vh|rem|em))/g);
     const sizeLengthsObj = !sizeLengths ? [] : sizeLengths.map(size => ({
-           value: size.match(/\d+/g)[0],
-           unit: size.match(/%|px|vw|vh|rem|em/g)[0]}
-        ));
+        value: size.match(/\d+/g)[0],
+        unit: size.match(/%|px|vw|vh|rem|em/g)[0]
+    }
+    ));
     const position = gradient.radial.position;
-    const positionObj = position.map(pos => /(\d+(%|px|vw|vh|rem|em))/g.test(pos) 
+    const positionObj = position.map(pos => /(\d+(%|px|vw|vh|rem|em))/g.test(pos)
         ? {
             value: pos.match(/\d+/g)[0],
             unit: pos.match(/%|px|vw|vh|rem|em/g)[0]
-            }
+        }
         : undefined
     );
 
 
 
     function updateGradientPropertyTo(key, value) {
-        if (key==="shape" && value === "circle") {
+        if (key === "shape" && value === "circle") {
             if (sizeLengthsObj[0] && sizeLengthsObj[0].unit === "%") {
                 updateGradientPropertyTo("size", "farthest-corner");
             }
@@ -60,7 +61,7 @@ export default function RadialSettings(props) {
             updateGradientPropertyTo("size", value + (unit || "px"));
         }
         else {
-            if (!sizeLengthsObj.length) sizeLengthsObj.push(...[{value: value, unit: unit}, {value: value, unit: unit}]);
+            if (!sizeLengthsObj.length) sizeLengthsObj.push(...[{ value: value, unit: unit }, { value: value, unit: unit }]);
 
             if (inputName === "size1") updateGradientPropertyTo("size", value + (unit || "px") + " " + (sizeLengthsObj[1].value || 0) + sizeLengthsObj[1].unit);
 
@@ -145,15 +146,15 @@ export default function RadialSettings(props) {
                         </div>
 
                         <div className="RadialSettings__size-btns__length">
-                            length:
-                        
+                            <span>length:</span>
+
                             <div>
-                                <LengthInput 
+                                <LengthInput
                                     id="1"
                                     name="size1"
                                     value={sizeLengthsObj[0] ? sizeLengthsObj[0].value : ""}
                                     unit={sizeLengthsObj[0] ? sizeLengthsObj[0].unit : ""}
-                                    units={shape==="circle" ? ["px", "vw", "vh", "em", "rem"] : ["%", "px", "vw", "vh", "em", "rem"]}
+                                    units={shape === "circle" ? ["px", "vw", "vh", "em", "rem"] : ["%", "px", "vw", "vh", "em", "rem"]}
                                     onChange={handleSizeInputOnChange}
                                 />
 
@@ -161,17 +162,17 @@ export default function RadialSettings(props) {
                             </div>
 
                             <div>
-                            <LengthInput 
-                                id="2"
-                                name="size2"
-                                disabled={shape === "circle"}
-                                value={sizeLengthsObj[1] ? sizeLengthsObj[1].value : ""}
-                                unit={sizeLengthsObj[1] ? sizeLengthsObj[1].unit : ""}
-                                units={["%", "px", "vw", "vh", "em", "rem"]}
-                                onChange={handleSizeInputOnChange}
-                            />
+                                <LengthInput
+                                    id="2"
+                                    name="size2"
+                                    disabled={shape === "circle"}
+                                    value={sizeLengthsObj[1] ? sizeLengthsObj[1].value : ""}
+                                    unit={sizeLengthsObj[1] ? sizeLengthsObj[1].unit : ""}
+                                    units={["%", "px", "vw", "vh", "em", "rem"]}
+                                    onChange={handleSizeInputOnChange}
+                                />
 
-                            <div className={`btn--${sizeLengthsObj[1] ? "active" : "inactive"}`}></div>
+                                <div className={`btn--${sizeLengthsObj[1] ? "active" : "inactive"}`}></div>
                             </div>
                         </div>
                     </div>
@@ -206,7 +207,7 @@ export default function RadialSettings(props) {
                                 <button onClick={() => updatePosition(0, "right")}>
                                     right
 
-                                    <div className={`btn--${position[0] === "right" ? "active" : "inactive"}`}></div>    
+                                    <div className={`btn--${position[0] === "right" ? "active" : "inactive"}`}></div>
                                 </button>
                             </div>
 
@@ -238,13 +239,13 @@ export default function RadialSettings(props) {
                                 <button onClick={() => updatePosition(1, "center")}>
                                     center
 
-                                    <div className={`btn--${position[1] === "center" ? "active" : "inactive"}`}></div>    
+                                    <div className={`btn--${position[1] === "center" ? "active" : "inactive"}`}></div>
                                 </button>
 
                                 <button onClick={() => updatePosition(1, "right")}>
                                     right
 
-                                    <div className={`btn--${position[1] === "right" ? "active" : "inactive"}`}></div>    
+                                    <div className={`btn--${position[1] === "right" ? "active" : "inactive"}`}></div>
                                 </button>
                             </div>
 
@@ -258,10 +259,10 @@ export default function RadialSettings(props) {
                         </div>
 
                         <div>
-                            at:
+                            <span>at:</span>
 
                             <div>
-                                <LengthInput 
+                                <LengthInput
                                     id="3"
                                     name="position1"
                                     value={positionObj[0] ? positionObj[0].value : ""}
@@ -274,7 +275,7 @@ export default function RadialSettings(props) {
                             </div>
 
                             <div>
-                                <LengthInput 
+                                <LengthInput
                                     id="4"
                                     name="position2"
                                     value={positionObj[1] ? positionObj[1].value : ""}

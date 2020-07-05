@@ -1,6 +1,4 @@
-$primarytColor: #c2c2c2;
-$activeBtnBg: #4cc3f1;
-$border: 1px solid rgba(221, 221, 221, 0.1);
+@import "../../variables/variables.scss";
 
 .GradientButtons {
     position: relative;
@@ -71,11 +69,14 @@ $border: 1px solid rgba(221, 221, 221, 0.1);
             width: 10%;
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: $border;
             button {
                 width: 100%;
                 height: 50%;
-                border-left: $border;
                 font-size: 25px;
+                border-bottom: $border;
                 &:hover { font-size: 20px; }
             }
             .LengthInput {

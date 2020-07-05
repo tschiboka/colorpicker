@@ -1,7 +1,4 @@
-$primarytColor: #c2c2c2;
-$activeBtnBg: #4cc3f1;
-$border: 1px solid rgba(221, 221, 221, 0.1);
-
+@import "../../variables/variables.scss";
 
 .RadialSettings {
     position: absolute;
@@ -38,6 +35,9 @@ $border: 1px solid rgba(221, 221, 221, 0.1);
         .btn--active { background: $activeBtnBg; }
         .btn--inactive { background: rgba(0, 0, 0, 0.7); }
     }
+    .LengthInput {
+        width: 80px;
+    }
     .RadialSettings__header {
         height: 30px;
         display: flex;
@@ -63,6 +63,9 @@ $border: 1px solid rgba(221, 221, 221, 0.1);
         justify-content: space-evenly;
         align-items: center;
         border-bottom: 1px solid rgba(221, 221, 221, 0.5);
+        span {
+            width: 10%;
+        }
         .RadialSettings__section {
             width: 100%;
             display: flex;

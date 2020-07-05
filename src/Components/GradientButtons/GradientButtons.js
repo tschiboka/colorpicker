@@ -31,11 +31,20 @@ export default class GradientButtons extends Component {
 
 
 
+    handleRepeatingBtnOnClick() {
+        const updatedGradient = getImmutableGradientCopy(this.props.gradient);
+
+        updatedGradient.repeating = !updatedGradient.repeating;
+        this.props.updateGradient(updatedGradient, this.props.index);
+    }
+
+
+
     handleRepeatingInputChange(name, value, unit) {
         const updatedGradient = getImmutableGradientCopy(this.props.gradient);
 
         updatedGradient.max = value;
-        updatedGradient.maxUnit = unit;
+        updatedGradient.unit = unit;
         this.props.updateGradient(updatedGradient, this.props.index);
     }
 
@@ -155,16 +164,18 @@ export default class GradientButtons extends Component {
                 </div>
 
                 <div>
-                    <button title="repeating gradient">&#x25A5;
+                    <button 
+                        title="repeating gradient"
+                        onClick={() => this.handleRepeatingBtnOnClick()}
+                    >&#x25A5;
                         <div className={`btn--${this.props.gradient.repeating ? "active": "inactive"}`}></div>
-
                     </button>
                     
                     <LengthInput 
                         id="0"
                         name="repeating-length"
                         value={this.props.gradient.max ? this.props.gradient.max : "0"}
-                        unit={this.props.gradient.maxUnit ? this.props.gradient.maxUnit : "px"}
+                        unit={this.props.gradient.maxUnit ? this.props.gradient.maxUnit : "%"}
                         units={["%", "px", "vw", "vh", "em", "rem"]}
                         onChange={this.handleRepeatingInputChange.bind(this)}
                     />

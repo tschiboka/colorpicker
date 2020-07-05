@@ -1,7 +1,4 @@
-$primaryBg: #181719;
-$primarytColor: #c2c2c2;
-$borderColor: #111;
-$border: 1px solid $borderColor;
+@import "../../variables/variables.scss";
 
 .ResultDisplay {
     width: 40%;

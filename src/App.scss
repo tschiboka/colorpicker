@@ -3,6 +3,8 @@
     font-family: "Abel";
 }
 
+@import "./variables/variables.scss";
+
 * {
     margin: 0;
     padding: 0;
@@ -13,8 +15,6 @@
     user-select: none;
     outline: none !important;
 }
-
-$primarytColor: #c2c2c2;
 
 .App {
     position: relative;
