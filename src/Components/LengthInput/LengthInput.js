@@ -9,14 +9,14 @@ export default class LengthInput extends Component {
 
         this.state = {
             optionsOpen: false,
-            unit: "%",
+            unit: this.props.unit,
         };
     }
 
 
 
     componentDidUpdate() {
-        if (this.lengthInput) this.lengthInput.focus()
+        if (this.lengthInput) this.lengthInput.focus();
     }
 
 
@@ -31,15 +31,29 @@ export default class LengthInput extends Component {
 
 
     handleOpitionOnClick(event, unit) {
-        this.setState({ ...this.state, unit, optionsOpen: false });
+        this.setState({ ...this.state, unit, optionsOpen: false }, () => {
+            this.validateInput(document.getElementById(`LengthInput_${this.props.id}`).value);
+        });
 
         event.stopPropagation();
     }
 
 
 
+    validateInput(inputValue, event) {
+        const value = inputValue || "0";
+        const valid = value.length && document.getElementById(`LengthInput_${this.props.id}`).validity.valid;
+        console.log("VALIDATE", value, document.getElementById(`LengthInput_${this.props.id}`))
+
+        this.setState({ ...this.state, valid }, () => {
+            if (this.state.valid) this.props.onChange(this.props.name, Number(value), this.state.unit);
+        });
+    }
+
+
+
     renderUnitButtons() {
-        const units = ["%", "px", "vw", "vh", "em", "rem"].reverse();
+        const units = (this.props.units || ["%", "px", "vw", "vh", "em", "rem"]).reverse();
 
         return units.map((unit, i) => (
             <button
@@ -55,17 +69,21 @@ export default class LengthInput extends Component {
 
     render() {
         return (
-            <div
-                className="LengthInput"
-            >
+            <div className="LengthInput">
                 <input
+                    id={`LengthInput_${this.props.id}`}
                     type="text"
+                    disabled={this.props.disabled}
+                    placeholder={this.props.value}
                     min="0"
+                    pattern={this.state.unit === "px" ? "\\d{1,4}|\\d{1,4}\\.\\d" : "\\d{1,2}|100"}
+                    value={this.props.disabled ? "" : this.props.value}
+                    onChange={e => this.validateInput(e.target.value, e)}
                 />
 
                 <div>{this.state.unit}</div>
 
-                <div onClick={() => this.setState({ ...this.state, optionsOpen: !this.state.optionsOpen })}>
+                <div onClick={() => this.setState({ ...this.state, optionsOpen: !this.props.disabled ? !this.state.optionsOpen : false })}>
                     &#709;
                 </div>
 

@@ -150,7 +150,9 @@ export default class GradientButtons extends Component {
 
                     </button>
                     
-                    <LengthInput />
+                    <LengthInput 
+                        id="0"
+                    />
                 </div>
 
                 <div>

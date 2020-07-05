@@ -10,17 +10,42 @@ export default function RadialSettings(props) {
     const size = gradient.radial.size;
     const isSizeNamed = /^(closest|farthest)-(side|corner)$/g.test(size);
     const sizeNamed = isSizeNamed ? size.split("-") : [];
-    console.log(sizeNamed);
-
-    console.log("SETTINGS", gradient)
+    const sizeLengths = size.match(/(\d+(%|px|vw|vh|rem|em))/g);
+    const sizeLengthsObj = !sizeLengths ? [] : sizeLengths.map(size => ({
+           value: size.match(/\d+/g)[0],
+           unit: size.match(/%|px|vw|vh|rem|em/g)[0]}
+        ));
+    console.log(sizeLengthsObj);
 
 
 
     function updateGradientPropertyTo(key, value) {
+        if (key==="shape" && value === "circle") {
+            if (sizeLengthsObj[0] && sizeLengthsObj[0].unit === "%") {
+                updateGradientPropertyTo("size", "farthest-corner");
+            }
+        }
         const updatedGradient = { ...gradient };
         updatedGradient.radial[key] = value;
 
         props.updateGradient(updatedGradient, props.index);
+    }
+
+
+
+    function handleSizeInputOnChange(inputName, value, unit) {
+        console.log("SET SIZE", inputName, value, unit, sizeLengthsObj)
+        if (shape === "circle") {
+            updateGradientPropertyTo("size", value + (unit || "px"));
+        }
+        else {
+            if (!sizeLengthsObj.length) {
+                sizeLengthsObj.push(...[{value: value, unit: unit}, {value: value, unit: unit}]);
+                console.log("PUSHHHHH", sizeLengthsObj);
+            }
+            if (inputName === "size1") updateGradientPropertyTo("size", value + (unit || "px") + " " + (sizeLengthsObj[1].value || 0) + sizeLengthsObj[1].unit);
+            if (inputName === "size2") updateGradientPropertyTo("size", (sizeLengthsObj[0].value || 0) + sizeLengthsObj[0].unit + " " + value + (unit || "px"));
+        }
     }
 
 
@@ -66,24 +91,24 @@ export default function RadialSettings(props) {
                     <div className="RadialSettings__size-btns">
                         <div className="RadialSettings__size-btns__named">
                             <div>
-                                <button onClick={() => updateGradientPropertyTo("size", "closest-" + sizeNamed[1])}>
+                                <button onClick={() => updateGradientPropertyTo("size", "closest-" + (sizeNamed[1] || "corner"))}>
                                     closest
                                     <div className={`btn--${sizeNamed[0] === "closest" ? "active" : "inactive"}`}></div>
                                 </button>
 
-                                <button onClick={() => updateGradientPropertyTo("size", sizeNamed[0] + "-corner")}>
+                                <button onClick={() => updateGradientPropertyTo("size", (sizeNamed[0] || "farthest") + "-corner")}>
                                     corner
                                     <div className={`btn--${sizeNamed[1] === "corner" ? "active" : "inactive"}`}></div>
                                 </button>
                             </div>
 
                             <div>
-                                <button onClick={() => updateGradientPropertyTo("size", "farthest-" + sizeNamed[1])}>
+                                <button onClick={() => updateGradientPropertyTo("size", "farthest-" + (sizeNamed[1] || "corner"))}>
                                     farthest
                                     <div className={`btn--${sizeNamed[0] === "farthest" ? "active" : "inactive"}`}></div>
                                 </button>
 
-                                <button onClick={() => updateGradientPropertyTo("size", sizeNamed[0] + "-side")}>
+                                <button onClick={() => updateGradientPropertyTo("size", (sizeNamed[0] || "farthest") + "-side")}>
                                     side
                                     <div className={`btn--${sizeNamed[1] === "side" ? "active" : "inactive"}`}></div>
                                 </button>
@@ -93,9 +118,32 @@ export default function RadialSettings(props) {
                         <div className="RadialSettings__size-btns__length">
                             length:
                         
-                            <LengthInput id="radial-size1-input" />
+                            <div>
+                                <LengthInput 
+                                    id="1"
+                                    name="size1"
+                                    value={sizeLengthsObj[0] ? sizeLengthsObj[0].value : ""}
+                                    unit={sizeLengthsObj[0] ? sizeLengthsObj[0].unit : ""}
+                                    units={shape==="circle" ? ["px", "vw", "vh", "em", "rem"] : ["%", "px", "vw", "vh", "em", "rem"]}
+                                    onChange={handleSizeInputOnChange}
+                                />
 
-                            <LengthInput id="radial-size1-input" />
+                                <div className={`btn--${sizeLengthsObj[0] ? "active" : "inactive"}`}></div>
+                            </div>
+
+                            <div>
+                            <LengthInput 
+                                id="2"
+                                name="size2"
+                                disabled={shape === "circle"}
+                                value={sizeLengthsObj[1] ? sizeLengthsObj[1].value : ""}
+                                unit={sizeLengthsObj[1] ? sizeLengthsObj[1].unit : ""}
+                                units={["%", "px", "vw", "vh", "em", "rem"]}
+                                onChange={handleSizeInputOnChange}
+                            />
+
+                            <div className={`btn--${sizeLengthsObj[1] ? "active" : "inactive"}`}></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -140,7 +188,15 @@ export default function RadialSettings(props) {
                             </div>
                         </div>
                         <div>
-                            at:<input type="text" />
+                            at:
+
+                            <LengthInput 
+                                id="3"
+                            />
+
+                            <LengthInput 
+                                id="4"
+                            />
                         </div>
                     </div>
                 </div>
