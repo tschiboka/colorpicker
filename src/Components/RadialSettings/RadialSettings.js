@@ -16,6 +16,13 @@ export default function RadialSettings(props) {
            unit: size.match(/%|px|vw|vh|rem|em/g)[0]}
         ));
     const position = gradient.radial.position;
+    const positionObj = position.map(pos => /(\d+(%|px|vw|vh|rem|em))/g.test(pos) 
+        ? {
+            value: pos.match(/\d+/g)[0],
+            unit: pos.match(/%|px|vw|vh|rem|em/g)[0]
+            }
+        : undefined
+    );
 
 
 
@@ -53,14 +60,21 @@ export default function RadialSettings(props) {
             updateGradientPropertyTo("size", value + (unit || "px"));
         }
         else {
-            if (!sizeLengthsObj.length) {
-                sizeLengthsObj.push(...[{value: value, unit: unit}, {value: value, unit: unit}]);
-            }
+            if (!sizeLengthsObj.length) sizeLengthsObj.push(...[{value: value, unit: unit}, {value: value, unit: unit}]);
 
             if (inputName === "size1") updateGradientPropertyTo("size", value + (unit || "px") + " " + (sizeLengthsObj[1].value || 0) + sizeLengthsObj[1].unit);
 
             if (inputName === "size2") updateGradientPropertyTo("size", (sizeLengthsObj[0].value || 0) + sizeLengthsObj[0].unit + " " + value + (unit || "px"));
         }
+    }
+
+
+
+    function handlePositionInputOnChange(inputName, value, unit) {
+        console.log("UPDATE", ...arguments);
+        const positionIndex = inputName === "position1" ? 0 : 1;
+
+        updatePosition(positionIndex, (value || "0") + (unit || "px"));
     }
 
 
@@ -242,16 +256,35 @@ export default function RadialSettings(props) {
                                 </button>
                             </div>
                         </div>
+
                         <div>
                             at:
 
-                            <LengthInput 
-                                id="3"
-                            />
+                            <div>
+                                <LengthInput 
+                                    id="3"
+                                    name="position1"
+                                    value={positionObj[0] ? positionObj[0].value : ""}
+                                    unit={positionObj[0] ? positionObj[0].unit : ""}
+                                    units={["%", "px", "vw", "vh", "em", "rem"]}
+                                    onChange={handlePositionInputOnChange}
+                                />
 
-                            <LengthInput 
-                                id="4"
-                            />
+                                <div className={`btn--${positionObj[0] ? "active" : "inactive"}`}></div>
+                            </div>
+
+                            <div>
+                                <LengthInput 
+                                    id="4"
+                                    name="position2"
+                                    value={positionObj[1] ? positionObj[1].value : ""}
+                                    unit={positionObj[1] ? positionObj[1].unit : ""}
+                                    units={["%", "px", "vw", "vh", "em", "rem"]}
+                                    onChange={handlePositionInputOnChange}
+                                />
+
+                                <div className={`btn--${positionObj[1] ? "active" : "inactive"}`}></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -262,6 +295,6 @@ export default function RadialSettings(props) {
 
                 <button onClick={() => props.openRadialSettings(false, props.index, false)}>Discard</button>
             </div>
-        </div >
+        </div>
     );
 }
