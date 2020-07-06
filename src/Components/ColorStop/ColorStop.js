@@ -5,10 +5,6 @@ import "./ColorStop.scss";
 
 
 export default function ColorStop(props) {
-    const stroke = "rgba(255, 255, 255, 0.5)";
-
-
-
     function handleThumbOnMouseDown(event) { props.setActiveColorStop(props.index, event); }
 
 
@@ -62,25 +58,23 @@ export default function ColorStop(props) {
 
             <div className="ColorStop__line">
                 <svg width="100%" height="100%">
-                    <line x1="50%" y1="0" x2="50%" y2="100%" style={{ stroke: "rgba(221, 221, 221, 0.2)" }} />
+                    <line x1="50%" y1="0" x2="50%" y2="100%" />
                 </svg>
             </div>
 
             <div className="ColorStop__thumb">
                 <svg width="14">
-                    <line x1="0" y1="100%" x2="7" y2="0" style={{ stroke, strokeWidth: 1 }} />
+                    <line x1="0" y1="100%" x2="7" y2="0" />
 
-                    <line x1="7" y1="0" x2="14" y2="100%" style={{ stroke, strokeWidth: 1 }} />
+                    <line x1="7" y1="0" x2="14" y2="100%" />
 
-                    <line x1="0" y1="100%" x2="100%" y2="100%" style={{ stroke, strokeWidth: 1 }} />
+                    <line x1="0" y1="100%" x2="100%" y2="100%" />
                 </svg>
 
                 <div
                     title={props.color}
-                    style={{
-                        background: `linear-gradient(${props.color} 0%, ${props.color} 100%), url(${checkeredRect}`,
-                        border: props.deleteOn ? `2px dotted deeppink` : `1px solid ${stroke}`,
-                    }}
+                    className={`ColorStop--${props.deleteOn ? "delete-on" : ""}`}
+                    style={{ background: `linear-gradient(${props.color} 0%, ${props.color} 100%), url(${checkeredRect}`, }}
                     onMouseDown={e => handleThumbOnMouseDown(e)}
                     onTouchStart={e => handleThumbOnMouseDown(e)}
                 >

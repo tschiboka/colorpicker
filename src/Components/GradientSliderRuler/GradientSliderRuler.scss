@@ -10,5 +10,13 @@
     svg {
         width: calc(100% - 40px);
         height: 33.3%;
+        line {
+            stroke: $tertiaryTextColor;
+            stroke-width: 1px;
+        }
+        .ruler-grooves--transparent { stroke: transparent; }
+        .ruler-grooves--strong { stroke: $primaryBorderColor; }
+        .ruler-grooves--light { stroke: $secondaryBorderColor; }
+        line:nth-last-child(1), line:nth-last-child(2) { stroke-width: 2px; }
     }
 }

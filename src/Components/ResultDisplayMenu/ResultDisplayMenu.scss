@@ -9,7 +9,7 @@
     max-width: 150px;
     padding: 10px;
     background: #202020;
-    color: $primarytColor;
+    color: $primaryTextColor;
     display: flex;
     flex-direction: column;
     h2 {
@@ -22,16 +22,16 @@
     div div {
         display: flex;
         justify-content: space-between;
-        &:hover { background: rgba(255, 255, 255, 0.05); }
+        &:hover { background: $buttonHoverBackgroundColor; }
         label {
             cursor: pointer;
         }
     }
     button {
         font-size: 16px;
-        border: 1px solid $primarytColor;
+        border: 1px solid $primaryTextColor;
         background: transparent;
-        color: $primarytColor;
-        &:hover { background: rgba(255, 255, 255, 0.05); }
+        color: $primaryTextColor;
+        &:hover { background: $buttonHoverBackgroundColor; }
     }
 }

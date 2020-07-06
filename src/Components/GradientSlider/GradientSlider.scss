@@ -6,7 +6,7 @@
     min-height: 55%;
     max-height: 55%;
     display: flex;
-    border-bottom: 1px solid rgba(221, 221, 221, 0.1);
+    border-bottom: $tertiaryBorder;
     .GradientSlider__slider {
         position: relative;
         display: flex;

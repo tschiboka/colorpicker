@@ -1,3 +1,40 @@
-$primarytColor: #c2c2c2;
-$activeBtnBg: #4cc3f1;
-$border: 1px solid rgba(221, 221, 221, 0.1);
+// ----------- COLOR PALETTE ----------
+
+// BACKGROUND COLORS
+$primaryBackgroundColor:        #202020;
+$secondaryBackgroundColor:      #161616;
+$tertiaryBackgroundColor:       #0c0c0c;
+$messageShadeBackgroundColor:   #000000b3;
+$buttonHoverBackgroundColor:    #ffffff27;
+// BORDER COLORS
+$primaryBorderColor:            #7a7a7a;
+$secondaryBorderColor:          #3e3e3e;
+$tertiaryBorderColor:           #2a2a2a;
+$messageBorderColor:            #222222;
+$shadeBorderColor:              #1a1a1a;
+// TEXT COLORS
+$primaryTextColor:              #c2c2c2;
+$secondaryTextColor:            #b7b7b7;
+$tertiaryTextColor:             #887c8b;
+$activeButtonTextColor:         #4cc3f1;
+$warningTextColor:              #ff1493;
+
+
+
+// ---------- SIZES -----------
+// FONT SIZES
+// BORDER SIZES
+$borderThin:                      1px;
+$borderMedium:                    2px;
+$borderThick:                     3px;
+$borderRadius:                    2px;
+
+
+
+// ----------- BORDERS -----------
+$primaryBorder:                   $borderThin    solid  $primaryBorderColor;
+$secondaryBorder:                 $borderThin    solid  $secondaryBorderColor;
+$tertiaryBorder:                  $borderThin    solid  $tertiaryBorderColor;
+$shadeBorder:                     $borderThin    solid  $shadeBorderColor;
+$warningBorder:                   $borderMedium  dotted $warningTextColor;
+$messageBorder:                   $borderThick   dashed $messageBorderColor;

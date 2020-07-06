@@ -22,17 +22,15 @@ export default class AngleMeter extends Component {
                 <svg
                     id={`AngleMeter__meter_${this.props.index}`}
                     className="AngleMeter__meter"
-                    width="50"
-                    height="50"
                     style={{
                         transform: `rotate(${this.props.gradient.angle}deg)`
                     }}
                     onMouseDown={e => this.handleMeterOnMouseDown(e)}
                     onTouchStart={e => this.handleMeterOnMouseDown(e)}
                 >
-                    <circle cx="25" cy="25" r="22" fill="transparent" stroke="#888" />
+                    <circle cx="25" cy="25" r="22" />
 
-                    <line x1="25" y1="25" x2="25" y2="3" stroke="#888" />
+                    <line x1="25" y1="25" x2="25" y2="3" />
                 </svg>
             </div>
         );

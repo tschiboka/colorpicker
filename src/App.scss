@@ -16,6 +16,10 @@
     outline: none !important;
 }
 
+::placeholder { color: $secondaryTextColor; }
+::-ms-input-placeholder { color: $secondaryTextColor; }
+:-ms-input-placeholder { color: $secondaryTextColor; }
+
 .App {
     position: relative;
     min-width: 100vw;
@@ -35,7 +39,7 @@
         justify-content: space-between;
         align-items: center;
         font-size: 18px;
-        color: $primarytColor;
+        color: $primaryTextColor;
         padding: 0 5px;
         border-bottom: 1px solid #888;
         cursor: default;

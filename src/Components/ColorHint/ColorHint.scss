@@ -14,24 +14,24 @@
         align-items: center;
         width: 100%;
         height: 50%;
-        background: #161616;
+        background: $secondaryBackgroundColor;
         font-size: 10px;
         border: none;
-        border-bottom: 1px solid rgba(221, 221, 221, 0.2);
+        border-bottom: $secondaryBorder;
         & > input {
             max-width: 40px;
             height: 100%;
             border: none;
             background: transparent;
             box-shadow: none;
-            color: #ddd;
+            color: $primaryTextColor;
             text-align: center;
             font-size: inherit;
         }
         input:invalid {
             border: none;
-            color: deeppink;
-            border-bottom: 1px dotted deeppink;
+            color: $warningTextColor;
+            border-bottom: $warningBorder;
         }
     }        
     .ColorHint__thumb {
@@ -45,13 +45,21 @@
         svg {
             position: absolute;
             height: 100%;
+            line {
+                stroke: $secondaryBorderColor;
+                stroke-width: 1px;
+            }
         }
         & > div {
-            position: relative;            height: 65%;
+            position: relative;
+            height: 65%;
             width: 14px;
             border-radius: 100%;
             pointer-events: auto;
             display: flex;
        }
+       .ColorHint--delete-on {
+            border: $warningBorder;
+        }
     }
 }

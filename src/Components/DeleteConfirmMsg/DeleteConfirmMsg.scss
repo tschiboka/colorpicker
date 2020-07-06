@@ -9,7 +9,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.7);
+    background: $messageShadeBackgroundColor;
+    color: $primaryTextColor;
     z-index: 2000;
     > div {
         display: flex;
@@ -20,26 +21,26 @@
         min-height: 30%;
         padding: 20px;
         background: black;
-        border: 3px dashed #222;
-        h2 { color: deeppink; }
+        border: $messageBorder;
+        h2 { color: $warningTextColor; }
         p { font-size: 18px; }
-        p span { color: #eee; }
+        p span { color: $tertiaryTextColor; }
         > div {
             width: 50%;
             display: flex;
             justify-content: space-evenly;
-            border-top: 1px solid rgba(221, 221, 221, 0.3);
-            border-bottom: 1px solid rgba(221, 221, 221, 0.3);
+            border-top: $secondaryBorder;//1px solid rgba(221, 221, 221, 0.3);
+            border-bottom: $secondaryBorder;//1px solid rgba(221, 221, 221, 0.3);
             button {
                 width: 50%;
-                background: rgba(255, 255, 255, 0.1);
+                background: $primaryBackgroundColor;//rgba(255, 255, 255, 0.1);
                 border: none;
                 font-size: 22px;
-                color: #ddd;
+                color: $primaryTextColor;
                 cursor: pointer;
-                &:first-child { border-right: 1px solid #111; }
+                &:first-child { border-right: $shadeBorder; }//border-right: 1px solid #111; }
                 &:hover {
-                    background: rgba(255, 255, 255, 0.3);
+                    background: $buttonHoverBackgroundColor;//rgba(255, 255, 255, 0.3);
                     font-size: 18px;
                 }
             }

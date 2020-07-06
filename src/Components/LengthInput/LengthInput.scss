@@ -4,19 +4,17 @@
     display: flex;
     justify-content: space-around;
     border-radius: 2px;
-    border: 1px solid rgba(221, 221, 221, 0.1);
-    border-bottom: $border;
-    border-top: $border;
+    border: $tertiaryBorder;
     input {
         width: calc(100% - 40px);
-        background: #131313;
+        background: $tertiaryBackgroundColor;
         font-size: 12px;
         border: none;
-        color: #888;
+        color: $secondaryTextColor;
         text-align: center;
     }
     input:invalid {
-        color: deeppink;
+        color: $warningTextColor;
         box-shadow: none;
     }
     & > div {
@@ -26,21 +24,23 @@
         align-items: center;
         width: 15px;
         line-height: 20px;
-        color: #888;
+        color: $secondaryTextColor;
         &:nth-child(2) {
             width: 20px;
             font-size: 14px;
-            background: #131313;
+            background: $tertiaryBackgroundColor;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         &:nth-child(3) {
             width: 20px;
-            color: #888;
-            border-left: 1px solid rgba(221, 221, 221, 0.1);
+            color: $secondaryTextColor;
+            border-left: $tertiaryBorder;
+            cursor: pointer;
             &:hover {
-                background: rgba(255, 255, 255, 0.1);
+                color: $activeButtonTextColor;
+                background: $buttonHoverBackgroundColor;
             }
         }
         &:last-child {
@@ -54,19 +54,19 @@
         bottom: -48px;
         right: -1px;
         display: flex;
-        background: #161616;
-        border-radius: 0;
-        border: 1px solid rgba(221, 221, 221, 0.1);
+        background: $secondaryBackgroundColor;
+        border-radius: $borderRadius;
+        border: $tertiaryBorder;
         z-index: 1002;
         button {
-            background: #161616;
+            background: $tertiaryBackgroundColor;
             border: none !important;
             padding: 0 5px;
             font-size: 14px !important;
-            color:#888;
+            color:$secondaryTextColor;
             &:hover {
                 font-size: 14px;
-                color: $primarytColor;
+                color: $activeButtonTextColor;
             }
         }
     }

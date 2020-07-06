@@ -11,7 +11,7 @@
             height: 100%;
             border: none;
             background: transparent;
-            color: $primarytColor;
+            color: $primaryTextColor;
             font-size: 18px;
             display: flex;
             justify-content: flex-end;
@@ -30,7 +30,7 @@
     .ResultDisplay__color-bg { 
         position: relative;
         height: 100%;
-        border: $border;
+        border: $primaryBorder;
     }
 }
 

@@ -6,7 +6,6 @@ import "./ColorHint.scss";
 
 export default function ColorHint(props) {
     const stroke = "rgba(255, 255, 255, 0.5)";
-    const border = props.deleteOn ? `2px dotted deeppink` : props.adjecentColors ? `2px solid #888` : `2px solid ${stroke}`;
     const background = props.adjecentColors ? `linear-gradient(90deg, ${props.adjecentColors[0]} 0% 50%, ${props.adjecentColors[1]} 50%), url(${checkeredRect}` : "transparent";
     const title = `color hint ${props.index} ` + props.errorInfo;
 
@@ -78,12 +77,13 @@ export default function ColorHint(props) {
 
             <div className="ColorHint__thumb">
                 <svg width="100%" height="100%">
-                    <line x1="50%" y1="0" x2="50%" y2="50%" style={{ stroke: "rgba(221, 221, 221, 0.2)" }} />
+                    <line x1="50%" y1="0" x2="50%" y2="50%" />
                 </svg>
 
                 <div
+                    className={`ColorHint--${props.deleteOn ? "delete-on" : ""}`}
                     title={title}
-                    style={{ border, background }}
+                    style={{ background }}
                     onMouseDown={e => handleThumbOnMouseDown(e)}
                     onTouchStart={e => handleThumbOnMouseDown(e)}
                 >

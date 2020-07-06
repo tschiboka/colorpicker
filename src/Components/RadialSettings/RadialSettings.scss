@@ -5,23 +5,23 @@
     width: 400px;
     height: 500px;
     background: #161616;
-    border: 1px solid rgba(221, 221, 221, 0.5);
+    border: $primaryBorder;
     z-index: 1001;
     font-size: 16px;
-    color: $primarytColor;
+    color: $primaryTextColor;
     button {
         position: relative;
         height: 26px;
         background: transparent;
-        color: $primarytColor;
+        color: $primaryTextColor;
         font-size: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: $tertiaryBorder;
         border-radius: 2px;
         cursor: pointer;
         &:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: $buttonHoverBackgroundColor;
             font-size: 14px;
-            color: $activeBtnBg;
+            color: $activeButtonTextColor;
         }
         & > div {
             position: absolute;
@@ -30,10 +30,10 @@
             top: 3px;
             right: 3px;
             border-radius: 5px;
-            border: 1px solid rgba(221, 221, 221, 0.2);
+            border: $tertiaryBorder;
         }
-        .btn--active { background: $activeBtnBg; }
-        .btn--inactive { background: rgba(0, 0, 0, 0.7); }
+        .btn--active { background: $activeButtonTextColor; }
+        .btn--inactive { background: $tertiaryBackgroundColor; }
     }
     .LengthInput {
         width: 80px;
@@ -44,15 +44,15 @@
         justify-content: space-between;
         align-items: center;
         padding-left: 5px;
-        border-bottom: 1px solid rgba(221, 221, 221, 0.5);
+        border-bottom: $primaryBorder;
         span span {
             font-size: 14px;
-            color: #888;
+            color: $tertiaryTextColor;
         }
         button {
             height: 30px;
             width: 30px;
-            color: deeppink;
+            color: $warningTextColor;
         }
     }
     .RadialSettings__body {
@@ -62,7 +62,7 @@
         flex-direction: column;
         justify-content: space-evenly;
         align-items: center;
-        border-bottom: 1px solid rgba(221, 221, 221, 0.5);
+        border-bottom: $primaryBorder;
         span {
             width: 10%;
         }
@@ -73,7 +73,7 @@
             &:nth-child(2) { height: 30%; }
             &:nth-child(3) { height: 60%; }
             &:not(:last-child) {
-                border-bottom: 1px solid rgba(221, 221, 221, 0.5);
+                border-bottom: $primaryBorder;
             }
             & > div:first-child {
                 width: 20%;
@@ -81,7 +81,7 @@
                 display: flex;
                 align-items: center;
                 padding: 5px;
-                border-right: 1px solid rgba(221, 221, 221, 0.5);
+                border-right: $primaryBorder;
             }
             & > div:last-child {
                 width: 80%;
@@ -106,7 +106,7 @@
                     flex-direction: column;
                     justify-content: space-evenly;
                     align-items: center;
-                    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+                    border-bottom: $primaryBorder;
                     & > div {
                         width: 100%;
                         display: flex;
@@ -130,10 +130,10 @@
                             width: 6px;
                             height: 6px;
                             border-radius: 5px;
-                            border: 1px solid rgba(221, 221, 221, 0.2);
+                            border: $tertiaryBorder;
                         }
-                        .btn--active { background: $activeBtnBg; }
-                        .btn--inactive { background: rgba(0, 0, 0, 0.7); }
+                        .btn--active { background: $activeButtonTextColor; }
+                        .btn--inactive { background: $tertiaryBackgroundColor; }
                     }
                 }
             }
@@ -147,7 +147,7 @@
                     width: 100%;
                     height: 40%;
                     padding: 5px;
-                    &:first-child { border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+                    &:first-child { border-bottom: $primaryBorder; }
                     & > div {
                         height: 33.3%;
                         width: 100%;
@@ -178,7 +178,7 @@
                     }
                 }
                 & > div:last-child {
-                    border-top: 1px solid rgba(255, 255, 255, 0.5);
+                    border-top: $primaryBorder;
                     display: flex;
                     justify-content: space-evenly;
                     align-items: center;
@@ -192,10 +192,10 @@
                             width: 6px;
                             height: 6px;
                             border-radius: 5px;
-                            border: 1px solid rgba(221, 221, 221, 0.2);
+                            border: $secondaryBorder;
                         }
-                        .btn--active { background: $activeBtnBg; }
-                        .btn--inactive { background: rgba(0, 0, 0, 0.7); }
+                        .btn--active { background: $activeButtonTextColor; }
+                        .btn--inactive { background: $tertiaryBackgroundColor; }
                     }
                 }
             }

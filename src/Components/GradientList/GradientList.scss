@@ -5,19 +5,19 @@
     height: 100%;
     width: 60%;
     order: 3;
-    color: $primarytColor;
+    color: $primaryTextColor;
     overflow-y: auto;
     overflow-x: hidden;
     & > header button {
         border: none;
         background: transparent;
-        color: $primarytColor;
+        color: $primaryTextColor;
         font-size: 24px;
         font-weight: bold;
         margin-right: 5px;
         &:hover {
             font-size: 20px;
-            color: $activeBtnBg;
+            color: $activeButtonTextColor;
         }
     }
     .gradients {

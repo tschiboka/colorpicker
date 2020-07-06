@@ -1,3 +1,5 @@
+@import "../../variables/variables.scss";
+
 .AngleMeter {
     width: 60%;
     min-width: 50px;
@@ -5,6 +7,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    svg {
+        width: 50px;
+        height: 50px;
+        line {
+            stroke: $primaryBorderColor;
+        }
+        circle {
+            fill: $secondaryBackgroundColor;
+            stroke: $primaryBorderColor;
+        }
+    }
     .AngleMeter__meter {
         cursor: pointer;
     }

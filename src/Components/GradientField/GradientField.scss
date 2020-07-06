@@ -53,7 +53,7 @@
                 justify-content: center;
                 background: transparent;
                 border: none;
-                color: $primarytColor;
+                color: $primaryTextColor;
                 font-size: 22px;
                 line-height: 22px;
                 vertical-align: middle;
@@ -64,7 +64,7 @@
                     height: 100%;              
                 }
                 &:hover {
-                    color: $activeBtnBg;
+                    color: $activeButtonTextColor;
                     font-size: 18px;
                 }
                 &:last-child:hover { color: deeppink; }
