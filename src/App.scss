@@ -21,6 +21,18 @@
 :-ms-input-placeholder { color: $primaryTextColor; }
 :disabled { cursor: not-allowed;}
 
+.btn--inactive, .btn--active {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        top: 3px;
+        right: 3px;
+        border-radius: 5px;
+        border: $tertiaryBorder;
+    }
+.btn--inactive { background: $buttonInactiveColor; }
+.btn--active { background: $activeButtonTextColor; }
+    
 .App {
     position: relative;
     min-width: 100vw;

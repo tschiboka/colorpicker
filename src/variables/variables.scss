@@ -1,48 +1,48 @@
 // ----------- COLOR PALETTE ----------
-
 // BACKGROUND COLORS
-$primaryBackgroundColor:        #202020;
-$secondaryBackgroundColor:      #161616;
-$tertiaryBackgroundColor:       #0c0c0c;
-$messageShadeBackgroundColor:   #000000b3;
-$buttonHoverBackgroundColor:    #ffffff27;
-// BORDER COLORS
-$primaryBorderColor:            #7a7a7a;
-$secondaryBorderColor:          #3e3e3e;
-$tertiaryBorderColor:           #2a2a2a;
-$messageBorderColor:            #222222;
-$shadeBorderColor:              #1a1a1a;
-// TEXT COLORS
-$primaryTextColor:              #c2c2c2;
-$secondaryTextColor:            #b7b7b7;
-$tertiaryTextColor:             #887c8b;
-$activeButtonTextColor:         #4cc3f1;
-$warningTextColor:              #ff1493;
+$primaryBackgroundColor:      #202020;
+$secondaryBackgroundColor:    #161616;
+$tertiaryBackgroundColor:     #101010;
+$messageShadeBackgroundColor: #000000b3;
+$buttonHoverBackgroundColor:  #ffffff27;
+// BORDER COLO
+$primaryBorderColor:          #7a7a7a;
+$secondaryBorderColor:        #3e3e3e;
+$tertiaryBorderColor:         #2a2a2a;
+$messageBorderColor:          #222222;
+$shadeBorderColor:            #1a1a1a;
+// TEXT COLO
+$primaryTextColor:            #c2c2c2;
+$secondaryTextColor:          #b7b7b7;
+$tertiaryTextColor:           #887c8b;
+$activeButtonTextColor:       #4cc3f1;
+$warningTextColor:            #ff1493;
+$buttonInactiveColor:         #0c0c0c;
 
 
 
-// ---------- SIZES -----------
-// FONT SIZES
-$xxlFont:                         26px;
-$xlgFont:                         22px;
-$lrgFont:                         18px;
-$medFont:                         16px;
-$smlFont:                         14px;
-$xsmFont:                         12px;
-$xxsFont:                         10px;
-// BORDER SIZES
-$borderThin:                      1px;
-$borderMedium:                    2px;
-$borderThick:                     3px;
-$borderRadius:                    2px;
-$circleRadius:                    100%;
+// ---------- SIZES ---------
+// FONT SIZ
+$xxlFont:                       26px;
+$xlgFont:                       22px;
+$lrgFont:                       18px;
+$medFont:                       16px;
+$smlFont:                       14px;
+$xsmFont:                       12px;
+$xxsFont:                       10px;
+// BORDER SIZ
+$borderThin:                    1px;
+$borderMedium:                  2px;
+$borderThick:                   3px;
+$borderRadius:                  2px;
+$circleRadius:                  100%;
 
 
 
-// ----------- BORDERS -----------
-$primaryBorder:                   $borderThin    solid  $primaryBorderColor;
-$secondaryBorder:                 $borderThin    solid  $secondaryBorderColor;
-$tertiaryBorder:                  $borderThin    solid  $tertiaryBorderColor;
-$shadeBorder:                     $borderThin    solid  $shadeBorderColor;
-$warningBorder:                   $borderMedium  dotted $warningTextColor;
-$messageBorder:                   $borderThick   dashed $messageBorderColor;
+// ----------- BORDERS ---------
+$primaryBorder:                 $borderThin    solid  $primaryBorderColor;
+$secondaryBorder:               $borderThin    solid  $secondaryBorderColor;
+$tertiaryBorder:                $borderThin    solid  $tertiaryBorderColor;
+$shadeBorder:                   $borderThin    solid  $shadeBorderColor;
+$warningBorder:                 $borderMedium  dotted $warningTextColor;
+$messageBorder:                 $borderThick   dashed $messageBorderColor;

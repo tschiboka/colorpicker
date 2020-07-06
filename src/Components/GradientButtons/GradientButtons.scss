@@ -17,17 +17,6 @@
             color: $activeButtonTextColor;
             font-size: $medFont;
         }
-        & > div {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            top: 3px;
-            right: 3px;
-            border-radius: 5px;
-            border: $tertiaryBorder;
-        }
-        .btn--active { background: $activeButtonTextColor; }
-        .btn--inactive { background: $tertiaryBackgroundColor; }
     }
     & > div {
         height: 100%;
@@ -108,9 +97,9 @@
                 margin: 0 15px;
                 height: 50%;
                 max-width: 40px;
-                max-height: 26px;
+                min-height: 50%;
                 background: $tertiaryBackgroundColor;
-                font-size: $medFont;
+                font-size: $smlFont;
                 border-radius: $borderRadius;
                 border: $tertiaryBorder;
                 border-bottom: $tertiaryBorder;

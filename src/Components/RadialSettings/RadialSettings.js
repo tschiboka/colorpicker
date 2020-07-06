@@ -148,32 +148,24 @@ export default function RadialSettings(props) {
                         <div className="RadialSettings__size-btns__length">
                             <span>length:</span>
 
-                            <div>
-                                <LengthInput
-                                    id="1"
-                                    name="size1"
-                                    value={sizeLengthsObj[0] ? sizeLengthsObj[0].value : ""}
-                                    unit={sizeLengthsObj[0] ? sizeLengthsObj[0].unit : ""}
-                                    units={shape === "circle" ? ["px", "vw", "vh", "em", "rem"] : ["%", "px", "vw", "vh", "em", "rem"]}
-                                    onChange={handleSizeInputOnChange}
-                                />
+                            <LengthInput
+                                id="1"
+                                name="size1"
+                                value={sizeLengthsObj[0] ? sizeLengthsObj[0].value : ""}
+                                unit={sizeLengthsObj[0] ? sizeLengthsObj[0].unit : ""}
+                                units={shape === "circle" ? ["px", "vw", "vh", "em", "rem"] : ["%", "px", "vw", "vh", "em", "rem"]}
+                                onChange={handleSizeInputOnChange}
+                            />
 
-                                <div className={`btn--${sizeLengthsObj[0] ? "active" : "inactive"}`}></div>
-                            </div>
-
-                            <div>
-                                <LengthInput
-                                    id="2"
-                                    name="size2"
-                                    disabled={shape === "circle"}
-                                    value={sizeLengthsObj[1] ? sizeLengthsObj[1].value : ""}
-                                    unit={sizeLengthsObj[1] ? sizeLengthsObj[1].unit : ""}
-                                    units={["%", "px", "vw", "vh", "em", "rem"]}
-                                    onChange={handleSizeInputOnChange}
-                                />
-
-                                <div className={`btn--${sizeLengthsObj[1] ? "active" : "inactive"}`}></div>
-                            </div>
+                            <LengthInput
+                                id="2"
+                                name="size2"
+                                disabled={shape === "circle"}
+                                value={sizeLengthsObj[1] ? sizeLengthsObj[1].value : ""}
+                                unit={sizeLengthsObj[1] ? sizeLengthsObj[1].unit : ""}
+                                units={["%", "px", "vw", "vh", "em", "rem"]}
+                                onChange={handleSizeInputOnChange}
+                            />
                         </div>
                     </div>
                 </div>
@@ -261,31 +253,23 @@ export default function RadialSettings(props) {
                         <div>
                             <span>at:</span>
 
-                            <div>
-                                <LengthInput
-                                    id="3"
-                                    name="position1"
-                                    value={positionObj[0] ? positionObj[0].value : ""}
-                                    unit={positionObj[0] ? positionObj[0].unit : ""}
-                                    units={["%", "px", "vw", "vh", "em", "rem"]}
-                                    onChange={handlePositionInputOnChange}
-                                />
+                            <LengthInput
+                                id="3"
+                                name="position1"
+                                value={positionObj[0] ? positionObj[0].value : ""}
+                                unit={positionObj[0] ? positionObj[0].unit : ""}
+                                units={["%", "px", "vw", "vh", "em", "rem"]}
+                                onChange={handlePositionInputOnChange}
+                            />
 
-                                <div className={`btn--${positionObj[0] ? "active" : "inactive"}`}></div>
-                            </div>
-
-                            <div>
-                                <LengthInput
-                                    id="4"
-                                    name="position2"
-                                    value={positionObj[1] ? positionObj[1].value : ""}
-                                    unit={positionObj[1] ? positionObj[1].unit : ""}
-                                    units={["%", "px", "vw", "vh", "em", "rem"]}
-                                    onChange={handlePositionInputOnChange}
-                                />
-
-                                <div className={`btn--${positionObj[1] ? "active" : "inactive"}`}></div>
-                            </div>
+                            <LengthInput
+                                id="4"
+                                name="position2"
+                                value={positionObj[1] ? positionObj[1].value : ""}
+                                unit={positionObj[1] ? positionObj[1].unit : ""}
+                                units={["%", "px", "vw", "vh", "em", "rem"]}
+                                onChange={handlePositionInputOnChange}
+                            />
                         </div>
                     </div>
                 </div>

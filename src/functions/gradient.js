@@ -99,8 +99,8 @@ const defaultGradientObj = {
     ],
     radial: {
         shape: "ellipse",
-        size: "farthest-corner",
-        position: ["center", "center"]
+        size: "50% 50%",
+        position: ["50%", "50%"]
     }
 };
 

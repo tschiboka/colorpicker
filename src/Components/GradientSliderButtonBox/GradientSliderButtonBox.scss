@@ -39,16 +39,5 @@
                 color: $activeButtonTextColor;
                 font-size: $smlFont;
             }
-            & > div {
-                position: absolute;
-                width: 6px;
-                height: 6px;
-                top: 3px;
-                right: 3px;
-                border-radius: 5px;
-                border: $tertiaryBorder;
-            }
-            .btn--active { background: $activeButtonTextColor; }
-            .btn--inactive { background: $tertiaryBackgroundColor; }
         }
 }
