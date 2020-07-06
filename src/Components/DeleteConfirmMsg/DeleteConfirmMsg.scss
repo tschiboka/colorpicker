@@ -23,8 +23,11 @@
         background: black;
         border: $messageBorder;
         h2 { color: $warningTextColor; }
-        p { font-size: 18px; }
-        p span { color: $tertiaryTextColor; }
+        p { font-size: $lrgFont; }
+        p span { 
+            font-size: $medFont;
+            color: $tertiaryTextColor; 
+        }
         > div {
             width: 50%;
             display: flex;
@@ -35,13 +38,13 @@
                 width: 50%;
                 background: $primaryBackgroundColor;//rgba(255, 255, 255, 0.1);
                 border: none;
-                font-size: 22px;
+                font-size: $xlgFont;
                 color: $primaryTextColor;
                 cursor: pointer;
                 &:first-child { border-right: $shadeBorder; }//border-right: 1px solid #111; }
                 &:hover {
                     background: $buttonHoverBackgroundColor;//rgba(255, 255, 255, 0.3);
-                    font-size: 18px;
+                    font-size: $lrgFont;
                 }
             }
         }

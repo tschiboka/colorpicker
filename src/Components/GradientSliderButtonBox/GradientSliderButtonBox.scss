@@ -15,9 +15,9 @@
                 border-bottom: $tertiaryBorder;
                 button {
                     width: 50%;
-                    font-size: 22px;
+                    font-size: $xlgFont;
                     &:first-child { border-right: $tertiaryBorder; }
-                    &:hover { font-size: 18px; }
+                    &:hover { font-size: $lrgFont; }
                 }
             }
             &:last-child {
@@ -32,12 +32,12 @@
             border: none;
             background: transparent;
             color: $primaryTextColor;
-            font-size: 16px;
+            font-size: $medFont;
             cursor: pointer;
             &:hover {
                 background: $secondaryBorderColor;
                 color: $activeButtonTextColor;
-                font-size: 14px;
+                font-size: $smlFont;
             }
             & > div {
                 position: absolute;

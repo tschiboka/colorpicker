@@ -12,14 +12,14 @@
             border: none;
             background: transparent;
             color: $primaryTextColor;
-            font-size: 18px;
+            font-size: $lrgFont;
             display: flex;
             justify-content: flex-end;
             align-items: center;
             text-align: right;
             cursor: pointer;
             &:hover {
-                font-size: 14px;
+                font-size: $medFont;
             }
         }
     }

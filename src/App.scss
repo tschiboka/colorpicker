@@ -16,9 +16,10 @@
     outline: none !important;
 }
 
-::placeholder { color: $secondaryTextColor; }
-::-ms-input-placeholder { color: $secondaryTextColor; }
-:-ms-input-placeholder { color: $secondaryTextColor; }
+::placeholder { color: $primaryTextColor; }
+::-ms-input-placeholder { color: $primaryTextColor; }
+:-ms-input-placeholder { color: $primaryTextColor; }
+:disabled { cursor: not-allowed;}
 
 .App {
     position: relative;
@@ -38,10 +39,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 18px;
+        font-size: $lrgFont;
         color: $primaryTextColor;
         padding: 0 5px;
-        border-bottom: 1px solid #888;
+        border-bottom: $primaryBorder;
         cursor: default;
     }
     & > * {

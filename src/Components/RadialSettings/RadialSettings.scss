@@ -7,20 +7,20 @@
     background: #161616;
     border: $primaryBorder;
     z-index: 1001;
-    font-size: 16px;
+    font-size: $medFont;
     color: $primaryTextColor;
     button {
         position: relative;
         height: 26px;
         background: transparent;
         color: $primaryTextColor;
-        font-size: 16px;
-        border: $tertiaryBorder;
-        border-radius: 2px;
+        font-size: $medFont;
+        border: $secondaryBorder;
+        border-radius: $border-radius;
         cursor: pointer;
         &:hover {
             background: $buttonHoverBackgroundColor;
-            font-size: 14px;
+            font-size: $smlFont;
             color: $activeButtonTextColor;
         }
         & > div {
@@ -46,7 +46,7 @@
         padding-left: 5px;
         border-bottom: $primaryBorder;
         span span {
-            font-size: 14px;
+            font-size: $smlFont;
             color: $tertiaryTextColor;
         }
         button {
