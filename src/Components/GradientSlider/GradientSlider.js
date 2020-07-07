@@ -283,7 +283,7 @@ export default class GradientSlider extends Component {
 
     renderColorStops() {
         return this.props.gradient.colors.map((colorStop, index) => {
-            const positionInPercentage = this.props.gradient.units === "percentage" ? colorStop.stop : undefined;
+            const positionInPercentage = !this.props.gradient.repeating ? colorStop.stop : undefined;
 
             return <ColorStop
                 key={`ColorStop${this.props.index}_${index}`}
@@ -292,7 +292,7 @@ export default class GradientSlider extends Component {
                 index={index}
                 deleteOn={this.state.buttonStates.deleteOn}
                 textOpen={this.state.activeColorStopText === index}
-                units={this.props.gradient.units}
+                gradient={this.props.gradient}
                 isActive={this.state.activeColorStop === index}
                 setActiveColorStop={this.setActiveColorStop.bind(this)}
                 setActiveColorStopText={this.setActiveColorStopText.bind(this)}
@@ -346,13 +346,15 @@ export default class GradientSlider extends Component {
             }
         });
 
+        console.log(colorHintsWithInfo);
+
         return colorHintsWithInfo.map((colorHint, index) => {
             return (
                 <ColorHint
                     key={`ColorHint${this.props.index}_${index}`}
                     position={colorHint.position}
                     index={index}
-                    units={this.props.gradient.units}
+                    gradient={this.props.gradient}
                     deleteOn={this.state.buttonStates.deleteOn}
                     setActiveColorHint={this.setActiveColorHint.bind(this)}
                     setActiveColorHintText={this.setActiveColorHintText.bind(this)}
@@ -381,7 +383,7 @@ export default class GradientSlider extends Component {
                     onMouseUp={e => this.handleSliderOnMouseUp(e)}
                     onTouchEnd={e => this.handleSliderOnMouseUp(e)}
                 >
-                    <GradientSliderRuler units={this.props.gradient.units} />
+                    <GradientSliderRuler gradient={this.props.gradient} />
 
                     <div className="GradientSlider__colorstops-and-colorhints">
                         {this.renderColorStops()}

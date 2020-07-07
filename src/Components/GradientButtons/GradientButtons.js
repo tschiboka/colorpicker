@@ -44,7 +44,7 @@ export default class GradientButtons extends Component {
         const updatedGradient = getImmutableGradientCopy(this.props.gradient);
 
         updatedGradient.max = value;
-        updatedGradient.unit = unit;
+        updatedGradient.repeatingUnit = unit;
         this.props.updateGradient(updatedGradient, this.props.index);
     }
 

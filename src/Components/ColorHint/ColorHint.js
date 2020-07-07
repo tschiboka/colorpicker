@@ -5,7 +5,6 @@ import "./ColorHint.scss";
 
 
 export default function ColorHint(props) {
-    const stroke = "rgba(255, 255, 255, 0.5)";
     const background = props.adjecentColors ? `linear-gradient(90deg, ${props.adjecentColors[0]} 0% 50%, ${props.adjecentColors[1]} 50%), url(${checkeredRect}` : "transparent";
     const title = `color hint ${props.index} ` + props.errorInfo;
 
@@ -16,7 +15,7 @@ export default function ColorHint(props) {
 
 
     function validateInput(event) {
-        if (props.units === "percentage") {
+        if (!props.repeating) {
             const value = event.target.value;
             const nonEmpty = value !== "";
             const isNumber = typeof Number(value) === "number";
@@ -32,7 +31,7 @@ export default function ColorHint(props) {
 
 
     function renderInput() {
-        const textValue = props.units === "percentage" ? props.position + "%" : undefined;
+        const textValue = !props.gradient.repeating ? props.position + "%" : undefined;
 
         return (
             <input
@@ -69,8 +68,10 @@ export default function ColorHint(props) {
             style={{
                 left: `calc(${props.position}% - 20px)`,
                 zIndex: props.isActive ? 100 : Math.round(props.position || 0)
-            }}
+            }
+            }
         >
+            {console.log(props.position)}
             <div className="ColorHint__text-box">
                 {renderInput()}
             </div>
@@ -90,6 +91,6 @@ export default function ColorHint(props) {
                     {renderAdjecentColors()}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

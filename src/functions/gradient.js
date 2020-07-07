@@ -3,7 +3,6 @@ import { sortGradientByColorStopsPercentage } from "./slider";
 
 
 export function gradientObjsToStr(gradientArray) {
-    console.log([...gradientArray]);
     gradientArray = gradientArray.map(grad => {
         // if no ColorStop provided let it be transparent
         if (!grad.colors.length) return {
@@ -33,14 +32,13 @@ export function gradientObjsToStr(gradientArray) {
         .map(grad => {
             const { colors } = grad;
             const repeatingStr = grad.repeating ? "repeating-" : "";
-            console.log(grad.unit);
             const prefix = repeatingStr + grad.type + "-gradient";
             const angle = grad.angle + "deg, ";
             const hints = [...grad.colorHints].sort((a, b) => a - b);
             const colorStops = colors.map((colorStop, index, colorStopArr) => {
                 let hintStr = "";
                 const maxValue = 100;
-                const units = grad.units === "percentage" ? "%" : "";
+                const units = grad.repeating ? grad.repeatingUnits : "%";
 
                 if (hints.length) {
                     const currentStop = colorStop.stop;
@@ -56,8 +54,6 @@ export function gradientObjsToStr(gradientArray) {
             }).join(",");
 
             if (grad.type === "linear") {
-                console.log(`${prefix}(${angle}${colorStops})`);
-
                 return `${prefix}(${angle}${colorStops})`;
             }
 
@@ -82,10 +78,9 @@ const defaultGradientObj = {
     visible: true,
     type: "linear",
     angle: "90",
-    units: "percentage",
     repeating: false,
+    repeatingUnit: "%",
     max: 100,
-    unit: "px",
     colorHints: [50],
     colors: [
         {

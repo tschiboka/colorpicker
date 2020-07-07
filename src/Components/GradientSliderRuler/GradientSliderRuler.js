@@ -8,7 +8,7 @@ export default function GradientSliderRuler(props) {
         const bodyWith = document.querySelector("body").getBoundingClientRect().width;
         const gradientListWidth = bodyWith > 1000 ? bodyWith * 0.6 : bodyWith;
 
-        if (props.units === "percentage") return (
+        if (!props.gradient.repeating) return (
             <svg>
                 {
                     new Array(100).fill("").map((_, i) => {

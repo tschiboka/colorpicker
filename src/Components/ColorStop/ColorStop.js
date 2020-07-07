@@ -10,7 +10,7 @@ export default function ColorStop(props) {
 
 
     function validateInput(event) {
-        if (props.units === "percentage") {
+        if (!props.gradient.repeating) {
             const value = event.target.value;
             const nonEmpty = value !== "";
             const isNumber = typeof Number(value) === "number";
@@ -26,7 +26,7 @@ export default function ColorStop(props) {
 
 
     function renderInput() {
-        const textValue = props.units === "percentage" ? props.position + "%" : undefined;
+        const textValue = !props.repeating ? props.position + "%" : undefined;
 
         return (
             <input
