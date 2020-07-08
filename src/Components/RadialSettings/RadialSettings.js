@@ -153,7 +153,7 @@ export default function RadialSettings(props) {
                                 name="size1"
                                 value={sizeLengthsObj[0] ? sizeLengthsObj[0].value : ""}
                                 unit={sizeLengthsObj[0] ? sizeLengthsObj[0].unit : ""}
-                                units={shape === "circle" ? ["px", "vw", "vh", "em", "rem"] : ["%", "px", "vw", "vh", "em", "rem"]}
+                                units={shape === "circle" ? ["px", "vw", "vh", "em", "rem"].reverse() : ["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handleSizeInputOnChange}
                             />
 
@@ -163,7 +163,7 @@ export default function RadialSettings(props) {
                                 disabled={shape === "circle"}
                                 value={sizeLengthsObj[1] ? sizeLengthsObj[1].value : ""}
                                 unit={sizeLengthsObj[1] ? sizeLengthsObj[1].unit : ""}
-                                units={["%", "px", "vw", "vh", "em", "rem"]}
+                                units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handleSizeInputOnChange}
                             />
                         </div>
@@ -258,7 +258,7 @@ export default function RadialSettings(props) {
                                 name="position1"
                                 value={positionObj[0] ? positionObj[0].value : ""}
                                 unit={positionObj[0] ? positionObj[0].unit : ""}
-                                units={["%", "px", "vw", "vh", "em", "rem"]}
+                                units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handlePositionInputOnChange}
                             />
 
@@ -267,7 +267,7 @@ export default function RadialSettings(props) {
                                 name="position2"
                                 value={positionObj[1] ? positionObj[1].value : ""}
                                 unit={positionObj[1] ? positionObj[1].unit : ""}
-                                units={["%", "px", "vw", "vh", "em", "rem"]}
+                                units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handlePositionInputOnChange}
                             />
                         </div>

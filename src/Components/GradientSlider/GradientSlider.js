@@ -346,8 +346,6 @@ export default class GradientSlider extends Component {
             }
         });
 
-        console.log(colorHintsWithInfo);
-
         return colorHintsWithInfo.map((colorHint, index) => {
             return (
                 <ColorHint

@@ -52,7 +52,7 @@ export default class LengthInput extends Component {
 
 
     renderUnitButtons() {
-        const units = (this.props.units || ["%", "px", "vw", "vh", "em", "rem"]).reverse();
+        const units = (this.props.units || ["%", "px", "vw", "vh", "em", "rem"].reverse());
 
         return units.map((unit, i) => (
             <button

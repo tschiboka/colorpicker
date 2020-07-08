@@ -185,6 +185,9 @@
         align-items: center;
         button {
             width: 25%;
+            &:last-child:hover {
+                color: $warningTextColor;
+            }
         }
     }
 }

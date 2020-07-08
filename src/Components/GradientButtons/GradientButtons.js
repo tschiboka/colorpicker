@@ -176,7 +176,7 @@ export default class GradientButtons extends Component {
                         name="repeating-length"
                         value={this.props.gradient.max ? this.props.gradient.max : "0"}
                         unit={this.props.gradient.maxUnit ? this.props.gradient.maxUnit : "%"}
-                        units={["%", "px", "vw", "vh", "em", "rem"]}
+                        units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                         onChange={this.handleRepeatingInputChange.bind(this)}
                     />
                 </div>
