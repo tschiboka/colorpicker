@@ -30,6 +30,7 @@ export function gradientObjsToStr(gradientArray) {
     return sortedByPercentage
         .filter(grad => grad.visible)
         .map(grad => {
+            console.log(grad.repeatingUnit, grad.max);
             const { colors } = grad;
             const repeatingStr = grad.repeating ? "repeating-" : "";
             const prefix = repeatingStr + grad.type + "-gradient";
@@ -37,7 +38,7 @@ export function gradientObjsToStr(gradientArray) {
             const hints = [...grad.colorHints].sort((a, b) => a - b);
             const colorStops = colors.map((colorStop, index, colorStopArr) => {
                 let hintStr = "";
-                const maxValue = 100;
+                const maxValue = grad.max || 0;
                 const units = grad.repeating ? grad.repeatingUnits : "%";
 
                 if (hints.length) {

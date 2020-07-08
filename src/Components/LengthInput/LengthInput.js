@@ -32,6 +32,13 @@ export default class LengthInput extends Component {
 
     handleOpitionOnClick(event, unit) {
         this.setState({ ...this.state, unit, optionsOpen: false }, () => {
+
+            if (unit === "px" && /\..$/g.test(this.props.value)) {
+                const input = document.getElementById(`LengthInput_${this.props.id}`);
+
+                input.value = this.props.value.replace(/\..$/g, "");
+            }
+
             this.validateInput(document.getElementById(`LengthInput_${this.props.id}`).value);
         });
 
@@ -41,12 +48,25 @@ export default class LengthInput extends Component {
 
 
     validateInput(inputValue) {
-        const value = inputValue || "0";
-        const valid = value.length && document.getElementById(`LengthInput_${this.props.id}`).validity.valid;
+        const valid = document.getElementById(`LengthInput_${this.props.id}`).validity.valid;
 
         this.setState({ ...this.state, valid }, () => {
-            if (this.state.valid) this.props.onChange(this.props.name, Number(value), this.state.unit);
+            if (this.state.valid) this.props.onChange(this.props.name, inputValue, this.state.unit);
         });
+    }
+
+
+
+    getInputPattern = () => this.state.unit === "px" ? "\\d{1,4}" : "\\d{1,2}\\.?\\d?|100";
+
+
+
+    getInputValue = () => {
+        if (this.props.disabled) return "";
+
+        if (this.unit === "px") return this.props.value.replace(/\..$/g, "");
+
+        return this.props.value;
     }
 
 
@@ -74,9 +94,8 @@ export default class LengthInput extends Component {
                     type="text"
                     disabled={this.props.disabled}
                     placeholder={this.props.value}
-                    min="0"
-                    pattern={this.state.unit === "px" ? "\\d{1,4}|\\d{1,4}\\.\\d" : "\\d{1,2}|100"}
-                    value={this.props.disabled ? "" : this.props.value}
+                    pattern={this.getInputPattern()}
+                    value={this.getInputValue()}
                     onChange={e => this.validateInput(e.target.value, e)}
                 />
 

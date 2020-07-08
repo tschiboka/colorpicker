@@ -282,6 +282,8 @@ export default class GradientSlider extends Component {
 
 
     renderColorStops() {
+        if (!this.props.gradient.max) return false;
+
         return this.props.gradient.colors.map((colorStop, index) => {
             const positionInPercentage = !this.props.gradient.repeating ? colorStop.stop : undefined;
 
@@ -306,6 +308,8 @@ export default class GradientSlider extends Component {
 
 
     renderColorHints() {
+        if (!this.props.gradient.max) return false;
+
         const hints = [...this.props.gradient.colorHints].sort((a, b) => a - b);
 
         //get adjecent colors if available and error message if hint is out of range or shadowed by other hints

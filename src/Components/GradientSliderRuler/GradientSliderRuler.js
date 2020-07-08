@@ -7,25 +7,15 @@ export default function GradientSliderRuler(props) {
     function renderRuler() {
         const bodyWith = document.querySelector("body").getBoundingClientRect().width;
         const gradientListWidth = bodyWith > 1000 ? bodyWith * 0.6 : bodyWith; // need a way to estimate width before rendering component
-        const max = props.gradient.max;
-        //
-
-        if (max <= 0) return false;
-
-        //switch (true) {
-        //    case max <= 100: { iteration = max; break; }
-        //    case max > 100 && max <= 1000: { iteration = Math.round(max / 10); break; }
-        //    case max > 1000: { iteration = Math.round(max / 100); break; }
-        //    default: { iteration = 0; }
-        //}
-
+        const max = Number(props.gradient.max);
         const step = 100 / max;
-        //console.log(max, iteration, step + "%");
+        const iteration = max % 1 ? max * 10 : max;
 
+        if (!max) return false;
 
         return (
             <svg>
-                {new Array(max).fill(0).map((_, i) => {
+                {new Array(iteration).fill(0).map((_, i) => {
                     if (max > 150 && i % 10) return false;
                     if (max > 1500 && i % 100) return false;
 
@@ -37,6 +27,7 @@ export default function GradientSliderRuler(props) {
                     const isTransparent = gradientListWidth < 600 && !isPrimaryGroove;
                     const strokeStrength = isTransparent ? "transparent" : !isPrimaryGroove ? "light" : "strong";
                     const y = isPrimaryGroove ? 20 : 30;
+
                     // GROOVE LINES [PER PERCENTAGE]
                     return <line
                         key={`helperStripes_${i}`}

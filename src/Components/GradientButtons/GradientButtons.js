@@ -45,6 +45,7 @@ export default class GradientButtons extends Component {
 
         updatedGradient.max = value;
         updatedGradient.repeatingUnit = unit;
+        console.log(updatedGradient.repeatingUnit);
         this.props.updateGradient(updatedGradient, this.props.index);
     }
 
@@ -174,7 +175,7 @@ export default class GradientButtons extends Component {
                     <LengthInput 
                         id="0"
                         name="repeating-length"
-                        value={this.props.gradient.max ? this.props.gradient.max : "0"}
+                        value={this.props.gradient.max}
                         unit={this.props.gradient.maxUnit ? this.props.gradient.maxUnit : "%"}
                         units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                         onChange={this.handleRepeatingInputChange.bind(this)}
