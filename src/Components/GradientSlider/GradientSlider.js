@@ -4,7 +4,7 @@ import GradientSliderButtonBox from "../GradientSliderButtonBox/GradientSliderBu
 import ColorStop from "../ColorStop/ColorStop";
 import ColorHint from "../ColorHint/ColorHint";
 import { sortGradientByColorStopsPercentage, filterIdenticalColorPercentages } from "../../functions/slider";
-import { getPercentToFixed, mousePos, getPositionInPercent } from "../../functions/slider";
+import { getPercentToFixed, mousePos } from "../../functions/slider";
 import { getImmutableGradientCopy, gradientHasValidMaxInput } from "../../functions/gradient";
 import "./GradientSlider.scss";
 
@@ -52,7 +52,7 @@ export default class GradientSlider extends Component {
 
         // Drag color hint
         if (colorHintPressed) {
-            gradientCopy.colorHints[this.state.activeColorHint] = this.getMousePosXInPercentage({ ...event });
+            gradientCopy.colorHints[this.state.activeColorHint] = this.getNewStopPosition({ ...event });
             gradientCopy.colorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
             this.props.updateGradient(gradientCopy, this.props.index);
         }
@@ -61,6 +61,7 @@ export default class GradientSlider extends Component {
 
 
     handleSliderOnMouseUp(event) {
+        console.log("UP", event.target);
         if (this.props.preventMouseUp) return false;
         // Do nothing if any text input is active on slider
         const textActive = this.state.activeColorStopText !== undefined || this.state.activeColorHintText !== undefined;
@@ -144,8 +145,8 @@ export default class GradientSlider extends Component {
 
     getMousePosXInPercentage(event, width) {
         const mouseX = mousePos({ ...event }, "#" + this.state.id);
-
         let mouseAtPercentage;
+
         if (mouseX <= 20) mouseAtPercentage = 0;
         else if (mouseX >= width - 20) mouseAtPercentage = 100;
         else mouseAtPercentage = getPercentToFixed(width - 40, mouseX - 20);
@@ -159,7 +160,9 @@ export default class GradientSlider extends Component {
         const relativePosInPercentage = this.getMousePosXInPercentage(event, width);
         const percentageToUnits = Number(this.props.gradient.max) * (relativePosInPercentage / 100);
 
-        return this.props.gradient.repeatingUnit === "px" ? Math.round(percentageToUnits) : percentageToUnits;
+        return this.props.gradient.repeatingUnit === "px"
+            ? Math.round(percentageToUnits) : percentageToUnits % 1
+                ? Number(percentageToUnits.toFixed(1)) : percentageToUnits;
     }
 
 
@@ -274,18 +277,16 @@ export default class GradientSlider extends Component {
 
 
     setActiveColorStop(activeColorStop, event) {
-        const sliderDiv = document.getElementById(this.state.id).children[0];
-        const width = Math.round(sliderDiv.getBoundingClientRect().width);
-
         this.resetStateTo({
             activeColorStop,
             mouseAtPercentage: this.getNewStopPosition({ ...event })
-        });
+        }, () => console.log(this.state.activeColorStop));
     }
 
 
 
     setActiveColorHint(activeColorHint, event) {
+        console.log("DOWN")
         this.resetStateTo({
             activeColorHint,
             mouseAtPercentage: this.getMousePosXInPercentage({ ...event })

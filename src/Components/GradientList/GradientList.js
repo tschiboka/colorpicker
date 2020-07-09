@@ -76,6 +76,9 @@ export default class GradientList extends Component {
             updatedGradient.angle = newAngle;
 
             this.props.updateGradient(updatedGradient, this.state.activeAngleMeter);
+
+            event.stopPropagation();
+            event.preventDefault();
         }
     }
 

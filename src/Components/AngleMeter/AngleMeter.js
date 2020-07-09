@@ -9,6 +9,9 @@ export default class AngleMeter extends Component {
         const mouseStartY = event.clientY || event.pageY || event.touches[0].clientY;
 
         this.props.setAngleMeterIsActive(this.props.index, mouseStartX, mouseStartY);
+
+        event.stopPropagation();
+        event.preventDefault();
     }
 
 

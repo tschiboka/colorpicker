@@ -6,7 +6,7 @@ import "./ColorStop.scss";
 
 
 export default function ColorStop(props) {
-    function handleThumbOnMouseDown(event) { props.setActiveColorStop(props.index, event); }
+    function handleThumbOnMouseDown(event) { props.setActiveColorStop(props.index, { ...event }); }
 
 
 
@@ -17,8 +17,8 @@ export default function ColorStop(props) {
             const isNumber = typeof Number(value) === "number";
             const lt5Char = value.length < 5;
             const gt0 = Number(value) >= 0;
-            const lt100 = Number(value) <= 100
-            const isValid = isNumber && nonEmpty && lt5Char && gt0 && lt100;
+            const ltMax = Number(value) <= props.gradient.max;
+            const isValid = isNumber && nonEmpty && lt5Char && gt0 && ltMax;
 
             event.target.setCustomValidity(isValid ? "" : " ");
         }

@@ -1,16 +1,18 @@
 import React from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
+import { getPositionInPercent } from "../../functions/slider";
 import "./ColorHint.scss";
 
 
 
 export default function ColorHint(props) {
+    const isInRange = getPositionInPercent(props.position, props.gradient.max) <= 100;
     const background = props.adjecentColors ? `linear-gradient(90deg, ${props.adjecentColors[0]} 0% 50%, ${props.adjecentColors[1]} 50%), url(${checkeredRect}` : "transparent";
     const title = `color hint ${props.index} ` + (props.errorInfo ? "[" + props.errorInfo + "]" : "");
 
 
 
-    function handleThumbOnMouseDown(event) { props.setActiveColorHint(props.index, event); }
+    function handleThumbOnMouseDown(event) { props.setActiveColorHint(props.index, event); event.preventDefault(); }
 
 
 
@@ -21,8 +23,8 @@ export default function ColorHint(props) {
             const isNumber = typeof Number(value) === "number";
             const lt5Char = value.length < 5;
             const gt0 = Number(value) >= 0;
-            const lt100 = Number(value) <= 100
-            const isValid = isNumber && nonEmpty && lt5Char && gt0 && lt100;
+            const ltMax = Number(value) <= props.gradient.max;
+            const isValid = isNumber && nonEmpty && lt5Char && gt0 && ltMax;
 
             event.target.setCustomValidity(isValid ? "" : " ");
         }
@@ -31,7 +33,7 @@ export default function ColorHint(props) {
 
 
     function renderInput() {
-        const textValue = !props.gradient.repeating ? props.position + "%" : undefined;
+        const textValue = props.position + props.gradient.repeatingUnit;
 
         return (
             <input
@@ -66,8 +68,9 @@ export default function ColorHint(props) {
         <div
             className="ColorHint"
             style={{
-                left: `calc(${props.position}% - 20px)`,
-                zIndex: props.isActive ? 100 : Math.round(props.position || 0)
+                display: isInRange ? "block" : "none",
+                left: `calc(${getPositionInPercent(props.position, props.gradient.max)}% - 20px)`,
+                zIndex: props.isActive ? 100 : Math.round(getPositionInPercent(props.position, props.gradient.max))
             }}
         >
             <div className="ColorHint__text-box">
