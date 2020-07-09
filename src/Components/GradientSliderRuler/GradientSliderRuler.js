@@ -7,9 +7,10 @@ export default function GradientSliderRuler(props) {
     function renderRuler() {
         const bodyWith = document.querySelector("body").getBoundingClientRect().width;
         const gradientListWidth = bodyWith > 1000 ? bodyWith * 0.6 : bodyWith; // need a way to estimate width before rendering component
-        const max = Number(props.gradient.max);
+        const maxToNumber = Number(props.gradient.max);
+        const max = maxToNumber <= 15 ? maxToNumber * 10 : maxToNumber;
         const step = 100 / max;
-        const iteration = max % 1 ? max * 10 : max;
+        const iteration = (max % 1 || max <= 15) ? max * 10 : max;
 
         if (!max) return false;
 
@@ -20,6 +21,8 @@ export default function GradientSliderRuler(props) {
                     if (max > 1500 && i % 100) return false;
 
                     let isPrimaryGroove = false;
+
+                    if (max <= 15 && !(i % 10)) isPrimaryGroove = true;
                     if (max <= 150 && !(i % 10)) isPrimaryGroove = true;
                     if (max > 150 && max <= 1500 && !(i % 100)) isPrimaryGroove = true;
                     if (max > 1500 && !(i % 1000)) isPrimaryGroove = true;

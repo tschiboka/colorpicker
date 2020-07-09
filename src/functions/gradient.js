@@ -2,73 +2,106 @@ import { sortGradientByColorStopsPercentage } from "./slider";
 
 
 
+const getHintString = (hints, colorStopArr, index, gradient, units) => {
+    const maxValue = Number(gradient.max);
+    let hintStr = "";
+
+    if (hints.length) {
+        const currentStop = colorStopArr[index].stop;
+        let nextColorStop = colorStopArr[index + 1] ? colorStopArr[index + 1].stop : maxValue;
+
+        const hintsInRange = hints.filter(hint => currentStop < hint && nextColorStop >= hint);
+        const highestHint = hintsInRange.length ? Math.max(...hintsInRange) : undefined;
+
+        if (highestHint) hintStr = ` ${highestHint}${units}`;
+
+    }
+    return hintStr;
+}
+
+
+
+const filterColorStops = gradients => {
+    return gradients.map(gradient => {
+        if (!gradient.repeating) return gradient;
+
+        const filteredGradient = getImmutableGradientCopy(gradient);
+        const filteredGradientColors = gradient.colors.filter(color => color.stop <= gradient.max);
+        filteredGradient.colors = filteredGradientColors;
+
+        return filteredGradient;
+    });
+}
+
+
+
+const sortGradientsByColorStops = gradients => gradients
+    .map(gradient => {
+        return sortGradientByColorStopsPercentage(getImmutableGradientCopy(gradient));
+    });
+
+
+
+
 export function gradientObjsToStr(gradientArray) {
-    gradientArray = gradientArray.map(grad => {
+    gradientArray = gradientArray.map(gradient => {
         // if no ColorStop provided let it be transparent
-        if (!grad.colors.length) return {
-            ...grad,
+        if (!gradient.colors.length) return {
+            ...gradient,
             colors: [
                 { color: "rgba(0, 0, 0, 0)", stop: 0 },
                 { color: "rgba(0, 0, 0, 0)", stop: 100 }
             ]
         };
         // if only 1 ColorStop provided let it be form 0 - 100%
-        else if (grad.colors.length === 1) {
+        else if (gradient.colors.length === 1) {
             return {
-                ...grad, colors: [
-                    { color: grad.colors[0].color, stop: 0 },
-                    { color: grad.colors[0].color, stop: 100 }
+                ...gradient, colors: [
+                    { color: gradient.colors[0].color, stop: 0 },
+                    { color: gradient.colors[0].color, stop: 100 }
                 ]
             };
         }
 
-        return grad;
+        return gradient;
     });
 
-    const sortedByPercentage = gradientArray.map(grad => sortGradientByColorStopsPercentage(getImmutableGradientCopy(grad)));
+    const filteredGradientsByColorStops = filterColorStops(gradientArray);
+    const sortedGradientsByColorStops = sortGradientsByColorStops(filteredGradientsByColorStops);
 
-    return sortedByPercentage
-        .filter(grad => grad.visible)
-        .map(grad => {
-            console.log(grad.repeatingUnit, grad.max);
-            const { colors } = grad;
-            const repeatingStr = grad.repeating ? "repeating-" : "";
-            const prefix = repeatingStr + grad.type + "-gradient";
-            const angle = grad.angle + "deg, ";
-            const hints = [...grad.colorHints].sort((a, b) => a - b);
+
+    return sortedGradientsByColorStops
+        .filter(gradient => gradient.visible && hasValidMaxInput(gradient))
+        .map(gradient => {
+            const { colors } = gradient;
+            const repeatingStr = gradient.repeating ? "repeating-" : "";
+            const prefix = repeatingStr + gradient.type + "-gradient";
+            const angle = gradient.angle + "deg, ";
+            const hints = [...gradient.colorHints].sort((a, b) => a - b);
             const colorStops = colors.map((colorStop, index, colorStopArr) => {
-                let hintStr = "";
-                const maxValue = grad.max || 0;
-                const units = grad.repeating ? grad.repeatingUnits : "%";
-
-                if (hints.length) {
-                    const currentStop = colorStop.stop;
-                    let nextColorStop = colorStopArr[index + 1] ? colorStopArr[index + 1].stop : maxValue;
-
-                    const hintsInRange = hints.filter(hint => currentStop < hint && nextColorStop >= hint);
-                    const highestHint = hintsInRange.length ? Math.max(...hintsInRange) : undefined;
-
-                    if (highestHint) hintStr = ` ${highestHint}${units}`;
-                }
+                const units = gradient.repeatingUnit;
+                const hintStr = getHintString(hints, colorStopArr, index, gradient, units);
 
                 return `${colorStop.color} ${colorStop.stop}${units}${hintStr}`
             }).join(",");
 
-            if (grad.type === "linear") {
+
+            if (gradient.type === "linear") {
+                console.log(`${prefix}(${angle}${colorStops})`);
                 return `${prefix}(${angle}${colorStops})`;
             }
 
-            if (grad.type === "radial") {
-                const shape = grad.radial.shape ? grad.radial.shape + " " : "";
-                const size = grad.radial.size ? grad.radial.size + " " : "";
-                const pos = grad.radial.position.join(" ");
+            if (gradient.type === "radial") {
+                const shape = gradient.radial.shape ? gradient.radial.shape + " " : "";
+                const size = gradient.radial.size ? gradient.radial.size + " " : "";
+                const pos = gradient.radial.position.join(" ");
                 const shapeSizePos = (shape || size || pos) ? shape + size + (pos && " at " + pos) + "," : "";
                 const gradientStr = `radial-gradient(${shapeSizePos}${colorStops})`;
 
                 return gradientStr;
             }
 
-            return new Error("Illegal gradient type", grad.type);
+            return new Error("Illegal gradient type", gradient.type);
         }).join(",");
 }
 
@@ -133,3 +166,10 @@ export const getImmutableGradientCopy = gradient => {
 
     return copy;
 }
+
+
+
+const maxStringNonZero = gradient => typeof gradient.max === "string" && gradient.max.length && gradient.max !== "0" && gradient.max !== "0.";
+const maxNumberNonZero = gradient => typeof gradient.max === "number" && gradient.max !== 0;
+const hasValidMaxInput = gradient => maxStringNonZero(gradient) || maxNumberNonZero(gradient);
+export const gradientHasValidMaxInput = hasValidMaxInput;

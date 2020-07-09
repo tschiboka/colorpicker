@@ -106,3 +106,7 @@ export const calculateAngle = (startX, startY, currX, currY) => {
 
     return Math.round(angle < 0 ? 360 + angle : angle);
 };
+
+
+
+export const getPositionInPercent = (position, max) => position / Number(max) * 100;

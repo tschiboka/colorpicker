@@ -1,5 +1,6 @@
 import React from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
+import { getPositionInPercent } from "../../functions/slider";
 import "./ColorStop.scss";
 
 
@@ -26,7 +27,7 @@ export default function ColorStop(props) {
 
 
     function renderInput() {
-        const textValue = !props.repeating ? props.position + "%" : undefined;
+        const textValue = props.position + props.gradient.repeatingUnit;
 
         return (
             <input
@@ -43,13 +44,17 @@ export default function ColorStop(props) {
     }
 
 
+    const isInRange = getPositionInPercent(props.position, props.gradient.max) <= 100;
+
+
 
     return (
         <div
             className="ColorStop"
             style={{
-                left: `calc(${props.position}% - 20px)`,
-                zIndex: props.isActive ? 100 : Math.round(props.position || 0)
+                display: isInRange ? "flex" : "none",
+                left: `calc(${getPositionInPercent(props.position, props.gradient.max)}% - 20px)`,
+                zIndex: props.isActive ? 100 : Math.round(getPositionInPercent(props.position, props.gradient.max))
             }}
         >
             <div className="ColorStop__text-box">

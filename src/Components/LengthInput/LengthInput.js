@@ -57,7 +57,7 @@ export default class LengthInput extends Component {
 
 
 
-    getInputPattern = () => this.state.unit === "px" ? "\\d{1,4}" : "\\d{1,2}\\.?\\d?|100";
+    getInputPattern = () => this.state.unit === "px" ? "^\\d{1,4}$" : "^\\d{1,2}\\.\\d$|^\\d{1,2}\\.$|^\\d{1,2}$|^100$";
 
 
 
