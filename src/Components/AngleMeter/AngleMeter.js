@@ -17,12 +17,41 @@ export default class AngleMeter extends Component {
 
 
     render() {
-        console.log(this.props.activeAngleMeter)
+        console.log(this.props.activeAngleMeter);
+        console.log(this.props.activeAngleMeter !== undefined ? "url(#gradientInverse)" : "url(#gradient)")
         return (
             <div
                 className="AngleMeter"
-                id={`AnmgleMeter_${this.props.index}`}
+                id={`AngleMeter_${this.props.index}`}
             >
+                <svg>
+                    <line x1="30" y1="0" x2="30" y2="60" />
+
+                    <line x1="30" y1="2" x2="30" y2="58" />
+
+                    <line x1="30" y1="0" x2="30" y2="60" />
+
+                    <line x1="30" y1="2" x2="30" y2="58" />
+
+                    <line x1="30" y1="0" x2="30" y2="60" />
+
+                    <line x1="30" y1="2" x2="30" y2="58" />
+
+                    <line x1="30" y1="0" x2="30" y2="60" />
+
+                    <line x1="30" y1="2" x2="30" y2="58" />
+
+                    <line x1="30" y1="0" x2="30" y2="60" />
+
+                    <line x1="30" y1="2" x2="30" y2="58" />
+
+                    <line x1="30" y1="0" x2="30" y2="60" />
+
+                    <line x1="30" y1="2" x2="30" y2="58" />
+
+                    <circle cx="30" cy="30" r="26" />
+                </svg>
+
                 <svg
                     id={`AngleMeter__meter_${this.props.index}`}
                     className="AngleMeter__meter"
@@ -33,15 +62,23 @@ export default class AngleMeter extends Component {
                     onTouchStart={e => this.handleMeterOnMouseDown(e)}
                 >
                     <defs>
-                        <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                            <stop offset="0%" style={{ "stop-color": "#1a1a1a", "stop-opacity": 0 }} />
+                        <radialGradient id="gradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                            <stop offset="0%" style={{ "stopColor": "#1a1a1a", "stopOpacity": 1 }} />
 
-                            <stop offset="100%" style={{ "stop-color": "#0c0c0c", "stop-opacity": 1 }} />
+                            <stop offset="100%" style={{ "stopColor": "#0c0c0c", "stopOpacity": 1 }} />
                         </radialGradient>
-                    </defs>
-                    <circle cx="25" cy="25" r="22" fill="url(#grad1)" />
 
-                    <line x1="25" y1="25" x2="25" y2="3" />
+                        <radialGradient id="gradientInverse" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                            <stop offset="0%" style={{ "stopColor": "#0c0c0c", "stopOpacity": 1 }} />
+
+                            <stop offset="100%" style={{ "stopColor": "#1a1a1a", "stopOpacity": 1 }} />
+                        </radialGradient>
+
+                    </defs>
+
+                    <circle cx="30" cy="30" r="23" fill={this.props.activeAngleMeter === this.props.index ? "url(#gradient)" : "url(#gradientInverse)"} />
+
+                    <line x1="30" y1="25" x2="30" y2="10" />
                 </svg>
             </div>
         );

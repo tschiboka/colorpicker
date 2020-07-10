@@ -43,8 +43,10 @@
             color: $tertiaryTextColor;
         }
         button {
-            height: 30px;
+            height: 29px;
             width: 30px;
+            border: none;
+            border-left: $tertiaryBorder;
             color: $warningTextColor;
         }
     }

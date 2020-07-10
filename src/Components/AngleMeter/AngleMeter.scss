@@ -7,15 +7,38 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    svg {
-        width: 50px;
-        height: 50px;
+    svg:first-child {
         line {
             stroke: $primaryBorderColor;
+            stroke-width: 1px;
+            stroke-linecap: round;
+            transform-origin: center;
+        }
+        line:nth-child(2n) { stroke: $secondaryBorderColor; }
+        line:nth-child(2) { transform: rotate(15deg); }
+        line:nth-child(3) { transform: rotate(30deg); }
+        line:nth-child(4) { transform: rotate(45deg); }
+        line:nth-child(5) { transform: rotate(60deg); }
+        line:nth-child(6) { transform: rotate(75deg); }
+        line:nth-child(7) { transform: rotate(90deg); }
+        line:nth-child(8) { transform: rotate(105deg); }
+        line:nth-child(9) { transform: rotate(120deg); }
+        line:nth-child(10) { transform: rotate(135deg); }
+        line:nth-child(11) { transform: rotate(150deg); }
+        line:nth-child(12) { transform: rotate(165deg); }   
+    }
+    svg {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        line {
+            stroke: $activeButtonTextColor;
+            stroke-width: 2px;
+            stroke-linecap: round;
+            opacity: 0.65;
         }
         circle {
-            //fill: $secondaryBackgroundColor;
-            stroke: $secondaryBorderColor;
+            stroke: $tertiaryBorderColor;
         }
     }
     .AngleMeter__meter {

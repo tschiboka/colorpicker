@@ -12,7 +12,8 @@ export default class GradientField extends Component {
         super(props);
 
         this.state = {
-            nameInputVisible: false
+            nameInputVisible: false,
+            copyWhenInsertOn: false
         };
     }
 
@@ -90,8 +91,12 @@ export default class GradientField extends Component {
                     </div>
 
                     <div className="GradientField__header__button-box">
-                        <button title="copy this gradient when insert">&#128396;
-                        <div className={`btn--${this.state.copyWhenInsertOn ? "active" : "inactive"}`}></div>
+                        <button 
+                            title="copy this gradient when insert"
+                            onClick={() => this.setState({ ...this.state, copyWhenInsertOn: !this.state.copyWhenInsertOn })}
+                        >&#128396;
+                                
+                            <div className={`btn--${this.state.copyWhenInsertOn ? "active" : "inactive"}`}></div>
                         </button>
 
                         <button title="insert new gradient above">&#8613;</button>
@@ -130,6 +135,7 @@ export default class GradientField extends Component {
                             updateGradient={this.props.updateGradient}
                             openColorPicker={this.props.openColorPicker}
                             preventMouseUp={this.props.preventMouseUp}
+                            activeAngleMeter={this.props.activeAngleMeter}
                         />
 
                         <GradientButtons

@@ -38,9 +38,13 @@
             button {
                 width: 50%;
                 height: 100%;
+                background: $buttonGradientLrg;
                 border-left: $tertiaryBorder;
                 font-size: $lrgFont;
-                &:hover { font-size: $medFont; }
+                &:hover { 
+                    background: $buttonGradientHoverLrg;
+                    font-size: $medFont; 
+                }
             }
         }
         &:nth-child(3) {
@@ -71,7 +75,7 @@
                 height: 50%;
                 font-size: $xxlFont;
                 border-bottom: $tertiaryBorder;
-                &:hover { font-size: $lrgFont; }
+                &:hover { font-size: $xlgFont; }
             }
             .LengthInput {
                 height: 50%;
@@ -84,11 +88,15 @@
             button {
                 width: 100%;
                 height: 100%;
+                background: $buttonGradientLrg;
                 border-left: $tertiaryBorder;
                 border-right: $tertiaryBorder;
                 font-size: $xxlFont;
                 font-weight: lighter;
-                &:hover { font-size: $lrgFont; }
+                &:hover { 
+                    font-size: $xlgFont;
+                    background: $buttonGradientHoverLrg;
+                }
             }
         }
         &:nth-child(6) {
