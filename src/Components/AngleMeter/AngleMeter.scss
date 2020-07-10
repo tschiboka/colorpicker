@@ -14,8 +14,8 @@
             stroke: $primaryBorderColor;
         }
         circle {
-            fill: $secondaryBackgroundColor;
-            stroke: $primaryBorderColor;
+            //fill: $secondaryBackgroundColor;
+            stroke: $secondaryBorderColor;
         }
     }
     .AngleMeter__meter {

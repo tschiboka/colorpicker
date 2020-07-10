@@ -8,7 +8,6 @@
         height: $xlgFont;
         width: 100%;
         padding: 0;
-        background: $secondaryBackgroundColor;
         font-size: $medFont;
         display: flex;
         justify-content: flex-start;
@@ -23,6 +22,7 @@
             align-items: center;
             justify-content: center;
             background-color: $secondaryTextColor;
+            background: $orangePinkGradient;
             color: $secondaryBackgroundColor;
             font-size: $xsmFont;
             font-weight: bolder;
@@ -52,10 +52,12 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: transparent;
+                margin-left: 1px;
+                background: $secondaryBackgroundColor;
+                background: $buttonGradient;
                 border: none;
-                border-left: $tertiaryBorder;
-                color: $primaryTextColor;
+                color: $secondaryTextColor;
+                text-shadow: -1px -1px black;
                 font-size: $xlgFont;
                 line-height: $xlgFont;
                 vertical-align: middle;
@@ -67,10 +69,24 @@
                 }
                 &:hover {
                     background: $secondaryBorderColor;
+                    background: $buttonGradientHover;
                     color: $activeButtonTextColor;
                     font-size: $lrgFont;
+                    text-shadow: 1px 1px black;
                 }
+                &:first-child { font-size: $lrgFont; }
                 &:last-child:hover { color: $warningTextColor; }
+                .btn--inactive, .btn--active {
+                    position: absolute;
+                    width: 6px;
+                    height: 6px;
+                    top: 3px;
+                    right: 3px;
+                    border-radius: 5px;
+                    border: $tertiaryBorder;
+                }
+                .btn--inactive { background: $buttonInactiveColor; }
+                .btn--active { background: $activeButtonTextColor; }    
             }
         }
     }

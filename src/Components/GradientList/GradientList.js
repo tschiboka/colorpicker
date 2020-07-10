@@ -33,6 +33,7 @@ export default class GradientList extends Component {
                 preventMouseUp={this.state.activeAngleMeter !== undefined}
                 openColorPicker={this.props.openColorPicker}
                 openRadialSettings={this.props.openRadialSettings}
+                activeAngleMeter={this.state.activeAngleMeter}
             />
         ));
     }
@@ -131,10 +132,12 @@ export default class GradientList extends Component {
                 <header>
                     <span>Gradient List</span>
 
-                    <button
-                        title="add new gradient"
-                        onClick={() => this.handleAddGradientOnClick()}
-                    >&#43;</button>
+                    <div>
+                        <button
+                            title="add new gradient"
+                            onClick={() => this.handleAddGradientOnClick()}
+                        >&#43;</button>
+                    </div>
                 </header>
 
                 <div className="gradients">

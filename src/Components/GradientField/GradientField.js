@@ -90,6 +90,10 @@ export default class GradientField extends Component {
                     </div>
 
                     <div className="GradientField__header__button-box">
+                        <button title="copy this gradient when insert">&#128396;
+                        <div className={`btn--${this.state.copyWhenInsertOn ? "active" : "inactive"}`}></div>
+                        </button>
+
                         <button title="insert new gradient above">&#8613;</button>
 
                         <button title="insert new gradient below">&#8615;</button>
@@ -133,6 +137,7 @@ export default class GradientField extends Component {
                             index={this.props.index}
                             updateGradient={this.props.updateGradient}
                             setAngleMeterIsActive={this.props.setAngleMeterIsActive}
+                            activeAngleMeter={this.props.activeAngleMeter}
                             openRadialSettings={this.props.openRadialSettings}
                         />
                     </div>

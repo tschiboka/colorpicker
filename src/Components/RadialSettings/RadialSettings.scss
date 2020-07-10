@@ -13,15 +13,19 @@
         position: relative;
         height: 26px;
         background: transparent;
+        background: $buttonGradient;
         color: $primaryTextColor;
         font-size: $medFont;
         border: $secondaryBorder;
         border-radius: $borderRadius;
+        text-shadow: -1px -1px black;
         cursor: pointer;
         &:hover {
             background: $buttonHoverBackgroundColor;
+            background: $buttonGradientHover;
             font-size: $smlFont;
             color: $activeButtonTextColor;
+            text-shadow: 1px 1px black;
         }
     }
     .LengthInput {

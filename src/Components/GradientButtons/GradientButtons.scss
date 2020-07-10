@@ -8,14 +8,18 @@
         position: relative;
         border: none;
         background: transparent;
+        background: $buttonGradient;
         color: $primaryTextColor;
         font-size: $lrgFont;
         line-height: $lrgFont;
+        text-shadow: -1px -1px black;
         cursor: pointer;
         &:hover {
             background: $buttonHoverBackgroundColor;
+            background: $buttonGradientHover;
             color: $activeButtonTextColor;
             font-size: $medFont;
+            text-shadow: 1px 1px black;
         }
     }
     & > div {

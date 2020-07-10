@@ -8,13 +8,20 @@
     color: $primaryTextColor;
     overflow-y: auto;
     overflow-x: hidden;
-    & > header button {
-        font-size: $xxlFont;
-        font-weight: lighter;
-        &:hover {
-            font-size: $xlgFont;
-            color: $activeButtonTextColor;
-        }
+    & > header
+        div {
+            max-height: 30px;
+            background: $buttonGradient;
+            &:hover { background: $buttonGradientHover; }
+            button {
+                max-height: 30px;
+                font-size: $xlgFont;
+                font-weight: lighter;
+                &:hover {
+                    font-size: $xlgFont;
+                    color: $activeButtonTextColor;
+            }
+        } 
     }
     .gradients {
         display: flex;

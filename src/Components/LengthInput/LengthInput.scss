@@ -40,10 +40,15 @@
             color: $secondaryTextColor;
             border-left: $tertiaryBorder;
             background: $secondaryBackgroundColor;
+            background: $buttonGradient;
+            text-shadow: -1px -1px black;
             cursor: pointer;
             &:hover {
                 color: $activeButtonTextColor;
                 background: $buttonHoverBackgroundColor;
+                background: $buttonGradientHover;
+                font-size: $xsmFont;
+                text-shadow: 1px 1px black;
             }
         }
         &:last-child {
@@ -69,14 +74,18 @@
             min-height: 26px;
             min-width: 26px;
             background: $tertiaryBackgroundColor;
+            background: $buttonGradient;
             border: none;
             padding: 0 5px;
             font-size: $xsmFont !important;
             color:$secondaryTextColor;
+            text-shadow: -1px -1px black;
             &:not(:first-child) { border-left: $tertiaryBorder; }
             &:hover {
                 font-size: $medFont;
                 color: $activeButtonTextColor;
+                background: $buttonGradientHover;
+                text-shadow: 1px 1px black;
             }
         }
     }

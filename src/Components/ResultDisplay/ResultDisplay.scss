@@ -6,10 +6,16 @@
     display: flex;
     flex-direction: column;
     .ResultDisplay__header {
-        .ResultDisplay__menu-btn {
-            font-size: $lrgFont;
+        div {
+            background: $buttonGradient;
+            .ResultDisplay__menu-btn {
+                font-size: $lrgFont;
+                &:hover {
+                    font-size: $medFont;
+                }
+            }
             &:hover {
-                font-size: $medFont;
+                background: $buttonGradientHover;
             }
         }
     }

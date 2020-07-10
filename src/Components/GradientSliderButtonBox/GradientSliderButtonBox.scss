@@ -2,40 +2,49 @@
 
 .GradientSliderButtonBox {
     display: flex;
-        flex-direction: column;
-        justify-content: center;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    background: $primaryBackgroundColor;
+    border-left: $tertiaryBorder;
+    & > div {
+        height: 50%;
+        display: flex;
+        &:first-child {
+            //border-bottom: $tertiaryBorder;
+            margin-bottom: 1px;
+            button {
+                font-size: $xlgFont;
+                &:first-child { 
+                    //border-right: $tertiaryBorder; 
+                    margin-right: 1px;
+                }
+                &:hover { font-size: $lrgFont; }
+            }
+        }
+        &:last-child {
+            button {
+                width: 100%;
+            }
+        }
+    }
+    button {
+        width: 35px;
+        position: relative;
         height: 100%;
-        border-left: $tertiaryBorder;
-        & > div {
-            height: 50%;
-            display: flex;
-            &:first-child {
-                border-bottom: $tertiaryBorder;
-                button {
-                    font-size: $xlgFont;
-                    &:first-child { border-right: $tertiaryBorder; }
-                    &:hover { font-size: $lrgFont; }
-                }
-            }
-            &:last-child {
-                button {
-                    width: 100%;
-                }
-            }
+        border: none;
+        background: transparent;
+        background: $buttonGradient;
+        color: $secondaryTextColor;
+        font-size: $medFont;
+        text-shadow: -1px -1px black;
+        cursor: pointer;
+        &:hover {
+            background: $secondaryBorderColor;
+            background: $buttonGradientHover;
+            color: $activeButtonTextColor;
+            text-shadow: 1px 1px black;
+            font-size: $smlFont;
         }
-        button {
-            width: 35px;
-            position: relative;
-            height: 100%;
-            border: none;
-            background: transparent;
-            color: $primaryTextColor;
-            font-size: $medFont;
-            cursor: pointer;
-            &:hover {
-                background: $secondaryBorderColor;
-                color: $activeButtonTextColor;
-                font-size: $smlFont;
-            }
-        }
+    }
 }

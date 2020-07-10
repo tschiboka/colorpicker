@@ -198,6 +198,7 @@ export default class GradientButtons extends Component {
                         index={this.props.index}
                         updateGradient={this.props.updateGradient}
                         setAngleMeterIsActive={this.props.setAngleMeterIsActive}
+                        activeAngleMeter={this.props.activeAngleMeter}
                      />
                     
                     <input

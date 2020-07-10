@@ -38,11 +38,13 @@ export default class ResultDisplay extends Component {
                 <header className="ResultDisplay__header">
                     <span>Gradient Display</span>
 
-                    <button
-                        className="ResultDisplay__menu-btn"
-                        onClick={() => this.setState({ ...this.state, menuIsOpen: !this.state.menuIsOpen })}>
-                        &#9776;
-                    </button>
+                    <div>
+                        <button
+                            className="ResultDisplay__menu-btn"
+                            onClick={() => this.setState({ ...this.state, menuIsOpen: !this.state.menuIsOpen })}>
+                            &#9776;
+                        </button>
+                    </div>
                 </header>
 
                 <div

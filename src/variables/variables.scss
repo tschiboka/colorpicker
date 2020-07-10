@@ -22,8 +22,10 @@ $buttonInactiveColor:         #0c0c0c;
 $codeBlue:                    #72e0d1;
 $codeYellow:                  #f5d67b;
 $codeOrange:                  #fc9463;
-// GRADIENT
+// GRADIENTS
 $orangePinkGradient:            linear-gradient(-45deg, #ff8a00 40% 30%,#e52e71 60% 70%, #e52e71 100%);
+$buttonGradient:                linear-gradient(180deg, #1a1a1a 30%, #0c0c0c);
+$buttonGradientHover:           linear-gradient(180deg, #0c0c0c 30%, #1a1a1a);
 
 
 

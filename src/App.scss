@@ -59,21 +59,18 @@
         cursor: default;
         button {
             width: 35px;
-            height: 100%;    
             display: flex;
             justify-content: center;
             align-items: center;
             background: $orangePinkGradient;
             background-clip: text;
             color: transparent;
-            font-size: 30px;
             border: none;
             border-left: $tertiaryBorder;
             cursor: pointer;
             &:hover { 
                 background-clip: none;
                 color: $activeButtonTextColor;
-                background: $secondaryBorderColor;
             }
         }
     }
