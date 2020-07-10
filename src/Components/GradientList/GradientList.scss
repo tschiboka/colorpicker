@@ -9,12 +9,8 @@
     overflow-y: auto;
     overflow-x: hidden;
     & > header button {
-        border: none;
-        background: transparent;
-        color: $primaryTextColor;
         font-size: $xxlFont;
-        font-weight: bold;
-        margin-right: 5px;
+        font-weight: lighter;
         &:hover {
             font-size: $xlgFont;
             color: $activeButtonTextColor;

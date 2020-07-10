@@ -40,22 +40,42 @@
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
+    background: $primaryBackgroundColor;
     padding: 10px;
-    background: #202020;
     font-weight: bold;
     overflow-x: hidden;
     > div > header {
         width: 100%;
         height: 30px;
         max-height: 30px;
+        background: $secondaryBackgroundColor;
         display: flex;
         justify-content: space-between;
         align-items: center;
         font-size: $lrgFont;
         color: $primaryTextColor;
-        padding: 0 5px;
+        padding: 0 0 0 5px;
         border-bottom: $primaryBorder;
         cursor: default;
+        button {
+            width: 35px;
+            height: 100%;    
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: $orangePinkGradient;
+            background-clip: text;
+            color: transparent;
+            font-size: 30px;
+            border: none;
+            border-left: $tertiaryBorder;
+            cursor: pointer;
+            &:hover { 
+                background-clip: none;
+                color: $activeButtonTextColor;
+                background: $secondaryBorderColor;
+            }
+        }
     }
     & > * {
         flex: 1 1 50%;

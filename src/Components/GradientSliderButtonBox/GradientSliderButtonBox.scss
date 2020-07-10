@@ -4,17 +4,14 @@
     display: flex;
         flex-direction: column;
         justify-content: center;
-        width: 70px;
         height: 100%;
         border-left: $tertiaryBorder;
         & > div {
-            width: 100%;
             height: 50%;
             display: flex;
             &:first-child {
                 border-bottom: $tertiaryBorder;
                 button {
-                    width: 50%;
                     font-size: $xlgFont;
                     &:first-child { border-right: $tertiaryBorder; }
                     &:hover { font-size: $lrgFont; }
@@ -27,6 +24,7 @@
             }
         }
         button {
+            width: 35px;
             position: relative;
             height: 100%;
             border: none;

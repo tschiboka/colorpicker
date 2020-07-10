@@ -88,6 +88,7 @@ export default function ColorHint(props) {
                     style={{ background }}
                     onMouseDown={e => handleThumbOnMouseDown(e)}
                     onTouchStart={e => handleThumbOnMouseDown(e)}
+                    draggable={true}
                 >
                     {renderAdjecentColors()}
                 </div>

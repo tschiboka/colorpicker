@@ -7,17 +7,7 @@
     flex-direction: column;
     .ResultDisplay__header {
         .ResultDisplay__menu-btn {
-            width: 5%;
-            height: 100%;
-            border: none;
-            background: transparent;
-            color: $primaryTextColor;
             font-size: $lrgFont;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            text-align: right;
-            cursor: pointer;
             &:hover {
                 font-size: $medFont;
             }

@@ -61,8 +61,6 @@ export default class GradientSlider extends Component {
 
 
     handleSliderOnMouseUp(event) {
-        console.log("UP", event.target);
-        if (this.props.preventMouseUp) return false;
         // Do nothing if any text input is active on slider
         const textActive = this.state.activeColorStopText !== undefined || this.state.activeColorHintText !== undefined;
         if (textActive) return false;
@@ -229,10 +227,16 @@ export default class GradientSlider extends Component {
 
 
     addNewColorStop(event) {
+        const sliderDiv = document.getElementById(this.state.id).children[0];
+        const width = Math.round(sliderDiv.getBoundingClientRect().width);
         const gradientCopy = getImmutableGradientCopy(this.props.gradient);
         const updatedColorStops = gradientCopy.colors;
+        let colorStop;
 
-        updatedColorStops.push({ color: "rgba(255, 255, 255, 0.5)", stop: this.getMousePosXInPercentage({ ...event }) });
+        if (this.props.gradient.repeatingUnit === "%" && Number(this.props.gradient.max) === 100) colorStop = this.getMousePosXInPercentage(event, width);
+        else colorStop = this.getMousePosX(event, width);
+
+        updatedColorStops.push({ color: "rgba(255, 255, 255, 0.5)", stop: colorStop });
         gradientCopy.colors = updatedColorStops;
 
         const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
@@ -252,6 +256,7 @@ export default class GradientSlider extends Component {
         gradientCopy.colorHints = updatedColorHints;
         gradientCopy.colorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
 
+        console.log("ADD", gradientCopy.colorHints);
         this.props.updateGradient(gradientCopy, this.props.index);
     }
 
@@ -286,11 +291,10 @@ export default class GradientSlider extends Component {
 
 
     setActiveColorHint(activeColorHint, event) {
-        console.log("DOWN")
         this.resetStateTo({
             activeColorHint,
             mouseAtPercentage: this.getMousePosXInPercentage({ ...event })
-        });
+        })
     }
 
 
