@@ -248,11 +248,16 @@ export default class GradientSlider extends Component {
 
 
     addNewColorHint(event) {
+        const sliderDiv = document.getElementById(this.state.id).children[0];
+        const width = Math.round(sliderDiv.getBoundingClientRect().width);
         const gradientCopy = getImmutableGradientCopy(this.props.gradient);
-        const newStop = this.getMousePosXInPercentage({ ...event });
+        let colorHint;
+
+        if (this.props.gradient.repeatingUnit === "%" && Number(this.props.gradient.max) === 100) colorHint = this.getMousePosXInPercentage(event, width);
+        else colorHint = this.getMousePosX(event, width);
         const updatedColorHints = gradientCopy.colorHints;
 
-        updatedColorHints.push(newStop);
+        updatedColorHints.push(colorHint);
         gradientCopy.colorHints = updatedColorHints;
         gradientCopy.colorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
 
