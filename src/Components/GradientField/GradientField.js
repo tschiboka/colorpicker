@@ -172,7 +172,13 @@ export default class GradientField extends Component {
                             onClick={() => this.handleInsertGradientOnClick("below")}
                         >&#8615;</button>
 
-                        <button title="reposition gradient">&#8645;</button>
+                        <button
+                            title="reposition gradient"
+                            style={{ color: this.props.repositionOn ? "#4cc3f1" : "" }}
+                            onClick={() => this.props.setReposition(this.props.index)}
+                        >&#8645;
+                        <div className={`btn--${this.props.repositionOn ? "active" : "inactive"}`}></div>
+                        </button>
 
                         <button
                             title="visibility"

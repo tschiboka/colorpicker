@@ -15,7 +15,9 @@ export default class GradientList extends Component {
             gradientToDelete: undefined,
             activeAngleMeter: undefined,
             activeAngleMeterStartX: undefined,
-            activeAngleMeterStartY: undefined
+            activeAngleMeterStartY: undefined,
+            isRepositioning: false,
+            repositionArr: [],
         }
     }
 
@@ -36,8 +38,30 @@ export default class GradientList extends Component {
                 openRadialSettings={this.props.openRadialSettings}
                 activeAngleMeter={this.state.activeAngleMeter}
                 insertGradient={this.props.insertGradient}
+                setReposition={this.setReposition.bind(this)}
+                repositionOn={this.state.repositionArr.indexOf(i) !== -1}
             />
         ));
+    }
+
+
+
+    setReposition(index) {
+        const newState = { ...this.state };
+        const newRepositionArr = [...newState.repositionArr];
+        const indexOfField = newRepositionArr.indexOf(index);
+        if (indexOfField === -1) newRepositionArr.push(index);
+        else newRepositionArr.splice(indexOfField, 1);
+
+        newState.repositionArr = newRepositionArr;
+        this.setState(newState, () => {
+            if (this.state.repositionArr.length > 1) {
+                this.props.swapGradientFields(...this.state.repositionArr);
+                const newState = { ...this.state };
+                newState.repositionArr = [];
+                this.setState(newState)
+            }
+        });
     }
 
 

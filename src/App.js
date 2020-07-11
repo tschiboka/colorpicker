@@ -65,6 +65,17 @@ export default class App extends Component {
 
 
 
+  swapGradientFields(indexA, indexB) {
+    const gradients = [...this.state.gradients];
+    const tempField = gradients[indexA];
+    gradients[indexA] = gradients[indexB];
+    gradients[indexB] = tempField;
+
+    this.updateGradients(gradients);
+  }
+
+
+
   insertGradient(newGradient, insertIndex) {
     const updatedGradientList = [...this.state.gradients];
     updatedGradientList.splice(insertIndex, 0, newGradient);
@@ -146,6 +157,7 @@ export default class App extends Component {
           openColorPicker={this.openColorPicker.bind(this)}
           openRadialSettings={this.openRadialSettings.bind(this)}
           insertGradient={this.insertGradient.bind(this)}
+          swapGradientFields={this.swapGradientFields.bind(this)}
         />
 
         <Code />
