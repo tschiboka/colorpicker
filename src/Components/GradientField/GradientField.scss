@@ -5,7 +5,7 @@
     border-bottom: $primaryBorder;
     height: 160px;
     header {
-        height: $xlgFont;
+        height: 22px;
         width: 100%;
         padding: 0;
         font-size: $medFont;
@@ -29,15 +29,17 @@
             text-align: center;
             line-height: $lrgFont;
             border-radius: $circleRadius;
+            border: $tertiaryBorder;
         }
         .GradientField__name {
-            padding-left: 5px;
+            padding-left: 5px;    
             border-left: $tertiaryBorder;
             text-overflow: ellipsis;
             overflow: hidden; 
             white-space: nowrap;
             cursor: text;
             input {
+                max-height: 20px;
                 background: $tertiaryBackgroundColor;
                 border-style: none;
                 border: $tertiaryBorder;
@@ -55,7 +57,7 @@
             button {
                 position: relative;
                 height: 100%;
-                width: 35px !important;
+                width: 35.5px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -63,6 +65,7 @@
                 background: $secondaryBackgroundColor;
                 background: $buttonGradient;
                 border: none;
+                border-left: $tertiaryBorder;
                 color: $secondaryTextColor;
                 text-shadow: -1px -1px black;
                 font-size: $xlgFont;

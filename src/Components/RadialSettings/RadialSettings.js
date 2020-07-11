@@ -88,7 +88,7 @@ export default function RadialSettings(props) {
             <div className="RadialSettings__header">
                 <span>
                     Radial Settings of [
-                    <span>{gradient.name || "Untitled " + props.index}</span>
+                    <span>{gradient.name}</span>
                 ] gradient</span>
 
                 <button onClick={() => props.openRadialSettings(false, props.index, false)}>

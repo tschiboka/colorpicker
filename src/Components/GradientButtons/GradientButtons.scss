@@ -3,13 +3,13 @@
 .GradientButtons {
     position: relative;
     display: flex;
-    height: 45%;
+    height: 50%;
     button {
         position: relative;
         border: none;
         background: transparent;
         background: $buttonGradient;
-        color: $primaryTextColor;
+        color: $secondaryTextColor;
         font-size: $lrgFont;
         line-height: $lrgFont;
         text-shadow: -1px -1px black;
@@ -24,7 +24,7 @@
     }
     & > div {
         height: 100%;
-        width: 13%;
+        width: 10%;
         display: flex;
         &:first-child {
             flex-direction: column;
@@ -35,14 +35,15 @@
             }
         }
         &:nth-child(2) {
+            width: 10%;
+            flex-direction: column;
             button {
-                width: 50%;
+                width: 100%;
                 height: 100%;
-                background: $buttonGradientLrg;
                 border-left: $tertiaryBorder;
                 font-size: $lrgFont;
+                &:first-child { border-bottom: $tertiaryBorder; }
                 &:hover { 
-                    background: $buttonGradientHoverLrg;
                     font-size: $medFont; 
                 }
             }
@@ -73,9 +74,9 @@
             button {
                 width: 100%;
                 height: 50%;
-                font-size: $xxlFont;
+                font-size: $xlgFont;
                 border-bottom: $tertiaryBorder;
-                &:hover { font-size: $xlgFont; }
+                &:hover { font-size: $lrgFont; }
             }
             .LengthInput {
                 height: 50%;
@@ -85,37 +86,29 @@
         }
         &:nth-child(5) {
             width: 10%;
-            button {
-                width: 100%;
-                height: 100%;
-                background: $buttonGradientLrg;
-                border-left: $tertiaryBorder;
-                border-right: $tertiaryBorder;
-                font-size: $xxlFont;
-                font-weight: lighter;
-                &:hover { 
-                    font-size: $xlgFont;
-                    background: $buttonGradientHoverLrg;
-                }
-            }
-        }
-        &:nth-child(6) {
-            width: 120px;
-            margin-left: auto;
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
+            border-left: $tertiaryBorder;
+            border-right: $tertiaryBorder;
+            button {
+                width: 100%;
+                height: 50%;
+                border-bottom: $tertiaryBorder;
+                font-size: $xlgFont;
+                font-weight: lighter;
+                &:hover { 
+                    font-size: $lrgFont;
+                }
+            }
             input {
                 margin: 0 15px;
                 height: 50%;
-                max-width: 40px;
-                min-height: 50%;
+                max-width: 100%;
                 background: $tertiaryBackgroundColor;
-                font-size: $smlFont;
-                border-radius: $borderRadius;
-                border: $tertiaryBorder;
-                border-bottom: $tertiaryBorder;
-                border-top: $tertiaryBorder;
+                font-size: $xsmFont;
+                border: none;
                 color: $primaryTextColor;
                 text-align: center;
             }
@@ -123,7 +116,16 @@
                 color: $warningTextColor;
                 box-shadow: none;
             }
-            input::placeholder { color: $primaryTextColor; }
+            input::placeholder { color: white; }
+        }
+        &:nth-child(6) {
+            width: 72px;
+            margin-left: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: $tertiaryBackgroundColor;
+            border-left: $tertiaryBorder;
         }
     }
 }
@@ -139,10 +141,10 @@
                 display: none;
             }
             &:nth-child(4) {
-                width: 30%;
+                min-width: 20%;
             }
             &:nth-child(5) {
-                width: 20%;
+                min-width: 20%;
             }
         }        
     }

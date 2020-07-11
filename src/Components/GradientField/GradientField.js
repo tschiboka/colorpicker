@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
-import { gradientObjsToStr } from "../../functions/gradient";
+import { gradientObjsToStr, getImmutableGradientCopy } from "../../functions/gradient";
 import GradientSlider from "../GradientSlider/GradientSlider";
 import GradientButtons from "../GradientButtons/GradientButtons";
+import { getDefaultGradientObj } from "../../functions/gradient";
 import "./GradientField.scss";
 
 
@@ -13,8 +14,20 @@ export default class GradientField extends Component {
 
         this.state = {
             nameInputVisible: false,
-            copyWhenInsertOn: false
+            copyWhenInsertCopyOn: false
         };
+    }
+
+
+
+    componentDidMount() {
+        if (!this.props.gradient.name) { this.nameGradients() }
+    }
+
+
+
+    componentDidUpdate() {
+        if (!this.props.gradient.name) { this.nameGradients() }
     }
 
 
@@ -26,10 +39,13 @@ export default class GradientField extends Component {
     handeleNameOnKeyDown(e) {
         const key = e.which || e.keyCode || e.key;
         const input = document.getElementById(`GradientField${this.props.index}-name-input`);
-        const validateInput = () => input.value.replace(/[^\w-.,()[\]\s]/g, "");
         const closeInput = () => this.setState({ ...this.state, nameInputVisible: false });
+        const validateInput = () => input.value
+            .replace(/[^\w-.,()[\]\s]/g, "") // filter invalid chars
+            .match(/.{0,20}/g)[0];           // allow only 20 cars 
 
         input.value = validateInput(input.value);
+        console.log(input.value);
 
         if (key === 27 || key === "Escape" || key === "Esc") closeInput();
 
@@ -42,6 +58,26 @@ export default class GradientField extends Component {
 
             closeInput();
         }
+    }
+
+
+
+    handleInsertGradientOnClick(where) {
+        const addCopyText = str => {
+            console.log("HERE", str);
+            return str.replace(/(\scopy\s?\d?)?$/g, copyText => {
+                const copyNumber = Number(copyText.match(/\d*$/g)[0] || 0) + 1;
+                return " copy" + (copyNumber === 1 ? "" : " " + copyNumber);
+            });
+        }
+        const getCopyName = () => addCopyText((this.props.gradient.name || `Untitled ${this.props.index + 1}`));
+        const insertIndex = where === "above" ? this.props.index : this.props.index + 1;
+        const newGradient = this.state.copyWhenInsertCopyOn ? { ...this.props.gradient } : getDefaultGradientObj();
+        const copyName = this.state.copyWhenInsertCopyOn ? getCopyName() : "";
+
+        newGradient.name = copyName;
+
+        this.props.insertGradient(newGradient, insertIndex);
     }
 
 
@@ -59,10 +95,32 @@ export default class GradientField extends Component {
 
 
 
+    getUntitledNumber() {
+        // In case user messes up titles [Untitled 1, Untitled 3345, Untitled 2]
+        // In the case above return 3 instead of 3346 as the next possible Untitled Number
+        const names = this.props.gradients.map(gradient => gradient.name);
+        const untitledNames = names.filter(name => /^Untitled\s?\d+$/gi.test(name));
+        const untitledNumbers = untitledNames.map(name => Number(name.match(/\d+/))).sort((a, b) => a - b);
+        const correctNumbers = untitledNumbers.filter((num, ind) => num === ind + 1);
+        const untitledNumber = (correctNumbers[correctNumbers.length - 1] || 0) + 1;
+        console.log(correctNumbers, untitledNumber);
+
+        return untitledNumber;
+    }
+
+
+
+    nameGradients() {
+        const updatedGradient = getImmutableGradientCopy(this.props.gradient);
+        updatedGradient.name = `Untitled ${this.getUntitledNumber()}`;
+        console.log(updatedGradient.name);
+        this.props.updateGradient(updatedGradient, this.props.index);
+    }
+
+
+
     renderName() {
-        if (!this.state.nameInputVisible) {
-            return this.props.gradient.name || `Untitled ${this.props.index + 1}`;
-        }
+        if (!this.state.nameInputVisible) return this.props.gradient.name;
         else {
             return <input
                 type="text"
@@ -91,17 +149,22 @@ export default class GradientField extends Component {
                     </div>
 
                     <div className="GradientField__header__button-box">
-                        <button 
+                        <button
                             title="copy this gradient when insert"
-                            onClick={() => this.setState({ ...this.state, copyWhenInsertOn: !this.state.copyWhenInsertOn })}
+                            onClick={() => this.setState({ ...this.state, copyWhenInsertCopyOn: !this.state.copyWhenInsertCopyOn })}
                         >&#128396;
-                                
-                            <div className={`btn--${this.state.copyWhenInsertOn ? "active" : "inactive"}`}></div>
+                            <div className={`btn--${this.state.copyWhenInsertCopyOn ? "active" : "inactive"}`}></div>
                         </button>
 
-                        <button title="insert new gradient above">&#8613;</button>
+                        <button
+                            title="insert new gradient above"
+                            onClick={() => this.handleInsertGradientOnClick("above")}
+                        >&#8613;</button>
 
-                        <button title="insert new gradient below">&#8615;</button>
+                        <button
+                            title="insert new gradient below"
+                            onClick={() => this.handleInsertGradientOnClick("below")}
+                        >&#8615;</button>
 
                         <button title="reposition gradient">&#8645;</button>
 

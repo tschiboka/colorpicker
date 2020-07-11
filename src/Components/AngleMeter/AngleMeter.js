@@ -4,6 +4,14 @@ import "./AngleMeter.scss";
 
 
 export default class AngleMeter extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = { onMouseOver: false }
+    }
+
+
+
     handleMeterOnMouseDown(event) {
         const mouseStartX = event.clientX || event.pageX || event.touches[0].clientX;
         const mouseStartY = event.clientY || event.pageY || event.touches[0].clientY;
@@ -76,9 +84,16 @@ export default class AngleMeter extends Component {
 
                     </defs>
 
-                    <circle cx="30" cy="30" r="23" fill={this.props.activeAngleMeter === this.props.index ? "url(#gradient)" : "url(#gradientInverse)"} />
+                    <circle
+                        cx="30" cy="30" r="23"
+                        fill={(this.props.activeAngleMeter === this.props.index || this.state.onMouseOver) ? "url(#gradientInverse)" : "url(#gradient)"}
+                        onMouseOver={() => this.setState({ ...this.state, onMouseOver: true })}
+                        onMouseLeave={() => this.setState({ ...this.state, onMouseOver: false })}
+                    />
 
-                    <line x1="30" y1="25" x2="30" y2="10" />
+                    <line x1="30" y1="26" x2="30" y2="13" />
+
+                    <line x1="30" y1="25" x2="30" y2="15" />
                 </svg>
             </div>
         );

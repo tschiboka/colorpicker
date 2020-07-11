@@ -1,8 +1,7 @@
 @import "../../variables/variables.scss";
 
 .AngleMeter {
-    width: 60%;
-    min-width: 50px;
+    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -32,10 +31,16 @@
         width: 60px;
         height: 60px;
         line {
+            stroke: black;
+            stroke-width: 3px;
+            stroke-linecap: round;
+            pointer-events: none;
+        }
+        line:last-child {
             stroke: $activeButtonTextColor;
             stroke-width: 2px;
             stroke-linecap: round;
-            opacity: 0.65;
+            pointer-events: none;
         }
         circle {
             stroke: $tertiaryBorderColor;

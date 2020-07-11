@@ -168,7 +168,7 @@ export default class GradientButtons extends Component {
                     <button 
                         title="repeating gradient"
                         onClick={() => this.handleRepeatingBtnOnClick()}
-                    >&#x25A5;
+                    >&#x25a7;
                         <div className={`btn--${this.props.gradient.repeating ? "active": "inactive"}`}></div>
                     </button>
                     
@@ -188,8 +188,16 @@ export default class GradientButtons extends Component {
                         onClick={() => this.props.openRadialSettings(true, this.props.index, true)}
                     >&#9678;
                     
-                    <div className={`btn--${this.props.gradient.type === "radial" ? "active": "inactive"}`}></div>
+                        <div className={`btn--${this.props.gradient.type === "radial" ? "active": "inactive"}`}></div>
                     </button>
+
+                    <input
+                        type="text" 
+                        placeholder={this.props.gradient.angle + '\u00B0'}
+                        pattern="\d{1,2}|[1-2]\d\d|3[0-5]\d"
+                        onBlur={e => this.setGradientAngle(e.target.value, e.target)}
+                        onKeyDown={e => this.handleAngleInputKeyDown(e)}
+                    />
                 </div>
 
                 <div>
@@ -200,14 +208,6 @@ export default class GradientButtons extends Component {
                         setAngleMeterIsActive={this.props.setAngleMeterIsActive}
                         activeAngleMeter={this.props.activeAngleMeter}
                      />
-                    
-                    <input
-                        type="text" 
-                        placeholder={this.props.gradient.angle + '\u00B0'}
-                        pattern="\d{1,2}|[1-2]\d\d|3[0-5]\d"
-                        onBlur={e => this.setGradientAngle(e.target.value, e.target)}
-                        onKeyDown={e => this.handleAngleInputKeyDown(e)}
-                    />
                 </div>
 
             </div>

@@ -65,6 +65,15 @@ export default class App extends Component {
 
 
 
+  insertGradient(newGradient, insertIndex) {
+    const updatedGradientList = [...this.state.gradients];
+    updatedGradientList.splice(insertIndex, 0, newGradient);
+
+    this.updateGradients([...updatedGradientList]);
+  }
+
+
+
   openColorPicker(gradientIndex, thumbIndex, color) {
     this.setState(
       {
@@ -136,6 +145,7 @@ export default class App extends Component {
           updateGradient={this.updateGradient.bind(this)}
           openColorPicker={this.openColorPicker.bind(this)}
           openRadialSettings={this.openRadialSettings.bind(this)}
+          insertGradient={this.insertGradient.bind(this)}
         />
 
         <Code />

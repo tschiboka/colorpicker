@@ -26,6 +26,7 @@ export default class GradientList extends Component {
             <GradientField
                 key={`gradient_${i}`}
                 gradient={gradient}
+                gradients={this.props.gradients}
                 index={i}
                 updateGradient={this.props.updateGradient}
                 confirmDeleteGradient={this.confirmDeleteGradient.bind(this)}
@@ -34,6 +35,7 @@ export default class GradientList extends Component {
                 openColorPicker={this.props.openColorPicker}
                 openRadialSettings={this.props.openRadialSettings}
                 activeAngleMeter={this.state.activeAngleMeter}
+                insertGradient={this.props.insertGradient}
             />
         ));
     }

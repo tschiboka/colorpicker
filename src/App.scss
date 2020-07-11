@@ -16,11 +16,6 @@
     outline: none !important;
 }
 
-::placeholder { color: $primaryTextColor; }
-::-ms-input-placeholder { color: $primaryTextColor; }
-:-ms-input-placeholder { color: $primaryTextColor; }
-:disabled { cursor: not-allowed;}
-
 .btn--inactive, .btn--active {
         position: absolute;
         width: 6px;
@@ -41,7 +36,6 @@
     flex-flow: column wrap;
     justify-content: space-between;
     background: $primaryBackgroundColor;
-    padding: 10px;
     font-weight: bold;
     overflow-x: hidden;
     > div > header {
@@ -102,7 +96,6 @@
         & > *:not(.ColorPicker) {
             min-width: 100%;
             flex: 1;
-            margin: 5px 0;
         }
         .ResultDisplay {
             order: 1;
