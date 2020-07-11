@@ -1,8 +1,28 @@
-@import "../../variables/variables.scss";
+@import "../../constants/constants.scss";
 
 .Code {
     width: 40%;
     height: 40%;
     color: $primaryTextColor;
     background-image: $dottedImg;
+    header {
+        div {
+            display: flex;
+            content: "";
+            background: $buttonGradient;
+            button {
+                width: 35px;
+                div {
+                    width: 24px;
+                    height: 24px;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                }
+                &:hover {
+                    background: $buttonGradientHover;
+                }
+            }
+        }
+    }
 }

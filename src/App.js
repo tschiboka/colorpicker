@@ -160,7 +160,9 @@ export default class App extends Component {
           swapGradientFields={this.swapGradientFields.bind(this)}
         />
 
-        <Code />
+        <Code
+          gradients={this.state.gradients}
+        />
 
 
         {this.state.colorPicker && <ColorPicker

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import "./ColorPicker.scss";
-import transparentCheckerdBg from "./images/transparent_checkered_bg.png";
-import checkeredRect from "./images/checkered_rect.png";
-import sliderThumb from "./images/hue_slider_thumb.png";
-import hueBtnBg from "./images/hue_btn.png";
-import starBtnBg from "./images/star.png";
-import colorsBtnBg from "./images/colors.png";
+import transparentCheckerdBg from "../../images/transparent_checkered_bg.png";
+import checkeredRect from "../../images/checkered_rect.png";
+import sliderThumb from "../../images/hue_slider_thumb.png";
+import hueBtnBg from "../../images/hue_btn.png";
+import starBtnBg from "../../images/star.png";
+import colorsBtnBg from "../../images/colors.png";
 
 
 
