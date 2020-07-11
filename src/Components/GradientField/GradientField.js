@@ -14,7 +14,7 @@ export default class GradientField extends Component {
 
         this.state = {
             nameInputVisible: false,
-            copyWhenInsertCopyOn: false
+            copyWhenInsertOn: false
         };
     }
 
@@ -45,7 +45,6 @@ export default class GradientField extends Component {
             .match(/.{0,20}/g)[0];           // allow only 20 cars 
 
         input.value = validateInput(input.value);
-        console.log(input.value);
 
         if (key === 27 || key === "Escape" || key === "Esc") closeInput();
 
@@ -63,21 +62,14 @@ export default class GradientField extends Component {
 
 
     handleInsertGradientOnClick(where) {
-        const addCopyText = str => {
-            console.log("HERE", str);
-            return str.replace(/(\scopy\s?\d?)?$/g, copyText => {
-                const copyNumber = Number(copyText.match(/\d*$/g)[0] || 0) + 1;
-                return " copy" + (copyNumber === 1 ? "" : " " + copyNumber);
-            });
-        }
-        const getCopyName = () => addCopyText((this.props.gradient.name || `Untitled ${this.props.index + 1}`));
         const insertIndex = where === "above" ? this.props.index : this.props.index + 1;
-        const newGradient = this.state.copyWhenInsertCopyOn ? { ...this.props.gradient } : getDefaultGradientObj();
-        const copyName = this.state.copyWhenInsertCopyOn ? getCopyName() : "";
+        const newGradient = this.state.copyWhenInsertOn ? { ...this.props.gradient } : getDefaultGradientObj();
+        const copyName = this.state.copyWhenInsertOn ? this.getCopyName(this.props.gradient.name) : "";
 
         newGradient.name = copyName;
 
         this.props.insertGradient(newGradient, insertIndex);
+        this.setState({ ...this.state, copyWhenInsertOn: false });
     }
 
 
@@ -95,6 +87,22 @@ export default class GradientField extends Component {
 
 
 
+    getCopyName(name) {
+        // Untitled 1 ==> Untitled 1 copy
+        const isFirstCopy = !/\s(copy\s\d+|copy)$/gi.test(name);
+        if (isFirstCopy) return name + " copy";
+
+        // Untitled 1 copy ==> Untitled 1 copy 2
+        const isSecondCopy = /\scopy$/gi.test(name);
+        if (isSecondCopy) return name + " 2";
+
+        // Untitled 1 copy n ==> Untitled 1 copy n + 1
+        const copyNumber = Number(name.match(/\d+$/g)) + 1;
+        return name.replace(/\d+$/g, num => copyNumber);
+    }
+
+
+
     getUntitledNumber() {
         // In case user messes up titles [Untitled 1, Untitled 3345, Untitled 2]
         // In the case above return 3 instead of 3346 as the next possible Untitled Number
@@ -103,7 +111,6 @@ export default class GradientField extends Component {
         const untitledNumbers = untitledNames.map(name => Number(name.match(/\d+/))).sort((a, b) => a - b);
         const correctNumbers = untitledNumbers.filter((num, ind) => num === ind + 1);
         const untitledNumber = (correctNumbers[correctNumbers.length - 1] || 0) + 1;
-        console.log(correctNumbers, untitledNumber);
 
         return untitledNumber;
     }
@@ -113,7 +120,6 @@ export default class GradientField extends Component {
     nameGradients() {
         const updatedGradient = getImmutableGradientCopy(this.props.gradient);
         updatedGradient.name = `Untitled ${this.getUntitledNumber()}`;
-        console.log(updatedGradient.name);
         this.props.updateGradient(updatedGradient, this.props.index);
     }
 
@@ -151,9 +157,9 @@ export default class GradientField extends Component {
                     <div className="GradientField__header__button-box">
                         <button
                             title="copy this gradient when insert"
-                            onClick={() => this.setState({ ...this.state, copyWhenInsertCopyOn: !this.state.copyWhenInsertCopyOn })}
+                            onClick={() => this.setState({ ...this.state, copyWhenInsertOn: !this.state.copyWhenInsertOn })}
                         >&#128396;
-                            <div className={`btn--${this.state.copyWhenInsertCopyOn ? "active" : "inactive"}`}></div>
+                            <div className={`btn--${this.state.copyWhenInsertOn ? "active" : "inactive"}`}></div>
                         </button>
 
                         <button

@@ -25,8 +25,6 @@ export default class AngleMeter extends Component {
 
 
     render() {
-        console.log(this.props.activeAngleMeter);
-        console.log(this.props.activeAngleMeter !== undefined ? "url(#gradientInverse)" : "url(#gradient)")
         return (
             <div
                 className="AngleMeter"
