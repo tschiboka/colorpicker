@@ -83,11 +83,11 @@ export function gradientObjsToStr(gradientArray) {
                 const hintStr = getHintString(hints, colorStopArr, index, gradient, units);
 
                 return `${colorStop.color} ${colorStop.stop}${units}${hintStr}`
-            }).join(",");
+            }).join(", ");
 
 
             if (gradient.type === "linear") {
-                console.log(`${prefix}(${angle}${colorStops})`);
+                //console.log(`${prefix}(${angle}${colorStops})`);
                 return `${prefix}(${angle}${colorStops})`;
             }
 
@@ -95,7 +95,7 @@ export function gradientObjsToStr(gradientArray) {
                 const shape = gradient.radial.shape ? gradient.radial.shape + " " : "";
                 const size = gradient.radial.size ? gradient.radial.size + " " : "";
                 const pos = gradient.radial.position.join(" ");
-                const shapeSizePos = (shape || size || pos) ? shape + size + (pos && " at " + pos) + "," : "";
+                const shapeSizePos = (shape || size || pos) ? shape + size + (pos && "at " + pos) + "," : "";
                 const gradientStr = `radial-gradient(${shapeSizePos}${colorStops})`;
 
                 return gradientStr;

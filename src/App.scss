@@ -2,6 +2,14 @@
     src: url("./fonts/Abel-Regular.ttf");
     font-family: "Abel";
 }
+@font-face {
+    src: url("./fonts/FiraCode-Light.ttf");
+    font-family: "Fira";
+}
+@font-face {
+    src: url("./fonts/Fantasque-Italic.otf");
+    font-family: "Fantasque";
+}
 
 @import "./constants/constants.scss";
 
@@ -31,7 +39,7 @@
 .App {
     position: relative;
     min-width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 2px);
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
@@ -70,7 +78,10 @@
     }
     & > * {
         flex: 1 1 50%;
-        border: 1px solid #888;
+        border: $primaryBorder;
+    }
+    .GradientList {
+        border-left: none;
     }
     .fullscreen-box {
         position: absolute;
@@ -97,6 +108,11 @@
             min-width: 100%;
             flex: 1;
         }
+        & > * {
+            height: 50%;
+            flex: 1 1 50%;
+            border: $primaryBorder
+        }
         .ResultDisplay {
             order: 1;
         }
@@ -104,6 +120,7 @@
             height: 50%;
             order: 2;
             margin-left: 0;
+            border: $primaryBorder;
         }
         .Code {
             order: 3;

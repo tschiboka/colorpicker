@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import "./ColorPicker.scss";
-import transparentCheckerdBg from "../../images/transparent_checkered_bg.png";
 import checkeredRect from "../../images/checkered_rect.png";
 import sliderThumb from "../../images/hue_slider_thumb.png";
 import hueBtnBg from "../../images/hue_btn.png";
@@ -1170,7 +1169,7 @@ export default class ColorPicker extends Component {
                             <div className="ColorPicker__alpha-box">
                                 <div className="ColorPicker__alpha-slider">
                                     <div className="ColorPicker__slider-bg">
-                                        <div className="ColorPicker__alpha-bg" style={{ backgroundImage: `url(${transparentCheckerdBg})` }}>
+                                        <div className="ColorPicker__alpha-bg" style={{ backgroundImage: `url(${checkeredRect})` }}>
                                             <div
                                                 className="ColorPicker__alpha"
                                                 id={(this.props.id || "") + "-alpha"}

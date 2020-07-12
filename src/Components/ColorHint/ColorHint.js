@@ -1,5 +1,5 @@
 import React from 'react';
-import checkeredRect from "../ColorPicker/images/transparent_checkered_bg.png";
+import checkeredRect from "../ColorPicker/images/checkered_rect.png";
 import { getPositionInPercent } from "../../functions/slider";
 import "./ColorHint.scss";
 
