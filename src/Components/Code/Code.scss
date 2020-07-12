@@ -2,11 +2,13 @@
 
 .Code {
     width: 40%;
-    height: 40%;
+    height: 50%;
+    max-height: 50%;
     color: $primaryTextColor;
     background-image: $dottedImg;
     header {
         div {
+            height: 100%;
             display: flex;
             content: "";
             background: $buttonGradient;
@@ -31,11 +33,16 @@
         }
     }
     div {
+        height: calc(100% - 35px);
+        max-height: 100%;
+        max-width: 100%;
+        overflow: auto;
         span { font-family: "Fira", monospace; }
         span.token.punctuation { color: $codeWhite; }
         span.token.property { color: $codeWhite; }
         span.token.number { color: $codeYellow; }
         span.token.function { color: $codeOrange; }
         span.token.unit { color: $codeRed; }
+        span.token.keyword { color: $codePurple; }
     }
 }

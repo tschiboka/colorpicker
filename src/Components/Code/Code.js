@@ -33,6 +33,10 @@ export default class Code extends Component {
 
 
 
+    // ********************* PARSING FUNCTIONS **********************
+
+
+
     renderAngleParameter(gradient) {
         if (gradient.type === "linear") return (
             <span>
@@ -42,7 +46,63 @@ export default class Code extends Component {
 
                 <span className="token punctuation">, </span>
             </span>
-        )
+        );
+    }
+
+
+
+    renderUnit(size) {
+        return size
+            .match(/[0-9.]+(%|px|vw|vh|em|rem)/g)
+            .map((sizeStr, index, sizeArr) => (
+                <span key={`size-span-radial-units-${index}`}>
+                    <span className="token number">{sizeStr.match(/[0-9.]+/g)}</span>
+
+                    <span className="token unit">{sizeStr.match(/(%|px|vw|vh|em|rem)/g)}</span>
+
+                    {sizeArr.length > 1 && !index && <span> </span>/* trailing whitespace */}
+                </span>));
+    }
+
+
+
+    renderShapeSizePosition(gradient) {
+        const isRadial = gradient.type === "radial";
+        const { shape, size, position } = gradient.radial;
+        const isUnit = str => /\d/g.test(str);
+
+        if (isRadial) return (
+            <span>
+                {shape && <span className="token keyword">{shape}</span>}
+
+                {(size && shape) && <span> </span>/* leading whitespace */}
+
+                {
+                    isUnit(size)
+                        ? this.renderUnit(size)
+                        : <span className="token keyword">{size}</span>
+                }
+
+                {((size || shape) && position) && <span> </span>/* leading whitespace */}
+
+                {
+                    position.map((pos, index, posArr, whiteSpace = posArr.length > 1 && !index) => isUnit(pos)
+                        ? <span key={`size-span-radial-units-${index}`}>
+                            {this.renderUnit(pos)}
+
+                            {whiteSpace && <span> </span>}
+                        </span>
+
+                        : <span key={`size-span-radial-keyword-${index}`}>
+                            <span className="token keyword">{pos}</span>
+
+                            {whiteSpace && <span> </span>}
+                        </span>
+                    )
+                }
+                {(shape || size || position) && <span> </span>/* trailing whitespace */}
+            </span>
+        );
     }
 
 
@@ -58,6 +118,8 @@ export default class Code extends Component {
                 <span className="token punctuation">(</span>
 
                 {this.renderAngleParameter(gradients[gradIndex])}
+
+                {this.renderShapeSizePosition(gradients[gradIndex])}
             </span>
         );
 

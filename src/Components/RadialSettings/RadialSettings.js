@@ -57,6 +57,7 @@ export default function RadialSettings(props) {
 
 
     function handleSizeInputOnChange(inputName, value, unit) {
+        console.log(inputName, value, unit);
         if (shape === "circle") {
             updateGradientPropertyTo("size", value + (unit || "px"));
         }
