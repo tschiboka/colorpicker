@@ -10,6 +10,8 @@ export default class LengthInput extends Component {
         this.state = {
             optionsOpen: false,
             unit: this.props.unit,
+            positionInputValue1: this.props.initialValue,
+            positionInputValue1: this.props.initialValue,
         };
     }
 

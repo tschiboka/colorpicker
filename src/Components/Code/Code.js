@@ -14,7 +14,7 @@ export default class Code extends Component {
 
         this.state = {
             settingsButtonHover: false,
-            copyButtonHover: false
+            copyButtonHover: false,
         }
     }
 
@@ -100,7 +100,7 @@ export default class Code extends Component {
                         </span>
                     )
                 }
-                {(shape || size || position) && <span> </span>/* trailing whitespace */}
+                {(shape || size || position) && <span className="token punctuation">,</span>/* trailing comma */}
             </span>
         );
     }

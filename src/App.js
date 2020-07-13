@@ -37,8 +37,8 @@ export default class App extends Component {
       canResize: true,
       appWidth: this.getWindowWidth(),
       colorPicker: undefined,
-      radiantSettingsOn: false,
-      radientSettings_GradientIndex: undefined,
+      radialSettingsOn: false,
+      radialSettings_GradientIndex: undefined,
     };
   }
 
@@ -95,10 +95,10 @@ export default class App extends Component {
 
 
 
-  openRadialSettings(radiantSettingsOn, radientSettings_GradientIndex, setToRadial) {
+  openRadialSettings(radialSettingsOn, radialSettings_GradientIndex, setToRadial) {
     const gradients = [...this.state.gradients];
     const type = setToRadial ? "radial" : "linear";
-    gradients[radientSettings_GradientIndex].type = type;
+    gradients[radialSettings_GradientIndex].type = type;
 
     console.log(gradients);
 
@@ -106,8 +106,8 @@ export default class App extends Component {
       {
         ...this.state,
         gradients,
-        radiantSettingsOn,
-        radientSettings_GradientIndex
+        radialSettingsOn,
+        radialSettings_GradientIndex
       }
     );
   }
@@ -136,7 +136,7 @@ export default class App extends Component {
     return (
       <RadialSettings
         openRadialSettings={this.openRadialSettings.bind(this)}
-        index={this.state.radientSettings_GradientIndex}
+        index={this.state.radialSettings_GradientIndex}
         gradients={this.state.gradients}
         updateGradient={this.updateGradient.bind(this)}
       />
@@ -175,12 +175,12 @@ export default class App extends Component {
           close={() => { this.setState({ ...this.state, colorPicker: undefined }); }}
         />}
 
-        {this.state.radiantSettingsOn && (
+        {this.state.radialSettingsOn && (
           this.state.appWidth <= 500
             ? this.renderRadialSettings()
             : <div
               className="fullscreen-box"
-              onClick={() => this.openRadialSettings(false, this.state.radientSettings_GradientIndex, false)}
+              onClick={() => this.openRadialSettings(false, this.state.radialSettings_GradientIndex, false)}
             >
               {this.renderRadialSettings()}
             </div>
