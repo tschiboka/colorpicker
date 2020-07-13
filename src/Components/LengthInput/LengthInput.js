@@ -10,9 +10,15 @@ export default class LengthInput extends Component {
         this.state = {
             optionsOpen: false,
             unit: this.props.unit,
-            positionInputValue1: this.props.initialValue,
-            positionInputValue1: this.props.initialValue,
+            valid: true
         };
+    }
+
+
+
+    componentDidMount() {
+        const input = document.getElementById(`LengthInput_${this.props.id}`);
+        input.value = this.validatePropsValue(this.props.value);
     }
 
 
@@ -32,6 +38,14 @@ export default class LengthInput extends Component {
 
 
 
+    handleInputOnChange(input) {
+        const valid = this.validateInput(input);
+        this.setState({ ...this.state, valid })
+        if (valid) this.props.onChange(this.props.name, input, this.state.unit);
+    }
+
+
+
     handleOpitionOnClick(event, unit) {
         this.setState({ ...this.state, unit, optionsOpen: false }, () => {
 
@@ -41,7 +55,7 @@ export default class LengthInput extends Component {
                 input.value = this.props.value.replace(/\..$/g, "");
             }
 
-            this.validateInput(document.getElementById(`LengthInput_${this.props.id}`).value);
+            //this.validateInput(document.getElementById(`LengthInput_${this.props.id}`).value);
         });
 
         event.stopPropagation();
@@ -50,26 +64,20 @@ export default class LengthInput extends Component {
 
 
     validateInput(inputValue) {
-        const valid = document.getElementById(`LengthInput_${this.props.id}`).validity.valid;
+        if (inputValue === "") return false;
+        //if (/^\d$/g.test(inputValue));
+        console.log("INVALID", /^\d$/g.test(inputValue));
+        //input.value = this.validatePropsValue(this.props.value);
 
-        this.setState({ ...this.state, valid }, () => {
-            if (this.state.valid) this.props.onChange(this.props.name, inputValue, this.state.unit);
-        });
+        console.log(inputValue);
+
+
+        return true;
     }
 
 
 
-    getInputPattern = () => this.state.unit === "px" ? "^\\d{1,4}$" : "^\\d{1,2}\\.\\d$|^\\d{1,2}\\.$|^\\d{1,2}$|^100$";
-
-
-
-    getInputValue = () => {
-        if (this.props.disabled) return "";
-
-        if (this.unit === "px") return this.props.value.replace(/\..$/g, "");
-
-        return this.props.value;
-    }
+    validatePropsValue(valueFromProps) { return !this.props.disabled ? valueFromProps : ""; }
 
 
 
@@ -93,15 +101,15 @@ export default class LengthInput extends Component {
             <div className="LengthInput">
                 <input
                     id={`LengthInput_${this.props.id}`}
+                    class={!this.state.valid && "invalid"}
                     type="text"
                     disabled={this.props.disabled}
-                    placeholder={this.props.value}
-                    pattern={this.getInputPattern()}
-                    value={this.getInputValue()}
-                    onChange={e => this.validateInput(e.target.value, e)}
+                    onChange={e => this.handleInputOnChange(e.target.value)}
                 />
 
-                <div>{this.state.unit}</div>
+                <div
+                    class={!this.state.valid && "invalid"}
+                >{this.state.unit}</div>
 
                 <div onClick={() => this.setState({ ...this.state, optionsOpen: !this.props.disabled ? !this.state.optionsOpen : false })}>
                     &#709;
@@ -113,12 +121,12 @@ export default class LengthInput extends Component {
                             className="LengthInput__options"
                             ref={(input) => { this.lengthInput = input; }}
                             tabIndex={1}
-                            onBlur={e => this.handleOnBlur(e)}>
+                            onBlur={e => this.handleOnBlur(e, e.target)}>
                             {this.renderUnitButtons()}
                         </div>
                     )}
                 </div>
-            </div>
+            </div >
         );
     }
 }

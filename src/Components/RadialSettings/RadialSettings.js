@@ -50,7 +50,6 @@ export default function RadialSettings(props) {
 
 
     function handleSizeInputOnChange(inputName, value, unit) {
-        console.log(inputName, value, unit, sizeLengthsObj);
         if (shape === "circle") {
             updateGradientPropertyTo("size", value + (unit || "px"));
         }
@@ -66,10 +65,23 @@ export default function RadialSettings(props) {
 
 
     function handlePositionInputOnChange(inputName, value, unit) {
-        console.log("UPDATE", ...arguments);
         const positionIndex = inputName === "position1" ? 0 : 1;
 
         if (value !== "") updatePosition(positionIndex, (value || "0") + (unit || "px"));
+    }
+
+
+
+    function getPositionInputValue(positionIndex) {
+        const positionValue = props.gradients[props.index].radial.position[positionIndex];
+        return /top|bottom|left|right|center/g.test(positionValue) ? "" : positionValue.match(/[0-9.]+/g)[0];
+    }
+
+
+
+    function getPositionUnit(positionIndex) {
+        const positionUnit = props.gradients[props.index].radial.position[positionIndex];
+        return /top|bottom|left|right|center/g.test(positionUnit) ? "" : positionUnit.match(/%|px|vw|vh|em|rem/g)[0];
     }
 
 
@@ -250,8 +262,8 @@ export default function RadialSettings(props) {
                             <LengthInput
                                 id="3"
                                 name="position1"
-                                initialValue={props.gradients[props.index].radial.position[0]}
-                                unit={""}
+                                value={getPositionInputValue(0)}
+                                unit={getPositionUnit(0)}
                                 units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handlePositionInputOnChange}
                             />
@@ -259,8 +271,8 @@ export default function RadialSettings(props) {
                             <LengthInput
                                 id="4"
                                 name="position2"
-                                initialValue={props.gradients[props.index].radial.position[0]}
-                                unit={""}
+                                value={getPositionInputValue(1)}
+                                unit={getPositionUnit(1)}
                                 units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handlePositionInputOnChange}
                             />

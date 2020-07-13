@@ -15,7 +15,7 @@
         color: $secondaryTextColor;
         text-align: center;
     }
-    input:invalid {
+    .invalid {
         color: $warningTextColor;
         box-shadow: none;
     }
