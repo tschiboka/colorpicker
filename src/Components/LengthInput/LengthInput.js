@@ -40,22 +40,17 @@ export default class LengthInput extends Component {
 
     handleInputOnChange(input) {
         const valid = this.validateInput(input);
+        console.log("ISVALID", valid);
         this.setState({ ...this.state, valid })
-        if (valid) this.props.onChange(this.props.name, input, this.state.unit);
+        if (valid) this.props.onChange(this.props.name, Number(input), this.state.unit);
     }
 
 
 
     handleOpitionOnClick(event, unit) {
         this.setState({ ...this.state, unit, optionsOpen: false }, () => {
-
-            if (unit === "px" && /\..$/g.test(this.props.value)) {
-                const input = document.getElementById(`LengthInput_${this.props.id}`);
-
-                input.value = this.props.value.replace(/\..$/g, "");
-            }
-
-            //this.validateInput(document.getElementById(`LengthInput_${this.props.id}`).value);
+            const input = document.getElementById(`LengthInput_${this.props.id}`);
+            this.handleInputOnChange(input.value);
         });
 
         event.stopPropagation();
@@ -64,14 +59,16 @@ export default class LengthInput extends Component {
 
 
     validateInput(inputValue) {
-        if (inputValue === "") return false;
-        //if (/^\d$/g.test(inputValue));
-        console.log("INVALID", /^\d$/g.test(inputValue));
-        //input.value = this.validatePropsValue(this.props.value);
+        console.log(this.state.unit === "px", /\./g.test(inputValue));
+        if (inputValue === "") return false;                                    // TEST ""
+        if (!/^(\d+)?([.]?\d{1})?$/g.test(inputValue)) return false;            // TEST X NUMBER OPTIONAL 1 DECIMAL PLACE
+        if (this.state.unit === "px" && /\./g.test(inputValue)) return false;   // TEST PX UNIT INTEGER
+        if (this.state.unit === "px" && Number(inputValue) > 2000) return false;// TEST PX <= 2000
+        if (this.state.unit !== "px" && Number(inputValue) > 100) return false; // TEST REST UNITS <= 100
+        if (/^0\d/g.test(inputValue)) return false;                             // TEST 01 00 001
 
-        console.log(inputValue);
 
-
+        console.log("NOT NUMBER", inputValue, !/^[0-9.]+$/g.test(inputValue))
         return true;
     }
 
@@ -98,17 +95,20 @@ export default class LengthInput extends Component {
 
     render() {
         return (
-            <div className="LengthInput">
+            <div
+                className="LengthInput"
+                title={this.props.title}
+            >
                 <input
                     id={`LengthInput_${this.props.id}`}
-                    class={!this.state.valid && "invalid"}
+                    className={!this.state.valid ? "invalid" : ""}
                     type="text"
                     disabled={this.props.disabled}
                     onChange={e => this.handleInputOnChange(e.target.value)}
                 />
 
                 <div
-                    class={!this.state.valid && "invalid"}
+                    className={!this.state.valid ? "invalid" : ""}
                 >{this.state.unit}</div>
 
                 <div onClick={() => this.setState({ ...this.state, optionsOpen: !this.props.disabled ? !this.state.optionsOpen : false })}>
@@ -126,7 +126,7 @@ export default class LengthInput extends Component {
                         </div>
                     )}
                 </div>
-            </div >
+            </div>
         );
     }
 }
