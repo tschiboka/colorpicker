@@ -7,15 +7,33 @@
     flex-direction: column;
     .ResultDisplay__header {
         div {
-            background: $buttonGradient;
-            .ResultDisplay__menu-btn {
-                font-size: $lrgFont;
-                &:hover {
-                    font-size: $medFont;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            div {
+                height: 100%;
+                background: $buttonGradient;
+                .ResultDisplay__menu-btn {
+                    width: 35px;
+                    font-size: $lrgFont;
+                    &:hover {
+                        font-size: $medFont;
+                    }
+                    div {
+                        width: 20px;
+                        height: 20px;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-size: contain;
+                    }
                 }
-            }
-            &:hover {
-                background: $buttonGradientHover;
+                &:hover {
+                    background: $buttonGradientHover;
+                    div {
+                        width: 18px;
+                        height: 18px;
+                    }
+                }
             }
         }
     }
