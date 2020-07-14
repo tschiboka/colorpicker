@@ -445,7 +445,7 @@ export default class ColorPicker extends Component {
         if (colorType !== "invalid") {
             a = (a === undefined) ? 1 : a; // a can be 0 which is falsy
             safe = isWebSafe(hex);
-            name = require("./json/cssColors.json")["#" + hex];
+            name = require("../../constants/color_templates/cssColors.json")["#" + hex];
         }
 
         return ({
@@ -650,8 +650,8 @@ export default class ColorPicker extends Component {
 
 
     renderColorNames() {
-        let colorsCss = require("./json/cssColors.json");
-        const colors1500 = require("./json/colors.json");
+        let colorsCss = require("../../constants/color_templates/cssColors.json");
+        const colors1500 = require("../../constants/color_templates/colors.json");
         const hexToRgb = h => h.match(/../g).map(v => parseInt(v, 16));
         const contrast = hex => {
             const [R, G, B] = hexToRgb(hex);

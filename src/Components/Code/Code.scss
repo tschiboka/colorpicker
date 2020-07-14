@@ -44,5 +44,6 @@
         span.token.function { color: $codeOrange; }
         span.token.unit { color: $codeRed; }
         span.token.keyword { color: $codePurple; }
+        span.token.css-color-name {color: $codeGreen; }
     }
 }

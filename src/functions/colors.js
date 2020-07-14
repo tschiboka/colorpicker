@@ -18,6 +18,14 @@ export function rgbToHex(r, g, b) {
 
 
 
+export function rgbToHexA(r, g, b, a) {
+    const decToHex = (n, hex = n.toString(16)) => hex.length === 1 ? "0" + hex : hex;
+    return decToHex(r) + decToHex(g) + decToHex(b) + (a && decToHex(a));
+}
+
+
+
+
 export function rgbToHsl(red, green, blue) {
     const r = red / 255, g = green / 255, b = blue / 255;
     const min = Math.min(r, g, b), max = Math.max(r, g, b);

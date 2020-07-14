@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import "./Code.scss";
 import gearIcon from "../../images/gear.png";
 import gearActiveIcon from "../../images/gear_active.png";
 import copyIcon from "../../images/copy.png";
 import copyActiveIcon from "../../images/copy_active.png";
 import { getImmutableGradientCopy } from "../../functions/gradient";
+import { hexToRgb, rgbToHex, rgbToHsl, hslToRgb } from "../../functions/colors";
+import "./Code.scss";
 
 
 
@@ -15,8 +16,12 @@ export default class Code extends Component {
         this.state = {
             settingsButtonHover: false,
             copyButtonHover: false,
+            convertCssNamedColorsWherePossible: true,
+            preferredColorFormat: undefined,
+            cssColorNames: require("../../constants/color_templates/cssColors.json")
         }
     }
+
 
 
     getCopyButtonImage() {
@@ -108,7 +113,30 @@ export default class Code extends Component {
 
 
     renderColor(color) {
-        console.log(color);
+        const colorType = color.match(/^(rgba|rgb|hsla|hsl|#)/)[0];
+
+        // check if transparent
+        if (colorType === "rgba" || colorType === "hsla") {
+            const isTransparent = color.match(/[0-9.]+/g)[3] === "0";
+            if (isTransparent) return <span className="token css-color-name">transparent </span>
+        }
+
+        // convert to css names - only types with no alpha values
+        if (this.state.convertCssNamedColorsWherePossible) {
+            let hex = undefined;
+
+            if (colorType === "#") hex = color;
+            if (colorType === "rgb") hex = "#" + rgbToHex(...color.match(/\d+/g).map(Number));
+            if (colorType === "hsl") hex = "#" + rgbToHex(...hslToRgb(...color.match(/\d+/g).map(Number)));
+
+            const cssName = this.state.cssColorNames[hex];
+
+            if (cssName) return <span className="token css-color-name">{cssName} </span>
+        }
+        // return rgb
+        if (colorType === "rgba") {
+            const numbers = color.match(/[0-9.]+/g);
+        }
     }
 
 
@@ -143,7 +171,6 @@ export default class Code extends Component {
 
     renderCode() {
         const gradients = this.props.gradients.map(grad => getImmutableGradientCopy(grad)).reverse();
-        console.log(gradients);
         const functionNames = gradients.map(gradient => (gradient.repeating ? "repeating-" : "") + gradient.type + "-gradient");
         const renderFunctionSpans = gradIndex => (
             <span key={`functionName${gradIndex}`}>
