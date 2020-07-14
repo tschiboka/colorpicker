@@ -107,6 +107,30 @@ export default class Code extends Component {
 
 
 
+    renderColorStopsAndHints(gradient) {
+        const colors = gradient.colors;
+        const hints = gradient.colorHints;
+
+        const colorStops = colors.map((colorStop, index) => {
+            const { color, stop } = { ...colorStop };
+            let hint = undefined;
+
+            if (hints.length) {
+                const currStop = colors[index].stop;
+                const nextStop = colors[index + 1] ? colors[index + 1].stop : gradient.max;
+                const hintsInRange = hints.filter(hint => currStop < hint && nextStop >= hint);
+                const highestHint = hintsInRange.length ? Math.max(...hintsInRange) : undefined;
+                hint = highestHint;
+            }
+
+            return ({ color, stop, hint })
+        });
+
+        console.log(colorStops);
+    }
+
+
+
     renderCode() {
         const gradients = this.props.gradients.map(grad => getImmutableGradientCopy(grad)).reverse();
         console.log(gradients);
@@ -120,6 +144,8 @@ export default class Code extends Component {
                 {this.renderAngleParameter(gradients[gradIndex])}
 
                 {this.renderShapeSizePosition(gradients[gradIndex])}
+
+                {this.renderColorStopsAndHints(gradients[gradIndex])}
             </span>
         );
 
