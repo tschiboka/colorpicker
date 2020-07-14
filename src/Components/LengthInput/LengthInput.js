@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import errorIcon from "../../images/error.png";
 import "./LengthInput.scss";
 
 
@@ -38,11 +39,10 @@ export default class LengthInput extends Component {
 
 
 
-    handleInputOnChange(input) {
-        const valid = this.validateInput(input);
-        console.log("ISVALID", valid);
-        this.setState({ ...this.state, valid })
-        if (valid) this.props.onChange(this.props.name, Number(input), this.state.unit);
+    handleInputOnChange(inputValue) {
+        const { valid, error, value } = { ...this.validateInput(inputValue) };
+        this.setState({ ...this.state, valid, error })
+        if (valid) this.props.onChange(this.props.name, Number(value), this.state.unit);
     }
 
 
@@ -59,17 +59,44 @@ export default class LengthInput extends Component {
 
 
     validateInput(inputValue) {
-        console.log(this.state.unit === "px", /\./g.test(inputValue));
-        if (inputValue === "") return false;                                    // TEST ""
-        if (!/^(\d+)?([.]?\d{1})?$/g.test(inputValue)) return false;            // TEST X NUMBER OPTIONAL 1 DECIMAL PLACE
-        if (this.state.unit === "px" && /\./g.test(inputValue)) return false;   // TEST PX UNIT INTEGER
-        if (this.state.unit === "px" && Number(inputValue) > 2000) return false;// TEST PX <= 2000
-        if (this.state.unit !== "px" && Number(inputValue) > 100) return false; // TEST REST UNITS <= 100
-        if (/^0\d/g.test(inputValue)) return false;                             // TEST 01 00 001
+        let error = undefined;
+        let valid = true;
+        let value = inputValue;
 
+        if (inputValue === "") {                                                // TEST ""
+            error = "Can not be empty!";
+            return ({ valid: false, error, value });
+        }
+        if (/^\d*[.]+$/g.test(inputValue)) {                                     // TEST . X. X..
+            error = "Must not end in decimal point!";
+            return ({ valid: false, error, value });
+        }
+        if (/[.]\d{2,}?$/g.test(inputValue)) {                        // TEST X NUMBER OPTIONAL AND DECIMAL POINT
+            error = "Max 1 decimal value!";
+            return ({ valid: false, error, value });
+        }
+        if (!/^(\d+)?([.]?\d{1})?$/g.test(inputValue)) {                        // TEST X NUMBER OPTIONAL AND DECIMAL POINT
+            error = "Must contain numbers!";
+            return ({ valid: false, error, value });
+        }
+        if (this.state.unit === "px" && /\./g.test(inputValue)) {               // TEST PX UNIT INTEGER
+            error = "Must be an integer! [px]";
+            return ({ valid: false, error, value });
+        }
+        if (this.state.unit === "px" && Number(inputValue) > 2000) {            // TEST PX <= 2000
+            error = "Max 2000 for px";
+            return ({ valid: false, error, value });
+        }
+        if (this.state.unit !== "px" && Number(inputValue) > 100) {             // TEST REST UNITS <= 100
+            error = "Max 100 for " + this.state.unit + "!";
+            return ({ valid: false, error, value });
+        }
+        if (/^0\d/g.test(inputValue)) {                                         // TEST 01 00 001
+            error = "Invalid formating!";
+            return ({ valid: false, error, value });
+        }
 
-        console.log("NOT NUMBER", inputValue, !/^[0-9.]+$/g.test(inputValue))
-        return true;
+        return ({ valid, error, value });
     }
 
 
@@ -109,7 +136,14 @@ export default class LengthInput extends Component {
 
                 <div
                     className={!this.state.valid ? "invalid" : ""}
-                >{this.state.unit}</div>
+                >{
+                        this.state.valid ?
+                            this.state.unit :
+                            <span
+                                className="error info icon"
+                                style={{ backgroundImage: `url(${errorIcon})` }}
+                            ></span>
+                    }</div>
 
                 <div onClick={() => this.setState({ ...this.state, optionsOpen: !this.props.disabled ? !this.state.optionsOpen : false })}>
                     &#709;
@@ -125,6 +159,15 @@ export default class LengthInput extends Component {
                             {this.renderUnitButtons()}
                         </div>
                     )}
+                    {
+                        !this.state.valid && (
+                            <div
+                                className="LengthInput__error-msg"
+                            >
+                                {this.state.error}
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         );

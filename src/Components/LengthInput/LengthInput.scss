@@ -30,10 +30,19 @@
         color: $secondaryTextColor;
         &:nth-child(2) {
             width: 20px;
+            height: 100%;
             font-size: $xsmFont;
             display: flex;
             justify-content: center;
             align-items: center;
+            span {
+                width: 100%;
+                height: 100%;
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-position: center;
+                opacity: 0.75;
+            }
         }
         &:nth-child(3) {
             width: 20px;
@@ -69,7 +78,7 @@
         background: $secondaryBackgroundColor;
         border-radius: $borderRadius;
         border: $tertiaryBorder;
-        z-index: 1002;
+        z-index: 10;
         button {
             min-height: 26px;
             min-width: 26px;
@@ -88,5 +97,22 @@
                 text-shadow: 1px 1px black;
             }
         }
+    }
+    .LengthInput__error-msg {
+        position: absolute;
+        bottom: 100%;
+        right: -70px;
+        width: 200px;
+        height: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: $tertiaryBackgroundColor;
+        border-radius: $borderRadius;
+        border: $tertiaryBorder;
+        color: $warningTextColor;
+        font-style: italic;
+        font-size: $medFont;
+        z-index: 10;
     }
 }
