@@ -5,7 +5,7 @@ import copyIcon from "../../images/copy.png";
 import copyActiveIcon from "../../images/copy_active.png";
 import checkeredBg from "../../images/checkered_rect.png";
 import { getImmutableGradientCopy } from "../../functions/gradient";
-import { hexToRgb, rgbToHex, rgbToHsl, hslToRgb } from "../../functions/colors";
+import { getColorObj } from "../../functions/colors";
 import "./Code.scss";
 
 
@@ -128,43 +128,92 @@ export default class Code extends Component {
 
 
 
-    renderColor(color) {
-        const colorType = color.match(/^(rgba|rgb|hsla|hsl|#)/)[0];
+    renderColor(color, colorsLength, index) {
+        const colorObj = getColorObj(color);
+        const colorType = color.match(/^(rgba|rgb|hsla|hsl|#)/g)[0];
+        const preferredFormat = this.state.preferredColorFormat || colorType;
+
+        console.log(colorObj);
 
         // check if transparent
         if (colorType === "rgba" || colorType === "hsla") {
             const isTransparent = color.match(/[0-9.]+/g)[3] === "0";
             if (isTransparent) return (
                 <span className="token css-color-name">
-                    <ColorPreview color={"red"} />
+                    <ColorPreview />
                     transparent
-                    <span> </span>
+                    {colorsLength - 1 > index && <span className="token punctuation">, </span>}
                 </span>
             );
         }
 
         // convert to css names - only types with no alpha values
-        if (this.state.convertCssNamedColorsWherePossible) {
-            let hex = undefined;
-
-            if (colorType === "#") hex = color;
-            if (colorType === "rgb") hex = "#" + rgbToHex(...color.match(/\d+/g).map(Number));
-            if (colorType === "hsl") hex = "#" + rgbToHex(...hslToRgb(...color.match(/\d+/g).map(Number)));
-
-            const cssName = this.state.cssColorNames[hex];
+        if (this.state.convertCssNamedColorsWherePossible && colorObj.alpha === 100) {
+            const cssName = this.state.cssColorNames["#" + colorObj.hex];
 
             if (cssName) return (
                 <span className="token css-color-name">
                     <ColorPreview color={color} />
                     {cssName}
-                    <span> </span>
+                    {colorsLength - 1 > index && <span className="token punctuation">, </span>}
                 </span>
             );
         }
-        // return rgb
-        if (colorType === "rgba") {
-            const numbers = color.match(/[0-9.]+/g);
-        }
+
+        // return RGB
+        if (preferredFormat === "rgb") return (
+            <span>
+                <ColorPreview color={color} />
+
+                <span className="token function">rgb</span>
+
+                <span className="token punctuation">(</span>
+
+                <span className="token number">{colorObj.rgb.r}</span>
+
+                <span className="token punctuation">,</span>
+
+                <span className="token number">{colorObj.rgb.g}</span>
+
+                <span className="token punctuation">,</span>
+
+                <span className="token number">{colorObj.rgb.b}</span>
+
+                <span className="token punctuation">)</span>
+
+                {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+            </span>
+        );
+
+        // return RGB
+        if (preferredFormat === "rgba") return (
+            <span>
+                <ColorPreview color={color} />
+
+                <span className="token function">rgba</span>
+
+                <span className="token punctuation">(</span>
+
+                <span className="token number">{colorObj.rgb.r}</span>
+
+                <span className="token punctuation">,</span>
+
+                <span className="token number">{colorObj.rgb.g}</span>
+
+                <span className="token punctuation">,</span>
+
+                <span className="token number">{colorObj.rgb.b}</span>
+
+
+                <span className="token punctuation">,</span>
+
+                <span className="token number">{"0." + colorObj.alpha.toString().replace(/0$/, "")}</span>
+
+                <span className="token punctuation">)</span>
+
+                {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+            </span>
+        );
     }
 
 
@@ -190,7 +239,7 @@ export default class Code extends Component {
 
         return colorStops.map((colorStop, index) => (
             <span key={`color-stop-code-${index}`}>
-                {this.renderColor(colorStop.color)}
+                {this.renderColor(colorStop.color, colorStops.length, index)}
             </span>
         ));
     }

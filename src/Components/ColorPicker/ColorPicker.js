@@ -4,7 +4,7 @@ import checkeredRect from "../../images/checkered_rect.png";
 import hueBtnBg from "../../images/hue_btn.png";
 import starBtnBg from "../../images/star.png";
 import colorsBtnBg from "../../images/colors.png";
-import { hexToRgb, rgbToHex, rgbToHsl, hslToRgb } from "../../functions/colors";
+import { hexToRgb, rgbToHsl, hslToRgb, getColorObj } from "../../functions/colors";
 import "./ColorPicker.scss";
 
 
@@ -26,8 +26,8 @@ export default class ColorPicker extends Component {
             mode: "palette", // (palette, history, names)
             colorNamesMode: { sortBy: "name", css: false, grid: false },
             preferredFormat: this.setInitialPreferredColorFormat(this.props.color), // (rgb, hex, hsl)
-            color: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
-            originalcolor: this.getColorObj(this.props.color || "rgb(255, 0, 0)"),
+            color: getColorObj(this.props.color || "rgb(255, 0, 0)"),
+            originalcolor: getColorObj(this.props.color || "rgb(255, 0, 0)"),
             hueSliderMouseDown: false,
             alphaSliderMouseDown: false,
             colorPaletteMouseDown: false,
@@ -291,15 +291,15 @@ export default class ColorPicker extends Component {
                 const ctx = this.state.hueColorPoints.getContext("2d");
                 const [r, g, b] = [...ctx.getImageData(diffX, 3, 1, 1).data];
 
-                this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${(this.state.color.alpha / 100).toFixed(2)})`) }, () => {
+                this.setState({ ...this.state, color: getColorObj(`rgba(${r}, ${g}, ${b}, ${(this.state.color.alpha / 100).toFixed(2)})`) }, () => {
                     this.drawColorPaletteCanvas()
                     const [r, g, b] = [...this.getColorUnderPaletteCursor()];
-                    this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${(this.state.color.alpha / 100).toFixed(2)})`) });
+                    this.setState({ ...this.state, color: getColorObj(`rgba(${r}, ${g}, ${b}, ${(this.state.color.alpha / 100).toFixed(2)})`) });
                 });
             }
             else {
                 const alpha = 100 - Math.round((diffX / maxX) * 100);
-                const colorObj = this.getColorObj(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${(alpha / 100).toFixed(2)})`);
+                const colorObj = getColorObj(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${(alpha / 100).toFixed(2)})`);
                 this.setState({ ...this.state, color: colorObj });
             }
         }
@@ -345,126 +345,7 @@ export default class ColorPicker extends Component {
 
         // set the state with a new color
         const [r, g, b] = [...this.getColorUnderPaletteCursor(x, y)];
-        this.setState({ ...this.state, color: this.getColorObj(`rgba(${r}, ${g}, ${b}, ${(this.state.color.alpha / 100).toFixed(2)})`) });
-    }
-
-
-
-    /* Function input can be any color or color code or text eg: red, #ff0000ff, rgba(255, 0, 0, 0.5).
-     * The return will be a color object with all the possible variations of the given color. 
-     * Additional informations are available eg valid, websafe, and code obj. (see below) */
-    getColorObj(colorStr) {
-        // color type functions return a flag in case of a matching color string
-        const isRgb = str => /^rgb\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)$/g.test(str)
-            ? str.match(/\d*/g).filter(m => !!m).map(Number).every(d => d >= 0 && d <= 255)
-            : false;
-        const isRgba = str => {
-            if (!/^rgba\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?\d\.?\d*\)$/g.test(str)) return false;
-            else {
-                const digits = str.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
-                const alpha = Number(digits[3]);
-                return alpha >= 0 && alpha <= 1 && digits.every(d => d >= 0 && d <= 255);
-            }
-        }
-        const isHex = str => /^((#[A-F\d]{8})|(#[A-F\d]{6})|(#[A-F\d]{3}))$/gi.test(str);
-        const isHsl = str => {
-            if (!/^hsl\(\d{1,3},\s?\d{1,3},\s?\d{1,3}\)$/g.test(str)) return false;
-            else {
-                const digits = str.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
-                const h = digits[0] >= 0 && digits[0] <= 360;
-                const s = digits[1] >= 0 && digits[1] <= 100;
-                const l = digits[2] >= 0 && digits[2] <= 100;
-                return h && s && l;
-            }
-        }
-        const isHsla = str => {
-            if (!/^hsla\(\d{1,3},\s?\d{1,3},\s?\d{1,3},\s?\d\.?\d*\)$/g.test(str)) return false;
-            else {
-                const digits = str.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
-                const h = digits[0] >= 0 && digits[0] <= 360;
-                const s = digits[1] >= 0 && digits[1] <= 100;
-                const l = digits[2] >= 0 && digits[2] <= 100;
-                const a = digits[3] >= 0 && digits[3] <= 1;
-                return h && s && l && a;
-            }
-        }
-        const isWebSafe = hex => /^((00)|(33)|(66)|(99)|(CC)|(FF)){3}$/gi.test(hex);
-
-        // get color type
-        let r, g, b, hex, h, s, l, a, name, safe = undefined;
-        const colorType = ["rgb", "rgba", "hex", "hsl", "hsla", "invalid"][[isRgb(colorStr), isRgba(colorStr), isHex(colorStr), isHsl(colorStr.replace(/%/g, "")), isHsla(colorStr.replace(/%/g, "")), true].findIndex(e => !!e)];
-
-        // get color values (r, g, b, h, s, l, hex) for all the possible input variations
-        switch (colorType) {
-            case "rgb": {
-                const digits = colorStr.match(/\d*/g).filter(m => !!m).map(Number);
-                const hsl = rgbToHsl(...digits);
-
-                r = digits[0]; g = digits[1]; b = digits[2];
-                hex = rgbToHex(...digits);
-                h = hsl[0]; s = hsl[1]; l = hsl[2];
-                break;
-            }
-            case "rgba": {
-                const digits = colorStr.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
-                const hsl = rgbToHsl(...digits);
-
-                r = digits[0]; g = digits[1]; b = digits[2]; a = digits[3];
-                hex = rgbToHex(...digits);
-                h = hsl[0]; s = hsl[1]; l = hsl[2];
-                break;
-            }
-            case "hex": {
-                const rgba = hexToRgb(colorStr);
-                r = rgba[0]; g = rgba[1]; b = rgba[2]; a = rgba[3];
-                const hsl = rgbToHsl(r, g, b);
-                h = hsl[0]; s = hsl[1]; l = hsl[2];
-                hex = rgbToHex(r, g, b);
-                break;
-            }
-            case "hsl": {
-                const digits = colorStr.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
-                const rgb = hslToRgb(...digits);
-                r = rgb[0]; g = rgb[1]; b = rgb[2];
-                h = digits[0]; s = digits[1]; l = digits[2];
-                hex = rgbToHex(r, g, b);
-                break;
-            }
-            case "hsla": {
-                const digits = colorStr.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
-                const rgb = hslToRgb(...digits);
-                r = rgb[0]; g = rgb[1]; b = rgb[2];
-                h = digits[0]; s = digits[1]; l = digits[2]; a = digits[3];
-                hex = rgbToHex(r, g, b);
-                break;
-            }
-            default: { throw Error("Invalid color : " + colorStr); }
-        }
-
-        // get alpha, websafe, color name info for all valid inputs
-        if (colorType !== "invalid") {
-            a = (a === undefined) ? 1 : a; // a can be 0 which is falsy
-            safe = isWebSafe(hex);
-            name = require("../../constants/color_templates/cssColors.json")["#" + hex];
-        }
-
-        return ({
-            valid: colorType !== "invalid",             // if color is invalid the rest of obj props are undefined
-            websafe: safe,                              // flag if color is a web safe 
-            rgb: { r: r, g: g, b: b },                  // object format for rgb
-            hex: hex,                                   // hex values, no hashtag!
-            hsl: { h: h, s: s, l: l },                  // hsl obj values
-            alpha: Math.round(a * 100),                 // transparency is given as percentage eg 57 rather than a float .57 (for easier text input manipulation)
-            name: name,                                 // the css name of the color or undefined
-            code: colorType !== "invalid" ? {           // code object has all the code formats of the color
-                rgb: `rgb(${r}, ${g}, ${b})`,           // rgb(r, g, b)
-                rgba: `rgba(${r}, ${g}, ${b}, ${a})`,   // rgba(r, g, b, a) a 0 - 1
-                hex: `#${hex}`,                         // # + 6 digit format
-                hsl: `hsl(${h}, ${s}%, ${l}%)`,         // hsl(0 - 360, 0 - 100%, 0 - 100%)
-                hsla: `hsla(${h}, ${s}%, ${l}%, ${a})`, // hsla(h, s, l, a) a 0 - 1
-                name: name                              // the css name of the color or undefined
-            } : undefined                               // invalid color results code: undefined
-        });
+        this.setState({ ...this.state, color: getColorObj(`rgba(${r}, ${g}, ${b}, ${(this.state.color.alpha / 100).toFixed(2)})`) });
     }
 
 
@@ -529,27 +410,27 @@ export default class ColorPicker extends Component {
             case "h": {
                 hue = values[0];
                 rgb = hslToRgb(...values);
-                newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
+                newColorObj = getColorObj("rgb(" + rgb.join(",") + ")");
                 adjustHueSlider();
                 break;
             }
             case "rgb": {
                 hue = rgbToHsl(...values)[0];
                 rgb = values;
-                newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
+                newColorObj = getColorObj("rgb(" + rgb.join(",") + ")");
                 adjustHueSlider();
                 break;
             }
             case "sl": {
                 hue = values[0];
                 rgb = hslToRgb(...values);
-                newColorObj = this.getColorObj("hsl(" + values.join(",") + ")");
+                newColorObj = getColorObj("hsl(" + values.join(",") + ")");
                 break;
             }
             case "hex": {
                 rgb = hexToRgb("#" + values);
                 hue = rgbToHsl(...rgb)[0];
-                newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
+                newColorObj = getColorObj("rgb(" + rgb.join(",") + ")");
                 adjustHueSlider();
                 break;
             }
@@ -573,7 +454,7 @@ export default class ColorPicker extends Component {
         const left = width - Math.floor((percentage / 100) * width);
 
         thumb.style.left = left + "px";
-        const color = this.getColorObj(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${percentage / 100})`);
+        const color = getColorObj(`rgba(${this.state.color.rgb.r}, ${this.state.color.rgb.g}, ${this.state.color.rgb.b}, ${percentage / 100})`);
         this.setState({ ...this.state, color: color, input_a: undefined });
     }
 
@@ -643,7 +524,7 @@ export default class ColorPicker extends Component {
     handleColorNameOnClick(e) {
         const hex = e.target.dataset.hex;
         if (!hex) return;
-        const colorObj = this.getColorObj("#" + hex);
+        const colorObj = getColorObj("#" + hex);
         this.setState({ ...this.state, color: colorObj }, () => this.findAndSetColorByInput("hex", hex));
     }
 
@@ -824,7 +705,7 @@ export default class ColorPicker extends Component {
                 <div
                     style={{ backgroundColor: color }}
                     title={color}
-                    onClick={() => this.setState({ ...this.state, color: this.getColorObj(color) }, () => this.adjustSliders())}></div>
+                    onClick={() => this.setState({ ...this.state, color: getColorObj(color) }, () => this.adjustSliders())}></div>
             </div>
         ));
     }
