@@ -40,6 +40,24 @@ export default class Code extends Component {
 
 
 
+    componentDidMount() {
+        const code = document.getElementById("code");
+        const bites = encodeURI(code.textContent).split(/%..|./).length - 1;
+
+        this.setState({ ...this.state, bites });
+    }
+
+
+
+    componentDidUpdate(_, prevState) {
+        const code = document.getElementById("code");
+        const bites = encodeURI(code.textContent).split(/%..|./).length - 1;
+
+        if (prevState.bites !== bites) this.setState({ ...this, bites });
+    }
+
+
+
     handleCopyBtnOnClick() {
         const code = document.getElementById("code");
         const codeText = code.textContent.split(";").join(";\n");
@@ -64,6 +82,7 @@ export default class Code extends Component {
             document.body.removeChild(textarea);
         }
     }
+
 
 
 
@@ -407,7 +426,12 @@ export default class Code extends Component {
         return (
             <div className="Code">
                 <header>
-                    <span>CODE</span>
+                    <span>
+                        CODE
+
+                    </span>
+
+                    <span className="bite-count">[ {this.state.bites / 1000}kB ]</span>
 
                     <div>
                         <button
