@@ -107,6 +107,12 @@ export default class Code extends Component {
 
 
 
+    renderColor(color) {
+        console.log(color);
+    }
+
+
+
     renderColorStopsAndHints(gradient) {
         const colors = gradient.colors;
         const hints = gradient.colorHints;
@@ -126,7 +132,11 @@ export default class Code extends Component {
             return ({ color, stop, hint })
         });
 
-        console.log(colorStops);
+        return colorStops.map((colorStop, index) => (
+            <span key={`color-stop-code-${index}`}>
+                {this.renderColor(colorStop.color)}
+            </span>
+        ));
     }
 
 

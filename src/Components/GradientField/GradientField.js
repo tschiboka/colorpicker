@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import checkeredRect from "../ColorPicker/images/checkered_rect.png";
+import checkeredRect from "../../images/checkered_rect.png";
 import { gradientObjsToStr, getImmutableGradientCopy } from "../../functions/gradient";
 import GradientSlider from "../GradientSlider/GradientSlider";
 import GradientButtons from "../GradientButtons/GradientButtons";

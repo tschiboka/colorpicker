@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import "./ColorPicker.scss";
-import checkeredRect from "../../images/checkered_rect.png";
 import sliderThumb from "../../images/hue_slider_thumb.png";
+import checkeredRect from "../../images/checkered_rect.png";
 import hueBtnBg from "../../images/hue_btn.png";
 import starBtnBg from "../../images/star.png";
 import colorsBtnBg from "../../images/colors.png";
+import { hexToRgb, rgbToHex, rgbToHsl, hslToRgb } from "../../functions/colors";
+import "./ColorPicker.scss";
 
 
 
@@ -397,44 +398,44 @@ export default class ColorPicker extends Component {
         switch (colorType) {
             case "rgb": {
                 const digits = colorStr.match(/\d*/g).filter(m => !!m).map(Number);
-                const hsl = this.rgbToHsl(...digits);
+                const hsl = rgbToHsl(...digits);
 
                 r = digits[0]; g = digits[1]; b = digits[2];
-                hex = this.rgbToHex(...digits);
+                hex = rgbToHex(...digits);
                 h = hsl[0]; s = hsl[1]; l = hsl[2];
                 break;
             }
             case "rgba": {
                 const digits = colorStr.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
-                const hsl = this.rgbToHsl(...digits);
+                const hsl = rgbToHsl(...digits);
 
                 r = digits[0]; g = digits[1]; b = digits[2]; a = digits[3];
-                hex = this.rgbToHex(...digits);
+                hex = rgbToHex(...digits);
                 h = hsl[0]; s = hsl[1]; l = hsl[2];
                 break;
             }
             case "hex": {
-                const rgba = this.hexToRgb(colorStr);
+                const rgba = hexToRgb(colorStr);
                 r = rgba[0]; g = rgba[1]; b = rgba[2]; a = rgba[3];
-                const hsl = this.rgbToHsl(r, g, b);
+                const hsl = rgbToHsl(r, g, b);
                 h = hsl[0]; s = hsl[1]; l = hsl[2];
-                hex = this.rgbToHex(r, g, b);
+                hex = rgbToHex(r, g, b);
                 break;
             }
             case "hsl": {
                 const digits = colorStr.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
-                const rgb = this.hslToRgb(...digits);
+                const rgb = hslToRgb(...digits);
                 r = rgb[0]; g = rgb[1]; b = rgb[2];
                 h = digits[0]; s = digits[1]; l = digits[2];
-                hex = this.rgbToHex(r, g, b);
+                hex = rgbToHex(r, g, b);
                 break;
             }
             case "hsla": {
                 const digits = colorStr.match(/(\d\.\d*)|(\d*)/g).filter(m => !!m).map(Number);
-                const rgb = this.hslToRgb(...digits);
+                const rgb = hslToRgb(...digits);
                 r = rgb[0]; g = rgb[1]; b = rgb[2];
                 h = digits[0]; s = digits[1]; l = digits[2]; a = digits[3];
-                hex = this.rgbToHex(r, g, b);
+                hex = rgbToHex(r, g, b);
                 break;
             }
             default: { throw Error("Invalid color : " + colorStr); }
@@ -464,80 +465,6 @@ export default class ColorPicker extends Component {
                 name: name                              // the css name of the color or undefined
             } : undefined                               // invalid color results code: undefined
         });
-    }
-
-
-
-    // Series of color format functions
-    hexToRgb(hex) {
-        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;  // Expand shorthand form "03F" to full form "0033FF"
-        hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
-        return hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i)
-            .map(h => parseInt(h, 16))
-            .map((n, i) => i !== 4 ? n : Math.round((n / 255) * 100) / 100) // get % if alpha present
-            .filter(n => !isNaN(n)); // first elem isNan
-    }
-
-
-
-    rgbToHex(r, g, b) {
-        const decToHex = (n, hex = n.toString(16)) => hex.length === 1 ? "0" + hex : hex;
-        return decToHex(r) + decToHex(g) + decToHex(b);
-    }
-
-
-
-    rgbToHsl(red, green, blue) {
-        const r = red / 255, g = green / 255, b = blue / 255;
-        const min = Math.min(r, g, b), max = Math.max(r, g, b);
-        const lum = (min + max) / 2;
-        let hue, sat, dif;
-
-        if (min === max) {
-            hue = 0;
-            sat = 0;
-        } else {
-            dif = max - min;
-            sat = lum > 0.5 ? dif / (2 - max - min) : dif / (max + min);
-            switch (max) {
-                case r: { hue = (g - b) / dif; break; }
-                case g: { hue = 2 + ((b - r) / dif); break; }
-                case b: { hue = 4 + ((r - g) / dif); break; }
-                default: { }
-            }
-            hue *= 60;
-            if (hue < 0) hue += 360;
-        }
-        return [hue, sat * 100, lum * 100].map(n => Math.round(n));
-    }
-
-
-
-    hslToRgb(h, s, l) {
-        let r, g, b, m, c, x;
-
-        if (!isFinite(h)) h = 0; if (!isFinite(s)) s = 0; if (!isFinite(l)) l = 0;
-
-        h /= 60;
-        if (h < 0) h = 6 - (-h % 6);
-        h %= 6;
-
-        s = Math.max(0, Math.min(1, s / 100));
-        l = Math.max(0, Math.min(1, l / 100));
-
-        c = (1 - Math.abs((2 * l) - 1)) * s;
-        x = c * (1 - Math.abs((h % 2) - 1));
-
-        if (h < 1) { r = c; g = x; b = 0; }
-        else if (h < 2) { r = x; g = c; b = 0; }
-        else if (h < 3) { r = 0; g = c; b = x; }
-        else if (h < 4) { r = 0; g = x; b = c; }
-        else if (h < 5) { r = x; g = 0; b = c; }
-        else { r = c; g = 0; b = x; }
-
-        m = l - c / 2;
-        r = Math.round((r + m) * 255); g = Math.round((g + m) * 255); b = Math.round((b + m) * 255);
-        return [r, g, b];
     }
 
 
@@ -585,7 +512,7 @@ export default class ColorPicker extends Component {
 
             for (let i = 0; i < width; i++) {
                 const [r, g, b] = [...hueCtx.getImageData(i, 3, 1, 1).data];
-                const pixelHue = this.rgbToHsl(r, g, b)[0]
+                const pixelHue = rgbToHsl(r, g, b)[0]
 
                 if (pixelHue >= hue) { newSliderX = i; break; }
             }
@@ -601,13 +528,13 @@ export default class ColorPicker extends Component {
         switch (type) {
             case "h": {
                 hue = values[0];
-                rgb = this.hslToRgb(...values);
+                rgb = hslToRgb(...values);
                 newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
                 adjustHueSlider();
                 break;
             }
             case "rgb": {
-                hue = this.rgbToHsl(...values)[0];
+                hue = rgbToHsl(...values)[0];
                 rgb = values;
                 newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
                 adjustHueSlider();
@@ -615,13 +542,13 @@ export default class ColorPicker extends Component {
             }
             case "sl": {
                 hue = values[0];
-                rgb = this.hslToRgb(...values);
+                rgb = hslToRgb(...values);
                 newColorObj = this.getColorObj("hsl(" + values.join(",") + ")");
                 break;
             }
             case "hex": {
-                rgb = this.hexToRgb("#" + values);
-                hue = this.rgbToHsl(...rgb)[0];
+                rgb = hexToRgb("#" + values);
+                hue = rgbToHsl(...rgb)[0];
                 newColorObj = this.getColorObj("rgb(" + rgb.join(",") + ")");
                 adjustHueSlider();
                 break;
@@ -758,7 +685,7 @@ export default class ColorPicker extends Component {
 
                 colors.forEach(c => {
                     // reference: www.workwithcolor.com (color ranges)
-                    const [H, S, L] = this.rgbToHsl(...hexToRgb(c.hex));
+                    const [H, S, L] = rgbToHsl(...hexToRgb(c.hex));
 
                     // greyscale
                     if (L >= 90) return placeColorInGroup("white", c);
@@ -784,7 +711,7 @@ export default class ColorPicker extends Component {
                 });
 
                 groups = groups.map(group => {
-                    group.colors = group.colors.sort((a, b, aL = this.rgbToHsl(...hexToRgb(a.hex))[2], bL = this.rgbToHsl(...hexToRgb(b.hex))[2]) => aL < bL);
+                    group.colors = group.colors.sort((a, b, aL = rgbToHsl(...hexToRgb(a.hex))[2], bL = rgbToHsl(...hexToRgb(b.hex))[2]) => aL < bL);
                     return group;
                 });
 

@@ -14,8 +14,8 @@ const getHintString = (hints, colorStopArr, index, gradient, units) => {
         const highestHint = hintsInRange.length ? Math.max(...hintsInRange) : undefined;
 
         if (highestHint) hintStr = ` ${highestHint}${units}`;
-
     }
+
     return hintStr;
 }
 
