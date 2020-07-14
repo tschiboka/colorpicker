@@ -133,7 +133,7 @@ export default class Code extends Component {
         const colorType = color.match(/^(rgba|rgb|hsla|hsl|#)/g)[0];
         const preferredFormat = this.state.preferredColorFormat || colorType;
 
-        console.log(colorObj);
+        console.log(color, colorObj, preferredFormat);
 
         // check if transparent
         if (colorType === "rgba" || colorType === "hsla") {
@@ -171,11 +171,11 @@ export default class Code extends Component {
 
                 <span className="token number">{colorObj.rgb.r}</span>
 
-                <span className="token punctuation">,</span>
+                <span className="token punctuation">, </span>
 
                 <span className="token number">{colorObj.rgb.g}</span>
 
-                <span className="token punctuation">,</span>
+                <span className="token punctuation">, </span>
 
                 <span className="token number">{colorObj.rgb.b}</span>
 
@@ -196,16 +196,16 @@ export default class Code extends Component {
 
                 <span className="token number">{colorObj.rgb.r}</span>
 
-                <span className="token punctuation">,</span>
+                <span className="token punctuation">, </span>
 
                 <span className="token number">{colorObj.rgb.g}</span>
 
-                <span className="token punctuation">,</span>
+                <span className="token punctuation">, </span>
 
                 <span className="token number">{colorObj.rgb.b}</span>
 
 
-                <span className="token punctuation">,</span>
+                <span className="token punctuation">, </span>
 
                 <span className="token number">{"0." + colorObj.alpha.toString().replace(/0$/, "")}</span>
 
@@ -214,6 +214,81 @@ export default class Code extends Component {
                 {colorsLength - 1 > index && <span className="token punctuation">, </span>}
             </span>
         );
+
+        // return HSL
+        if (preferredFormat === "hsl") return (
+            <span>
+                <ColorPreview color={color} />
+
+                <span className="token function">hsl</span>
+
+                <span className="token punctuation">(</span>
+
+                <span className="token number">{colorObj.hsl.h}</span>
+
+                <span className="token punctuation">, </span>
+
+                <span className="token number">{colorObj.hsl.s}</span>
+
+                <span className="token unit">%</span>
+
+                <span className="token punctuation">, </span>
+
+                <span className="token number">{colorObj.hsl.l}</span>
+
+                <span className="token unit">%</span>
+
+                <span className="token punctuation">)</span>
+
+                {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+            </span>
+        );
+
+        // return HSL
+        if (preferredFormat === "hsla") return (
+            <span>
+                <ColorPreview color={color} />
+
+                <span className="token function">hsla</span>
+
+                <span className="token punctuation">(</span>
+
+                <span className="token number">{colorObj.hsl.h}</span>
+
+                <span className="token punctuation">, </span>
+
+                <span className="token number">{colorObj.hsl.s}</span>
+
+                <span className="token unit">%</span>
+
+                <span className="token punctuation">, </span>
+
+                <span className="token number">{colorObj.hsl.l}</span>
+
+                <span className="token unit">%</span>
+
+                <span className="token punctuation">, </span>
+
+                <span className="token number">{"0." + colorObj.alpha.toString().replace(/0$/, "")}</span>
+
+
+                <span className="token punctuation">)</span>
+
+                {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+            </span>
+        );
+
+        if (preferredFormat === "#") {
+            return (
+                <span>
+                    <ColorPreview color={color} />
+
+                    <span className="token hex">{color}</span>
+
+                    {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+                </span>
+            );
+        }
     }
 
 
@@ -264,17 +339,17 @@ export default class Code extends Component {
         );
 
         return gradients.map((gradients, gradIndex) => (
-            <pre key={`gradient-code${gradIndex}`}>
-                <code>
-                    <span className="token property">background</span>
+            //           <pre key={`gradient-code${gradIndex}`}>
+            <code>
+                <span className="token property">background</span>
 
-                    <span className="token punctuation">: </span>
+                <span className="token punctuation">: </span>
 
-                    {renderFunctionSpans(gradIndex)}
+                {renderFunctionSpans(gradIndex)}
 
-                    <br />
-                </code>
-            </pre>
+                <br />
+            </code>
+            //         </pre>
         ));
     }
 
