@@ -87,7 +87,6 @@ export function gradientObjsToStr(gradientArray) {
 
 
             if (gradient.type === "linear") {
-                //console.log(`${prefix}(${angle}${colorStops})`);
                 return `${prefix}(${angle}${colorStops})`;
             }
 

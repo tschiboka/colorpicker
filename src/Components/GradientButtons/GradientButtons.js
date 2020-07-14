@@ -18,15 +18,15 @@ export default class GradientButtons extends Component {
 
     handleAngleInputKeyDown(event) {
         const key = event.which || event.keyCode || event.key;
-        const value = event.target.value;
         const target = event.target;
+        const value = target.value;
 
         if (key === 27 || key === "Escape" || key === "Esc") { 
             event.target.value = "";
             event.target.blur();    
         }
 
-        if (key === 13 || key === "Enter") this.setGradientAngle(value, target);
+        this.setGradientAngle(value, target);
     }
 
 
@@ -45,7 +45,6 @@ export default class GradientButtons extends Component {
 
         updatedGradient.max = value;
         updatedGradient.repeatingUnit = unit;
-        console.log(updatedGradient.repeatingUnit);
         this.props.updateGradient(updatedGradient, this.props.index);
     }
 
@@ -60,11 +59,6 @@ export default class GradientButtons extends Component {
             updatedGradient.angle = newAngle;
 
             this.props.updateGradient(updatedGradient, this.props.index);
-        }
-
-        if (resetInput) {
-            resetInput.value = "";
-            resetInput.blur();
         }
     }
 
@@ -196,8 +190,12 @@ export default class GradientButtons extends Component {
                         type="text" 
                         placeholder={this.props.gradient.angle + '\u00B0'}
                         pattern="\d{1,2}|[1-2]\d\d|3[0-5]\d"
-                        onBlur={e => this.setGradientAngle(e.target.value, e.target)}
-                        onKeyDown={e => this.handleAngleInputKeyDown(e)}
+                        onBlur={e => { 
+                            e.target.blur();
+                            e.target.value = ""
+                            }}
+                        onChange={e => this.handleAngleInputKeyDown(e)}
+                        onFocus={e => e.target.value = this.props.gradient.angle}
                     />
                 </div>
 

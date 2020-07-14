@@ -100,8 +100,6 @@ export default class App extends Component {
     const type = setToRadial ? "radial" : "linear";
     gradients[radialSettings_GradientIndex].type = type;
 
-    console.log(gradients);
-
     this.setState(
       {
         ...this.state,

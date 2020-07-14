@@ -67,11 +67,11 @@ export default class LengthInput extends Component {
             error = "Can not be empty!";
             return ({ valid: false, error, value });
         }
-        if (/^\d*[.]+$/g.test(inputValue)) {                                     // TEST . X. X..
+        if (/^\d*[.]+$/g.test(inputValue)) {                                    // TEST . X. X..
             error = "Must not end in decimal point!";
             return ({ valid: false, error, value });
         }
-        if (/[.]\d{2,}?$/g.test(inputValue)) {                        // TEST X NUMBER OPTIONAL AND DECIMAL POINT
+        if (/[.]\d{2,}?$/g.test(inputValue)) {                                  // TEST X.YZ 
             error = "Max 1 decimal value!";
             return ({ valid: false, error, value });
         }
@@ -133,7 +133,6 @@ export default class LengthInput extends Component {
                     disabled={this.props.disabled}
                     onChange={e => this.handleInputOnChange(e.target.value)}
                 />
-
                 <div
                     className={!this.state.valid ? "invalid" : ""}
                 >{

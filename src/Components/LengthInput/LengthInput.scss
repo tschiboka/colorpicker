@@ -19,6 +19,9 @@
         color: $warningTextColor;
         box-shadow: none;
     }
+    input:disabled {
+        opacity: 0.5;
+    }
     & > div {
         height: 100%;
         min-height: 20px;
