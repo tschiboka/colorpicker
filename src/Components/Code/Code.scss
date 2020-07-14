@@ -33,6 +33,7 @@
         }
     }
     div {
+        code {user-select: auto;}
         height: calc(100% - 35px);
         max-height: 100%;
         max-width: 100%;
@@ -46,6 +47,7 @@
         span.token.keyword { color: $codePurple; }
         span.token.css-color-name {color: $codeGreen; }
         span.token.hex { color: $codeBlue; }
+        span.token.vendor-prefix { color: $codeBlue; }
         .ColorPreview {
             display: inline-block;
             width: 12px;

@@ -12,7 +12,6 @@ import "./Code.scss";
 
 function ColorPreview(props) {
     const color = props.color ? `linear-gradient(${props.color}, ${props.color}) ,` : "";
-    console.log(color);
 
     return (
         <div
@@ -34,7 +33,35 @@ export default class Code extends Component {
             copyButtonHover: false,
             convertCssNamedColorsWherePossible: true,
             preferredColorFormat: undefined,
-            cssColorNames: require("../../constants/color_templates/cssColors.json")
+            cssColorNames: require("../../constants/color_templates/cssColors.json"),
+            vendorPrefixes: ["", "-webkit-", "-moz-", "-o-", "-ms-"]
+        }
+    }
+
+
+
+    handleCopyBtnOnClick() {
+        const code = document.getElementById("code");
+        const codeText = code.textContent.split(";").join(";\n");
+
+        this.copyToClipboard(codeText);
+    }
+
+
+
+    copyToClipboard(text) {
+        var textarea = document.createElement("textarea");
+        textarea.textContent = text;
+        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+        } catch (ex) {
+            console.warn("Copy to clipboard failed.", ex);
+            return false;
+        } finally {
+            document.body.removeChild(textarea);
         }
     }
 
@@ -132,8 +159,6 @@ export default class Code extends Component {
         const colorObj = getColorObj(color);
         const colorType = color.match(/^(rgba|rgb|hsla|hsl|#)/g)[0];
         const preferredFormat = this.state.preferredColorFormat || colorType;
-
-        console.log(color, colorObj, preferredFormat);
 
         // check if transparent
         if (colorType === "rgba" || colorType === "hsla") {
@@ -321,12 +346,11 @@ export default class Code extends Component {
 
 
 
-    renderCode() {
+    renderBackgroundWithPrefix(vendorPrefix) {
         const gradients = this.props.gradients.map(grad => getImmutableGradientCopy(grad)).reverse();
         const functionNames = gradients.map(gradient => (gradient.repeating ? "repeating-" : "") + gradient.type + "-gradient");
         const renderFunctionSpans = gradIndex => (
             <span key={`functionName${gradIndex}`}>
-                <span className="token function">{functionNames[gradIndex]}</span>
 
                 <span className="token punctuation">(</span>
 
@@ -335,22 +359,46 @@ export default class Code extends Component {
                 {this.renderShapeSizePosition(gradients[gradIndex])}
 
                 {this.renderColorStopsAndHints(gradients[gradIndex])}
+
+                <span className="token punctuation">)</span>
             </span>
         );
 
-        return gradients.map((gradients, gradIndex) => (
-            //           <pre key={`gradient-code${gradIndex}`}>
-            <code>
-                <span className="token property">background</span>
+        return (
+            <code key={"code" + vendorPrefix}>
+                <pre>
+                    <span>
+                        <span className="token property">background</span>
 
-                <span className="token punctuation">: </span>
+                        <span className="token punctuation">: </span>
+                        {gradients.map((gradient, gradIndex) => (
+                            <span key={`gradient_${gradIndex}`}>
+                                <span className="token vendor-prefix">{vendorPrefix}</span>
 
-                {renderFunctionSpans(gradIndex)}
+                                <span className={`token ${vendorPrefix ? "vendor-prefix" : "function"}`}>{functionNames[gradIndex]}</span>
 
-                <br />
+                                {renderFunctionSpans(gradIndex)}
+
+                                {gradients.length - 1 > gradIndex
+                                    ? <span className="token punctuation">,<br /><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span>
+                                    : <span className="token punctuation">;<br /></span>
+                                }
+                            </span>
+                        ))}
+                    </span>
+                </pre>
             </code>
-            //         </pre>
-        ));
+        )
+    }
+
+
+
+    renderCode() {
+        return (
+            this.state.vendorPrefixes.map(vendorPrefix => {
+                return this.renderBackgroundWithPrefix(vendorPrefix)
+            })
+        );
     }
 
 
@@ -366,6 +414,7 @@ export default class Code extends Component {
                             title="copy to clipboard"
                             onMouseOver={() => this.setState({ ...this.state, copyButtonHover: true })}
                             onMouseLeave={() => this.setState({ ...this.state, copyButtonHover: false })}
+                            onClick={() => this.handleCopyBtnOnClick()}
                         >
                             <div style={{ backgroundImage: this.getCopyButtonImage() }}></div>
                         </button>
@@ -380,7 +429,7 @@ export default class Code extends Component {
                     </div>
                 </header>
 
-                <div>
+                <div id="code">
                     {this.renderCode()}
                 </div>
             </div>
