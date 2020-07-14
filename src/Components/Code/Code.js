@@ -3,9 +3,25 @@ import gearIcon from "../../images/gear.png";
 import gearActiveIcon from "../../images/gear_active.png";
 import copyIcon from "../../images/copy.png";
 import copyActiveIcon from "../../images/copy_active.png";
+import checkeredBg from "../../images/checkered_rect.png";
 import { getImmutableGradientCopy } from "../../functions/gradient";
 import { hexToRgb, rgbToHex, rgbToHsl, hslToRgb } from "../../functions/colors";
 import "./Code.scss";
+
+
+
+function ColorPreview(props) {
+    const color = props.color ? `linear-gradient(${props.color}, ${props.color}) ,` : "";
+    console.log(color);
+
+    return (
+        <div
+            className="ColorPreview"
+            style={{ backgroundImage: `${color}url(${checkeredBg})` }}
+        ></div>
+    )
+}
+
 
 
 
@@ -118,7 +134,13 @@ export default class Code extends Component {
         // check if transparent
         if (colorType === "rgba" || colorType === "hsla") {
             const isTransparent = color.match(/[0-9.]+/g)[3] === "0";
-            if (isTransparent) return <span className="token css-color-name">transparent </span>
+            if (isTransparent) return (
+                <span className="token css-color-name">
+                    <ColorPreview color={"red"} />
+                    transparent
+                    <span> </span>
+                </span>
+            );
         }
 
         // convert to css names - only types with no alpha values
@@ -131,7 +153,13 @@ export default class Code extends Component {
 
             const cssName = this.state.cssColorNames[hex];
 
-            if (cssName) return <span className="token css-color-name">{cssName} </span>
+            if (cssName) return (
+                <span className="token css-color-name">
+                    <ColorPreview color={color} />
+                    {cssName}
+                    <span> </span>
+                </span>
+            );
         }
         // return rgb
         if (colorType === "rgba") {
