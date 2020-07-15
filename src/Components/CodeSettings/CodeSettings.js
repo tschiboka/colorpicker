@@ -6,12 +6,33 @@ import "./CodeSettings.scss";
 
 
 export function CodeSettings(props) {
+    function handlePrefixOnClick(prefix) {
+        const vendorPrefixes = { ...props.vendorPrefixes };
+        const isPrefixAllowed = vendorPrefixes[prefix];
+
+        vendorPrefixes[prefix] = !isPrefixAllowed;
+
+        props.setVendorPrefixes(vendorPrefixes);
+    }
+
+
+
+
+    function isActivePrefix(prefix) {
+        const vendorPrefixes = props.vendorPrefixes;
+        const buttonPrefixAllowed = vendorPrefixes[prefix];
+
+        return buttonPrefixAllowed ? "btn--active" : "btn--inacitve";
+    }
+
+
+
     return (
         <div className="CodeSettings">
             <h2>Code Settings</h2>
 
             <div className="CodeSettings__background-size">
-                <p>Background Size:</p>
+                <p>Background Size: </p>
 
                 <div>
                     <div>
@@ -41,24 +62,39 @@ export function CodeSettings(props) {
             </div>
 
             <div className="CodeSettings__vendor-prefixes">
-                <p>Vendor Prefixes:</p>
+                <p>Vendor Prefixes: </p>
 
                 <div>
-                    <button>-o-</button>
+                    <button onClick={() => handlePrefixOnClick("-o-")}>
+                        -o-
+                        <div className={isActivePrefix("-o-")}></div>
+                    </button>
 
-                    <button>-ms-</button>
+                    <button onClick={() => handlePrefixOnClick("-ms-")}>
+                        -ms-
+                        <div className={isActivePrefix("-ms-")}></div>
+                    </button>
 
-                    <button>-moz-</button>
+                    <button onClick={() => handlePrefixOnClick("-moz-")}>
+                        -moz-
+                        <div className={isActivePrefix("-moz-")}></div>
+                    </button>
 
-                    <button>-webkit-</button>
+                    <button onClick={() => handlePrefixOnClick("-webkit-")}>
+                        -webkit-
+                        <div className={isActivePrefix("-webkit-")}></div>
+                    </button>
 
-                    <button>fallback</button>
+                    <button onClick={() => props.toggleFallbackAllowed()}>
+                        fallback
+                        <div className={props.fallbackAllowed ? "btn--active" : "btn--inactive"}></div>
+                    </button>
                 </div>
             </div>
 
 
             <div>
-                <p>Preferred Format:</p>
+                <p>Preferred Format: </p>
                 <button>hex</button>
 
                 <button>rgb</button>
@@ -70,7 +106,7 @@ export function CodeSettings(props) {
 
             <div>
                 <p>Allow hex short-hand:
-                    <span>eg.: #ff6600 - #f60</span>
+                    <span> eg.: #ff6600 - #f60</span>
                 </p>
 
                 <ToggleButton />
@@ -79,20 +115,18 @@ export function CodeSettings(props) {
 
             <div>
                 <p>css color names:
-                    <span>eg.: #ffffff - white</span>
+                    <span> eg.: #ffffff - white</span>
                 </p>
 
                 <ToggleButton />
             </div>
 
             <div>
-                <p>Show comments:
-                    <span>(comments never appear in your clipboard)</span>
-                </p>
+                <p>Show comments: </p>
 
                 <ToggleButton />
             </div>
-            <div><button>Back</button></div>
+            <div><button onClick={() => props.closeSettings()}>Back</button></div>
         </div>
     );
 }

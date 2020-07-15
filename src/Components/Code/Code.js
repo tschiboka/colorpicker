@@ -37,7 +37,14 @@ export default class Code extends Component {
             preferredColorFormat: undefined,
             commentsAllowed: true,
             cssColorNames: require("../../constants/color_templates/cssColors.json"),
-            vendorPrefixes: ["W3C", "-o-", "-ms-", "-moz-", "-webkit-",]
+            fallbackAllowed: true,
+            vendorPrefixes: {
+                "W3C": true,
+                "-o-": true,
+                "-ms-": true,
+                "-moz-": true,
+                "-webkit-": true
+            }
         }
     }
 
@@ -85,6 +92,14 @@ export default class Code extends Component {
     handleSettingsOnClick() {
         this.setState({ ...this.state, settingIsOpen: !this.state.settingIsOpen });
     }
+
+
+
+    setVendorPrefixes(vendorPrefixes) { this.setState({ ...this.state, vendorPrefixes }); }
+
+
+
+    toggleFallbackAllowed() { this.setState({ ...this.state, fallbackAllowed: !this.state.fallbackAllowed }); }
 
 
 
@@ -457,8 +472,14 @@ export default class Code extends Component {
 
 
     renderCode() {
+        const prefixes = Object.keys(this.state.vendorPrefixes);
+
         return (
-            this.state.vendorPrefixes.map(vendorPrefix => {
+            prefixes.map(vendorPrefix => {
+                const prefixAllowed = this.state.vendorPrefixes[vendorPrefix];
+
+                if (!prefixAllowed) return false;
+
                 const vendorComment = {
                     "W3C": "W3C",
                     "-o-": "Opera 11.10+",
@@ -466,6 +487,7 @@ export default class Code extends Component {
                     "-moz-": "FireFox 3.6+",
                     "-webkit-": "Chrome, Safari4+",
                 };
+
                 return (
                     <span key={`vendor-prefix${vendorPrefix}`}>
                         {this.state.commentsAllowed && <span className="token comment">
@@ -519,23 +541,32 @@ export default class Code extends Component {
 
                 <div className="Code__body">
                     {this.state.settingIsOpen && (
-                        <CodeSettings />
+                        <CodeSettings
+                            vendorPrefixes={this.state.vendorPrefixes}
+                            setVendorPrefixes={this.setVendorPrefixes.bind(this)}
+                            fallbackAllowed={this.state.fallbackAllowed}
+                            toggleFallbackAllowed={this.toggleFallbackAllowed.bind(this)}
+                            closeSettings={() => this.setState({ ...this.state, settingIsOpen: false })}
+                        />
                     )}
 
                     <div id="code">
                         {this.props.gradients.length
                             ? <span>
-                                {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
+                                {this.state.fallbackAllowed &&
+                                    <span> {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
 
-                                <span className="token property">background-color</span>
+                                        <span className="token property">background-color</span>
 
-                                <span className="token punctuation">: </span>
+                                        <span className="token punctuation">: </span>
 
-                                {this.renderColor(this.props.gradients[0].colors[0].color, 1, 0)}
+                                        {this.renderColor(this.props.gradients[0].colors[0].color, 1, 0)}
 
-                                <span className="token punctuation">;</span>
+                                        <span className="token punctuation">;</span>
 
-                                <br />
+                                        <br />
+                                    </span>
+                                }
                                 {this.renderCode()}
                             </span>
                             : <span className="token comment">&#47;&#47; No gradients</span>

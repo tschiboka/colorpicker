@@ -38,7 +38,7 @@
     button {
         position: relative;
         height: 26px;
-        padding: 0 5px;
+        padding: 0 10px;
         background: transparent;
         background: $buttonGradient;
         color: $primaryTextColor;
@@ -55,6 +55,7 @@
         }
     }
     span {
+        color: $tertiaryTextColor;
         font-size: $xsmFont;
     }
     .CodeSettings__background-size {
@@ -73,6 +74,9 @@
         & > div {
             display: flex;
             justify-content: space-evenly;
+            button {
+                margin-left: 5px;
+            }
         }
     }
 }
