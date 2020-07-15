@@ -95,13 +95,25 @@ export function CodeSettings(props) {
 
             <div>
                 <p>Preferred Format: </p>
-                <button>hex</button>
+                <button onClick={() => props.setPreferredColorFormat("#")}>
+                    hex
+                    <div className={props.preferredColorFormat === "#" ? "btn--active" : "btn--inactive"}></div>
+                </button>
 
-                <button>rgb</button>
+                <button onClick={() => props.setPreferredColorFormat("rgb")}>
+                    rgb
+                    <div className={props.preferredColorFormat === "rgb" ? "btn--active" : "btn--inactive"}></div>
+                </button>
 
-                <button>hsl</button>
+                <button onClick={() => props.setPreferredColorFormat("hsl")}>
+                    hsl
+                    <div className={props.preferredColorFormat === "hsl" ? "btn--active" : "btn--inactive"}></div>
+                </button>
 
-                <button>auto</button>
+                <button onClick={() => props.setPreferredColorFormat(undefined)}>
+                    auto
+                    <div className={props.preferredColorFormat === undefined ? "btn--active" : "btn--inactive"}></div>
+                </button>
             </div>
 
             <div>

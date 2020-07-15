@@ -33,7 +33,7 @@ export default class Code extends Component {
             settingsButtonHover: false,
             settingIsOpen: false,
             copyButtonHover: false,
-            convertCssNamedColorsWherePossible: true,
+            cssNamesAllowed: false,
             preferredColorFormat: undefined,
             commentsAllowed: true,
             cssColorNames: require("../../constants/color_templates/cssColors.json"),
@@ -100,6 +100,10 @@ export default class Code extends Component {
 
 
     toggleFallbackAllowed() { this.setState({ ...this.state, fallbackAllowed: !this.state.fallbackAllowed }); }
+
+
+
+    setPreferredColorFormat(preferredColorFormat) { this.setState({ ...this.state, preferredColorFormat: preferredColorFormat }); }
 
 
 
@@ -212,8 +216,20 @@ export default class Code extends Component {
 
     renderColor(color, colorsLength, index) {
         const colorObj = getColorObj(color);
-        const colorType = color.match(/^(rgba|rgb|hsla|hsl|#)/g)[0];
-        const preferredFormat = this.state.preferredColorFormat || colorType;
+        const customType = color.match(/^(rgba|rgb|hsla|hsl|#)/g)[0];
+        const preferredFormat = this.state.preferredColorFormat;
+
+        const getFinalColorType = () => {
+            if (!preferredFormat) return customType;
+
+            const hasTransparency = colorObj.alpha !== 100;
+            if (!hasTransparency) return preferredFormat;
+            if (preferredFormat === "rgb") return "rgba";
+            if (preferredFormat === "hsl") return "hsla";
+            if (preferredFormat === "#") return "rgba";
+        }
+
+        const colorType = getFinalColorType();
 
         // check if transparent
         if (colorType === "rgba" || colorType === "hsla") {
@@ -228,7 +244,7 @@ export default class Code extends Component {
         }
 
         // convert to css names - only types with no alpha values
-        if (this.state.convertCssNamedColorsWherePossible && colorObj.alpha === 100) {
+        if (this.state.cssNamesAllowed && colorObj.alpha === 100) {
             const cssName = this.state.cssColorNames["#" + colorObj.hex];
 
             if (cssName) return (
@@ -241,7 +257,7 @@ export default class Code extends Component {
         }
 
         // return RGB
-        if (preferredFormat === "rgb") return (
+        if (colorType === "rgb") return (
             <span>
                 <ColorPreview color={color} />
 
@@ -265,8 +281,8 @@ export default class Code extends Component {
             </span>
         );
 
-        // return RGB
-        if (preferredFormat === "rgba") return (
+        // return RGBA
+        if (colorType === "rgba") return (
             <span>
                 <ColorPreview color={color} />
 
@@ -296,7 +312,7 @@ export default class Code extends Component {
         );
 
         // return HSL
-        if (preferredFormat === "hsl") return (
+        if (colorType === "hsl") return (
             <span>
                 <ColorPreview color={color} />
 
@@ -324,8 +340,8 @@ export default class Code extends Component {
             </span>
         );
 
-        // return HSL
-        if (preferredFormat === "hsla") return (
+        // return HSLA
+        if (colorType === "hsla") return (
             <span>
                 <ColorPreview color={color} />
 
@@ -358,12 +374,13 @@ export default class Code extends Component {
             </span>
         );
 
-        if (preferredFormat === "#") {
+        if (colorType === "#") {
             return (
                 <span>
+                    {console.log("HERE")}
                     <ColorPreview color={color} />
 
-                    <span className="token hex">{color}</span>
+                    <span className="token hex">{colorObj.code.hex}</span>
 
                     {colorsLength - 1 > index && <span className="token punctuation">, </span>}
                 </span>
@@ -546,6 +563,8 @@ export default class Code extends Component {
                             setVendorPrefixes={this.setVendorPrefixes.bind(this)}
                             fallbackAllowed={this.state.fallbackAllowed}
                             toggleFallbackAllowed={this.toggleFallbackAllowed.bind(this)}
+                            preferredColorFormat={this.state.preferredColorFormat}
+                            setPreferredColorFormat={this.setPreferredColorFormat.bind(this)}
                             closeSettings={() => this.setState({ ...this.state, settingIsOpen: false })}
                         />
                     )}

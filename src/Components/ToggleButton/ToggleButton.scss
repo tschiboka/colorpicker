@@ -19,7 +19,7 @@
         background: $buttonGradient;
         box-shadow: 1px 1px black;
         &:hover {
-            border: $primaryBorder;
+            border: 1px solid $activeButtonTextColor;
         }
         & > div {
             position: absolute;
