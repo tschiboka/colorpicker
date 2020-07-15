@@ -95,7 +95,7 @@ export function gradientObjsToStr(gradientArray) {
                 const size = gradient.radial.size ? gradient.radial.size + " " : "";
                 const pos = gradient.radial.position.join(" ");
                 const shapeSizePos = (shape || size || pos) ? shape + size + (pos && "at " + pos) + "," : "";
-                const gradientStr = `radial-gradient(${shapeSizePos}${colorStops})`;
+                const gradientStr = `${prefix}(${shapeSizePos}${colorStops})`;
 
                 return gradientStr;
             }

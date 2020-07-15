@@ -1,0 +1,37 @@
+@import "../../constants/constants.scss";
+
+.ToggleButton {
+    position: relative;
+    width: 70px;
+    height: 22px;
+    border-radius: 10px;
+    border: $secondaryBorder;
+    background: $buttonGradientHover;
+    cursor: pointer;
+    & > div {
+        position: absolute;
+        top: 1.5px;
+        left: 1.5px;
+        width: 17px;
+        height: 17px;
+        border-radius: 10px;
+        border: $tertiaryBorder;
+        background: $buttonGradient;
+        box-shadow: 1px 1px black;
+        &:hover {
+            border: $primaryBorder;
+        }
+        & > div {
+            position: absolute;
+            top: 5.5px;
+            left: 5.5px;
+            width: 4.5px;
+            height: 4.5px;
+            border-radius: 10px;
+            border: $primaryBorder;
+            background: $activeButtonTextColor;
+            box-shadow: -1px -1px black;
+            pointer-events: none;
+        }
+    }
+}

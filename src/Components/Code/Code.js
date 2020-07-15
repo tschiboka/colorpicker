@@ -7,6 +7,7 @@ import checkeredBg from "../../images/checkered_rect.png";
 import { getImmutableGradientCopy } from "../../functions/gradient";
 import { getColorObj } from "../../functions/colors";
 import "./Code.scss";
+import { CodeSettings } from '../CodeSettings/CodeSettings';
 
 
 
@@ -30,6 +31,7 @@ export default class Code extends Component {
 
         this.state = {
             settingsButtonHover: false,
+            settingIsOpen: false,
             copyButtonHover: false,
             convertCssNamedColorsWherePossible: true,
             preferredColorFormat: undefined,
@@ -76,6 +78,12 @@ export default class Code extends Component {
             });
         }
         else copy();
+    }
+
+
+
+    handleSettingsOnClick() {
+        this.setState({ ...this.state, settingIsOpen: !this.state.settingIsOpen });
     }
 
 
@@ -502,30 +510,37 @@ export default class Code extends Component {
                             title="settings"
                             onMouseOver={() => this.setState({ ...this.state, settingsButtonHover: true })}
                             onMouseLeave={() => this.setState({ ...this.state, settingsButtonHover: false })}
+                            onClick={() => this.handleSettingsOnClick()}
                         >
                             <div style={{ backgroundImage: this.getGearButtonImage() }}></div>
                         </button>
                     </div>
                 </header>
 
-                <div id="code">
-                    {this.props.gradients.length
-                        ? <span>
-                            {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
+                <div className="Code__body">
+                    {this.state.settingIsOpen && (
+                        <CodeSettings />
+                    )}
 
-                            <span className="token property">background-color</span>
+                    <div id="code">
+                        {this.props.gradients.length
+                            ? <span>
+                                {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
 
-                            <span className="token punctuation">: </span>
+                                <span className="token property">background-color</span>
 
-                            {this.renderColor(this.props.gradients[0].colors[0].color, 1, 0)}
+                                <span className="token punctuation">: </span>
 
-                            <span className="token punctuation">;</span>
+                                {this.renderColor(this.props.gradients[0].colors[0].color, 1, 0)}
 
-                            <br />
-                            {this.renderCode()}
-                        </span>
-                        : <span className="token comment">&#47;&#47; No gradients</span>
-                    }
+                                <span className="token punctuation">;</span>
+
+                                <br />
+                                {this.renderCode()}
+                            </span>
+                            : <span className="token comment">&#47;&#47; No gradients</span>
+                        }
+                    </div>
                 </div>
             </div>
         )
