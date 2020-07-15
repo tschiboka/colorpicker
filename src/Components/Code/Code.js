@@ -33,8 +33,9 @@ export default class Code extends Component {
             copyButtonHover: false,
             convertCssNamedColorsWherePossible: true,
             preferredColorFormat: undefined,
+            commentsAllowed: true,
             cssColorNames: require("../../constants/color_templates/cssColors.json"),
-            vendorPrefixes: ["", "-webkit-", "-moz-", "-o-", "-ms-"]
+            vendorPrefixes: ["W3C", "-o-", "-ms-", "-moz-", "-webkit-",]
         }
     }
 
@@ -51,7 +52,10 @@ export default class Code extends Component {
 
     componentDidUpdate(_, prevState) {
         const code = document.getElementById("code");
-        const bites = encodeURI(code.textContent).split(/%..|./).length - 1;
+        const text = this.props.gradients.length ? code.textContent : "";
+        const bites = encodeURI(text)
+            .replace(/\*(.|\n)*?\*/g, "") // get rid of comments
+            .split(/%..|./).length - 1;
 
         if (prevState.bites !== bites) this.setState({ ...this, bites });
     }
@@ -59,10 +63,19 @@ export default class Code extends Component {
 
 
     handleCopyBtnOnClick() {
-        const code = document.getElementById("code");
-        const codeText = code.textContent.split(";").join(";\n");
+        const copy = () => {
+            const code = document.getElementById("code");
+            const codeText = code.textContent.split(";").join(";\n");
+            this.copyToClipboard(codeText);
+        }
 
-        this.copyToClipboard(codeText);
+        if (this.state.commentsAllowed) { // Don't let comments pollute clip-board
+            this.setState({ ...this.state, commentsAllowed: false }, () => {
+                copy();
+                this.setState({ ...this.state, commentsAllowed: true });
+            });
+        }
+        else copy();
     }
 
 
@@ -365,6 +378,16 @@ export default class Code extends Component {
 
 
 
+    renderComment(index) {
+        const comment = this.props.gradients[index].name;
+        const isUntitled = /^untitled/gi.test(comment);
+        if (this.state.commentsAllowed && !isUntitled) return (
+            <span className="token comment">&nbsp;&nbsp;&#47;&#42;&nbsp;{comment}&nbsp;&#42;&#47;</span>
+        );
+    }
+
+
+
     renderBackgroundWithPrefix(vendorPrefix) {
         const gradients = this.props.gradients.map(grad => getImmutableGradientCopy(grad)).reverse();
         const functionNames = gradients.map(gradient => (gradient.repeating ? "repeating-" : "") + gradient.type + "-gradient");
@@ -383,24 +406,37 @@ export default class Code extends Component {
             </span>
         );
 
+        const prefix = vendorPrefix === "W3C" ? "" : vendorPrefix;
+
         return (
-            <code key={"code" + vendorPrefix}>
+            <code key={"code" + prefix}>
                 <pre>
                     <span>
                         <span className="token property">background</span>
 
                         <span className="token punctuation">: </span>
+
                         {gradients.map((gradient, gradIndex) => (
                             <span key={`gradient_${gradIndex}`}>
-                                <span className="token vendor-prefix">{vendorPrefix}</span>
+                                <span className="token vendor-prefix">{prefix}</span>
 
-                                <span className={`token ${vendorPrefix ? "vendor-prefix" : "function"}`}>{functionNames[gradIndex]}</span>
+                                <span className={`token ${prefix ? "vendor-prefix" : "function"}`}>{functionNames[gradIndex]}</span>
 
                                 {renderFunctionSpans(gradIndex)}
 
                                 {gradients.length - 1 > gradIndex
-                                    ? <span className="token punctuation">,<br /><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span>
-                                    : <span className="token punctuation">;<br /></span>
+                                    ? <span className="token punctuation">
+                                        ,{this.renderComment(gradIndex)}
+
+                                        <br />
+
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    </span>
+                                    : <span className="token punctuation">
+                                        ;{this.renderComment(gradIndex)}
+
+                                        <br />
+                                    </span>
                                 }
                             </span>
                         ))}
@@ -415,7 +451,26 @@ export default class Code extends Component {
     renderCode() {
         return (
             this.state.vendorPrefixes.map(vendorPrefix => {
-                return this.renderBackgroundWithPrefix(vendorPrefix)
+                const vendorComment = {
+                    "W3C": "W3C",
+                    "-o-": "Opera 11.10+",
+                    "-ms-": "Internet Explorer 10+",
+                    "-moz-": "FireFox 3.6+",
+                    "-webkit-": "Chrome, Safari4+",
+                };
+                return (
+                    <span key={`vendor-prefix${vendorPrefix}`}>
+                        {this.state.commentsAllowed && <span className="token comment">
+                            &#47;&#42;&nbsp;
+
+                            {vendorComment[vendorPrefix]}
+
+                            &nbsp;&#42;&#47;
+                            </span>}
+
+                        {this.renderBackgroundWithPrefix(vendorPrefix)}
+                    </span>
+                )
             })
         );
     }
@@ -431,7 +486,7 @@ export default class Code extends Component {
 
                     </span>
 
-                    <span className="bite-count">-[{this.state.bites / 1000}kB ]-</span>
+                    <span className="bite-count">[{this.state.bites / 1000}kB ]</span>
 
                     <div>
                         <button
@@ -454,7 +509,23 @@ export default class Code extends Component {
                 </header>
 
                 <div id="code">
-                    {this.renderCode()}
+                    {this.props.gradients.length
+                        ? <span>
+                            {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
+
+                            <span className="token property">background-color</span>
+
+                            <span className="token punctuation">: </span>
+
+                            {this.renderColor(this.props.gradients[0].colors[0].color, 1, 0)}
+
+                            <span className="token punctuation">;</span>
+
+                            <br />
+                            {this.renderCode()}
+                        </span>
+                        : <span className="token comment">&#47;&#47; No gradients</span>
+                    }
                 </div>
             </div>
         )

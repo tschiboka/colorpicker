@@ -69,10 +69,6 @@
             border: none;
             border-left: $tertiaryBorder;
             cursor: pointer;
-            &:hover { 
-                background-clip: none;
-                color: $activeButtonTextColor;
-            }
         }
     }
     & > * {

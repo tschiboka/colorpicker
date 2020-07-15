@@ -24,12 +24,12 @@
                         background-size: contain;
                         pointer-events: none;
                     }
-                }
-                &:hover {
-                    background: $buttonGradientHover;
-                    div {
-                        width: 18px;
-                        height: 18px;
+                    &:hover {
+                        background: $buttonGradientHover;
+                        div {
+                            width: 18px;
+                            height: 18px;
+                        }
                     }
                 }
             }
