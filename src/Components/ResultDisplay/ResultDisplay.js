@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import checkeredRect from "../../images/checkered_rect.png";
 import ResultDisplayMenu from "../ResultDisplayMenu/ResultDisplayMenu";
 import { gradientObjsToStr } from "../../functions/gradient";
-import fullscreenBtn from "../../images/fullscreen.png";
-import fullStreenActiveBtn from "../../images/fullscreen_active.png";
+import fullscreenIcon from "../../images/fullscreen.png";
+import fullStreenActiveIcon from "../../images/fullscreen_active.png";
+import menuIcon from "../../images/menu.png";
+import menuActiveIcon from "../../images/menu_active.png";
 import "./ResultDisplay.scss";
 
 
@@ -47,12 +49,12 @@ export default class ResultDisplay extends Component {
                             <button
                                 className="ResultDisplay__menu-btn"
                                 title="display gradient full-screen"
-                                //onClick={() => this.setState({ ...this.state, menuIsOpen: !this.state.menuIsOpen })}
-                                onMouseEnter={() => this.setState({ ...this.state, fullscreenHover: true })}
-                                onMouseLeave={() => this.setState({ ...this.state, fullscreenHover: false })}
+                                onMouseEnter={() => this.setState({ ...this.state, fullscreenHover: true, menuHover: false })}
+                                onMouseLeave={() => this.setState({ ...this.state, fullscreenHover: false, menuHover: false })}
+                                onClick={() => this.setState({ ...this.state, menuIsOpen: !this.state.menuIsOpen })}
                             >
                                 <div
-                                    style={{ backgroundImage: `url(${this.state.fullscreenHover ? fullStreenActiveBtn : fullscreenBtn})` }}
+                                    style={{ backgroundImage: `url(${this.state.fullscreenHover ? fullStreenActiveIcon : fullscreenIcon})` }}
                                 ></div>
                             </button>
                         </div>
@@ -60,10 +62,16 @@ export default class ResultDisplay extends Component {
 
                         <div>
                             <button
+                                title="main menu"
                                 className="ResultDisplay__menu-btn"
-                                onClick={() => this.setState({ ...this.state, menuIsOpen: !this.state.menuIsOpen })}>
-                                &#9776;
-                        </button>
+                                onClick={() => this.setState({ ...this.state, menuIsOpen: !this.state.menuIsOpen })}
+                                onMouseEnter={() => this.setState({ ...this.state, menuHover: true, fullscreenHover: false })}
+                                onMouseLeave={() => this.setState({ ...this.state, menuHover: false, fullscreenHover: false })}
+                            >
+                                <div
+                                    style={{ backgroundImage: `url(${this.state.menuHover ? menuActiveIcon : menuIcon})` }}
+                                ></div>
+                            </button>
                         </div>
                     </div>
                 </header>

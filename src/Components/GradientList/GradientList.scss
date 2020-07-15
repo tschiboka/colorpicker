@@ -9,20 +9,37 @@
     color: $primaryTextColor;
     overflow-y: auto;
     overflow-x: hidden;
-    & > header
+    & > header {
         div {
+            height: 100%;
             max-height: 30px;
-            background: $buttonGradient;
-            &:hover { background: $buttonGradientHover; }
+            width: 72px;
+            display: flex;
             button {
+                background: $buttonGradient;
+                height: 100%;
                 max-height: 30px;
+                width: 35px;
                 font-size: $xlgFont;
                 font-weight: lighter;
-                &:hover {
-                    font-size: $xlgFont;
-                    color: $activeButtonTextColor;
-            }
-        } 
+                &:first-child {
+                    margin-right: 1.5px;
+                }
+                &:hover { background: $buttonGradientHover; }
+                div {
+                    width: 20px;
+                    height: 20px;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    pointer-events: none;
+                }
+                &:hover div {
+                    width: 18px;
+                    height: 18px;
+                }
+            } 
+        }
     }
     .gradients {
         display: flex;

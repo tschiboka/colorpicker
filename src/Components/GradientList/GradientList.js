@@ -3,6 +3,10 @@ import GradientField from "../GradientField/GradientField";
 import DeleteConfirmMsg from "../DeleteConfirmMsg/DeleteConfirmMsg";
 import { getDefaultGradientObj } from "../../functions/gradient";
 import { calculateAngle } from "../../functions/slider";
+import addIcon from "../../images/add.png";
+import addActiveIcon from "../../images/add_active.png";
+import helpIcon from "../../images/help.png";
+import helpActiveIcon from "../../images/help_active.png";
 import "./GradientList.scss";
 
 
@@ -11,6 +15,8 @@ export default class GradientList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            addIconHover: false,
+            helpIconHover: false,
             deleteConfirmMsgVisible: false,
             gradientToDelete: undefined,
             activeAngleMeter: undefined,
@@ -160,9 +166,25 @@ export default class GradientList extends Component {
 
                     <div>
                         <button
+                            title="help and tutorial"
+                            onMouseOver={() => this.setState({ ...this.state, helpIconHover: true, addIconHover: false })}
+                            onMouseLeave={() => this.setState({ ...this.state, helpIconHover: false, addIconHover: false })}
+                        >
+                            <div
+                                style={{ backgroundImage: `url(${this.state.helpIconHover ? helpActiveIcon : helpIcon})` }}
+                            ></div>
+                        </button>
+
+                        <button
                             title="add new gradient"
                             onClick={() => this.handleAddGradientOnClick()}
-                        >&#43;</button>
+                            onMouseOver={() => this.setState({ ...this.state, addIconHover: true, helpIconHover: false })}
+                            onMouseLeave={() => this.setState({ ...this.state, addIconHover: false, helpIconHover: false })}
+                        >
+                            <div
+                                style={{ backgroundImage: `url(${this.state.addIconHover ? addActiveIcon : addIcon})` }}
+                            ></div>
+                        </button>
                     </div>
                 </header>
 

@@ -431,7 +431,7 @@ export default class Code extends Component {
 
                     </span>
 
-                    <span className="bite-count">[ {this.state.bites / 1000}kB ]</span>
+                    <span className="bite-count">-[{this.state.bites / 1000}kB ]-</span>
 
                     <div>
                         <button
