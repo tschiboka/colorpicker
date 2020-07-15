@@ -33,9 +33,10 @@ export default class GradientList extends Component {
         return this.props.gradients.map((gradient, i) => (
             <GradientField
                 key={`gradient_${i}`}
+                index={i}
                 gradient={gradient}
                 gradients={this.props.gradients}
-                index={i}
+                backgroundSize={this.props.backgroundSize}
                 updateGradient={this.props.updateGradient}
                 confirmDeleteGradient={this.confirmDeleteGradient.bind(this)}
                 setAngleMeterIsActive={this.setAngleMeterIsActive.bind(this)}

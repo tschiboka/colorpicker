@@ -196,7 +196,10 @@ export default class GradientField extends Component {
                 <div className="GradientField__body">
                     <div className="GradientField__preview" title="preview">
                         <div
-                            style={{ background: `${gradientObjsToStr([this.props.gradient].reverse())}, url(${checkeredRect})` }}
+                            style={{
+                                background: `${gradientObjsToStr([this.props.gradient].reverse())}, url(${checkeredRect})`,
+                                backgroundSize: this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " + this.props.backgroundSize[1].value + this.props.backgroundSize[1].unit,
+                            }}
                             onClick={() => this.toggleVisibility()}
                         >
                             {!this.props.gradient.visible && this.renderRedDiagonalLine()}

@@ -39,6 +39,10 @@ export default class App extends Component {
       colorPicker: undefined,
       radialSettingsOn: false,
       radialSettings_GradientIndex: undefined,
+      backgroundSize: [
+        { value: "100", unit: "%" },
+        { value: "100", unit: "%" }
+      ]
     };
   }
 
@@ -143,13 +147,27 @@ export default class App extends Component {
 
 
 
+  changeBackgroundSize(name, value, unit) {
+    const index = name === "background-size-x" ? 0 : 1;
+    const backgroundSize = [...this.state.backgroundSize];
+
+    backgroundSize[index] = { value, unit };
+    this.setState({ ...this.state, backgroundSize });
+  }
+
+
+
   render() {
     return (
       <div className="App">
-        <ResultDisplay gradients={this.state.gradients} />
+        <ResultDisplay
+          backgroundSize={this.state.backgroundSize}
+          gradients={this.state.gradients}
+        />
 
         <GradientList
           gradients={this.state.gradients}
+          backgroundSize={this.state.backgroundSize}
           updateGradients={this.updateGradients.bind(this)}
           updateGradient={this.updateGradient.bind(this)}
           openColorPicker={this.openColorPicker.bind(this)}
@@ -160,6 +178,8 @@ export default class App extends Component {
 
         <Code
           gradients={this.state.gradients}
+          backgroundSize={this.state.backgroundSize}
+          changeBackgroundSize={this.changeBackgroundSize.bind(this)}
         />
 
 

@@ -543,10 +543,7 @@ export default class Code extends Component {
         return (
             <div className="Code">
                 <header>
-                    <span>
-                        CODE
-
-                    </span>
+                    <span>CODE</span>
 
                     <span className="bite-count">[{this.state.bites / 1000}kB ]</span>
 
@@ -574,6 +571,8 @@ export default class Code extends Component {
                 <div className="Code__body">
                     {this.state.settingIsOpen && (
                         <CodeSettings
+                            backgroundSize={this.props.backgroundSize}
+                            changeBackgroundSize={this.props.changeBackgroundSize}
                             vendorPrefixes={this.state.vendorPrefixes}
                             setVendorPrefixes={this.setVendorPrefixes.bind(this)}
                             fallbackAllowed={this.state.fallbackAllowed}
@@ -591,6 +590,22 @@ export default class Code extends Component {
                     )}
 
                     <div id="code">
+
+                        <span className="token property">background-size</span>
+
+                        <span className="token punctuation">: </span>
+
+                        <span className="token number">{this.props.backgroundSize[0].value}</span>
+
+                        <span className="token unit">{this.props.backgroundSize[0].unit} </span>
+
+                        <span className="token number">{this.props.backgroundSize[1].value}</span>
+
+                        <span className="token unit">{this.props.backgroundSize[1].unit}</span>
+
+                        <span className="token punctuation">;</span>
+
+                        <br />
                         {this.props.gradients.length
                             ? <span>
                                 {this.state.fallbackAllowed &&
@@ -607,6 +622,7 @@ export default class Code extends Component {
                                         <br />
                                     </span>
                                 }
+
                                 {this.renderCode()}
                             </span>
                             : <span className="token comment">&#47;&#47; No gradients</span>

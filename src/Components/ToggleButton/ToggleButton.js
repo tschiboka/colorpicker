@@ -9,7 +9,8 @@ export function ToggleButton(props) {
             className="ToggleButton"
             onClick={() => props.handleOnClick()}
         >
-            <div style={{ left: props.on ? "" : "1.5px", right: props.on ? "1.5px" : "" }}>
+            <div
+                style={{ left: props.on ? "" : "1.5px", right: props.on ? "1.5px" : "" }}>
                 <div
                     style={{ background: props.on ? "#4cc3f1" : "#ff1493" }}
                 >

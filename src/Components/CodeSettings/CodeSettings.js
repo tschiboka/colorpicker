@@ -40,10 +40,10 @@ export function CodeSettings(props) {
                             id="6"
                             name="background-size-x"
                             title="background size x"
-                            value={100}
-                            unit={"%"}
+                            value={props.backgroundSize[0].value}
+                            unit={props.backgroundSize[0].unit}
                             units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
-                        //onChange={this.handleRepeatingInputChange.bind(this)}
+                            onChange={props.changeBackgroundSize}
                         />
                     </div>
 
@@ -52,10 +52,10 @@ export function CodeSettings(props) {
                             id="7"
                             name="background-size-y"
                             title="background size y"
-                            value={100}
-                            unit={"%"}
+                            value={props.backgroundSize[1].value}
+                            unit={props.backgroundSize[1].unit}
                             units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
-                        //onChange={this.handleRepeatingInputChange.bind(this)}
+                            onChange={props.changeBackgroundSize}
                         />
                     </div>
                 </div>
