@@ -198,3 +198,14 @@ export function hslToRgb(h, s, l) {
     r = Math.round((r + m) * 255); g = Math.round((g + m) * 255); b = Math.round((b + m) * 255);
     return [r, g, b];
 }
+
+
+
+// Function returns with hex shorthand eg.: FFAA33 -> FA3
+// If there is no shorthand return original value
+export function hexShortHand(hex) {
+    const hexPairs = hex.match(/\w{2}/gi);
+    const allPairMatches = hexPairs.reduce((prev, curr) => prev ? curr[0] === curr[1] : false, true);
+
+    return allPairMatches ? (hex[0] + hex[2] + hex[4]) : hex;
+}

@@ -65,27 +65,37 @@ export function CodeSettings(props) {
                 <p>Vendor Prefixes: </p>
 
                 <div>
-                    <button onClick={() => handlePrefixOnClick("-o-")}>
+                    <button
+                        title="Opera"
+                        onClick={() => handlePrefixOnClick("-o-")}>
                         -o-
                         <div className={isActivePrefix("-o-")}></div>
                     </button>
 
-                    <button onClick={() => handlePrefixOnClick("-ms-")}>
+                    <button
+                        title="Internet Explorer"
+                        onClick={() => handlePrefixOnClick("-ms-")}>
                         -ms-
                         <div className={isActivePrefix("-ms-")}></div>
                     </button>
 
-                    <button onClick={() => handlePrefixOnClick("-moz-")}>
+                    <button
+                        title="Firefox"
+                        onClick={() => handlePrefixOnClick("-moz-")}>
                         -moz-
                         <div className={isActivePrefix("-moz-")}></div>
                     </button>
 
-                    <button onClick={() => handlePrefixOnClick("-webkit-")}>
+                    <button
+                        title="Safari, Chrome, Android, iOS"
+                        onClick={() => handlePrefixOnClick("-webkit-")}>
                         -webkit-
                         <div className={isActivePrefix("-webkit-")}></div>
                     </button>
 
-                    <button onClick={() => props.toggleFallbackAllowed()}>
+                    <button
+                        title="Old Browsers"
+                        onClick={() => props.toggleFallbackAllowed()}>
                         fallback
                         <div className={props.fallbackAllowed ? "btn--active" : "btn--inactive"}></div>
                     </button>
@@ -95,23 +105,31 @@ export function CodeSettings(props) {
 
             <div>
                 <p>Preferred Format: </p>
-                <button onClick={() => props.setPreferredColorFormat("#")}>
+                <button
+                    title="Hexadecimal / RGBA (for transparent colors)"
+                    onClick={() => props.setPreferredColorFormat("#")}>
                     hex
                     <div className={props.preferredColorFormat === "#" ? "btn--active" : "btn--inactive"}></div>
                 </button>
 
-                <button onClick={() => props.setPreferredColorFormat("rgb")}>
+                <button
+                    title="RGB (red, green, blue)"
+                    onClick={() => props.setPreferredColorFormat("rgb")}>
                     rgb
                     <div className={props.preferredColorFormat === "rgb" ? "btn--active" : "btn--inactive"}></div>
                 </button>
 
-                <button onClick={() => props.setPreferredColorFormat("hsl")}>
+                <button
+                    title="Hue Saturation Lightness"
+                    onClick={() => props.setPreferredColorFormat("hsl")}>
                     hsl
                     <div className={props.preferredColorFormat === "hsl" ? "btn--active" : "btn--inactive"}></div>
                 </button>
 
-                <button onClick={() => props.setPreferredColorFormat(undefined)}>
-                    auto
+                <button
+                    title="Color defined by you on the slider"
+                    onClick={() => props.setPreferredColorFormat(undefined)}>
+                    default
                     <div className={props.preferredColorFormat === undefined ? "btn--active" : "btn--inactive"}></div>
                 </button>
             </div>
@@ -121,7 +139,10 @@ export function CodeSettings(props) {
                     <span> eg.: #ff6600 - #f60</span>
                 </p>
 
-                <ToggleButton />
+                <ToggleButton
+                    on={props.hexShortHandAllowed}
+                    handleOnClick={() => props.toggleHexShortHandAllowed()}
+                />
             </div>
 
 
@@ -130,13 +151,19 @@ export function CodeSettings(props) {
                     <span> eg.: #ffffff - white</span>
                 </p>
 
-                <ToggleButton />
+                <ToggleButton
+                    on={props.cssNamesAllowed}
+                    handleOnClick={() => props.toggleCssNamesAllowed()}
+                />
             </div>
 
             <div>
                 <p>Show comments: </p>
 
-                <ToggleButton />
+                <ToggleButton
+                    on={props.commentsAllowed}
+                    handleOnClick={() => props.toggleCommentsAllowed()}
+                />
             </div>
             <div><button onClick={() => props.closeSettings()}>Back</button></div>
         </div>

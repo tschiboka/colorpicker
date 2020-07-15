@@ -5,7 +5,7 @@ import copyIcon from "../../images/copy.png";
 import copyActiveIcon from "../../images/copy_active.png";
 import checkeredBg from "../../images/checkered_rect.png";
 import { getImmutableGradientCopy } from "../../functions/gradient";
-import { getColorObj } from "../../functions/colors";
+import { getColorObj, hexShortHand } from "../../functions/colors";
 import "./Code.scss";
 import { CodeSettings } from '../CodeSettings/CodeSettings';
 
@@ -33,9 +33,10 @@ export default class Code extends Component {
             settingsButtonHover: false,
             settingIsOpen: false,
             copyButtonHover: false,
-            cssNamesAllowed: false,
-            preferredColorFormat: undefined,
+            hexShortHandAllowed: false,
+            cssNamesAllowed: true,
             commentsAllowed: true,
+            preferredColorFormat: undefined,
             cssColorNames: require("../../constants/color_templates/cssColors.json"),
             fallbackAllowed: true,
             vendorPrefixes: {
@@ -99,11 +100,23 @@ export default class Code extends Component {
 
 
 
+    setPreferredColorFormat(preferredColorFormat) { this.setState({ ...this.state, preferredColorFormat: preferredColorFormat }); }
+
+
+
     toggleFallbackAllowed() { this.setState({ ...this.state, fallbackAllowed: !this.state.fallbackAllowed }); }
 
 
 
-    setPreferredColorFormat(preferredColorFormat) { this.setState({ ...this.state, preferredColorFormat: preferredColorFormat }); }
+    toggleHexShortHandAllowed() { this.setState({ ...this.state, hexShortHandAllowed: !this.state.hexShortHandAllowed }) }
+
+
+
+    toggleCssNamesAllowed() { this.setState({ ...this.state, cssNamesAllowed: !this.state.cssNamesAllowed }) }
+
+
+
+    toggleCommentsAllowed() { this.setState({ ...this.state, commentsAllowed: !this.state.commentsAllowed }) }
 
 
 
@@ -377,10 +390,12 @@ export default class Code extends Component {
         if (colorType === "#") {
             return (
                 <span>
-                    {console.log("HERE")}
                     <ColorPreview color={color} />
 
-                    <span className="token hex">{colorObj.code.hex}</span>
+                    <span className="token hex">
+                        #
+                        {this.state.hexShortHandAllowed ? hexShortHand(colorObj.hex) : colorObj.hex}
+                    </span>
 
                     {colorsLength - 1 > index && <span className="token punctuation">, </span>}
                 </span>
@@ -565,6 +580,12 @@ export default class Code extends Component {
                             toggleFallbackAllowed={this.toggleFallbackAllowed.bind(this)}
                             preferredColorFormat={this.state.preferredColorFormat}
                             setPreferredColorFormat={this.setPreferredColorFormat.bind(this)}
+                            hexShortHandAllowed={this.state.hexShortHandAllowed}
+                            toggleHexShortHandAllowed={this.toggleHexShortHandAllowed.bind(this)}
+                            cssNamesAllowed={this.state.cssNamesAllowed}
+                            toggleCssNamesAllowed={this.toggleCssNamesAllowed.bind(this)}
+                            commentsAllowed={this.state.commentsAllowed}
+                            toggleCommentsAllowed={this.toggleCommentsAllowed.bind(this)}
                             closeSettings={() => this.setState({ ...this.state, settingIsOpen: false })}
                         />
                     )}

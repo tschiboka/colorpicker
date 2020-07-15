@@ -117,7 +117,7 @@ const defaultGradientObj = {
     colorHints: [50],
     colors: [
         {
-            color: "rgb(0, 0, 0)",
+            color: "#000000",
             stop: 0
         },
         {
