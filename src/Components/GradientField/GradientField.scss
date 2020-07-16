@@ -98,6 +98,18 @@
                 .btn--inactive { background: $buttonInactiveColor; }
                 .btn--active { background: $activeButtonTextColor; }    
             }
+            .visibility-btn {
+                div {
+                    background-size: 16px;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
+                &:hover {
+                    div {
+                        background-size: 14px;
+                    }
+                }
+            }
         }
     }
     .GradientField__body {

@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import checkeredRect from "../../images/checkered_rect.png";
+import visibleIcon from "../../images/visible.png";
+import visibleActiveIcon from "../../images/visible_active.png";
+import hiddenIcon from "../../images/hidden.png";
+import hiddenActiveIcon from "../../images/hidden_active.png";
 import { gradientObjsToStr, getImmutableGradientCopy } from "../../functions/gradient";
 import GradientSlider from "../GradientSlider/GradientSlider";
 import GradientButtons from "../GradientButtons/GradientButtons";
@@ -13,6 +17,7 @@ export default class GradientField extends Component {
         super(props);
 
         this.state = {
+            visibleHovered: false,
             nameInputVisible: false,
             copyWhenInsertOn: false
         };
@@ -117,6 +122,19 @@ export default class GradientField extends Component {
 
 
 
+    getVisibleIcon() {
+        if (!this.props.gradient.visible) {
+            if (!this.state.visibleHovered) return `url(${visibleIcon})`;
+            else return `url(${visibleActiveIcon})`;
+        }
+        else {
+            if (!this.state.visibleHovered) return `url(${hiddenIcon})`;
+            else return `url(${hiddenActiveIcon})`;
+        }
+    }
+
+
+
     nameGradients() {
         const updatedGradient = getImmutableGradientCopy(this.props.gradient);
         updatedGradient.name = `Untitled ${this.getUntitledNumber()}`;
@@ -181,9 +199,14 @@ export default class GradientField extends Component {
                         </button>
 
                         <button
+                            className="visibility-btn"
                             title="visibility"
                             onClick={() => this.toggleVisibility()}
-                        >&#128065;<div>{!this.props.gradient.visible && this.renderRedDiagonalLine()}</div>
+                            onMouseEnter={() => this.setState({ ...this.state, visibleHovered: true })}
+                            onMouseLeave={() => this.setState({ ...this.state, visibleHovered: false })}
+                        ><div
+                            style={{ backgroundImage: this.getVisibleIcon() }}
+                        ></div>
                         </button>
 
                         <button

@@ -227,10 +227,13 @@ export default class Code extends Component {
 
 
 
-    renderColor(color, colorsLength, index) {
+    renderColor(colorStops, index, unit) {
+        const color = colorStops[index].color || colorStops; // colorStop can be an object or a single color str
+        const hasSizeAndHint = typeof colorStops === "object";
         const colorObj = getColorObj(color);
         const customType = color.match(/^(rgba|rgb|hsla|hsl|#)/g)[0];
         const preferredFormat = this.state.preferredColorFormat;
+        const lastColorStop = colorStops.length - 1 === index || !hasSizeAndHint;
 
         const getFinalColorType = () => {
             if (!preferredFormat) return customType;
@@ -251,7 +254,10 @@ export default class Code extends Component {
                 <span className="token css-color-name">
                     <ColorPreview />
                     transparent
-                    {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+
+                    {hasSizeAndHint && this.renderColorHint(colorStops[index], unit)}
+
+                    {!lastColorStop && <span className="token punctuation">, </span>}
                 </span>
             );
         }
@@ -263,8 +269,12 @@ export default class Code extends Component {
             if (cssName) return (
                 <span className="token css-color-name">
                     <ColorPreview color={color} />
+
                     {cssName}
-                    {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+
+                    {hasSizeAndHint && this.renderColorHint(colorStops[index], unit)}
+
+                    {!lastColorStop && <span className="token punctuation">, </span>}
                 </span>
             );
         }
@@ -290,7 +300,9 @@ export default class Code extends Component {
 
                 <span className="token punctuation">)</span>
 
-                {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+                {hasSizeAndHint && this.renderColorHint(colorStops[index], unit)}
+
+                {!lastColorStop && <span className="token punctuation">, </span>}
             </span>
         );
 
@@ -320,7 +332,9 @@ export default class Code extends Component {
 
                 <span className="token punctuation">)</span>
 
-                {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+                {hasSizeAndHint && this.renderColorHint(colorStops[index], unit)}
+
+                {!lastColorStop && <span className="token punctuation">, </span>}
             </span>
         );
 
@@ -349,7 +363,9 @@ export default class Code extends Component {
 
                 <span className="token punctuation">)</span>
 
-                {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+                {hasSizeAndHint && this.renderColorHint(colorStops[index], unit)}
+
+                {!lastColorStop && <span className="token punctuation">, </span>}
             </span>
         );
 
@@ -380,10 +396,11 @@ export default class Code extends Component {
 
                 <span className="token number">{"0." + colorObj.alpha.toString().replace(/0$/, "")}</span>
 
-
                 <span className="token punctuation">)</span>
 
-                {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+                {hasSizeAndHint && this.renderColorHint(colorStops[index], unit)}
+
+                {!lastColorStop && <span className="token punctuation">, </span>}
             </span>
         );
 
@@ -397,10 +414,37 @@ export default class Code extends Component {
                         {this.state.hexShortHandAllowed ? hexShortHand(colorObj.hex) : colorObj.hex}
                     </span>
 
-                    {colorsLength - 1 > index && <span className="token punctuation">, </span>}
+                    {hasSizeAndHint && this.renderColorHint(colorStops[index], unit)}
+
+                    {!lastColorStop && <span className="token punctuation">, </span>}
                 </span>
             );
         }
+    }
+
+
+
+    renderColorHint(colorStop, unit) {
+        console.log(colorStop)
+        return (
+            <span>
+                <span> </span>
+
+                <span className="token number">{colorStop.stop}</span>
+
+                <span className="token unit">{unit}</span>
+
+                {colorStop.hint && (
+                    <span>
+                        <span> </span>
+
+                        <span className="token number">{colorStop.hint}</span>
+
+                        <span className="token unit">{unit}</span>
+                    </span>
+                )}
+            </span>
+        );
     }
 
 
@@ -426,7 +470,7 @@ export default class Code extends Component {
 
         return colorStops.map((colorStop, index) => (
             <span key={`color-stop-code-${index}`}>
-                {this.renderColor(colorStop.color, colorStops.length, index)}
+                {this.renderColor(colorStops, index, gradient.repeatingUnit)}
             </span>
         ));
     }
@@ -455,7 +499,7 @@ export default class Code extends Component {
 
                 {this.renderShapeSizePosition(gradients[gradIndex])}
 
-                {this.renderColorStopsAndHints(gradients[gradIndex])}
+                {this.renderColorStopsAndHints(gradients[gradIndex], gradIndex, gradients.length)}
 
                 <span className="token punctuation">)</span>
             </span>
