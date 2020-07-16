@@ -1,55 +1,44 @@
 import React, { Component } from 'react';
+import { ToggleButton } from "../ToggleButton/ToggleButton";
 import "./MainMenu.scss";
 
 
 
 export default class MainMenu extends Component {
-    componentDidMount() {
-        const radioName = this.props.bgIsCheckered ? "checkered" : "white";
-        console.log(this.props.bgIsCheckered, radioName);
-        document.getElementById(`MainMenu__radio--${radioName}`).checked = true;
-    }
-
-
-
     render() {
         return (
             <div className="MainMenu">
-                <h2>Background</h2>
-
                 <div>
-                    <div>
-                        <label
-                            htmlFor="MainMenu__radio--checkered"
-                            title="checkered background"
-                        >Checkered</label>
+                    <p>Save</p>
 
-                        <input
-                            id="MainMenu__radio--checkered"
-                            type="radio"
-                            name="result-display-bg"
-                            title="checkered background"
-                            onChange={() => this.props.changeDisplayBg(true)}
-                        />
-                    </div>
-
-                    <div>
-                        <label
-                            htmlFor="MainMenu__radio--white"
-                            title="white background"
-                        >White</label>
-
-                        <input
-                            id="MainMenu__radio--white"
-                            type="radio"
-                            name="result-display-bg"
-                            title="white background"
-                            onChange={() => this.props.changeDisplayBg(false)}
-                        />
-                    </div>
+                    <input type="text" name="" id="" />
                 </div>
 
-                <button onClick={() => this.props.closeMenu()}>Close</button>
+                <div>
+                    <p>Open</p>
+
+                    <input type="text" name="" id="" />
+                </div>
+
+                <div>
+                    <p>Predefined</p>
+
+                    <input type="text" />
+                </div>
+
+                <div>
+                    <p>Display backgrund is checkered</p>
+
+                    <ToggleButton
+                        on={this.props.checkered}
+                        handleOnClick={() => this.props.setCheckered(!this.props.checkered)}
+                    />
+
+                </div>
+
+                <div>
+                    <button onClick={() => this.props.closeMenu()}>Close</button>
+                </div>
             </div>
         )
     }

@@ -68,28 +68,28 @@ export function CodeSettings(props) {
                     <button
                         title="Opera"
                         onClick={() => handlePrefixOnClick("-o-")}>
-                        -o-
+                        o
                         <div className={isActivePrefix("-o-")}></div>
                     </button>
 
                     <button
                         title="Internet Explorer"
                         onClick={() => handlePrefixOnClick("-ms-")}>
-                        -ms-
+                        ms
                         <div className={isActivePrefix("-ms-")}></div>
                     </button>
 
                     <button
                         title="Firefox"
                         onClick={() => handlePrefixOnClick("-moz-")}>
-                        -moz-
+                        moz
                         <div className={isActivePrefix("-moz-")}></div>
                     </button>
 
                     <button
                         title="Safari, Chrome, Android, iOS"
                         onClick={() => handlePrefixOnClick("-webkit-")}>
-                        -webkit-
+                        webkit
                         <div className={isActivePrefix("-webkit-")}></div>
                     </button>
 
@@ -136,7 +136,7 @@ export function CodeSettings(props) {
 
             <div>
                 <p>Allow hex short-hand:
-                    <span> eg.: #ff6600 - #f60</span>
+                    <span> eg.: #FF6600 - #F60</span>
                 </p>
 
                 <ToggleButton
@@ -148,7 +148,7 @@ export function CodeSettings(props) {
 
             <div>
                 <p>css color names:
-                    <span> eg.: #ffffff - white</span>
+                    <span> eg.: #FFFFFF - white</span>
                 </p>
 
                 <ToggleButton

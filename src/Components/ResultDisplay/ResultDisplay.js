@@ -29,10 +29,6 @@ export default class ResultDisplay extends Component {
 
 
 
-    changeDisplayBg(checkered) { this.props.setCheckered(checkered); }
-
-
-
     closeMenu() { this.setState({ ...this.state, menuIsOpen: false }); }
 
 
@@ -88,8 +84,8 @@ export default class ResultDisplay extends Component {
 
                         {this.state.menuIsOpen && (
                             <MainMenu
-                                bgIsCheckered={this.props.checkered}
-                                changeDisplayBg={this.changeDisplayBg.bind(this)}
+                                checkered={this.props.checkered}
+                                setCheckered={this.props.setCheckered}
                                 closeMenu={this.closeMenu.bind(this)}
                             />
                         )}

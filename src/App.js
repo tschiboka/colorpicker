@@ -163,7 +163,7 @@ export default class App extends Component {
 
 
 
-  setCheckeredDisplay(checkered) { this.setState({ ...this.state, checkered }); }
+  setCheckeredDisplay(checkered) { console.log(checkered); this.setState({ ...this.state, checkered }); }
 
 
 

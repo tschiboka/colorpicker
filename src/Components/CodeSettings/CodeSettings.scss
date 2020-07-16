@@ -84,17 +84,17 @@
 
 @media only screen and (max-width: 500px) {
  .CodeSettings {
-     h1 {
-         font-size: $medFont;
-     }
-     button {
-         font-size: $xsmFont;
-     }
-     p {
-        font-size: $smlFont;
-     }
-     span {
-         font-size: $xxsFont;
-     }
- }
+        h1 {
+            font-size: $medFont;
+        }
+        button {
+            font-size: $xsmFont;
+        }
+        p {
+           font-size: $smlFont;
+        }
+        span {
+            font-size: $xxsFont;
+        }
+    }
 }

@@ -114,8 +114,10 @@
         border-radius: $borderRadius;
         border: $tertiaryBorder;
         color: $warningTextColor;
+        font-family: "Fantasque";
         font-style: italic;
-        font-size: $medFont;
+        font-size: $smlFont;
+        text-shadow: -1px -1px 1px black;
         z-index: 10;
     }
 }
