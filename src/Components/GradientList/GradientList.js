@@ -36,6 +36,7 @@ export default class GradientList extends Component {
                 index={i}
                 gradient={gradient}
                 gradients={this.props.gradients}
+                checkered={this.props.checkered}
                 backgroundSize={this.props.backgroundSize}
                 updateGradient={this.props.updateGradient}
                 confirmDeleteGradient={this.confirmDeleteGradient.bind(this)}

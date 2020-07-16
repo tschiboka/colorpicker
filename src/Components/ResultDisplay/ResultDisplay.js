@@ -15,7 +15,6 @@ export default class ResultDisplay extends Component {
         super(props);
         this.state = {
             menuIsOpen: false,
-            bgIsCheckered: true,
             menuHover: false,
             fullscreenHover: false
         };
@@ -30,7 +29,7 @@ export default class ResultDisplay extends Component {
 
 
 
-    changeDisplayBg(isCheckered) { this.setState({ ...this.state, bgIsCheckered: isCheckered }) }
+    changeDisplayBg(checkered) { this.props.setCheckered(checkered); }
 
 
 
@@ -47,11 +46,11 @@ export default class ResultDisplay extends Component {
                     <div>
                         <div>
                             <button
-                                className="ResultDisplay__menu-btn"
+                                className="ResultDisplay__btn"
                                 title="display gradient full-screen"
                                 onMouseEnter={() => this.setState({ ...this.state, fullscreenHover: true, menuHover: false })}
                                 onMouseLeave={() => this.setState({ ...this.state, fullscreenHover: false, menuHover: false })}
-                                onClick={() => this.setState({ ...this.state, menuIsOpen: !this.state.menuIsOpen })}
+                                onClick={() => this.props.setFullscreen()}
                             >
                                 <div
                                     style={{ backgroundImage: `url(${this.state.fullscreenHover ? fullStreenActiveIcon : fullscreenIcon})` }}
@@ -63,7 +62,7 @@ export default class ResultDisplay extends Component {
                         <div>
                             <button
                                 title="main menu"
-                                className="ResultDisplay__menu-btn"
+                                className="ResultDisplay__btn"
                                 onClick={() => this.setState({ ...this.state, menuIsOpen: !this.state.menuIsOpen })}
                                 onMouseEnter={() => this.setState({ ...this.state, menuHover: true, fullscreenHover: false })}
                                 onMouseLeave={() => this.setState({ ...this.state, menuHover: false, fullscreenHover: false })}
@@ -78,7 +77,7 @@ export default class ResultDisplay extends Component {
 
                 <div
                     className="ResultDisplay__checkered-bg"
-                    style={this.getStyleObj(this.state.bgIsCheckered)}>
+                    style={this.getStyleObj(this.props.checkered)}>
                     <div
                         className="ResultDisplay__color-bg"
                         title="Result Gradient"
@@ -89,7 +88,7 @@ export default class ResultDisplay extends Component {
 
                         {this.state.menuIsOpen && (
                             <ResultDisplayMenu
-                                bgIsCheckered={this.state.bgIsCheckered}
+                                bgIsCheckered={this.props.checkered}
                                 changeDisplayBg={this.changeDisplayBg.bind(this)}
                                 closeMenu={this.closeMenu.bind(this)}
                             />

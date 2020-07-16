@@ -4,7 +4,8 @@ import ResultDisplay from "./Components/ResultDisplay/ResultDisplay";
 import GradientList from "./Components/GradientList/GradientList";
 import Code from "./Components/Code/Code";
 import RadialSettings from "./Components/RadialSettings/RadialSettings";
-import { getDefaultGradientObj } from "./functions/gradient";
+import { getDefaultGradientObj, gradientObjsToStr } from "./functions/gradient";
+import checkeredRect from "./images/checkered_rect.png";
 import "./App.scss";
 
 
@@ -42,7 +43,8 @@ export default class App extends Component {
       backgroundSize: [
         { value: "100", unit: "%" },
         { value: "100", unit: "%" }
-      ]
+      ],
+      fullscreen: false,
     };
   }
 
@@ -157,16 +159,28 @@ export default class App extends Component {
 
 
 
+  setFullscreen() { this.setState({ ...this.state, fullscreen: true }); }
+
+
+
+  setCheckeredDisplay(checkered) { this.setState({ ...this.state, checkered }); }
+
+
+
   render() {
     return (
       <div className="App">
         <ResultDisplay
           backgroundSize={this.state.backgroundSize}
           gradients={this.state.gradients}
+          setFullscreen={this.setFullscreen.bind(this)}
+          checkered={this.state.checkered}
+          setCheckered={this.setCheckeredDisplay.bind(this)}
         />
 
         <GradientList
           gradients={this.state.gradients}
+          checkered={this.state.checkered}
           backgroundSize={this.state.backgroundSize}
           updateGradients={this.updateGradients.bind(this)}
           updateGradient={this.updateGradient.bind(this)}
@@ -202,6 +216,24 @@ export default class App extends Component {
             >
               {this.renderRadialSettings()}
             </div>
+        )}
+        {this.state.fullscreen && (
+          <div
+            id="fullscreen"
+            style={{
+              backgroundColor: "white",
+              backgroundImage: this.state.checkered ? `url(${checkeredRect})` : ""
+            }}
+          >
+            <div
+              style={{
+                backgroundImage: gradientObjsToStr([...this.state.gradients].reverse()),
+                backgroundSize: this.state.backgroundSize[0].value + this.state.backgroundSize[0].unit + " " + this.state.backgroundSize[1].value + this.state.backgroundSize[1].unit,
+              }}
+            >
+              <button onClick={() => this.setState({ ...this.state, fullscreen: false })}>&times;</button>
+            </div>
+          </div>
         )}
       </div>
     );
