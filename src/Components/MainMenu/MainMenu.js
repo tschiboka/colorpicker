@@ -1,31 +1,31 @@
 import React, { Component } from 'react';
-import "./ResultDisplayMenu.scss";
+import "./MainMenu.scss";
 
 
 
-export default class ResultDisplayMenu extends Component {
+export default class MainMenu extends Component {
     componentDidMount() {
         const radioName = this.props.bgIsCheckered ? "checkered" : "white";
         console.log(this.props.bgIsCheckered, radioName);
-        document.getElementById(`ResultDisplayMenu__radio--${radioName}`).checked = true;
+        document.getElementById(`MainMenu__radio--${radioName}`).checked = true;
     }
 
 
 
     render() {
         return (
-            <div className="ResultDisplayMenu">
+            <div className="MainMenu">
                 <h2>Background</h2>
 
                 <div>
                     <div>
                         <label
-                            htmlFor="ResultDisplayMenu__radio--checkered"
+                            htmlFor="MainMenu__radio--checkered"
                             title="checkered background"
                         >Checkered</label>
 
                         <input
-                            id="ResultDisplayMenu__radio--checkered"
+                            id="MainMenu__radio--checkered"
                             type="radio"
                             name="result-display-bg"
                             title="checkered background"
@@ -35,12 +35,12 @@ export default class ResultDisplayMenu extends Component {
 
                     <div>
                         <label
-                            htmlFor="ResultDisplayMenu__radio--white"
+                            htmlFor="MainMenu__radio--white"
                             title="white background"
                         >White</label>
 
                         <input
-                            id="ResultDisplayMenu__radio--white"
+                            id="MainMenu__radio--white"
                             type="radio"
                             name="result-display-bg"
                             title="white background"

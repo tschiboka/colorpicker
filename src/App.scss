@@ -21,6 +21,12 @@
     outline: none;
     font-weight: normal;
     outline: none !important;
+    scrollbar-color: rgba(255, 136, 0, 0.75) rgba(255, 255, 255, 0.05);
+    scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
 }
 
 .btn--inactive, .btn--active {

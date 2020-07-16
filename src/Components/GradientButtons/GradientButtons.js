@@ -165,9 +165,9 @@ export default class GradientButtons extends Component {
                     >&#x25a7;
                         <div className={`btn--${this.props.gradient.repeating ? "active": "inactive"}`}></div>
                     </button>
-                    
+
                     <LengthInput 
-                        id="0"
+                        id={`gradient_max_size_input-${this.props.index}`}
                         name="repeating-length"
                         title="max size of gradient"
                         value={this.props.gradient.max}

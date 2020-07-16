@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import checkeredRect from "../../images/checkered_rect.png";
-import ResultDisplayMenu from "../ResultDisplayMenu/ResultDisplayMenu";
+import MainMenu from "../MainMenu/MainMenu";
 import { gradientObjsToStr } from "../../functions/gradient";
 import fullscreenIcon from "../../images/fullscreen.png";
 import fullStreenActiveIcon from "../../images/fullscreen_active.png";
@@ -87,7 +87,7 @@ export default class ResultDisplay extends Component {
                         }}>
 
                         {this.state.menuIsOpen && (
-                            <ResultDisplayMenu
+                            <MainMenu
                                 bgIsCheckered={this.props.checkered}
                                 changeDisplayBg={this.changeDisplayBg.bind(this)}
                                 closeMenu={this.closeMenu.bind(this)}
