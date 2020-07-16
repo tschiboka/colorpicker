@@ -58,6 +58,27 @@
         padding: 0 0 0 5px;
         border-bottom: $primaryBorder;
         cursor: default;
+        & > span {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-shadow: -1px -1px 1px black;
+            & > span {
+                margin-left: 5px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: $tertiaryTextColor;
+                font-size: $smlFont;
+                & > span {
+                    margin: 0 7px 0 5px;
+                    font-family: "Fantasque";
+                    font-style: italic;
+                    font-size: 13px;
+                }
+            }
+        }
         button {
             width: 35px;
             display: flex;

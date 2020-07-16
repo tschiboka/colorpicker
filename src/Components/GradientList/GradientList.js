@@ -164,7 +164,14 @@ export default class GradientList extends Component {
                 onMouseLeave={e => this.handleOnMouseLeave(e)}
             >
                 <header>
-                    <span>Gradient List</span>
+                    <span>
+                        Gradient List
+                        <span> [
+                            <span>
+                                {this.props.gradients.length}
+                            </span>
+                                 ] </span>
+                    </span>
 
                     <div>
                         <button

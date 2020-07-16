@@ -543,9 +543,13 @@ export default class Code extends Component {
         return (
             <div className="Code">
                 <header>
-                    <span>CODE</span>
+                    <span>
+                        Code
+                        <span className="bite-count">[
+                            <span>{this.state.bites / 1000}kB </span>
+                        ]</span>
+                    </span>
 
-                    <span className="bite-count">[{this.state.bites / 1000}kB ]</span>
 
                     <div>
                         <button
