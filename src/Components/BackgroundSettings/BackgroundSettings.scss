@@ -1,0 +1,55 @@
+@import "../../constants/constants.scss";
+
+.BackgroundSettings {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    width: 400px;
+    height: 500px;
+    background: #161616;
+    border: $primaryBorder;
+    z-index: 1001;
+    font-size: $medFont;
+    color: $primaryTextColor;
+    button {
+        position: relative;
+        height: 26px;
+        background: transparent;
+        background: $buttonGradient;
+        color: $primaryTextColor;
+        font-size: $medFont;
+        border: $secondaryBorder;
+        border-radius: $borderRadius;
+        text-shadow: -1px -1px black;
+        cursor: pointer;
+        &:hover {
+            background: $buttonHoverBackgroundColor;
+            background: $buttonGradientHover;
+            font-size: $smlFont;
+            color: $activeButtonTextColor;
+            text-shadow: 1px 1px black;
+        }
+    }
+    .LengthInput {
+        width: 80px;
+    }
+    .BackgroundSettings__header {
+        height: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: 5px;
+        border-bottom: $primaryBorder;
+        span span {
+            font-size: $smlFont;
+            color: $tertiaryTextColor;
+        }
+        button {
+            height: 29px;
+            width: 30px;
+            border: none;
+            border-left: $tertiaryBorder;
+            color: $warningTextColor;
+        }
+    }
+}

@@ -65,12 +65,45 @@
         }
         &:nth-child(4) {
             width: 10%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-left: $tertiaryBorder;
+            button:first-child {
+                width: 100%;
+                height: 50%;
+                & > div {
+                    width: 100%;
+                    height: 100%;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: $xlgFont;
+                    &:hover {
+                        background-size: $lrgFont;
+                    }
+                }
+            }
+            button {
+                min-width: 100%;
+                height: 50%;
+                border-bottom: $tertiaryBorder;
+                font-size: $xlgFont;
+                font-weight: lighter;
+                &:hover { 
+                    font-size: $lrgFont;
+                }
+            }
+        }
+        &:nth-child(5) {
+            width: 10%;
             min-width: 70px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             border-left: $tertiaryBorder;
+            border-right: $tertiaryBorder;
             button {
                 width: 100%;
                 height: 50%;
@@ -84,31 +117,22 @@
                 border: none;
             }
         }
-        &:nth-child(5) {
+        &:nth-child(6) {
             width: 10%;
+            height: 100%;
+            margin-left: auto;
+            padding-right: 5px;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
-            border-left: $tertiaryBorder;
-            border-right: $tertiaryBorder;
-            button {
-                width: 100%;
-                height: 50%;
-                border-bottom: $tertiaryBorder;
-                font-size: $xlgFont;
-                font-weight: lighter;
-                &:hover { 
-                    font-size: $lrgFont;
-                }
-            }
             input {
                 margin: 0 15px;
                 height: 50%;
-                max-width: 100%;
+                min-width: 40px;
                 background: $tertiaryBackgroundColor;
                 font-size: $xsmFont;
-                border: none;
+                border: $tertiaryBorder;
+                border-radius: $borderRadius;
                 color: $primaryTextColor;
                 text-align: center;
             }
@@ -118,9 +142,8 @@
             }
             input::placeholder { color: white; }
         }
-        &:nth-child(6) {
+        &:nth-child(7) {
             width: 72px;
-            margin-left: auto;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -144,6 +167,9 @@
                 min-width: 20%;
             }
             &:nth-child(5) {
+                min-width: 20%;
+            }
+            &:nth-child(6) {
                 min-width: 20%;
             }
         }        

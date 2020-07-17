@@ -252,6 +252,7 @@ export default class GradientField extends Component {
                             setAngleMeterIsActive={this.props.setAngleMeterIsActive}
                             activeAngleMeter={this.props.activeAngleMeter}
                             openRadialSettings={this.props.openRadialSettings}
+                            openBackgroundSettings={this.props.openBackgroundSettings}
                         />
                     </div>
                 </div>

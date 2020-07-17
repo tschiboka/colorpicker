@@ -4,6 +4,7 @@ import ResultDisplay from "./Components/ResultDisplay/ResultDisplay";
 import GradientList from "./Components/GradientList/GradientList";
 import Code from "./Components/Code/Code";
 import RadialSettings from "./Components/RadialSettings/RadialSettings";
+import BackgroundSettings from "./Components/BackgroundSettings/BackgroundSettings";
 import { getDefaultGradientObj, gradientObjsToStr } from "./functions/gradient";
 import checkeredRect from "./images/checkered_rect.png";
 import "./App.scss";
@@ -40,6 +41,8 @@ export default class App extends Component {
       colorPicker: undefined,
       radialSettingsOn: false,
       radialSettings_GradientIndex: undefined,
+      backgroundSettingsOn: false,
+      backgroundSettings_GradientIndex: undefined,
       backgroundSize: [
         { value: "100", unit: "%" },
         { value: "100", unit: "%" }
@@ -118,6 +121,22 @@ export default class App extends Component {
 
 
 
+  openBackgroundSettings(backgroundSettingsOn, backgroundSettings_GradientIndex) {
+    console.log(backgroundSettingsOn, backgroundSettings_GradientIndex);
+    const gradients = [...this.state.gradients];
+
+    this.setState(
+      {
+        ...this.state,
+        gradients,
+        backgroundSettingsOn,
+        backgroundSettings_GradientIndex
+      }
+    );
+  }
+
+
+
   returnColor(color, gradientIndex, thumbIndex, closeFunction) {
     const newState = {
       ...this.state,
@@ -141,6 +160,19 @@ export default class App extends Component {
       <RadialSettings
         openRadialSettings={this.openRadialSettings.bind(this)}
         index={this.state.radialSettings_GradientIndex}
+        gradients={this.state.gradients}
+        updateGradient={this.updateGradient.bind(this)}
+      />
+    );
+  }
+
+
+
+  renderBackgroundSettings() {
+    return (
+      <BackgroundSettings
+        openBackgroundSettings={this.openBackgroundSettings.bind(this)}
+        index={this.state.backgroundSettings_GradientIndex}
         gradients={this.state.gradients}
         updateGradient={this.updateGradient.bind(this)}
       />
@@ -186,6 +218,7 @@ export default class App extends Component {
           updateGradient={this.updateGradient.bind(this)}
           openColorPicker={this.openColorPicker.bind(this)}
           openRadialSettings={this.openRadialSettings.bind(this)}
+          openBackgroundSettings={this.openBackgroundSettings.bind(this)}
           insertGradient={this.insertGradient.bind(this)}
           swapGradientFields={this.swapGradientFields.bind(this)}
         />
@@ -217,6 +250,18 @@ export default class App extends Component {
               {this.renderRadialSettings()}
             </div>
         )}
+
+        {this.state.backgroundSettingsOn && (
+          this.state.appWidth <= 500
+            ? this.renderBackgroundSettings()
+            : <div
+              className="fullscreen-box"
+              onClick={() => this.openBackgroundSettings(false, this.state.backgroundSettings_GradientIndex, false)}
+            >
+              {this.renderBackgroundSettings()}
+            </div>
+        )}
+
         {this.state.fullscreen && (
           <div
             id="fullscreen"

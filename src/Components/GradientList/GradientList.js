@@ -44,6 +44,7 @@ export default class GradientList extends Component {
                 preventMouseUp={this.state.activeAngleMeter !== undefined}
                 openColorPicker={this.props.openColorPicker}
                 openRadialSettings={this.props.openRadialSettings}
+                openBackgroundSettings={this.props.openBackgroundSettings}
                 activeAngleMeter={this.state.activeAngleMeter}
                 insertGradient={this.props.insertGradient}
                 setReposition={this.setReposition.bind(this)}

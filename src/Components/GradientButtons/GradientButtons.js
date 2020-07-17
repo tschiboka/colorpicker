@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import bgSettingsIcon from "../../images/bg_settings.png";
+import bgSettingsActiveIcon from "../../images/bg_settings_active.png";
 import AngleMeter from "../AngleMeter/AngleMeter";
 import LengthInput from "../LengthInput/LengthInput";
 import { getImmutableGradientCopy } from "../../functions/gradient";
@@ -159,6 +161,31 @@ export default class GradientButtons extends Component {
                 </div>
 
                 <div>
+                    <button
+                        title="background settings"
+                        onClick={() => this.props.openBackgroundSettings(true, this.props.index)}
+                        onMouseEnter={() => this.setState({...this.state, hoverBackgroundSettings: true})}
+                        onMouseLeave={() => this.setState({...this.state, hoverBackgroundSettings: false})}
+                    >     
+                    <div
+                    style={{
+                            backgroundImage: `url(${this.state.hoverBackgroundSettings ? bgSettingsActiveIcon : bgSettingsIcon})`
+                        }}
+                    >
+                        <div className={`btn--${this.props.gradient.background ? "active": "inactive"}`}></div>
+                    </div>                   
+                    </button>
+                    
+                    <button
+                        title="radial gradient settings"
+                        onClick={() => this.props.openRadialSettings(true, this.props.index, true)}
+                    >&#9678;
+                    
+                        <div className={`btn--${this.props.gradient.type === "radial" ? "active": "inactive"}`}></div>
+                    </button>
+                </div>
+
+                <div>
                     <button 
                         title="repeating gradient"
                         onClick={() => this.handleRepeatingBtnOnClick()}
@@ -178,14 +205,6 @@ export default class GradientButtons extends Component {
                 </div>
 
                 <div>
-                    <button
-                        title="radial gradient"
-                        onClick={() => this.props.openRadialSettings(true, this.props.index, true)}
-                    >&#9678;
-                    
-                        <div className={`btn--${this.props.gradient.type === "radial" ? "active": "inactive"}`}></div>
-                    </button>
-
                     <input
                         type="text" 
                         placeholder={this.props.gradient.angle + '\u00B0'}
