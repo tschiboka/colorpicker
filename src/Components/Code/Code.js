@@ -425,7 +425,6 @@ export default class Code extends Component {
 
 
     renderColorHint(colorStop, unit) {
-        console.log(colorStop)
         return (
             <span>
                 <span> </span>
@@ -583,6 +582,49 @@ export default class Code extends Component {
 
 
 
+    renderFallback() {
+        if (this.state.fallbackAllowed) return (
+            <span> {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
+
+                <span className="token property">background-color</span>
+
+                <span className="token punctuation">: </span>
+
+                {this.renderColor(this.props.gradients[0].colors[0].color, 1, 0)}
+
+                <span className="token punctuation">;</span>
+
+                <br />
+            </span>
+        );
+    }
+
+
+
+    renderPatternBackgroundSize() {
+        if (this.props.gradients.length) return (
+            <span>
+                <span className="token property">background-size</span>
+
+                <span className="token punctuation">: </span>
+
+                <span className="token number">{this.props.backgroundSize[0].value}</span>
+
+                <span className="token unit">{this.props.backgroundSize[0].unit} </span>
+
+                <span className="token number">{this.props.backgroundSize[1].value}</span>
+
+                <span className="token unit">{this.props.backgroundSize[1].unit}</span>
+
+                <span className="token punctuation">;</span>
+
+                <br />
+            </span>
+        );
+    }
+
+
+
     render() {
         return (
             <div className="Code">
@@ -638,40 +680,13 @@ export default class Code extends Component {
                     )}
 
                     <div id="code">
-
-                        <span className="token property">background-size</span>
-
-                        <span className="token punctuation">: </span>
-
-                        <span className="token number">{this.props.backgroundSize[0].value}</span>
-
-                        <span className="token unit">{this.props.backgroundSize[0].unit} </span>
-
-                        <span className="token number">{this.props.backgroundSize[1].value}</span>
-
-                        <span className="token unit">{this.props.backgroundSize[1].unit}</span>
-
-                        <span className="token punctuation">;</span>
-
-                        <br />
                         {this.props.gradients.length
                             ? <span>
-                                {this.state.fallbackAllowed &&
-                                    <span> {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
-
-                                        <span className="token property">background-color</span>
-
-                                        <span className="token punctuation">: </span>
-
-                                        {this.renderColor(this.props.gradients[0].colors[0].color, 1, 0)}
-
-                                        <span className="token punctuation">;</span>
-
-                                        <br />
-                                    </span>
-                                }
+                                {this.renderFallback()}
 
                                 {this.renderCode()}
+
+                                {this.renderPatternBackgroundSize()}
                             </span>
                             : <span className="token comment">&#47;&#47; No gradients</span>
                         }
