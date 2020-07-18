@@ -22,6 +22,8 @@ export default class BackgroundSettings extends Component {
                         &times;
                 </button>
                 </div>
+
+
             </div>
         );
     }
