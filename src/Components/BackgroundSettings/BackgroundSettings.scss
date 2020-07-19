@@ -52,4 +52,61 @@
             color: $warningTextColor;
         }
     }
+    .BackgroundSettings__body {
+        width: calc(100% - 10px);
+        height: calc(100% - 10px);
+        margin: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        .BackgroundSettings__section {
+            width: 100%;
+            & > .BackgroundSettings__position {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                & > div:first-child {
+                    padding: 5px 0;
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    & > div {
+                        width: 50%;
+                        & > div {
+                            display: flex;
+                            justify-content: space-evenly;
+                            button {
+                                width: 30%;   
+                            }
+                        }
+                    }
+                }
+                & > div:last-child {
+                    width: 100%;
+                    display: flex;
+                    padding-bottom: 5px;
+                    border-bottom: $secondaryBorder;
+                    & > div {
+                        width: 50%;
+                        display: flex;
+                        justify-content: center;
+                    }
+                }
+            }
+            & > div {
+                width: 100%;
+            }
+            & > div:first-child {
+                display: flex;
+                padding-bottom: 5px;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: $tertiaryBorder;
+            }
+        }
+        .BackgroundSettings__size {
+            display: flex;
+            justify-content: space-evenly;
+        }
+    }
 }

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { ToggleButton } from "../ToggleButton/ToggleButton";
+import LengthInput from '../LengthInput/LengthInput';
 import "./BackgroundSettings.scss";
 
 
@@ -15,15 +17,116 @@ export default class BackgroundSettings extends Component {
                 <div className="BackgroundSettings__header">
                     <span>
                         Background Settings of [
-                    <span>{gradient.name}</span>
-                ] gradient</span>
+                        
+                        <span>{gradient.name}</span>
+                        
+                        ] gradient
+                    </span>
 
-                    <button onClick={() => this.props.openRadialSettings(false, this.props.index, false)}>
+                    <button onClick={() => this.props.openBackgroundSettings(false, this.props.index)}>
                         &times;
-                </button>
+                    </button>
                 </div>
 
+                <div className="BackgroundSettings__body">
+                    <div className="BackgroundSettings__section">
+                        <div>
+                            <span>Position</span>
 
+                            <ToggleButton />
+                        </div>
+
+                        <div className="BackgroundSettings__position">
+                            <div>
+                                <div>
+                                    <div>
+                                        <button>top</button>
+                                    </div>
+
+                                    <div>
+                                        <button>left</button>
+
+                                        <button>center</button>
+
+                                        <button>right</button>
+                                    </div>
+
+                                    <div>
+                                        <button>bottom</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div>
+                                        <button>top</button>
+                                    </div>
+
+                                    <div>
+                                        <button>left</button>
+
+                                        <button>center</button>
+
+                                        <button>right</button>
+                                    </div>
+
+                                    <div>
+                                        <button>bottom</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <LengthInput />
+                                </div>
+
+                                <div>
+                                    <LengthInput />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="BackgroundSettings__section">
+                        <div>
+                            <span>Size</span>
+
+                            <ToggleButton />
+                        </div>
+
+                        <div className="BackgroundSettings__size">
+                            <button>cover</button>
+
+                            <button>contain</button>
+
+                            <LengthInput />
+
+                            <LengthInput />
+                        </div>
+                    </div>
+ 
+                    <div className="BackgroundSettings__section">
+                        <div>
+                            <span>Repeat</span>
+
+                            <ToggleButton />
+                        </div>
+                    </div>
+
+                    <div className="BackgroundSettings__section">
+                        <div>
+                            <span>Color</span>
+
+                            <ToggleButton />
+                        </div>
+                    </div>
+
+                    <div className="BackgroundSettings__section">
+                        <button>Apply</button>
+
+                        <button>Discard</button>
+                    </div>
+                </div>
             </div>
         );
     }
