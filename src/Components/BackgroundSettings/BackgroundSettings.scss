@@ -70,7 +70,7 @@
                     width: 100%;
                     display: flex;
                     justify-content: space-between;
-                    & > div {
+                    & > div { 
                         width: 50%;
                         & > div {
                             display: flex;
@@ -107,6 +107,16 @@
         .BackgroundSettings__size {
             display: flex;
             justify-content: space-evenly;
+            & > button {
+                width: 16.6%;
+                background: red;
+            }
+            & > div {
+                height: 22px;
+                min-width: 16.6%;
+                display: flex;
+                justify-content: center;
+            }
         }
     }
 }

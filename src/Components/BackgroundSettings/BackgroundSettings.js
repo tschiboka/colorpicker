@@ -77,10 +77,12 @@ export default class BackgroundSettings extends Component {
 
                             <div>
                                 <div>
+                                    x:
                                     <LengthInput />
                                 </div>
 
                                 <div>
+                                    y:
                                     <LengthInput />
                                 </div>
                             </div>
@@ -99,9 +101,17 @@ export default class BackgroundSettings extends Component {
 
                             <button>contain</button>
 
-                            <LengthInput />
+                            <div>
+                                <span>x: </span>
 
-                            <LengthInput />
+                                <LengthInput />
+                            </div>
+
+                            <div>
+                                <span>y: </span>
+                                
+                                <LengthInput />
+                            </div>
                         </div>
                     </div>
  
