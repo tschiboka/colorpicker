@@ -9,12 +9,24 @@ import {getImmutableGradientCopy} from "../../functions/gradient";
 
 export default class BackgroundSettings extends Component {
     handlePositionKeywordBtnOnClick(keyword, posIndex) {
+        this.updatePosition(keyword, undefined, undefined, posIndex);
+    }
+    
+    
+    
+    handlePositionInputOnChange() {
+        const [name, value, unit] = [...arguments];
+        const index = name.match(/\d$/g)[0];
+        
+        this.updatePosition(undefined, value, unit, index);
+    }
+
+
+
+    updatePosition(keyword, value, unit, index) {
         const newGradient = getImmutableGradientCopy(this.props.gradients[this.props.index]);
-        newGradient.background.position[posIndex].keyword = keyword;
-        newGradient.background.position[posIndex].value = undefined;
-        newGradient.background.position[posIndex].unit = undefined;
+        newGradient.background.position[index] = {keyword, value, unit};
         this.props.updateGradient(newGradient, this.props.index);
-        console.log(this.props.gradient);
     }
 
 
@@ -134,11 +146,11 @@ export default class BackgroundSettings extends Component {
                                     x:
                                     <LengthInput 
                                         id="7"
-                                        name="bg-position1"
+                                        name="bg-position-0"
                                         value={background.position[0].value || ""}
                                         unit={background.position[0].unit || "px"}
                                         units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
-                                        //onChange={handleSizeInputOnChange}
+                                        onChange={this.handlePositionInputOnChange.bind(this)}
                                     />
                                 </div>
 
@@ -146,11 +158,11 @@ export default class BackgroundSettings extends Component {
                                     y:
                                     <LengthInput
                                         id="8"
-                                        name="bg-position2"
+                                        name="bg-position-1"
                                         value={background.position[1].value || ""}
                                         unit={background.position[1].unit || "px"}
                                         units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
-                                        //onChange={handleSizeInputOnChange}
+                                        onChange={this.handlePositionInputOnChange.bind(this)}
                                     />
                                 </div>
                             </div>
