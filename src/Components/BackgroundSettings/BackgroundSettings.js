@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ToggleButton } from "../ToggleButton/ToggleButton";
 import LengthInput from '../LengthInput/LengthInput';
 import "./BackgroundSettings.scss";
+import checkeredBg from "../../images/checkered_rect.png";
 
 
 
@@ -97,20 +98,24 @@ export default class BackgroundSettings extends Component {
                         </div>
 
                         <div className="BackgroundSettings__size">
-                            <button>cover</button>
-
-                            <button>contain</button>
-
                             <div>
-                                <span>x: </span>
+                                <button>cover</button>
 
-                                <LengthInput />
+                                <button>contain</button>
                             </div>
 
                             <div>
-                                <span>y: </span>
-                                
-                                <LengthInput />
+                                <div>
+                                    <span>x: </span>
+                        
+                                    <LengthInput />
+                                </div>
+                        
+                                <div>
+                                    <span>y: </span>
+                                    
+                                    <LengthInput />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -119,8 +124,22 @@ export default class BackgroundSettings extends Component {
                         <div>
                             <span>Repeat</span>
 
-                            <ToggleButton />
-                        </div>
+                                <ToggleButton />
+                            </div>
+                            
+                            <div className="BackgroundSettings__repeat">
+                                <button>repeat</button>
+
+                                <button>no-repeat</button>
+
+                                <button>repeat-x</button>
+
+                                <button>repeat-y</button>
+                                
+                                <button>space</button>
+                                
+                                <button>round</button>
+                            </div>
                     </div>
 
                     <div className="BackgroundSettings__section">
@@ -128,6 +147,12 @@ export default class BackgroundSettings extends Component {
                             <span>Color</span>
 
                             <ToggleButton />
+                        </div>
+
+                        <div className="BackgroundSettings__color">
+                            <div style={{backgroundImage: `url(${checkeredBg})`}}>
+
+                            </div>
                         </div>
                     </div>
 
