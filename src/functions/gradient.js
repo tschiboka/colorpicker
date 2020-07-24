@@ -129,6 +129,33 @@ const defaultGradientObj = {
         shape: "ellipse",
         size: "50% 50%",
         position: ["50%", "50%"]
+    },
+    background: {
+        position: [
+            {
+                keyword: undefined,
+                value: undefined,
+                unit: undefined
+            },
+            {
+                keyword: undefined,
+                value: undefined,
+                unit: undefined
+            },
+        ],
+        size: {
+            keyword: undefined,
+            x: {
+                value: undefined,
+                unit: undefined
+            },
+            y: {
+                value: undefined,
+                unit: undefined
+            }
+        },
+        repeat: undefined,
+        color: undefined,
     }
 };
 
@@ -141,7 +168,8 @@ export const getDefaultGradientObj = () => {
         ...defaultGradientObj,
         colorHints: [...defaultGradientObj.colorHints],
         colors: [...defaultGradientObj.colors.map(color => Object.assign({}, color))],
-        radial: { ...defaultGradientObj.radial }
+        radial: { ...defaultGradientObj.radial },
+        background: { ...defaultGradientObj.background }
     };
 
     return gradient;
@@ -160,7 +188,8 @@ export const getImmutableGradientCopy = gradient => {
                 ...color
             }))
         ],
-        radial: { ...gradient.radial }
+        radial: { ...gradient.radial },
+        background: { ...defaultGradientObj.background }
     }
 
     return copy;
