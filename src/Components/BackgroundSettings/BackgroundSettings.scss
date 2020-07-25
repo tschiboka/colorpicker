@@ -58,6 +58,7 @@
         margin: 5px;
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         .BackgroundSettings__section {
             width: 100%;
             display: flex;
@@ -68,6 +69,11 @@
             &:nth-child(3) { height: 25%; }
             &:nth-child(4) { height: 15%; }
             &:nth-child(5) { height: 10%; }
+            & > div:first-child { 
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+             }
             & > .BackgroundSettings__position {
                 width: 100%;
                 display: flex;
@@ -106,12 +112,6 @@
             }
             & > div {
                 width: 100%;
-            }
-            & > div:first-child {
-                display: flex;
-                padding-bottom: 5px;
-                justify-content: space-between;
-                align-items: center;
             }
         }
         .BackgroundSettings__size {
@@ -152,7 +152,7 @@
             justify-content: space-evenly;
             align-items: center;
             button {
-                width: 15.5%;
+                width: 20%;
                 &:last-child:hover {
                     color: $warningTextColor;
                 }

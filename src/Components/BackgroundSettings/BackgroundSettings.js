@@ -38,9 +38,37 @@ export default class BackgroundSettings extends Component {
 
 
 
+    handleSizeToggleOnClick() {
+        this.updateSize(undefined, undefined, "0");
+        this.updateSize(undefined, undefined, "1");
+
+        // clear input fields
+        document.querySelector("#LengthInput_9").value = "";
+        document.querySelector("#LengthInput_10").value = "";
+    }
+
+
+
+    handleSizeInputOnChange() {
+        const [name, value, unit] = [...arguments];
+        const index = name.match(/\d$/g)[0];
+
+        this.updateSize(value, unit, index)
+    }
+
+
+
     updatePosition(keyword, value, unit, index) {
         const newGradient = getImmutableGradientCopy(this.props.gradients[this.props.index]);
         newGradient.background.position[index] = {keyword, value, unit};
+        this.props.updateGradient(newGradient, this.props.index);
+    }
+
+
+
+    updateSize(value, unit, index) {
+        const newGradient = getImmutableGradientCopy(this.props.gradients[this.props.index]);
+        newGradient.background.size[index === "0" ? "x" : "y"] = {value, unit};
         this.props.updateGradient(newGradient, this.props.index);
     }
 
@@ -151,7 +179,10 @@ export default class BackgroundSettings extends Component {
                         <div>
                             <span>Size</span>
 
-                            <ToggleButton />
+                            <ToggleButton
+                                on={ background.size.x.value !== undefined || background.size.y.value !== undefined }
+                                handleOnClick={() => this.handleSizeToggleOnClick()}
+                            />
                         </div>
 
                         <div className="BackgroundSettings__size">
@@ -161,10 +192,11 @@ export default class BackgroundSettings extends Component {
                         
                                     <LengthInput
                                         id="9"
-                                        name="bg-size-x"
+                                        name="bg-size-0"
                                         value={background.size.x.value || ""}
                                         unit={background.size.x.unit || "px"}
                                         units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
+                                        onChange={this.handleSizeInputOnChange.bind(this)}
                                     />
                                 </div>
                         
@@ -173,10 +205,11 @@ export default class BackgroundSettings extends Component {
                                     
                                     <LengthInput
                                         id="10"
-                                        name="bg-size-y"
+                                        name="bg-size-1"
                                         value={background.size.y.value || ""}
                                         unit={background.size.y.unit || "px"}
                                         units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
+                                        onChange={this.handleSizeInputOnChange.bind(this)}
                                     />
                                 </div>
                             </div>

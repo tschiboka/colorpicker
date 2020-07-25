@@ -73,6 +73,7 @@ export function gradientObjsToStr(gradientArray) {
     return sortedGradientsByColorStops
         .filter(gradient => gradient.visible && hasValidMaxInput(gradient))
         .map(gradient => {
+            // COLOR STOPS
             const { colors } = gradient;
             const repeatingStr = gradient.repeating ? "repeating-" : "";
             const prefix = repeatingStr + gradient.type + "-gradient";
@@ -84,9 +85,37 @@ export function gradientObjsToStr(gradientArray) {
 
                 return `${colorStop.color} ${colorStop.stop}${units}${hintStr}`
             }).join(", ");
-            const bgPositionTop = gradient.background.position[0];
 
+            // BACKGROUND
 
+            // POSITION
+            const posX = { ...gradient.background.position[0] };
+            const posY = { ...gradient.background.position[1] };
+            let position = "";
+
+            // if any keyword (top, bottom) set
+            if (posX.keyword || posY.keyword) {
+                const positionX = `${posX.keyword || "top"} ${posX.value ? posX.value + posX.unit : "0"}`;
+                const positionY = `${posY.keyword || "left"} ${posY.value ? posY.value + posY.unit : "0"}`;
+                position = positionX + " " + positionY;
+            }
+            else if (posX.value || posY.value) {
+                position = `${posX.value ? posX.value + posX.unit : "0"} ${posY.value ? posY.value + posY.unit : "0"}`;
+            }
+
+            // SIZE
+            const sizeX = { ...gradient.background.size.x };
+            const sizeY = { ...gradient.background.size.y };
+            let size = "";
+
+            if (sizeX.value || sizeY.value) {
+                size = `${sizeX.value ? sizeX.value + sizeX.unit : "0"} ${sizeY.value ? sizeY.value + sizeY.unit : "0"}`;
+            }
+
+            const posAndSize = size ? `${position || "0 0"} / ${size}` : position;
+            console.log(posAndSize);
+
+            // LINEAR / RADIAL
 
             if (gradient.type === "linear") {
                 return `${prefix}(${angle}${colorStops})`;
@@ -146,7 +175,6 @@ const defaultGradientObj = {
             },
         ],
         size: {
-            keyword: undefined,
             x: {
                 value: undefined,
                 unit: undefined
