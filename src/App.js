@@ -122,7 +122,6 @@ export default class App extends Component {
 
 
   openBackgroundSettings(backgroundSettingsOn, backgroundSettings_GradientIndex) {
-    console.log(backgroundSettingsOn, backgroundSettings_GradientIndex);
     const gradients = [...this.state.gradients];
 
     this.setState(

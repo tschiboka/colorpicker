@@ -76,6 +76,28 @@ export default class GradientButtons extends Component {
 
 
 
+    hasBackgroundSet() {
+        const bg = this.props.gradient.background;
+        const [posX, posY] = [...bg.position];
+        const hasPositionX = posX.keyword || posX.value;
+        const hasPositionY = posY.keyword || posY.value;
+
+        if (hasPositionX || hasPositionY) return true;
+
+        const size = {...bg.size};
+        const hasSize = size.x.value || size.y.value;
+        
+        if (hasSize) return true;
+
+        const hasRepeat = bg.repeat;
+        
+        if (hasRepeat) return true;
+
+        return false;
+    }
+
+
+
     setRadialGradient() {
         this.props.updateGradient({...this.props.gradient, type: "radial"}, this.props.index);
 
@@ -172,7 +194,7 @@ export default class GradientButtons extends Component {
                             backgroundImage: `url(${this.state.hoverBackgroundSettings ? bgSettingsActiveIcon : bgSettingsIcon})`
                         }}
                     >
-                        <div className={`btn--${this.props.gradient.background ? "active": "inactive"}`}></div>
+                        <div className={`btn--${this.hasBackgroundSet() ? "active": "inactive"}`}></div>
                     </div>                   
                     </button>
                     

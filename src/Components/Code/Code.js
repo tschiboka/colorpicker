@@ -682,11 +682,11 @@ export default class Code extends Component {
                     <div id="code">
                         {this.props.gradients.length
                             ? <span>
+                                {this.renderPatternBackgroundSize()}
+
                                 {this.renderFallback()}
 
                                 {this.renderCode()}
-
-                                {this.renderPatternBackgroundSize()}
                             </span>
                             : <span className="token comment">&#47;&#47; No gradients</span>
                         }

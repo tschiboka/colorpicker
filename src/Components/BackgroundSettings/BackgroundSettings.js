@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { ToggleButton } from "../ToggleButton/ToggleButton";
 import LengthInput from '../LengthInput/LengthInput';
-import "./BackgroundSettings.scss";
 import {getImmutableGradientCopy} from "../../functions/gradient";
+import { produce } from 'immer';
+import "./BackgroundSettings.scss";
 
 
 
@@ -66,24 +67,29 @@ export default class BackgroundSettings extends Component {
 
 
     updatePosition(keyword, value, unit, index) {
-        const newGradient = getImmutableGradientCopy(this.props.gradients[this.props.index]);
-        newGradient.background.position[index] = {keyword, value, unit};
-        this.props.updateGradient(newGradient, this.props.index);
+        const updated = produce(this.props.gradients[this.props.index], draft => {
+            draft.background.position[index] = {keyword, value, unit};
+        });
+
+        this.props.updateGradient(updated, this.props.index);
     }
 
 
 
     updateSize(value, unit, index) {
-        const newGradient = getImmutableGradientCopy(this.props.gradients[this.props.index]);
-        newGradient.background.size[index === "0" ? "x" : "y"] = {value, unit};
-        this.props.updateGradient(newGradient, this.props.index);
+        const updated = produce(this.props.gradients[this.props.index], draft => {
+            draft.background.size[index === "0" ? "x" : "y"] = {value, unit};
+        });
+
+        this.props.updateGradient(updated, this.props.index);
     }
 
 
     updateRepeat(repeatValue) {
-        const newGradient = getImmutableGradientCopy(this.props.gradients[this.props.index]);
-        newGradient.background.repeat = repeatValue;
-        this.props.updateGradient(newGradient, this.props.index);
+        const updated = produce(this.props.gradients[this.props.index], draft => {
+            draft.background.repeat = repeatValue;           
+        });
+        this.props.updateGradient(updated, this.props.index);
     }
 
 
@@ -101,9 +107,10 @@ export default class BackgroundSettings extends Component {
             repeat: undefined,
         };
 
-        const newGradient = getImmutableGradientCopy(this.props.gradients[this.props.index]);
-        newGradient.background = clearBackground;
-        this.props.updateGradient(newGradient, this.props.index);
+        const updated = produce(this.props.gradients[this.props.index], draft => {
+            draft.background = clearBackground;
+        });
+        this.props.updateGradient(updated, this.props.index);
 
         // Close Background Settings
         this.props.openBackgroundSettings(false, this.props.index)

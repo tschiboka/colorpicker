@@ -115,10 +115,11 @@ export function gradientObjsToStr(gradientArray) {
 
             const posAndSize = size ? `${position || "0 0"} / ${size}` : position;
 
-            // LINEAR / RADIAL
+            const background = posAndSize + (gradient.background.repeat ? " " + gradient.background.repeat : "");
 
+            // LINEAR / RADIAL
             if (gradient.type === "linear") {
-                return `${prefix}(${angle}${colorStops})`;
+                return `${prefix}(${angle}${colorStops})${background ? " " + background : ""}`;
             }
 
             if (gradient.type === "radial") {
@@ -126,9 +127,7 @@ export function gradientObjsToStr(gradientArray) {
                 const size = gradient.radial.size ? gradient.radial.size + " " : "";
                 const pos = gradient.radial.position.join(" ");
                 const shapeSizePos = (shape || size || pos) ? shape + size + (pos && "at " + pos) + "," : "";
-                const gradientStr = `${prefix}(${shapeSizePos}${colorStops})`;
-
-                return gradientStr;
+                return `${prefix}(${shapeSizePos}${colorStops}${background ? " " + background : ""})`;
             }
 
             return new Error("Illegal gradient type", gradient.type);
@@ -190,7 +189,9 @@ const defaultGradientObj = {
 
 
 
-export const getDefaultGradientObj = () => produce(defaultGradientObj, () => defaultGradientObj);
+export const getDefaultGradientObj = () => produce(defaultGradientObj, () => {
+    return defaultGradientObj;
+});
 
 
 
