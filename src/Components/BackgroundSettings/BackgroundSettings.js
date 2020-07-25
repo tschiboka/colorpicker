@@ -9,7 +9,10 @@ import {getImmutableGradientCopy} from "../../functions/gradient";
 
 export default class BackgroundSettings extends Component {
     handlePositionKeywordBtnOnClick(keyword, posIndex) {
-        this.updatePosition(keyword, undefined, undefined, posIndex);
+        const position = this.props.gradients[this.props.index].background.position[posIndex];
+        const {value, unit} = {...position};
+        
+        this.updatePosition(keyword, value, unit, posIndex);
     }
     
     
@@ -17,8 +20,20 @@ export default class BackgroundSettings extends Component {
     handlePositionInputOnChange() {
         const [name, value, unit] = [...arguments];
         const index = name.match(/\d$/g)[0];
-        
-        this.updatePosition(undefined, value, unit, index);
+        const keyword = this.props.gradients[this.props.index].background.position[index].keyword;
+
+        this.updatePosition(keyword, value, unit, index);
+    }
+
+
+
+    handlePositionToggleOnClick() {
+        this.updatePosition(undefined, undefined, undefined, 0);
+        this.updatePosition(undefined, undefined, undefined, 1);
+
+        // clear input fields
+        document.querySelector("#LengthInput_7").value = "";
+        document.querySelector("#LengthInput_8").value = "";
     }
 
 
@@ -59,7 +74,13 @@ export default class BackgroundSettings extends Component {
                         <div>
                             <span>Position</span>
 
-                            <ToggleButton />
+                            <ToggleButton
+                            on={
+                                background.position[0].keyword !== undefined || background.position[0].value !== undefined ||
+                                background.position[1].keyword !== undefined || background.position[1].value !== undefined
+                                }
+                            handleOnClick={() => this.handlePositionToggleOnClick()}
+                            />
                         </div>
 
                         <div className="BackgroundSettings__position">
@@ -75,21 +96,16 @@ export default class BackgroundSettings extends Component {
 
                                     <div>
                                         <button
-                                            onClick={() => this.handlePositionKeywordBtnOnClick("left", 0)}
+                                            onClick={() => this.handlePositionKeywordBtnOnClick("left", 1)}
                                         >
-                                            <div className={background.position[0].keyword === "left" ? "btn--active" : "btn--inactive"}></div>
+                                            <div className={background.position[1].keyword === "left" ? "btn--active" : "btn--inactive"}></div>
                                         left</button>
 
+                                     
                                         <button
-                                            onClick={() => this.handlePositionKeywordBtnOnClick("center", 0)}
+                                            onClick={() => this.handlePositionKeywordBtnOnClick("right", 1)}
                                         >
-                                            <div className={background.position[0].keyword === "center" ? "btn--active" : "btn--inactive"}></div>
-                                        center</button>
-
-                                        <button
-                                            onClick={() => this.handlePositionKeywordBtnOnClick("right", 0)}
-                                        >
-                                            <div className={background.position[0].keyword === "right" ? "btn--active" : "btn--inactive"}></div>
+                                            <div className={background.position[1].keyword === "right" ? "btn--active" : "btn--inactive"}></div>
                                         right</button>
                                     </div>
 
@@ -101,49 +117,11 @@ export default class BackgroundSettings extends Component {
                                         bottom</button>
                                     </div>
                                 </div>
-
-                                <div>
-                                    <div>
-                                        <button
-                                            onClick={() => this.handlePositionKeywordBtnOnClick("top", 1)}
-                                        >
-                                            <div className={background.position[1].keyword === "top" ? "btn--active" : "btn--inactive"}></div>
-                                        top</button>
-                                    </div>
-
-                                    <div>
-                                        <button
-                                            onClick={() => this.handlePositionKeywordBtnOnClick("left", 1)}
-                                        >
-                                            <div className={background.position[1].keyword === "left" ? "btn--active" : "btn--inactive"}></div>
-                                        left</button>
-
-                                        <button
-                                            onClick={() => this.handlePositionKeywordBtnOnClick("center", 1)}
-                                        >
-                                            <div className={background.position[1].keyword === "center" ? "btn--active" : "btn--inactive"}></div>
-                                        center</button>
-
-                                        <button
-                                            onClick={() => this.handlePositionKeywordBtnOnClick("right", 1)}
-                                        >
-                                            <div className={background.position[1].keyword === "right" ? "btn--active" : "btn--inactive"}></div>
-                                        right</button>
-                                    </div>
-
-                                    <div>
-                                        <button
-                                            onClick={() => this.handlePositionKeywordBtnOnClick("bottom", 1)}
-                                        >
-                                            <div className={background.position[1].keyword === "bottom" ? "btn--active" : "btn--inactive"}></div>
-                                        bottom</button>
-                                    </div>
-                                </div>
                             </div>
 
                             <div>
                                 <div>
-                                    x:
+                                    x:&nbsp;&nbsp;
                                     <LengthInput 
                                         id="7"
                                         name="bg-position-0"
@@ -155,7 +133,7 @@ export default class BackgroundSettings extends Component {
                                 </div>
 
                                 <div>
-                                    y:
+                                    y:&nbsp;&nbsp;
                                     <LengthInput
                                         id="8"
                                         name="bg-position-1"
@@ -178,14 +156,8 @@ export default class BackgroundSettings extends Component {
 
                         <div className="BackgroundSettings__size">
                             <div>
-                                <button>cover</button>
-
-                                <button>contain</button>
-                            </div>
-
-                            <div>
                                 <div>
-                                    <span>x: </span>
+                                    <span>x:&nbsp;&nbsp;</span>
                         
                                     <LengthInput
                                         id="9"
@@ -193,12 +165,11 @@ export default class BackgroundSettings extends Component {
                                         value={background.size.x.value || ""}
                                         unit={background.size.x.unit || "px"}
                                         units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
-                                        //onChange={handleSizeInputOnChange}
                                     />
                                 </div>
                         
                                 <div>
-                                    <span>y: </span>
+                                    <span>y:&nbsp;&nbsp;</span>
                                     
                                     <LengthInput
                                         id="10"
@@ -206,7 +177,6 @@ export default class BackgroundSettings extends Component {
                                         value={background.size.y.value || ""}
                                         unit={background.size.y.unit || "px"}
                                         units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
-                                        //onChange={handleSizeInputOnChange}
                                     />
                                 </div>
                             </div>
@@ -218,26 +188,26 @@ export default class BackgroundSettings extends Component {
                             <span>Repeat</span>
 
                                 <ToggleButton />
-                            </div>
+                        </div>
                             
-                            <div className="BackgroundSettings__repeat">
-                                <button>repeat</button>
-
-                                <button>no-repeat</button>
-
-                                <button>repeat-x</button>
-
-                                <button>repeat-y</button>
-                                
-                                <button>space</button>
-                                
-                                <button>round</button>
-                            </div>
+                        <div className="BackgroundSettings__repeat">
+                            <button>repeat</button>
+                
+                            <button>no-repeat</button>
+                
+                            <button>repeat-x</button>
+                
+                            <button>repeat-y</button>
+                            
+                            <button>space</button>
+                            
+                            <button>round</button>
+                        </div>
                     </div>
 
                     <div className="BackgroundSettings__section">
                         <div>
-                            <span>Color</span>
+                            <span>Pattern Background Color</span>
 
                             <ToggleButton />
                         </div>

@@ -84,6 +84,8 @@ export function gradientObjsToStr(gradientArray) {
 
                 return `${colorStop.color} ${colorStop.stop}${units}${hintStr}`
             }).join(", ");
+            const bgPositionTop = gradient.background.position[0];
+
 
 
             if (gradient.type === "linear") {
@@ -158,6 +160,7 @@ const defaultGradientObj = {
         color: undefined,
     }
 };
+
 
 
 
