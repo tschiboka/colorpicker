@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { ToggleButton } from "../ToggleButton/ToggleButton";
 import LengthInput from '../LengthInput/LengthInput';
 import "./BackgroundSettings.scss";
-import checkeredBg from "../../images/checkered_rect.png";
 import {getImmutableGradientCopy} from "../../functions/gradient";
 
 
@@ -49,12 +48,20 @@ export default class BackgroundSettings extends Component {
 
 
 
+    handleRepeatToggleOnClick() { this.updateRepeat(undefined); }
+
+
+
     handleSizeInputOnChange() {
         const [name, value, unit] = [...arguments];
         const index = name.match(/\d$/g)[0];
 
         this.updateSize(value, unit, index)
     }
+
+
+
+    handleRepeatBtnOnClick(repeatValue) { this.updateRepeat(repeatValue); }
 
 
 
@@ -70,6 +77,36 @@ export default class BackgroundSettings extends Component {
         const newGradient = getImmutableGradientCopy(this.props.gradients[this.props.index]);
         newGradient.background.size[index === "0" ? "x" : "y"] = {value, unit};
         this.props.updateGradient(newGradient, this.props.index);
+    }
+
+
+    updateRepeat(repeatValue) {
+        const newGradient = getImmutableGradientCopy(this.props.gradients[this.props.index]);
+        newGradient.background.repeat = repeatValue;
+        this.props.updateGradient(newGradient, this.props.index);
+    }
+
+
+
+    discardChanges() {
+        const clearBackground = {
+            position: [
+                { keyword: undefined, value: undefined, unit: undefined },
+                { keyword: undefined, value: undefined, unit: undefined }
+            ],
+            size: {
+                x: { value: undefined, unit: undefined },
+                y: { value: undefined, unit: undefined }
+            },
+            repeat: undefined,
+        };
+
+        const newGradient = getImmutableGradientCopy(this.props.gradients[this.props.index]);
+        newGradient.background = clearBackground;
+        this.props.updateGradient(newGradient, this.props.index);
+
+        // Close Background Settings
+        this.props.openBackgroundSettings(false, this.props.index)
     }
 
 
@@ -92,7 +129,7 @@ export default class BackgroundSettings extends Component {
                         ] gradient
                     </span>
 
-                    <button onClick={() => this.props.openBackgroundSettings(false, this.props.index)}>
+                    <button onClick={() => this.discardChanges()}>
                         &times;
                     </button>
                 </div>
@@ -220,42 +257,43 @@ export default class BackgroundSettings extends Component {
                         <div>
                             <span>Repeat</span>
 
-                                <ToggleButton />
+                            <ToggleButton
+                                on={ background.repeat}
+                                handleOnClick={() => this.handleRepeatToggleOnClick()}
+                            />
                         </div>
                             
                         <div className="BackgroundSettings__repeat">
-                            <button>repeat</button>
-                
-                            <button>no-repeat</button>
-                
-                            <button>repeat-x</button>
-                
-                            <button>repeat-y</button>
-                            
-                            <button>space</button>
-                            
-                            <button>round</button>
+                            <button onClick={() => this.handleRepeatBtnOnClick("repeat")} >repeat
+                                <div className={background.repeat === "repeat" ? "btn--active" : "btn--inactive"}></div>
+                            </button>
+
+                            <button onClick={() => this.handleRepeatBtnOnClick("no-repeat")} >no-repeat
+                                <div className={background.repeat === "no-repeat" ? "btn--active" : "btn--inactive"}></div>
+                            </button>
+
+                            <button onClick={() => this.handleRepeatBtnOnClick("repeat-x")} >repeat-x
+                                <div className={background.repeat === "repeat-x" ? "btn--active" : "btn--inactive"}></div>
+                            </button>
+
+                            <button onClick={() => this.handleRepeatBtnOnClick("repeat-y")} >repeat-y
+                                <div className={background.repeat === "repeat-y" ? "btn--active" : "btn--inactive"}></div>
+                            </button>
+
+                            <button onClick={() => this.handleRepeatBtnOnClick("space")} >space
+                                <div className={background.repeat === "space" ? "btn--active" : "btn--inactive"}></div>
+                            </button>
+
+                            <button onClick={() => this.handleRepeatBtnOnClick("round")} >round
+                                <div className={background.repeat === "round" ? "btn--active" : "btn--inactive"}></div>
+                            </button>
                         </div>
                     </div>
 
                     <div className="BackgroundSettings__section">
-                        <div>
-                            <span>Pattern Background Color</span>
+                        <button onClick={() => this.props.openBackgroundSettings(false, this.props.index)}>Apply</button>
 
-                            <ToggleButton />
-                        </div>
-
-                        <div className="BackgroundSettings__color">
-                            <div style={{backgroundImage: `url(${checkeredBg})`}}>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="BackgroundSettings__section">
-                        <button>Apply</button>
-
-                        <button>Discard</button>
+                        <button onClick={() => this.discardChanges()}>Discard</button>
                     </div>
                 </div>
             </div>

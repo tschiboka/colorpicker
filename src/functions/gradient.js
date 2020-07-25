@@ -1,4 +1,5 @@
 import { sortGradientByColorStopsPercentage } from "./slider";
+import { produce } from 'immer';
 
 
 
@@ -113,7 +114,6 @@ export function gradientObjsToStr(gradientArray) {
             }
 
             const posAndSize = size ? `${position || "0 0"} / ${size}` : position;
-            console.log(posAndSize);
 
             // LINEAR / RADIAL
 
@@ -185,46 +185,16 @@ const defaultGradientObj = {
             }
         },
         repeat: undefined,
-        color: undefined,
     }
 };
 
 
 
-
-
-// fix mutability issues of gradient obj by spreading
-export const getDefaultGradientObj = () => {
-    const gradient = {
-        ...defaultGradientObj,
-        colorHints: [...defaultGradientObj.colorHints],
-        colors: [...defaultGradientObj.colors.map(color => Object.assign({}, color))],
-        radial: { ...defaultGradientObj.radial },
-        background: { ...defaultGradientObj.background }
-    };
-
-    return gradient;
-}
+export const getDefaultGradientObj = () => produce(defaultGradientObj, () => defaultGradientObj);
 
 
 
-export const getImmutableGradientCopy = gradient => {
-    const copy = {
-        ...gradient,
-        colorHints: [
-            ...gradient.colorHints
-        ],
-        colors: [
-            ...gradient.colors.map(color => ({
-                ...color
-            }))
-        ],
-        radial: { ...gradient.radial },
-        background: { ...defaultGradientObj.background }
-    }
-
-    return copy;
-}
+export const getImmutableGradientCopy = gradient => produce(gradient, () => gradient);
 
 
 
