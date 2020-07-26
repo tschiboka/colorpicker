@@ -5,7 +5,8 @@ import ColorStop from "../ColorStop/ColorStop";
 import ColorHint from "../ColorHint/ColorHint";
 import { sortGradientByColorStopsPercentage, filterIdenticalColorPercentages } from "../../functions/slider";
 import { getPercentToFixed, mousePos } from "../../functions/slider";
-import { getImmutableGradientCopy, gradientHasValidMaxInput } from "../../functions/gradient";
+import { gradientHasValidMaxInput } from "../../functions/gradient";
+import { produce } from "immer";
 import "./GradientSlider.scss";
 
 
@@ -39,7 +40,7 @@ export default class GradientSlider extends Component {
         const colorStopPressed = this.state.activeColorStop !== undefined;
         const colorHintPressed = this.state.activeColorHint !== undefined;
         const thumbDragged = this.state.colorStopDragged;
-        const gradientCopy = (colorStopPressed || colorHintPressed) ? getImmutableGradientCopy(this.props.gradient) : undefined;
+        const gradientCopy = (colorStopPressed || colorHintPressed) ? this.props.gradient : undefined;
 
         // Set dragged state if mouse pressed on color stop or color hint
         if (!thumbDragged && (colorStopPressed || colorHintPressed)) this.setState({ ...this.state, colorStopDragged: true });
@@ -174,7 +175,7 @@ export default class GradientSlider extends Component {
 
 
     setNewColorStopValue(value, index) {
-        const gradientCopy = getImmutableGradientCopy(this.props.gradient);
+        const gradientCopy = this.props.gradient;
         gradientCopy.colors[index].stop = Number(value);
 
         const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
@@ -187,7 +188,7 @@ export default class GradientSlider extends Component {
 
 
     setNewColorHintValue(value, index) {
-        const gradientCopy = getImmutableGradientCopy(this.props.gradient);
+        const gradientCopy = this.props.gradient;
         gradientCopy.colorHints[index] = Number(value);
 
         const updatedColorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
@@ -200,8 +201,9 @@ export default class GradientSlider extends Component {
 
 
     deleteColorStop(index) {
-        const updatedGradient = getImmutableGradientCopy(this.props.gradient);
-        updatedGradient.colors = updatedGradient.colors.filter((_, i) => i !== index);
+        const updatedGradient = produce(this.props.gradient, draft => {
+            draft.colors = draft.colors.filter((_, i) => i !== index);
+        });
 
         this.props.updateGradient(updatedGradient, this.props.index);
     }
@@ -209,8 +211,9 @@ export default class GradientSlider extends Component {
 
 
     deleteColorHint(index) {
-        const updatedGradient = getImmutableGradientCopy(this.props.gradient);
-        updatedGradient.colorHints = updatedGradient.colorHints.filter((_, i) => i !== index);
+        const updatedGradient = produce(this.props.gradient, draft => {
+            draft.colorHints = draft.colorHints.filter((_, i) => i !== index);
+        });
 
         this.props.updateGradient(updatedGradient, this.props.index);
     }
@@ -218,7 +221,7 @@ export default class GradientSlider extends Component {
 
 
     sortAndFilterGradients() {
-        const gradientCopy = getImmutableGradientCopy(this.props.gradient);
+        const gradientCopy = this.props.gradient;
         const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
         const filteredGradient = filterIdenticalColorPercentages(gradientSorted, this.state.activeColorStop);
 
@@ -230,7 +233,7 @@ export default class GradientSlider extends Component {
     addNewColorStop(event) {
         const sliderDiv = document.getElementById(this.state.id).children[0];
         const width = Math.round(sliderDiv.getBoundingClientRect().width);
-        const gradientCopy = getImmutableGradientCopy(this.props.gradient);
+        const gradientCopy = this.props.gradient;
         const updatedColorStops = gradientCopy.colors;
         let colorStop;
 
@@ -238,9 +241,11 @@ export default class GradientSlider extends Component {
         else colorStop = this.getMousePosX(event, width);
 
         updatedColorStops.push({ color: "rgba(255, 255, 255, 0.5)", stop: colorStop });
-        gradientCopy.colors = updatedColorStops;
+        const updatedGradientColors = produce(gradientCopy, draft => {
+            draft.colors = updatedColorStops;
+        });
 
-        const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
+        const gradientSorted = sortGradientByColorStopsPercentage(updatedGradientColors);
         const filteredGradient = filterIdenticalColorPercentages(gradientSorted, this.state.activeColorStop);
 
         this.props.updateGradient(filteredGradient, this.props.index);
@@ -251,7 +256,7 @@ export default class GradientSlider extends Component {
     addNewColorHint(event) {
         const sliderDiv = document.getElementById(this.state.id).children[0];
         const width = Math.round(sliderDiv.getBoundingClientRect().width);
-        const gradientCopy = getImmutableGradientCopy(this.props.gradient);
+        const gradientCopy = this.props.gradient;
         let colorHint;
 
         if (this.props.gradient.repeatingUnit === "%" && Number(this.props.gradient.max) === 100) colorHint = this.getMousePosXInPercentage(event, width);

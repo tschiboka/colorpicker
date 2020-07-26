@@ -180,6 +180,15 @@ export function CodeSettings(props) {
                     handleOnClick={() => props.toggleCommentsAllowed()}
                 />
             </div>
+
+            <div>
+                <p>Checkered / white background: </p>
+
+                <ToggleButton
+                    on={props.checkered}
+                    handleOnClick={() => props.setCheckered(!props.checkered)}
+                />
+            </div>
             <div><button onClick={() => props.closeSettings()}>Back</button></div>
         </div>
     );

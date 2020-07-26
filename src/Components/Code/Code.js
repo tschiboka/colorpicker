@@ -33,7 +33,7 @@ export default class Code extends Component {
             settingsButtonHover: false,
             settingIsOpen: false,
             copyButtonHover: false,
-            hexShortHandAllowed: false,
+            hexShortHandAllowed: true,
             cssNamesAllowed: true,
             commentsAllowed: true,
             preferredColorFormat: undefined,
@@ -768,6 +768,8 @@ export default class Code extends Component {
                             commentsAllowed={this.state.commentsAllowed}
                             toggleCommentsAllowed={this.toggleCommentsAllowed.bind(this)}
                             closeSettings={() => this.setState({ ...this.state, settingIsOpen: false })}
+                            checkered={this.props.checkered}
+                            setCheckered={this.props.setCheckered}
                         />
                     )}
 

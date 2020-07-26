@@ -42,6 +42,7 @@ export default class App extends Component {
       colorPicker: undefined,
       radialSettingsOn: false,
       radialSettings_GradientIndex: undefined,
+      patternName: undefined,
       backgroundSettingsOn: false,
       backgroundSettings_GradientIndex: undefined,
       backgroundSize: [
@@ -133,9 +134,12 @@ export default class App extends Component {
 
 
   openRadialSettings(radialSettingsOn, radialSettings_GradientIndex, setToRadial) {
-    const gradients = [...this.state.gradients];
+    const newGradients = [...this.state.gradients];
     const type = setToRadial ? "radial" : "linear";
-    gradients[radialSettings_GradientIndex].type = type;
+
+    const gradients = produce(newGradients, draft => {
+      draft[radialSettings_GradientIndex].type = type;
+    });
 
     this.setState(
       {
@@ -237,7 +241,6 @@ export default class App extends Component {
           gradients={this.state.gradients}
           setFullscreen={this.setFullscreen.bind(this)}
           checkered={this.state.checkered}
-          setCheckered={this.setCheckeredDisplay.bind(this)}
         />
 
         <GradientList
@@ -260,6 +263,8 @@ export default class App extends Component {
           backgroundColor={this.state.backgroundColor}
           openColorPicker={this.openColorPicker.bind(this)}
           changeBackgroundSize={this.changeBackgroundSize.bind(this)}
+          checkered={this.state.checkered}
+          setCheckered={this.setCheckeredDisplay.bind(this)}
         />
 
 
