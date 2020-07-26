@@ -45,7 +45,7 @@
         max-width: 100%;
         overflow: auto;
         margin: 5px;
-        font-size: $medFont;
+        font-size: $smlFont;
         text-shadow: -1px -1px 2px black;
         code {user-select: auto;}
         span { font-family: "Fira", monospace; }
@@ -62,7 +62,7 @@
             color: $codeGray;
             font-family: "Fantasque";
             font-style: italic;
-            font-size: $lrgFont;
+            font-size: $smlFont;
         }
         .ColorPreview {
             display: inline-block;

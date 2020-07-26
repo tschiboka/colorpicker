@@ -4,6 +4,7 @@ import bgSettingsActiveIcon from "../../images/bg_settings_active.png";
 import AngleMeter from "../AngleMeter/AngleMeter";
 import LengthInput from "../LengthInput/LengthInput";
 import { getImmutableGradientCopy } from "../../functions/gradient";
+import { produce } from 'immer';
 import "./GradientButtons.scss";
 
 
@@ -57,10 +58,11 @@ export default class GradientButtons extends Component {
         const valid = !resetInput ? true : resetInput.validity.valid;
 
         if (newAngle >= 0 && newAngle < 360 && valid) {
-            const updatedGradient = getImmutableGradientCopy(this.props.gradient);
-            updatedGradient.angle = newAngle;
+            const updated = produce(getImmutableGradientCopy(this.props.gradient), draft => {
+                draft.angle = newAngle;
+            });
 
-            this.props.updateGradient(updatedGradient, this.props.index);
+            this.props.updateGradient(updated, this.props.index);
         }
     }
 

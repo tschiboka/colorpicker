@@ -66,7 +66,8 @@ export default class BackgroundSettings extends Component {
 
 
 
-    updatePosition(keyword, value, unit, index) {
+    updatePosition(keyword, input, unit, index) {
+        const value = Number(input) || undefined;
         const updated = produce(this.props.gradients[this.props.index], draft => {
             draft.background.position[index] = {keyword, value, unit};
         });
@@ -76,7 +77,8 @@ export default class BackgroundSettings extends Component {
 
 
 
-    updateSize(value, unit, index) {
+    updateSize(input, unit, index) {
+        const value = Number(input) || undefined;
         const updated = produce(this.props.gradients[this.props.index], draft => {
             draft.background.size[index === "0" ? "x" : "y"] = {value, unit};
         });

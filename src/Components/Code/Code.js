@@ -476,6 +476,78 @@ export default class Code extends Component {
 
 
 
+    renderBackgroundProperties(gradient) {
+        // POSITION
+        const posX = { ...gradient.background.position[0] };
+        const posY = { ...gradient.background.position[1] };
+        // Check if any positioning has been set
+        const hasPositionX = posX.keyword || posX.value;
+        const hasPositionY = posY.keyword || posY.value;
+        const hasPosition = hasPositionX || hasPositionY;
+
+        // SIZE
+        const sizeX = { ...gradient.background.size.x };
+        const sizeY = { ...gradient.background.size.y };
+
+        function renderPositionWithKeywords() {
+            return (<span>
+                <span className="token keyword"> {posX.keyword || "top"}</span>
+
+                <span className="token number"> {posX.value || "0"}</span>
+
+                <span className="token unit">{posX.value && posX.unit}</span>
+
+                <span className="token keyword"> {posY.keyword || "left"}</span>
+
+                <span className="token number"> {posY.value || "0"}</span>
+
+                <span className="token unit">{posY.value && posY.unit}</span>
+            </span>);
+        }
+
+        function renderPositionWithoutKeywords() {
+            return (<span>
+                <span className="token number"> {posX.value || "0"}</span>
+
+                <span className="token unit">{posX.value && posX.unit}</span>
+
+                <span className="token number"> {posY.value || "0"}</span>
+
+                <span className="token unit">{posY.value && posY.unit}</span>
+            </span>);
+        }
+
+        function renderSize() {
+            return (<span>
+                {!hasPosition && <span className="token number"> 0 0</span>}
+
+                <span className="token punctuation"> /</span>
+
+                <span className="token number"> {sizeX.value || "0"}</span>
+
+                <span className="token unit">{sizeX.value && sizeX.unit}</span>
+
+                <span className="token number"> {sizeY.value || "0"}</span>
+
+                <span className="token unit">{sizeY.value && sizeY.unit}</span>
+            </span>);
+        }
+
+        return (
+            <span>
+                {(posX.keyword || posY.keyword) && renderPositionWithKeywords()}
+
+                {(hasPosition && !posX.keyword && !posY.keyword) && renderPositionWithoutKeywords()}
+
+                {(sizeX.value || sizeY.value) && renderSize()}
+
+                {gradient.background.repeat && <span className="token keyword"> {gradient.background.repeat}</span>}
+            </span>
+        );
+    }
+
+
+
     renderComment(index) {
         const comment = this.props.gradients[index].name;
         const isUntitled = /^untitled/gi.test(comment);
@@ -489,6 +561,7 @@ export default class Code extends Component {
     renderBackgroundWithPrefix(vendorPrefix) {
         const gradients = this.props.gradients.map(grad => getImmutableGradientCopy(grad)).reverse();
         const functionNames = gradients.map(gradient => (gradient.repeating ? "repeating-" : "") + gradient.type + "-gradient");
+
         const renderFunctionSpans = gradIndex => (
             <span key={`functionName${gradIndex}`}>
 
@@ -501,6 +574,8 @@ export default class Code extends Component {
                 {this.renderColorStopsAndHints(gradients[gradIndex], gradIndex, gradients.length)}
 
                 <span className="token punctuation">)</span>
+
+                {this.renderBackgroundProperties(gradients[gradIndex])}
             </span>
         );
 
