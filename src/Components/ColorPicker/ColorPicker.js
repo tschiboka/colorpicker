@@ -25,7 +25,7 @@ export default class ColorPicker extends Component {
             y: this.getPositionXY("Y"),
             mode: "palette", // (palette, history, names)
             colorNamesMode: { sortBy: "name", css: false, grid: false },
-            preferredFormat: this.setInitialPreferredColorFormat(this.props.color), // (rgb, hex, hsl)
+            preferredFormat: this.setInitialPreferredColorFormat(this.props.color || "rgb(255, 0, 0)"), // (rgb, hex, hsl)
             color: getColorObj(this.props.color || "rgb(255, 0, 0)"),
             originalcolor: getColorObj(this.props.color || "rgb(255, 0, 0)"),
             hueSliderMouseDown: false,

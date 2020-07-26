@@ -27,7 +27,7 @@ export const mousePos = (event, selector) => {
 
 
 export const sortGradientByColorStopsPercentage = gradient => {
-    const sortedColors = gradient.colors.sort((a, b) => a.stop - b.stop);
+    const sortedColors = [...gradient.colors].sort((a, b) => a.stop - b.stop);
     const sortedGradient = { ...gradient, colors: sortedColors };
 
     return sortedGradient;

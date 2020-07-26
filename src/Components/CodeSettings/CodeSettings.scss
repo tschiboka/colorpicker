@@ -70,7 +70,20 @@
             }
         }
     }
-    .CodeSettings__vendor-prefixes {
+    .CodeSettings__background-color {
+        & > div {
+            height: 22px;
+            width: 90px;
+            border: $tertiaryBorder;
+            border-radius: $borderRadius;
+            cursor: pointer;
+            div {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    .CodeSettings__vendor-prefixes, .CodeSettings__preferred-format {
         & > div {
             display: flex;
             justify-content: space-evenly;

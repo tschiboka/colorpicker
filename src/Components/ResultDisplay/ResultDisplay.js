@@ -79,6 +79,7 @@ export default class ResultDisplay extends Component {
                         title="Result Gradient"
                         style={{
                             backgroundSize: this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " + this.props.backgroundSize[1].value + this.props.backgroundSize[1].unit,
+                            backgroundColor: this.props.backgroundColor || "",
                             background: gradientObjsToStr([...this.props.gradients].reverse()),
                         }}>
 

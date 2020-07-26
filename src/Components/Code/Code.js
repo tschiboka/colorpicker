@@ -658,20 +658,22 @@ export default class Code extends Component {
 
 
     renderFallback() {
-        if (this.state.fallbackAllowed) return (
-            <span> {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
+        if (this.props.backgroundColor) {
+            if (this.state.fallbackAllowed) return (
+                <span> {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
 
-                <span className="token property">background-color</span>
+                    <span className="token property">background-color</span>
 
-                <span className="token punctuation">: </span>
+                    <span className="token punctuation">: </span>
 
-                {this.renderColor(this.props.gradients[0].colors[0].color, 1, 0)}
+                    {this.renderColor(this.props.backgroundColor, 1, 0)}
 
-                <span className="token punctuation">;</span>
+                    <span className="token punctuation">;</span>
 
-                <br />
-            </span>
-        );
+                    <br />
+                </span>
+            );
+        }
     }
 
 
@@ -737,6 +739,8 @@ export default class Code extends Component {
                     {this.state.settingIsOpen && (
                         <CodeSettings
                             backgroundSize={this.props.backgroundSize}
+                            backgroundColor={this.props.backgroundColor}
+                            openColorPicker={this.props.openColorPicker}
                             changeBackgroundSize={this.props.changeBackgroundSize}
                             vendorPrefixes={this.state.vendorPrefixes}
                             setVendorPrefixes={this.setVendorPrefixes.bind(this)}

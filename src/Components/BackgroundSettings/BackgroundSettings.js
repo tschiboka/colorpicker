@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { ToggleButton } from "../ToggleButton/ToggleButton";
 import LengthInput from '../LengthInput/LengthInput';
-import {getImmutableGradientCopy} from "../../functions/gradient";
 import { produce } from 'immer';
 import "./BackgroundSettings.scss";
 

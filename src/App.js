@@ -7,6 +7,7 @@ import RadialSettings from "./Components/RadialSettings/RadialSettings";
 import BackgroundSettings from "./Components/BackgroundSettings/BackgroundSettings";
 import { getDefaultGradientObj, gradientObjsToStr } from "./functions/gradient";
 import checkeredRect from "./images/checkered_rect.png";
+import { produce } from "immer";
 import "./App.scss";
 
 
@@ -47,6 +48,7 @@ export default class App extends Component {
         { value: "100", unit: "%" },
         { value: "100", unit: "%" }
       ],
+      backgroundColor: undefined,
       fullscreen: false,
     };
   }
@@ -137,19 +139,21 @@ export default class App extends Component {
 
 
   returnColor(color, gradientIndex, thumbIndex, closeFunction) {
-    const newState = {
-      ...this.state,
-      gradients: [
-        ...this.state.gradients.map(grad => ({
-          ...grad,
-          colors: [...grad.colors].map(color => ({ ...color }))
-        })),
-      ]
-    };
+    // if color selection happened from a color stop / hint thumb
+    if (gradientIndex !== undefined && thumbIndex !== undefined) { // index 0 would coerse false
+      const newState = produce(this.state, draft => {
+        draft.gradients[gradientIndex].colors[thumbIndex].color = color;
+      });
+      this.setState(newState, () => closeFunction(this.state));
+    }
+    // else it must change background color
+    else {
+      const newState = produce(this.state, draft => {
+        draft.backgroundColor = color;
+      });
 
-    newState.gradients[gradientIndex].colors[thumbIndex].color = color;
-
-    this.setState(newState, () => closeFunction(this.state));
+      this.setState(newState, () => closeFunction(this.state));
+    }
   }
 
 
@@ -203,6 +207,7 @@ export default class App extends Component {
       <div className="App">
         <ResultDisplay
           backgroundSize={this.state.backgroundSize}
+          backgroundColor={this.state.backgroundColor}
           gradients={this.state.gradients}
           setFullscreen={this.setFullscreen.bind(this)}
           checkered={this.state.checkered}
@@ -225,6 +230,8 @@ export default class App extends Component {
         <Code
           gradients={this.state.gradients}
           backgroundSize={this.state.backgroundSize}
+          backgroundColor={this.state.backgroundColor}
+          openColorPicker={this.openColorPicker.bind(this)}
           changeBackgroundSize={this.changeBackgroundSize.bind(this)}
         />
 

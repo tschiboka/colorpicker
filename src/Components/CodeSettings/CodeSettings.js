@@ -1,6 +1,7 @@
 import React from 'react';
 import LengthInput from "../LengthInput/LengthInput";
 import { ToggleButton } from '../ToggleButton/ToggleButton';
+import checkeredBg from "../../images/checkered_rect.png";
 import "./CodeSettings.scss";
 
 
@@ -61,6 +62,17 @@ export function CodeSettings(props) {
                 </div>
             </div>
 
+            <div className="CodeSettings__background-color">
+                <p>Background Color:</p>
+
+                <div
+                    style={{ backgroundImage: `url(${checkeredBg})` }}
+                    onClick={() => props.openColorPicker(undefined, undefined, props.backgroundColor)}
+                >
+                    <div style={{ backgroundColor: props.backgroundColor }}></div>
+                </div>
+            </div>
+
             <div className="CodeSettings__vendor-prefixes">
                 <p>Vendor Prefixes: </p>
 
@@ -103,35 +115,38 @@ export function CodeSettings(props) {
             </div>
 
 
-            <div>
+            <div className="CodeSettings__preferred-format">
                 <p>Preferred Format: </p>
-                <button
-                    title="Hexadecimal / RGBA (for transparent colors)"
-                    onClick={() => props.setPreferredColorFormat("#")}>
-                    hex
+
+                <div>
+                    <button
+                        title="Hexadecimal / RGBA (for transparent colors)"
+                        onClick={() => props.setPreferredColorFormat("#")}>
+                        hex
                     <div className={props.preferredColorFormat === "#" ? "btn--active" : "btn--inactive"}></div>
-                </button>
+                    </button>
 
-                <button
-                    title="RGB (red, green, blue)"
-                    onClick={() => props.setPreferredColorFormat("rgb")}>
-                    rgb
+                    <button
+                        title="RGB (red, green, blue)"
+                        onClick={() => props.setPreferredColorFormat("rgb")}>
+                        rgb
                     <div className={props.preferredColorFormat === "rgb" ? "btn--active" : "btn--inactive"}></div>
-                </button>
+                    </button>
 
-                <button
-                    title="Hue Saturation Lightness"
-                    onClick={() => props.setPreferredColorFormat("hsl")}>
-                    hsl
+                    <button
+                        title="Hue Saturation Lightness"
+                        onClick={() => props.setPreferredColorFormat("hsl")}>
+                        hsl
                     <div className={props.preferredColorFormat === "hsl" ? "btn--active" : "btn--inactive"}></div>
-                </button>
+                    </button>
 
-                <button
-                    title="Color defined by you on the slider"
-                    onClick={() => props.setPreferredColorFormat(undefined)}>
-                    default
+                    <button
+                        title="Color defined by you on the slider"
+                        onClick={() => props.setPreferredColorFormat(undefined)}>
+                        default
                     <div className={props.preferredColorFormat === undefined ? "btn--active" : "btn--inactive"}></div>
-                </button>
+                    </button>
+                </div>
             </div>
 
             <div>
