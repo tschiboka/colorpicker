@@ -61,17 +61,26 @@ export default class App extends Component {
 
 
 
-  updateGradients(gradients) { this.setState({ ...this.state, gradients: gradients }, () => console.log(JSON.stringify(this.state.gradients))) }
+  updateGradients(gradients, callback) {
+    const newState = produce(this.state, draft => {
+      draft.gradients = gradients
+    });
+
+    this.setState(() => { return newState },
+      () => typeof callback === "function" && callback()
+    );
+  }
 
 
 
-  updateGradient(gradient, index) {
+  updateGradient(gradient, index, callback) {
     if (index === undefined) throw new Error("Function updateGradient must have index parameter! ");
 
-    const updatedGradientList = [...this.state.gradients];
-    updatedGradientList[index] = gradient;
+    const updatedGradientList = produce(this.state.gradients, draft => {
+      draft[index] = gradient;
+    });
 
-    this.updateGradients(updatedGradientList);
+    this.updateGradients(updatedGradientList, callback);
   }
 
 
@@ -278,8 +287,9 @@ export default class App extends Component {
           >
             <div
               style={{
-                backgroundImage: gradientObjsToStr([...this.state.gradients].reverse()),
                 backgroundSize: this.state.backgroundSize[0].value + this.state.backgroundSize[0].unit + " " + this.state.backgroundSize[1].value + this.state.backgroundSize[1].unit,
+                background: gradientObjsToStr([...this.state.gradients].reverse()),
+                backgroundColor: this.state.backgroundColor,
               }}
             >
               <button onClick={() => this.setState({ ...this.state, fullscreen: false })}>&times;</button>

@@ -27,8 +27,12 @@ export default class BackgroundSettings extends Component {
 
 
     handlePositionToggleOnClick() {
-        this.updatePosition(undefined, undefined, undefined, 0);
-        this.updatePosition(undefined, undefined, undefined, 1);
+        const updated = produce(this.props.gradients[this.props.index], draft => {
+            draft.background.position[0] = {undefined, undefined, undefined};
+            draft.background.position[1] = {undefined, undefined, undefined};
+        });
+
+        this.props.updateGradient(updated, this.props.index);
 
         // clear input fields
         document.querySelector("#LengthInput_7").value = "";
@@ -38,8 +42,14 @@ export default class BackgroundSettings extends Component {
 
 
     handleSizeToggleOnClick() {
-        this.updateSize(undefined, undefined, "0");
-        this.updateSize(undefined, undefined, "1");
+        const updated = produce(this.props.gradients[this.props.index], draft => {
+            draft.background.size = {
+                x: { value: undefined, unit: undefined },
+                y: { value: undefined, unit: undefined }
+            }
+        });
+
+        this.props.updateGradient(updated, this.props.index);
 
         // clear input fields
         document.querySelector("#LengthInput_9").value = "";
@@ -87,34 +97,39 @@ export default class BackgroundSettings extends Component {
 
 
     updateRepeat(repeatValue) {
-        const updated = produce(this.props.gradients[this.props.index], draft => {
-            draft.background.repeat = repeatValue;           
-        });
-        this.props.updateGradient(updated, this.props.index);
+        this.props.updateGradient(
+            produce(this.props.gradients[this.props.index], draft => {
+                draft.background.repeat = repeatValue;           
+        }), this.props.index);
     }
 
 
 
     discardChanges() {
-        const clearBackground = {
-            position: [
-                { keyword: undefined, value: undefined, unit: undefined },
-                { keyword: undefined, value: undefined, unit: undefined }
-            ],
-            size: {
-                x: { value: undefined, unit: undefined },
-                y: { value: undefined, unit: undefined }
-            },
-            repeat: undefined,
-        };
-
         const updated = produce(this.props.gradients[this.props.index], draft => {
-            draft.background = clearBackground;
+            draft.background = {
+                position: [
+                    { keyword: undefined, value: undefined, unit: undefined },
+                    { keyword: undefined, value: undefined, unit: undefined }
+                ],
+                size: {
+                    x: { value: undefined, unit: undefined },
+                    y: { value: undefined, unit: undefined }
+                },
+                repeat: undefined,
+            };
         });
-        this.props.updateGradient(updated, this.props.index);
 
-        // Close Background Settings
-        this.props.openBackgroundSettings(false, this.props.index)
+        this.updateAndClose(updated);
+    }
+
+
+
+    updateAndClose(updatedGradient) {
+        // Close Background Settings as a CallBack (subsequent state updates messes up state)
+        this.props.updateGradient(updatedGradient, this.props.index, 
+            () => this.props.openBackgroundSettings(false, this.props.index)
+        );
     }
 
 
