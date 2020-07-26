@@ -33,6 +33,17 @@ export default class GradientField extends Component {
 
     componentDidUpdate() {
         if (!this.props.gradient.name) { this.nameGradients() }
+
+        // NOTE: Style needs to be set here!
+        // React can not handle overlapping style properties like background shorthand / background color.
+        // Its behaviour is unpredictable and unsupported. This part of the app needs to behave as closely
+        // to native css as possible therefore style-sheet will be set on every update in vanilla JS style
+        const display = document.getElementById("Preview_" + this.props.index);
+
+        display.style.backgroundSize = this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " +
+            this.props.backgroundSize[1].value + this.props.backgroundSize[1].unit;
+        display.style.background = gradientObjsToStr([this.props.gradients[this.props.index]].reverse());
+        display.style.backgroundColor = this.props.backgroundColor || "";
     }
 
 
@@ -220,14 +231,13 @@ export default class GradientField extends Component {
                     <div className="GradientField__preview" title="preview">
                         <div
                             className="GradientField__preview__checkered"
-                            style={{ backgroundImage: `${this.props.checkered ? `url(${checkeredRect})` : ""}` }}
+                            style={{
+                                backgroundImage: `${this.props.checkered ? `url(${checkeredRect})` : ""}`,
+                            }}
                         >
                             <div
+                                id={`Preview_${this.props.index}`}
                                 className="GradientField__preview__gradient"
-                                style={{
-                                    backgroundImage: `${gradientObjsToStr([this.props.gradient].reverse())}`,
-                                    backgroundSize: this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " + this.props.backgroundSize[1].value + this.props.backgroundSize[1].unit,
-                                }}
                                 onClick={() => this.toggleVisibility()}
                             >
                                 {!this.props.gradient.visible && this.renderRedDiagonalLine()}

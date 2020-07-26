@@ -38,6 +38,7 @@ export default class GradientList extends Component {
                 gradients={this.props.gradients}
                 checkered={this.props.checkered}
                 backgroundSize={this.props.backgroundSize}
+                backgroundColor={this.props.backgroundColor}
                 updateGradient={this.props.updateGradient}
                 confirmDeleteGradient={this.confirmDeleteGradient.bind(this)}
                 setAngleMeterIsActive={this.setAngleMeterIsActive.bind(this)}

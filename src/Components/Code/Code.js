@@ -658,24 +658,37 @@ export default class Code extends Component {
 
 
     renderFallback() {
-        if (this.props.backgroundColor) {
-            if (this.state.fallbackAllowed) return (
-                <span> {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
+        if (this.state.fallbackAllowed) return (
+            <span> {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
 
-                    <span className="token property">background-color</span>
+                <span className="token property">background</span>
 
-                    <span className="token punctuation">: </span>
+                <span className="token punctuation">: </span>
 
-                    {this.renderColor(this.props.backgroundColor, 1, 0)}
+                {this.renderColor(this.props.gradients[0].colors[0].color, 1, 0)}
 
-                    <span className="token punctuation">;</span>
+                <span className="token punctuation">;</span>
 
-                    <br />
-                </span>
-            );
-        }
+                <br />
+            </span>
+        );
     }
 
+
+
+    renderBackgroundColor() {
+        if (this.props.backgroundColor) return (
+            <span>
+                <span className="token property">background-color</span>
+
+                <span className="token punctuation">: </span>
+
+                {this.renderColor(this.props.backgroundColor, 1, 0)}
+
+                <span className="token punctuation">;</span>
+            </span>
+        );
+    }
 
 
     renderPatternBackgroundSize() {
@@ -766,6 +779,8 @@ export default class Code extends Component {
                                 {this.renderFallback()}
 
                                 {this.renderCode()}
+
+                                {this.renderBackgroundColor()}
                             </span>
                             : <span className="token comment">&#47;&#47; No gradients</span>
                         }

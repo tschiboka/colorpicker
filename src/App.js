@@ -55,6 +55,23 @@ export default class App extends Component {
 
 
 
+  componentDidUpdate() {
+    if (this.state.fullscreen) {
+      // NOTE: Style needs to be set here!
+      // React can not handle overlapping style properties like background shorthand / background color.
+      // Its behaviour is unpredictable and unsupported. This part of the app needs to behave as closely
+      // to native css as possible therefore style-sheet will be set on every update in vanilla JS style
+      const display = document.getElementById("Fullscreen_Display");
+
+      display.style.backgroundSize = this.state.backgroundSize[0].value + this.state.backgroundSize[0].unit + " " +
+        this.state.backgroundSize[1].value + this.state.backgroundSize[1].unit;
+      display.style.background = gradientObjsToStr([...this.state.gradients].reverse());
+      display.style.backgroundColor = this.state.backgroundColor || "";
+    }
+  }
+
+
+
   getWindowWidth() {
     return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   }
@@ -227,6 +244,7 @@ export default class App extends Component {
           gradients={this.state.gradients}
           checkered={this.state.checkered}
           backgroundSize={this.state.backgroundSize}
+          backgroundColor={this.state.backgroundColor}
           updateGradients={this.updateGradients.bind(this)}
           updateGradient={this.updateGradient.bind(this)}
           openColorPicker={this.openColorPicker.bind(this)}
@@ -285,13 +303,7 @@ export default class App extends Component {
               backgroundImage: this.state.checkered ? `url(${checkeredRect})` : ""
             }}
           >
-            <div
-              style={{
-                backgroundSize: this.state.backgroundSize[0].value + this.state.backgroundSize[0].unit + " " + this.state.backgroundSize[1].value + this.state.backgroundSize[1].unit,
-                background: gradientObjsToStr([...this.state.gradients].reverse()),
-                backgroundColor: this.state.backgroundColor,
-              }}
-            >
+            <div id="Fullscreen_Display" >
               <button onClick={() => this.setState({ ...this.state, fullscreen: false })}>&times;</button>
             </div>
           </div>

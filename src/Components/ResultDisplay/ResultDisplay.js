@@ -21,6 +21,22 @@ export default class ResultDisplay extends Component {
     }
 
 
+
+    componentDidUpdate() {
+        // NOTE: Style needs to be set here!
+        // React can not handle overlapping style properties like background shorthand / background color.
+        // Its behaviour is unpredictable and unsupported. This part of the app needs to behave as closely
+        // to native css as possible therefore style-sheet will be set on every update in vanilla JS style
+        const display = document.getElementById("ResultDisplay");
+
+        display.style.backgroundSize = this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " +
+            this.props.backgroundSize[1].value + this.props.backgroundSize[1].unit;
+        display.style.background = gradientObjsToStr([...this.props.gradients].reverse());
+        display.style.backgroundColor = this.props.backgroundColor || "";
+    }
+
+
+
     getStyleObj(isCheckered = false) {
         const checkeredStyle = { backgroundImage: `url(${checkeredRect})` };
         const whiteStyle = { backgroundColor: "white" };
@@ -75,13 +91,10 @@ export default class ResultDisplay extends Component {
                     className="ResultDisplay__checkered-bg"
                     style={this.getStyleObj(this.props.checkered)}>
                     <div
+                        id="ResultDisplay"
                         className="ResultDisplay__color-bg"
                         title="Result Gradient"
-                        style={{
-                            backgroundSize: this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " + this.props.backgroundSize[1].value + this.props.backgroundSize[1].unit,
-                            background: gradientObjsToStr([...this.props.gradients].reverse()),
-                            backgroundColor: this.props.backgroundColor || "",
-                        }}>
+                    >
 
                         {this.state.menuIsOpen && (
                             <MainMenu

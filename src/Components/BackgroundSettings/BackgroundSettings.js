@@ -28,8 +28,8 @@ export default class BackgroundSettings extends Component {
 
     handlePositionToggleOnClick() {
         const updated = produce(this.props.gradients[this.props.index], draft => {
-            draft.background.position[0] = {undefined, undefined, undefined};
-            draft.background.position[1] = {undefined, undefined, undefined};
+            draft.background.position[0] = {keyword: undefined, value: undefined, unit: undefined};
+            draft.background.position[1] = {keyword: undefined, value: undefined, unit: undefined};
         });
 
         this.props.updateGradient(updated, this.props.index);
