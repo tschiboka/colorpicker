@@ -26,9 +26,10 @@ const filterColorStops = gradients => {
     return gradients.map(gradient => {
         if (!gradient.repeating) return gradient;
 
-        const filteredGradient = getImmutableGradientCopy(gradient);
         const filteredGradientColors = gradient.colors.filter(color => color.stop <= gradient.max);
-        filteredGradient.colors = filteredGradientColors;
+        const filteredGradient = produce(getImmutableGradientCopy(gradient), draft => {
+            draft.colors = filteredGradientColors;
+        });
 
         return filteredGradient;
     });

@@ -35,19 +35,22 @@ export default class GradientButtons extends Component {
 
 
     handleRepeatingBtnOnClick() {
-        const updatedGradient = getImmutableGradientCopy(this.props.gradient);
+        const updatedGradient = produce(getImmutableGradientCopy(this.props.gradient), draft => {
+            draft.repeating = !draft.repeating;
+        });
 
-        updatedGradient.repeating = !updatedGradient.repeating;
         this.props.updateGradient(updatedGradient, this.props.index);
     }
 
 
 
     handleRepeatingInputChange(name, value, unit) {
-        const updatedGradient = getImmutableGradientCopy(this.props.gradient);
+        const updatedGradient = produce(getImmutableGradientCopy(this.props.gradient), draft => {
+            draft.max = value;
+            draft.repeatingUnit = unit;
 
-        updatedGradient.max = value;
-        updatedGradient.repeatingUnit = unit;
+        });
+
         this.props.updateGradient(updatedGradient, this.props.index);
     }
 
