@@ -8,13 +8,11 @@
     height: 100%;
     .MainMenu__options {
         width: 27%;
-        min-width: 100px;
+        min-width: 180px;
         margin-left: auto;
-        margin-right: -1px;
         border-bottom: $tertiaryBorder;
         border-left: $tertiaryBorder;
-        border-right: $primaryBorder;
-        box-shadow: 5px 5px 5px black;
+        box-shadow: -2px 5px 10px black;
         ul {
             display: flex;
             flex-direction: column;
@@ -69,6 +67,31 @@
                     align-items: center;
                     border-left: $tertiaryBorder;
                 }
+            }
+        }
+    }
+    .MainMenu__open-form {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: $secondaryBackgroundColor;
+        display: flex;
+        flex-direction: column;
+        color: $secondaryTextColor;
+        h2 {
+            text-align: center;
+        }
+        .MainMenu__storage-predefined-toggle {
+            width: 100%;
+            display: flex;
+            list-style: none;
+            li {
+                width: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
         }
     }

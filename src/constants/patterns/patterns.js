@@ -1,13 +1,7 @@
 /* 
     PATTERN OBJECT STRUCTURE
     {
-        name: str,
-        created: {
-            date: JS.DATE,
-            time: JS.TIME,
-            by: str
-        },
-        description: str,
+        patternName: str,
         backgroundSize: {
             value: number,
             unit: str
@@ -17,43 +11,16 @@
     }
 */
 
-const patterns = [
+export default [
     // STRIPES
     {
-        name: "stripes",
-        created: {
-            date: "25.07.2020",
-            time: "02:40",
-            by: "Tschiboka"
-        },
-        description: "stripes",
+        patternName: "stripes123456789123456789123456789aaaaaaaaa",
         backgroundSize: [
             { value: 100, unit: "%" },
             { value: 100, unit: "%" }
         ],
         backgroundColor: "#66A3FF",
         gradients: [
-            {
-                "name": "background",
-                "visible": true,
-                "type": "linear",
-                "angle": "90",
-                "repeating": false,
-                "repeatingUnit": "%",
-                "max": 100,
-                "colorHints": [],
-                "colors": [
-                    { "color": "rgb(102, 163, 255)", "stop": 0 },
-                    { "color": "rgb(102, 163, 255)", "stop": 100 }
-                ],
-                "radial":
-                {
-                    "shape": "ellipse",
-                    "size": "50% 50%",
-                    "position": ["50%", "50%"]
-                },
-                "background": { "position": [{}, {}], "size": { "x": {}, "y": {} } }
-            },
             {
                 "name": "horizontal stripes",
                 "visible": true,

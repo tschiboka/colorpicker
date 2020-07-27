@@ -147,42 +147,18 @@ const defaultGradientObj = {
     max: 100,
     colorHints: [50],
     colors: [
-        {
-            color: "rgb(0, 0, 0)",
-            stop: 0
-        },
-        {
-            color: "rgba(255, 255, 255, 0.5)",
-            stop: 100
-        },
+        { color: "rgb(0, 0, 0)", stop: 0 },
+        { color: "rgba(255, 255, 255, 0.5)", stop: 100 },
     ],
-    radial: {
-        shape: "ellipse",
-        size: "50% 50%",
-        position: ["50%", "50%"]
-    },
+    radial: { shape: "ellipse", size: "50% 50%", position: ["50%", "50%"] },
     background: {
         position: [
-            {
-                keyword: undefined,
-                value: undefined,
-                unit: undefined
-            },
-            {
-                keyword: undefined,
-                value: undefined,
-                unit: undefined
-            },
+            { keyword: undefined, value: undefined, unit: undefined },
+            { keyword: undefined, value: undefined, unit: undefined },
         ],
         size: {
-            x: {
-                value: undefined,
-                unit: undefined
-            },
-            y: {
-                value: undefined,
-                unit: undefined
-            }
+            x: { value: undefined, unit: undefined },
+            y: { value: undefined, unit: undefined }
         },
         repeat: undefined,
     }
@@ -190,13 +166,34 @@ const defaultGradientObj = {
 
 
 
-export const getDefaultGradientObj = () => produce(defaultGradientObj, () => {
-    return defaultGradientObj;
+export const getDefaultGradientObj = () => produce(defaultGradientObj, draft => {
+    draft.name = "";
+    draft.visible = true;
+    draft.type = "linear";
+    draft.angle = "90";
+    draft.repeating = false;
+    draft.repeatingUnit = "%";
+    draft.max = 100;
+    draft.colorHints = [50];
+    draft.colors = [{ color: "rgb(0, 0, 0)", stop: 0 }, { color: "rgba(255, 255, 255, 0.5)", stop: 100 },];
+    draft.radial = { shape: "ellipse", size: "50% 50%", position: ["50%", "50%"] };
+    draft.background = {
+        position: [
+            { keyword: undefined, value: undefined, unit: undefined },
+            { keyword: undefined, value: undefined, unit: undefined },],
+        size: {
+            x: { value: undefined, unit: undefined },
+            y: { value: undefined, unit: undefined }
+        },
+        repeat: undefined,
+    };
 });
 
 
 
-export const getImmutableGradientCopy = gradient => produce(gradient, () => gradient);
+export const getImmutableGradientCopy = gradient => produce(gradient, draft => {
+    draft = gradient;
+});
 
 
 
