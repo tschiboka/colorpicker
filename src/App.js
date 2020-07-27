@@ -168,6 +168,10 @@ export default class App extends Component {
 
 
 
+  renamePattern(patternName) { this.setState({ ...this.state, patternName }, () => console.log(patternName)); }
+
+
+
   returnColor(color, gradientIndex, thumbIndex, closeFunction) {
     // if color selection happened from a color stop / hint thumb
     if (gradientIndex !== undefined && thumbIndex !== undefined) { // index 0 would coerse false
@@ -238,9 +242,11 @@ export default class App extends Component {
         <ResultDisplay
           backgroundSize={this.state.backgroundSize}
           backgroundColor={this.state.backgroundColor}
+          patternName={this.state.patternName}
           gradients={this.state.gradients}
           setFullscreen={this.setFullscreen.bind(this)}
           checkered={this.state.checkered}
+          renamePattern={this.renamePattern.bind(this)}
         />
 
         <GradientList

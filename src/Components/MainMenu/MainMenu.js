@@ -10,7 +10,7 @@ export default class MainMenu extends Component {
 
         this.state = {
             saveMsgOpen: false,
-            saveInputNameIsInvalid: false
+            saveInputNameIsInvalid: this.props.patternName ? true : false
         }
     }
 
@@ -52,20 +52,49 @@ export default class MainMenu extends Component {
 
         if (!/^[0-9a-zA-Z_-]+$/g.test(input)) return false;
 
-        // MORE vALIDATION HERE LATER EG EGSISTING NAMES EXEPT FOR NAME THAT PATTERN ALREADY HAVE
+        const nameAvailable = JSON.parse(localStorage.patterns || "[]").findIndex(pattern => pattern.patternName === input) === -1;
+        if (input !== this.props.patternName && !nameAvailable) return false;
+
         return true;
     }
+
 
 
     submitPattern() {
         if (this.state.saveInputNameIsInvalid) {
             const name = document.getElementById("save-pattern-input").value;
-            console.log("SUBMIT ", name);
+            const patternName = name;
+            const backgroundSize = this.props.backgroundSize;
+            const backgroundColor = this.props.backgroundColor;
+            const gradients = this.props.gradients;
             const pattern = {
+                patternName,
+                backgroundSize,
+                backgroundColor,
+                gradients
+            };
 
+            // check if localStore has patterns key at all
+            const storagePatterns = localStorage.patterns;
+            if (!storagePatterns) {
+                localStorage.setItem("patterns", JSON.stringify([pattern]));
+                this.props.renamePattern(name);
             }
+            else {
+                const storagePatternsArray = JSON.parse(storagePatterns);
+                // if name is the same as patternName update it
+                if (name === this.props.patternName) {
+                    const patternIndex = storagePatternsArray.findIndex(patt => patt.patternName === name);
+                    storagePatternsArray[patternIndex] = pattern;
+                }
+                else {
+                    storagePatternsArray.push(pattern);
+                    this.props.renamePattern(name);
+                }
 
-            console.log(Date.now())
+                localStorage.setItem("patterns", JSON.stringify(storagePatternsArray));
+                console.log(JSON.parse(localStorage.patterns));
+            }
         }
     }
 
@@ -118,6 +147,7 @@ export default class MainMenu extends Component {
                             type="text"
                             onChange={e => this.handleSaveInputOnChange(e)}
                             onKeyPress={e => this.handleSaveInputOnKeyPress(e)}
+                            defaultValue={this.props.patternName}
                         />
                     </div>
 

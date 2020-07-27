@@ -93,13 +93,17 @@ export default class ResultDisplay extends Component {
                     <div
                         id="ResultDisplay"
                         className="ResultDisplay__color-bg"
-                        title="Result Gradient"
                     >
 
                         {this.state.menuIsOpen && (
                             <MainMenu
+                                backgroundSize={this.props.backgroundSize}
+                                backgroundColor={this.props.backgroundColor}
+                                patternName={this.props.patternName}
+                                gradients={this.props.gradients}
                                 checkered={this.props.checkered}
                                 setCheckered={this.props.setCheckered}
+                                renamePattern={this.props.renamePattern}
                                 closeMenu={this.closeMenu.bind(this)}
                             />
                         )}

@@ -54,8 +54,10 @@ export default class GradientSlider extends Component {
         // Drag color hint
         if (colorHintPressed) {
             gradientCopy.colorHints[this.state.activeColorHint] = this.getNewStopPosition({ ...event });
-            gradientCopy.colorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
-            this.props.updateGradient(gradientCopy, this.props.index);
+            const sortedGradientHints = produce(gradientCopy, draft => {
+                draft.colorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
+            });
+            this.props.updateGradient(sortedGradientHints, this.props.index);
         }
     }
 
@@ -261,14 +263,13 @@ export default class GradientSlider extends Component {
 
         if (this.props.gradient.repeatingUnit === "%" && Number(this.props.gradient.max) === 100) colorHint = this.getMousePosXInPercentage(event, width);
         else colorHint = this.getMousePosX(event, width);
-        const updatedColorHints = gradientCopy.colorHints;
+        const colorHints = gradientCopy.colorHints;
+        const pushedColorHints = produce(colorHints, draft => { draft.push(colorHint); });
+        const gradientCopyWithNewColorHint = produce(gradientCopy, draft => {
+            draft.colorHints = [...pushedColorHints].sort((a, b) => a - b)
+        });
 
-        updatedColorHints.push(colorHint);
-        gradientCopy.colorHints = updatedColorHints;
-        gradientCopy.colorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
-
-        console.log("ADD", gradientCopy.colorHints);
-        this.props.updateGradient(gradientCopy, this.props.index);
+        this.props.updateGradient(gradientCopyWithNewColorHint, this.props.index);
     }
 
 
