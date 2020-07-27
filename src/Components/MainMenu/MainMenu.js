@@ -20,7 +20,8 @@ export default class MainMenu extends Component {
 
         this.state = {
             menuListHovered: undefined,
-            saveMsgOpen: false,
+            saveFormOpen: false,
+            newFormOpen: false,
             saveInputNameIsInvalid: this.props.patternName ? true : false
         }
     }
@@ -39,6 +40,50 @@ export default class MainMenu extends Component {
 
 
 
+    // OPTION NEW FUNCTIONS
+    checkIfChangesHaveBeenMadeInPattern() {
+        // if pattern has no name it must be a fresh one by opening the app
+        if (!this.props.patternName) return true;
+
+        // check if localStorage pattern matches exactly the current pattern
+        const backgroundSize = this.props.backgroundSize;
+        const patternName = this.props.patternName;
+        const backgroundColor = this.props.backgroundColor;
+        const gradients = this.props.gradients;
+        const currentPattern = {
+            patternName,
+            backgroundSize,
+            backgroundColor,
+            gradients
+        };
+
+        const patternsInStorage = JSON.parse(localStorage.patterns || "[]");
+        const storedPatternIndex = patternsInStorage.findIndex(storedPattern => storedPattern.patternName === patternName);
+
+        // in case pattern has name but it can not be found in storage (further down it would cause runtime exception)
+        if (storedPatternIndex === -1) return true;
+
+        const storedPattern = patternsInStorage[storedPatternIndex];
+        const currentPatternStr = JSON.stringify(currentPattern);
+        const storedPatternStr = JSON.stringify(storedPattern);
+
+        if (storedPatternStr === currentPatternStr) return false; // the two are perfectly matching --> no need to save
+        else return true;   // the current version of the pattern doesn't match the one sored
+    }
+
+
+
+    createNewPattern() {
+        this.setState({ ...this.state, newFormOpen: false }, () => {
+            this.props.closeMenu();
+
+            this.props.setDefaultState();
+        });
+    }
+
+
+
+    // OPTION SAVE FUNCTIONS
     handleSaveInputOnChange(event) {
         const name = event.target.value;
         const saveInputNameIsInvalid = this.validateSaveNameInput(name);
@@ -59,10 +104,13 @@ export default class MainMenu extends Component {
 
 
     validateSaveNameInput(input) {
-        if (!input.length || input.length > 30) return false;
+        if (!input.length || input.length > 30) return false;  // input length 1 - 29
 
-        if (!/^[0-9a-zA-Z_-]+$/g.test(input)) return false;
+        if (!/^[0-9a-zA-Z_-]+$/g.test(input)) return false;    // has only chars nums and -_
 
+        if (!/^[a-zA-Z]/.test(input)) return false;          // starts with a char
+
+        // name can not be already present in storage
         const nameAvailable = JSON.parse(localStorage.patterns || "[]").findIndex(pattern => pattern.patternName === input) === -1;
         if (input !== this.props.patternName && !nameAvailable) return false;
 
@@ -106,7 +154,7 @@ export default class MainMenu extends Component {
                 localStorage.setItem("patterns", JSON.stringify(storagePatternsArray));
             }
 
-            this.setState({ ...this.state, saveMsgOpen: false });
+            this.setState({ ...this.state, saveFormOpen: false });
         }
     }
 
@@ -135,6 +183,7 @@ export default class MainMenu extends Component {
                     >
                         <li
                             onMouseOver={() => this.setState({ ...this.state, menuListHovered: "new" })}
+                            onClick={() => this.setState({ ...this.state, newFormOpen: true })}
                         >
                             <div style={{ backgroundImage: `url(${this.state.menuListHovered === "new" ? newActiveIcon : newIcon})` }}></div>
 
@@ -150,7 +199,7 @@ export default class MainMenu extends Component {
                         </li>
 
                         <li
-                            onClick={() => this.setState({ ...this.state, saveMsgOpen: true })}
+                            onClick={() => this.setState({ ...this.state, saveFormOpen: true })}
                             onMouseOver={() => this.setState({ ...this.state, menuListHovered: "save" })}
                         >
                             <div style={{ backgroundImage: `url(${this.state.menuListHovered === "save" ? saveActiveIcon : saveIcon})` }}></div>
@@ -177,34 +226,79 @@ export default class MainMenu extends Component {
                     </ul>
                 </div>
 
-                {this.state.saveMsgOpen && (<div className="MainMenu__saveMsg">
-                    <h2>Save</h2>
-
-                    <div className="storage-info">
-                        <p>Your pattern will be saved in your browsers local storage.</p>
-                        {this.renderStorageInfo()}
-                    </div>
-
-
+                {this.state.newFormOpen && (
                     <div>
-                        <span>Name: </span>
+                        {this.checkIfChangesHaveBeenMadeInPattern()
+                            ? (
+                                <div className="MainMenu__new-form">
+                                    <h2>New</h2>
 
-                        <input
-                            id="save-pattern-input"
-                            className={this.state.saveInputNameIsInvalid ? "valid" : "invalid"}
-                            type="text"
-                            onChange={e => this.handleSaveInputOnChange(e)}
-                            onKeyPress={e => this.handleSaveInputOnKeyPress(e)}
-                            defaultValue={this.props.patternName}
-                        />
+                                    <p>
+                                        You have unsaved changes in your work.<br />
+                                        Creating a new pattern will close the<br />
+                                        current work in progress.<br />
+                                        Would you like to save it before closing?
+                                    </p>
+
+                                    <div>
+                                        <button onClick={() => { this.setState({ ...this.state, saveFormOpen: true }); }}>Save</button>
+
+                                        <button onClick={() => this.createNewPattern()}>Don&apos;t save</button>
+
+                                        <button onClick={() => this.setState({ ...this.state, newFormOpen: false })}>Cancel</button>
+                                    </div>
+                                </div>
+                            )
+                            : (
+                                <div className="MainMenu__new-form">
+                                    <h2>New</h2>
+
+                                    <p>
+                                        Your work has no unsaved changes.<br />
+                                        Creating a new pattern will close the<br />
+                                        current work in progress.<br />
+                                    </p>
+
+                                    <div>
+                                        <button onClick={() => this.createNewPattern()}>Ok</button>
+
+                                        <button onClick={() => this.setState({ ...this.state, newFormOpen: false })}>Cancel</button>
+                                    </div>
+                                </div>
+                            )
+                        }
                     </div>
+                )}
 
-                    <div>
-                        <button onClick={() => this.submitPattern()}>Ok</button>
+                {this.state.saveFormOpen && (
+                    <div className="MainMenu__save-form">
+                        <h2>Save</h2>
 
-                        <button onClick={() => this.setState({ ...this.state, saveMsgOpen: false })}>Cancel</button>
-                    </div>
-                </div>)}
+                        <div className="storage-info">
+                            <p>Your pattern will be saved in your browsers local storage.</p>
+                            {this.renderStorageInfo()}
+                        </div>
+
+
+                        <div>
+                            <span>Name: </span>
+
+                            <input
+                                id="save-pattern-input"
+                                className={this.state.saveInputNameIsInvalid ? "valid" : "invalid"}
+                                type="text"
+                                onChange={e => this.handleSaveInputOnChange(e)}
+                                onKeyPress={e => this.handleSaveInputOnKeyPress(e)}
+                                defaultValue={this.props.patternName}
+                            />
+                        </div>
+
+                        <div>
+                            <button onClick={() => this.submitPattern()}>Ok</button>
+
+                            <button onClick={() => this.setState({ ...this.state, saveFormOpen: false })}>Cancel</button>
+                        </div>
+                    </div>)}
             </div>
         )
     }

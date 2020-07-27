@@ -109,6 +109,7 @@ export default class ResultDisplay extends Component {
                                 checkered={this.props.checkered}
                                 setCheckered={this.props.setCheckered}
                                 renamePattern={this.props.renamePattern}
+                                setDefaultState={this.props.setDefaultState}
                                 closeMenu={this.closeMenu.bind(this)}
                             />
                         )}

@@ -103,6 +103,31 @@ export default class App extends Component {
 
 
 
+  setDefaultState() {
+    const newState = {
+      checkered: true,
+      gradients: [{ ...getDefaultGradientObj() }],
+      canResize: true,
+      appWidth: this.getWindowWidth(),
+      colorPicker: undefined,
+      radialSettingsOn: false,
+      radialSettings_GradientIndex: undefined,
+      patternName: undefined,
+      backgroundSettingsOn: false,
+      backgroundSettings_GradientIndex: undefined,
+      backgroundSize: [
+        { value: "100", unit: "%" },
+        { value: "100", unit: "%" }
+      ],
+      backgroundColor: undefined,
+      fullscreen: false,
+    };
+
+    this.setState(newState);
+  }
+
+
+
   swapGradientFields(indexA, indexB) {
     const gradients = [...this.state.gradients];
     const tempField = gradients[indexA];
@@ -247,6 +272,7 @@ export default class App extends Component {
           setFullscreen={this.setFullscreen.bind(this)}
           checkered={this.state.checkered}
           renamePattern={this.renamePattern.bind(this)}
+          setDefaultState={this.setDefaultState.bind(this)}
         />
 
         <GradientList
