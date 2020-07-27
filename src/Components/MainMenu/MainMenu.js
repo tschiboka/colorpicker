@@ -1,4 +1,14 @@
 import React, { Component } from 'react';
+import newIcon from "../../images/new.png";
+import newActiveIcon from "../../images/new_active.png";
+import openIcon from "../../images/open.png";
+import openActiveIcon from "../../images/open_active.png";
+import saveIcon from "../../images/save.png";
+import saveActiveIcon from "../../images/save_active.png";
+import deleteIcon from "../../images/delete.png";
+import deleteActiveIcon from "../../images/delete_active.png";
+import backIcon from "../../images/expand_less.png";
+import backActiveIcon from "../../images/expand_less_active.png";
 import "./MainMenu.scss";
 
 
@@ -9,6 +19,7 @@ export default class MainMenu extends Component {
 
 
         this.state = {
+            menuListHovered: undefined,
             saveMsgOpen: false,
             saveInputNameIsInvalid: this.props.patternName ? true : false
         }
@@ -93,8 +104,9 @@ export default class MainMenu extends Component {
                 }
 
                 localStorage.setItem("patterns", JSON.stringify(storagePatternsArray));
-                console.log(JSON.parse(localStorage.patterns));
             }
+
+            this.setState({ ...this.state, saveMsgOpen: false });
         }
     }
 
@@ -118,14 +130,50 @@ export default class MainMenu extends Component {
         return (
             <div className="MainMenu">
                 <div className="MainMenu__options">
-                    <ul>
-                        <li>New</li>
+                    <ul
+                        onMouseLeave={() => this.setState({ ...this.state, menuListHovered: undefined })}
+                    >
+                        <li
+                            onMouseOver={() => this.setState({ ...this.state, menuListHovered: "new" })}
+                        >
+                            <div style={{ backgroundImage: `url(${this.state.menuListHovered === "new" ? newActiveIcon : newIcon})` }}></div>
 
-                        <li>Open</li>
+                            <span>New</span>
+                        </li>
 
-                        <li onClick={() => this.setState({ ...this.state, saveMsgOpen: true })}>Save</li>
+                        <li
+                            onMouseOver={() => this.setState({ ...this.state, menuListHovered: "open" })}
+                        >
+                            <div style={{ backgroundImage: `url(${this.state.menuListHovered === "open" ? openActiveIcon : openIcon})` }}></div>
 
-                        <li>Delete</li>
+                            <span>Open</span>
+                        </li>
+
+                        <li
+                            onClick={() => this.setState({ ...this.state, saveMsgOpen: true })}
+                            onMouseOver={() => this.setState({ ...this.state, menuListHovered: "save" })}
+                        >
+                            <div style={{ backgroundImage: `url(${this.state.menuListHovered === "save" ? saveActiveIcon : saveIcon})` }}></div>
+
+                            <span>Save</span>
+                        </li>
+
+                        <li
+                            onMouseOver={() => this.setState({ ...this.state, menuListHovered: "delete" })}
+                        >
+                            <div style={{ backgroundImage: `url(${this.state.menuListHovered === "delete" ? deleteActiveIcon : deleteIcon})` }}></div>
+
+                            <span>Delete</span>
+                        </li>
+
+                        <li
+                            onMouseOver={() => this.setState({ ...this.state, menuListHovered: "back" })}
+                            onClick={() => this.props.closeMenu()}
+                        >
+                            <div style={{ backgroundImage: `url(${this.state.menuListHovered === "back" ? backActiveIcon : backIcon})` }}></div>
+
+                            <span>Back</span>
+                        </li>
                     </ul>
                 </div>
 

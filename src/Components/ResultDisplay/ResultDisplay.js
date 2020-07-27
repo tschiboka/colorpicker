@@ -53,7 +53,12 @@ export default class ResultDisplay extends Component {
         return (
             <div className="ResultDisplay">
                 <header className="ResultDisplay__header">
-                    <span>Gradient Display</span>
+                    <span>
+                        Gradient Display
+                        {this.props.patternName && (
+                            <span>[ <span>{this.props.patternName}</span> ]</span>
+                        )}
+                    </span>
 
                     <div>
                         <div>

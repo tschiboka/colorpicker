@@ -6,17 +6,65 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: $secondaryBackgroundColor;
     .MainMenu__options {
-        width: 100%;
-        height: 30px;
+        width: 27%;
+        min-width: 100px;
+        margin-left: auto;
+        border-bottom: $tertiaryBorder;
+        border-left: $tertiaryBorder;
+        box-shadow: 5px 5px 5px black;
         ul {
             display: flex;
-            justify-content: flex-end;
+            flex-direction: column;
             list-style: none;
             li {
-                width: 33.3%;
-                text-align: center;
+                height: 30px;
+                width: 100%;
+                padding: 0 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border: none;
+                border-radius: 0;
+                &:not(:first-child) { border-top: $tertiaryBorder; }
+                &:hover { 
+                    font-size: $smlFont; 
+                    div {
+                        width: $lrgFont;
+                        height: $lrgFont;
+                        border: none;
+                        border-bottom: $secondaryBorder;
+                        border-right: $secondaryBorder;
+                        border-bottom-right-radius: 2px;
+                    }
+                    span {
+                        width: calc(100% - $smlFont);
+                        height: calc(100% - $smlFont);
+                        margin-right: calc($smlFont);
+                    }
+                }
+                div {
+                    width: $lrgFont;
+                    height: $lrgFont;
+                    background-position: center;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    border: none;
+                    border-top: $secondaryBorder;
+                    border-left: $secondaryBorder;
+                    border-top-left-radius: 2px;
+                }
+                span {
+                    width: calc(100% - $medFont);
+                    height: calc(100% - $medFont);
+                    width: 80%;
+                    margin-right: calc($medFont);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-left: $tertiaryBorder;
+                }
             }
         }
     }
