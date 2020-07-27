@@ -10,6 +10,7 @@ export default class MainMenu extends Component {
 
         this.state = {
             saveMsgOpen: false,
+            saveInputNameIsInvalid: false
         }
     }
 
@@ -27,7 +28,16 @@ export default class MainMenu extends Component {
 
 
 
-    handleSaveInputOnKeyDown(event) {
+    handleSaveInputOnChange(event) {
+        const name = event.target.value;
+        const saveInputNameIsInvalid = this.validateSaveNameInput(name);
+
+        this.setState({ ...this.state, saveInputNameIsInvalid });
+    }
+
+
+
+    handleSaveInputOnKeyPress(event) {
         const key = event.which || event.keyCode || event.key;
 
         if (key === 13 || key === "Enter") {
@@ -36,8 +46,27 @@ export default class MainMenu extends Component {
     }
 
 
-    submitPattern() {
 
+    validateSaveNameInput(input) {
+        if (!input.length || input.length > 30) return false;
+
+        if (!/^[0-9a-zA-Z_-]+$/g.test(input)) return false;
+
+        // MORE vALIDATION HERE LATER EG EGSISTING NAMES EXEPT FOR NAME THAT PATTERN ALREADY HAVE
+        return true;
+    }
+
+
+    submitPattern() {
+        if (this.state.saveInputNameIsInvalid) {
+            const name = document.getElementById("save-pattern-input").value;
+            console.log("SUBMIT ", name);
+            const pattern = {
+
+            }
+
+            console.log(Date.now())
+        }
     }
 
 
@@ -85,8 +114,10 @@ export default class MainMenu extends Component {
 
                         <input
                             id="save-pattern-input"
+                            className={this.state.saveInputNameIsInvalid ? "valid" : "invalid"}
                             type="text"
-                            onKeyDown={e => this.handleSaveInputOnKeyDown(e)}
+                            onChange={e => this.handleSaveInputOnChange(e)}
+                            onKeyPress={e => this.handleSaveInputOnKeyPress(e)}
                         />
                     </div>
 

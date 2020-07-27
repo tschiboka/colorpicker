@@ -79,6 +79,7 @@
         text-align: right;
         font-size: $smlFont;
     }
+    input.invalid { color: $warningTextColor; }
 }
 
 
