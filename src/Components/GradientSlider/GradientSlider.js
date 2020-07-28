@@ -236,7 +236,7 @@ export default class GradientSlider extends Component {
         const sliderDiv = document.getElementById(this.state.id).children[0];
         const width = Math.round(sliderDiv.getBoundingClientRect().width);
         const gradientCopy = this.props.gradient;
-        const updatedColorStops = gradientCopy.colors;
+        const updatedColorStops = [...gradientCopy.colors];
         let colorStop;
 
         if (this.props.gradient.repeatingUnit === "%" && Number(this.props.gradient.max) === 100) colorStop = this.getMousePosXInPercentage(event, width);

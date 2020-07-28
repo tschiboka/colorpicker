@@ -658,7 +658,7 @@ export default class Code extends Component {
 
 
     renderFallback() {
-        if (this.state.fallbackAllowed) return (
+        if (this.state.fallbackAllowed && this.props.gradients[0].colors[0]) return (
             <span> {this.state.commentsAllowed && <span className="token comment">&#47;&#42;&nbsp;Fallback for Old Browsers&nbsp;&#42;&#47;<br /></span>}
 
                 <span className="token property">background</span>
@@ -692,7 +692,7 @@ export default class Code extends Component {
 
 
     renderPatternBackgroundSize() {
-        if (this.props.gradients.length) return (
+        if (this.props.gradients.length && this.props.backgroundSize) return (
             <span>
                 <span className="token property">background-size</span>
 
@@ -776,13 +776,13 @@ export default class Code extends Component {
                     <div id="code">
                         {this.props.gradients.length
                             ? <span>
-                                {this.renderPatternBackgroundSize()}
-
                                 {this.renderFallback()}
 
                                 {this.renderCode()}
 
                                 {this.renderBackgroundColor()}
+
+                                {this.renderPatternBackgroundSize()}
                             </span>
                             : <span className="token comment">&#47;&#47; No gradients</span>
                         }

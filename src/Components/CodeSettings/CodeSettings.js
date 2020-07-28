@@ -41,8 +41,8 @@ export function CodeSettings(props) {
                             id="6"
                             name="background-size-x"
                             title="background size x"
-                            value={props.backgroundSize[0].value}
-                            unit={props.backgroundSize[0].unit}
+                            value={props.backgroundSize ? props.backgroundSize[0].value : ""}
+                            unit={props.backgroundSize ? props.backgroundSize[0].unit : "px"}
                             units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                             onChange={props.changeBackgroundSize}
                         />
@@ -53,12 +53,36 @@ export function CodeSettings(props) {
                             id="7"
                             name="background-size-y"
                             title="background size y"
-                            value={props.backgroundSize[1].value}
-                            unit={props.backgroundSize[1].unit}
+                            value={props.backgroundSize ? props.backgroundSize[1].value : ""}
+                            unit={props.backgroundSize ? props.backgroundSize[1].unit : "px"}
                             units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                             onChange={props.changeBackgroundSize}
                         />
                     </div>
+
+                    <ToggleButton
+                        on={(() => {
+                            let backgroundSizeSet;
+
+                            try {
+                                const hasValue0 = props.backgroundSize[0].value;
+                                const hasValue1 = props.backgroundSize[1].value;
+                                const hasUnit0 = props.backgroundSize[0].unit;
+                                const hasUnit1 = props.backgroundSize[1].unit;
+                                backgroundSizeSet = hasValue0 && hasValue1 && hasUnit0 && hasUnit1;
+                            } catch (e) { }
+
+                            console.log(backgroundSizeSet);
+
+                            return backgroundSizeSet;
+                        })()}
+                        handleOnClick={() => {
+                            props.changeBackgroundSize(undefined);
+                            document.getElementById("LengthInput_6").value = "";
+                            document.getElementById("LengthInput_7").value = "";
+                        }}
+                    />
+
                 </div>
             </div>
 

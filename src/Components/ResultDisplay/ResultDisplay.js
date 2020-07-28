@@ -29,10 +29,22 @@ export default class ResultDisplay extends Component {
         // to native css as possible therefore style-sheet will be set on every update in vanilla JS style
         const display = document.getElementById("ResultDisplay");
 
-        display.style.backgroundSize = this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " +
-            this.props.backgroundSize[1].value + this.props.backgroundSize[1].unit;
+        let backgroundSizeSet;
+
+        try {
+            const hasValue0 = this.props.backgroundSize[0] && this.props.backgroundSize[0].value;
+            const hasValue1 = this.props.backgroundSize[1] && this.props.backgroundSize[1].value;
+            const hasUnit0 = this.props.backgroundSize[0] && this.props.backgroundSize[0].unit;
+            const hasUnit1 = this.props.backgroundSize[1] && this.props.backgroundSize[1].unit;
+            backgroundSizeSet = hasValue0 && hasValue1 && hasUnit0 && hasUnit1;
+        } catch (e) { }
+
         display.style.background = gradientObjsToStr([...this.props.gradients].reverse());
         display.style.backgroundColor = this.props.backgroundColor || "";
+        if (backgroundSizeSet) {
+            display.style.backgroundSize = this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " +
+                this.props.backgroundSize[1].value + this.props.backgroundSize[1].unit;
+        }
     }
 
 

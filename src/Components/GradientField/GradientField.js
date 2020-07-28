@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
+import { getDefaultGradientObj, gradientObjsToStr } from "../../functions/gradient";
 import checkeredRect from "../../images/checkered_rect.png";
 import visibleIcon from "../../images/visible.png";
 import visibleActiveIcon from "../../images/visible_active.png";
 import hiddenIcon from "../../images/hidden.png";
 import hiddenActiveIcon from "../../images/hidden_active.png";
-import { gradientObjsToStr, getImmutableGradientCopy } from "../../functions/gradient";
 import GradientSlider from "../GradientSlider/GradientSlider";
 import GradientButtons from "../GradientButtons/GradientButtons";
-import { getDefaultGradientObj } from "../../functions/gradient";
+import { produce } from "immer";
 import "./GradientField.scss";
 
 
@@ -40,10 +40,23 @@ export default class GradientField extends Component {
         // to native css as possible therefore style-sheet will be set on every update in vanilla JS style
         const display = document.getElementById("Preview_" + this.props.index);
 
-        display.style.backgroundSize = this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " +
-            this.props.backgroundSize[1].value + this.props.backgroundSize[1].unit;
+        let backgroundSizeSet;
+
+        try {
+            const hasValue0 = this.props.backgroundSize[0] && this.props.backgroundSize[0].value;
+            const hasValue1 = this.props.backgroundSize[1] && this.props.backgroundSize[1].value;
+            const hasUnit0 = this.props.backgroundSize[0] && this.props.backgroundSize[0].unit;
+            const hasUnit1 = this.props.backgroundSize[1] && this.props.backgroundSize[1].unit;
+            backgroundSizeSet = hasValue0 && hasValue1 && hasUnit0 && hasUnit1;
+        } catch (e) { }
+
+
         display.style.background = gradientObjsToStr([this.props.gradients[this.props.index]].reverse());
         display.style.backgroundColor = this.props.backgroundColor || "";
+        if (backgroundSizeSet) {
+            display.style.backgroundSize = this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " +
+                this.props.backgroundSize[1].value + this.props.backgroundSize[1].unit;
+        }
     }
 
 
@@ -81,10 +94,11 @@ export default class GradientField extends Component {
         const insertIndex = where === "above" ? this.props.index : this.props.index + 1;
         const newGradient = this.state.copyWhenInsertOn ? { ...this.props.gradient } : getDefaultGradientObj();
         const copyName = this.state.copyWhenInsertOn ? this.getCopyName(this.props.gradient.name) : "";
+        const updatedGradient = produce(newGradient, draft => {
+            draft.name = copyName;
+        });
 
-        newGradient.name = copyName;
-
-        this.props.insertGradient(newGradient, insertIndex);
+        this.props.insertGradient(updatedGradient, insertIndex);
         this.setState({ ...this.state, copyWhenInsertOn: false });
     }
 
@@ -147,8 +161,9 @@ export default class GradientField extends Component {
 
 
     nameGradients() {
-        const updatedGradient = getImmutableGradientCopy(this.props.gradient);
-        updatedGradient.name = `Untitled ${this.getUntitledNumber()}`;
+        const updatedGradient = produce(this.props.gradient, draft => {
+            draft.name = `Untitled ${this.getUntitledNumber()}`;
+        });
         this.props.updateGradient(updatedGradient, this.props.index);
     }
 

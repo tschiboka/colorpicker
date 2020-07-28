@@ -203,6 +203,7 @@ export default class MainMenu extends Component {
                 else {
                     storagePatternsArray.push(pattern);
                     this.props.renamePattern(name);
+                    console.log(pattern);
                 }
 
                 localStorage.setItem("patterns", JSON.stringify(storagePatternsArray));

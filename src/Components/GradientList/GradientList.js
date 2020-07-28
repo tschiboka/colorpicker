@@ -7,6 +7,7 @@ import addIcon from "../../images/add.png";
 import addActiveIcon from "../../images/add_active.png";
 import helpIcon from "../../images/help.png";
 import helpActiveIcon from "../../images/help_active.png";
+import { produce } from "immer";
 import "./GradientList.scss";
 
 
@@ -108,9 +109,9 @@ export default class GradientList extends Component {
             const mouseCurrY = event.clientY || event.pageY || event.touches[0].clientY;
 
             const newAngle = calculateAngle(mouseStartX, mouseStartY, mouseCurrX, mouseCurrY);
-            const updatedGradient = this.props.gradients[this.state.activeAngleMeter];
-
-            updatedGradient.angle = newAngle;
+            const updatedGradient = produce(this.props.gradients[this.state.activeAngleMeter], draft => {
+                draft.angle = newAngle;
+            });
 
             this.props.updateGradient(updatedGradient, this.state.activeAngleMeter);
 

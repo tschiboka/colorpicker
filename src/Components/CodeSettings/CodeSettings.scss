@@ -60,13 +60,17 @@
     }
     .CodeSettings__background-size {
         & > div {
-            min-width: 165px;
+            min-width: 250px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             & > div {
                 width: 80px;
                 height: 100%;
+                &:last-child {
+                    height: 22px;
+                    width: 65px;
+                }
             }
         }
     }

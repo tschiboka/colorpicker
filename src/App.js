@@ -45,10 +45,7 @@ export default class App extends Component {
       patternName: undefined,
       backgroundSettingsOn: false,
       backgroundSettings_GradientIndex: undefined,
-      backgroundSize: [
-        { value: "100", unit: "%" },
-        { value: "100", unit: "%" }
-      ],
+      backgroundSize: undefined,
       backgroundColor: undefined,
       fullscreen: false,
     };
@@ -64,10 +61,23 @@ export default class App extends Component {
       // to native css as possible therefore style-sheet will be set on every update in vanilla JS style
       const display = document.getElementById("Fullscreen_Display");
 
-      display.style.backgroundSize = this.state.backgroundSize[0].value + this.state.backgroundSize[0].unit + " " +
-        this.state.backgroundSize[1].value + this.state.backgroundSize[1].unit;
+      let backgroundSizeSet;
+
+      try {
+        const hasValue0 = this.state.backgroundSize[0] && this.state.backgroundSize[0].value;
+        const hasValue1 = this.state.backgroundSize[1] && this.state.backgroundSize[1].value;
+        const hasUnit0 = this.state.backgroundSize[0] && this.state.backgroundSize[0].unit;
+        const hasUnit1 = this.state.backgroundSize[1] && this.state.backgroundSize[1].unit;
+        backgroundSizeSet = hasValue0 && hasValue1 && hasUnit0 && hasUnit1;
+      } catch (e) { }
+
+
       display.style.background = gradientObjsToStr([...this.state.gradients].reverse());
       display.style.backgroundColor = this.state.backgroundColor || "";
+      if (backgroundSizeSet) {
+        display.style.backgroundSize = this.state.backgroundSize[0].value + this.state.backgroundSize[0].unit + " " +
+          this.state.backgroundSize[1].value + this.state.backgroundSize[1].unit;
+      }
     }
   }
 
@@ -115,10 +125,7 @@ export default class App extends Component {
       patternName: undefined,
       backgroundSettingsOn: false,
       backgroundSettings_GradientIndex: undefined,
-      backgroundSize: [
-        { value: "100", unit: "%" },
-        { value: "100", unit: "%" }
-      ],
+      backgroundSize: undefined,
       backgroundColor: undefined,
       fullscreen: false,
     };
@@ -215,7 +222,7 @@ export default class App extends Component {
 
 
 
-  renamePattern(patternName) { this.setState({ ...this.state, patternName }, () => console.log(patternName)); }
+  renamePattern(patternName) { this.setState({ ...this.state, patternName }); }
 
 
 
@@ -266,11 +273,14 @@ export default class App extends Component {
 
 
   changeBackgroundSize(name, value, unit) {
-    const index = name === "background-size-x" ? 0 : 1;
-    const backgroundSize = [...this.state.backgroundSize];
+    if (name) {
+      const index = name === "background-size-x" ? 0 : 1;
+      const defaultBgSize = [{ value: undefined, unit: undefined }, { value: undefined, unit: undefined }];
+      const backgroundSize = [...(this.state.backgroundSize || defaultBgSize)];
 
-    backgroundSize[index] = { value, unit };
-    this.setState({ ...this.state, backgroundSize });
+      backgroundSize[index] = { value, unit };
+      this.setState({ ...this.state, backgroundSize });
+    } else this.setState({ ...this.state, backgroundSize: undefined });
   }
 
 
