@@ -105,7 +105,7 @@ export default class App extends Component {
 
   setDefaultState() {
     const newState = {
-      checkered: true,
+      checkered: this.state.checkered,
       gradients: [{ ...getDefaultGradientObj() }],
       canResize: true,
       appWidth: this.getWindowWidth(),
@@ -122,6 +122,28 @@ export default class App extends Component {
       backgroundColor: undefined,
       fullscreen: false,
     };
+
+    this.setState(newState);
+  }
+
+
+
+  changeStateToPattern(newPattern) {
+    const newState = {
+      checkered: this.state.checkered,
+      gradients: newPattern.gradients,
+      canResize: true,
+      appWidth: this.getWindowWidth(),
+      colorPicker: undefined,
+      radialSettingsOn: false,
+      radialSettings_GradientIndex: undefined,
+      patternName: undefined,
+      backgroundSettingsOn: false,
+      backgroundSettings_GradientIndex: undefined,
+      backgroundSize: newPattern.backgroundSize,
+      backgroundColor: newPattern.backgroundColor,
+      fullscreen: false,
+    }
 
     this.setState(newState);
   }
@@ -273,6 +295,7 @@ export default class App extends Component {
           checkered={this.state.checkered}
           renamePattern={this.renamePattern.bind(this)}
           setDefaultState={this.setDefaultState.bind(this)}
+          changeStateToPattern={this.changeStateToPattern.bind(this)}
         />
 
         <GradientList

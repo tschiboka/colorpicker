@@ -17,7 +17,9 @@ function Image(props) {
                 <span>{props.pattern.patternName}</span>
             </span>
 
-            <div id={`image_${props.index}`}></div>
+            <div id={`image_${props.index}`}>
+                <div onClick={() => props.callBackOnClick(props.pattern)}></div>
+            </div>
         </div>
     );
 }
@@ -49,7 +51,7 @@ export default class Gallery extends Component {
 
 
     getPatterns(show) {
-        if (show === "storage") return JSON.parse(localStorage.patterns);
+        if (show === "storage") return JSON.parse(localStorage.patterns).reverse();
         else return predefinedPatterns;
     }
 
@@ -68,6 +70,8 @@ export default class Gallery extends Component {
                         key={`GalleryImage_${index}`}
                         index={index}
                         pattern={pattern}
+                        show={this.props.show}
+                        callBackOnClick={this.props.callBackOnClick}
                     />
                 ))}
             </div>

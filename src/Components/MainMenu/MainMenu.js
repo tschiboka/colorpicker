@@ -24,6 +24,7 @@ export default class MainMenu extends Component {
             newFormOpen: false,
             saveFormOpen: false,
             openFormOpen: false,
+            openPatternDialog: false,
             showPredefinedOrStorage: "predefined",
             saveInputNameIsInvalid: this.props.patternName ? true : false
         }
@@ -280,9 +281,75 @@ export default class MainMenu extends Component {
 
                 <Gallery
                     show={this.state.showPredefinedOrStorage}
+                    callBackOnClick={this.setOpenPatternDialog.bind(this)}
                 />
             </div>
         );
+    }
+
+
+
+    setOpenPatternDialog(pattern) {
+        this.setState({ ...this.state, openPatternDialog: true, openFormOpen: false, patternToOpen: pattern });
+    }
+
+
+
+    renderOpenPatternDialog() {
+        return (
+            <div>
+                {this.checkIfChangesHaveBeenMadeInPattern()
+                    ? (
+                        <div className="MainMenu__new-form">
+                            <h2>Open</h2>
+
+                            <p>
+                                You have unsaved changes in your work.<br />
+                                Opening a new pattern will close the<br />
+                                current work in progress.<br />
+                                Would you like to save it before closing?
+                            </p>
+
+                            <div>
+                                <button onClick={() => { this.setState({ ...this.state, saveFormOpen: true }); }}>Save</button>
+
+                                <button onClick={() => this.openNewPattern()}>Don&apos;t save</button>
+
+                                <button onClick={() => this.setState({ ...this.state, newFormOpen: false })}>Cancel</button>
+                            </div>
+                        </div>
+                    )
+                    : (
+                        <div className="MainMenu__new-form">
+                            <h2>New</h2>
+
+                            <p>
+                                Your work has no unsaved changes.<br />
+                                Opening a new pattern will close the<br />
+                                current work in progress.<br />
+                            </p>
+
+                            <div>
+                                <button onClick={() => this.openNewPattern()}>Ok</button>
+
+                                <button onClick={() => this.setState({ ...this.state, newFormOpen: false })}>Cancel</button>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+        )
+    }
+
+
+
+    openNewPattern() {
+        const pattern = this.state.patternToOpen;
+        this.setState({ ...this.state, openPatternDialog: false, patternToOpen: undefined }, () => {
+            this.props.closeMenu();
+
+            this.props.changeStateToPattern(pattern);
+        });
     }
 
 
@@ -345,6 +412,8 @@ export default class MainMenu extends Component {
                 {this.state.saveFormOpen && this.renderSaveForm()}
 
                 {this.state.openFormOpen && this.renderOpenForm()}
+
+                {this.state.openPatternDialog && this.renderOpenPatternDialog()}
             </div>
         )
     }

@@ -19,7 +19,7 @@
             width: 100%;
             height: 20px;
             text-align: center;
-            border-bottom: $secondaryBorder;;
+            border-bottom: $secondaryBorder;
             span {
                 display: flex;
                 justify-content: center;
@@ -46,6 +46,16 @@
         div {
             width: 100%;
             height: 170px;
+            cursor: pointer;
+            div {
+                width: 100%;
+                height: 100%;
+                &:hover {
+                    border-radius: 3px;
+                    border: $activeButtonTextColor solid 3px;
+                    background-color: rgba(0, 0, 0, 0.5);
+                }
+            }
         }
     }
 }

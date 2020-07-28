@@ -14,7 +14,7 @@
 export default [
     // STRIPES
     {
-        patternName: "stripes123456789123456789123456789aaaaaaaaa",
+        patternName: "textile striped",
         backgroundSize: [
             { value: 100, unit: "%" },
             { value: 100, unit: "%" }
