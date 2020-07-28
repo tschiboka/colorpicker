@@ -27,6 +27,8 @@ export default class GradientField extends Component {
 
     componentDidMount() {
         if (!this.props.gradient.name) { this.nameGradients() }
+
+        this.setPreview();
     }
 
 
@@ -34,6 +36,11 @@ export default class GradientField extends Component {
     componentDidUpdate() {
         if (!this.props.gradient.name) { this.nameGradients() }
 
+        this.setPreview();
+    }
+
+
+    setPreview() {
         // NOTE: Style needs to be set here!
         // React can not handle overlapping style properties like background shorthand / background color.
         // Its behaviour is unpredictable and unsupported. This part of the app needs to behave as closely

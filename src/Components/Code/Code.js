@@ -692,7 +692,17 @@ export default class Code extends Component {
 
 
     renderPatternBackgroundSize() {
-        if (this.props.gradients.length && this.props.backgroundSize) return (
+        let backgroundSizeSet;
+
+        try {
+            const hasValue0 = this.props.backgroundSize[0].value;
+            const hasValue1 = this.props.backgroundSize[1].value;
+            const hasUnit0 = this.props.backgroundSize[0].unit;
+            const hasUnit1 = this.props.backgroundSize[1].unit;
+            backgroundSizeSet = hasValue0 && hasValue1 && hasUnit0 && hasUnit1;
+        } catch (e) { }
+
+        if (this.props.gradients.length && backgroundSizeSet) return (
             <span>
                 <span className="token property">background-size</span>
 

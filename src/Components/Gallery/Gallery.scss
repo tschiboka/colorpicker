@@ -10,6 +10,10 @@
     border-top: $tertiaryBorder;
     border-bottom: $tertiaryBorder;
     overflow-x: auto;
+    & > span {
+        text-align: center;
+        width: 100%;
+    }
     .Image {
         min-width: 200px;
         width: 150px;

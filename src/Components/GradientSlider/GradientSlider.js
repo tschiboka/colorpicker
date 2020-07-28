@@ -47,8 +47,10 @@ export default class GradientSlider extends Component {
 
         // Drag colors stop
         if (colorStopPressed) {
-            gradientCopy.colors[this.state.activeColorStop].stop = this.getNewStopPosition({ ...event });
-            this.props.updateGradient(gradientCopy, this.props.index);
+            const updatedGradientCopy = produce(gradientCopy, draft => {
+                draft.colors[this.state.activeColorStop].stop = this.getNewStopPosition({ ...event });
+            });
+            this.props.updateGradient(updatedGradientCopy, this.props.index);
         }
 
         // Drag color hint
@@ -194,9 +196,11 @@ export default class GradientSlider extends Component {
         gradientCopy.colorHints[index] = Number(value);
 
         const updatedColorHints = [...gradientCopy.colorHints].sort((a, b) => a - b);
-        gradientCopy.colorHints = updatedColorHints;
+        const updatedGradientCopy = produce(gradientCopy, draft => {
+            draft.colorHints = updatedColorHints;
+        });
 
-        this.props.updateGradient(gradientCopy, this.props.index);
+        this.props.updateGradient(updatedGradientCopy, this.props.index);
         const timer = setTimeout(() => { this.resetStateTo(); clearTimeout(timer); }, 500);
     }
 

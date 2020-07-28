@@ -17,8 +17,10 @@ function Image(props) {
                 <span>{props.pattern.patternName}</span>
             </span>
 
-            <div id={`image_${props.index}`}>
-                <div onClick={() => props.callBackOnClick(props.pattern)}></div>
+            <div style={{ backgroundColor: "white" }}>
+                <div id={`image_${props.index}`}>
+                    <div onClick={() => props.callBackOnClick(props.pattern)}></div>
+                </div>
             </div>
         </div>
     );
@@ -38,13 +40,23 @@ export default class Gallery extends Component {
         patterns.forEach((pattern, i) => {
             const imageDiv = document.getElementById("image_" + i);
 
-            imageDiv.style.backgroundSize =
-                pattern.backgroundSize[0].value +
-                pattern.backgroundSize[0].unit + " " +
-                pattern.backgroundSize[1].value +
-                pattern.backgroundSize[1].unit;
+            let backgroundSizeSet;
+
+            try {
+                const hasValue0 = pattern.backgroundSize[0] && pattern.backgroundSize[0].value;
+                const hasValue1 = pattern.backgroundSize[1] && pattern.backgroundSize[1].value;
+                const hasUnit0 = pattern.backgroundSize[0] && pattern.backgroundSize[0].unit;
+                const hasUnit1 = pattern.backgroundSize[1] && pattern.backgroundSize[1].unit;
+                backgroundSizeSet = hasValue0 && hasValue1 && hasUnit0 && hasUnit1;
+            } catch (e) { }
+
             imageDiv.style.background = gradientObjsToStr([...pattern.gradients].reverse());
             imageDiv.style.backgroundColor = pattern.backgroundColor || "";
+            if (backgroundSizeSet) {
+                imageDiv.style.backgroundSize = pattern.backgroundSize[0].value + pattern.backgroundSize[0].unit + " " +
+                    pattern.backgroundSize[1].value + pattern.backgroundSize[1].unit;
+            }
+
         });
     }
 
@@ -57,6 +69,22 @@ export default class Gallery extends Component {
 
 
 
+    renderImages(patterns) {
+        return (
+            patterns.map((pattern, index) => (
+                <Image
+                    key={`GalleryImage_${index}`}
+                    index={index}
+                    pattern={pattern}
+                    show={this.props.show}
+                    callBackOnClick={this.props.callBackOnClick}
+                />
+            ))
+        );
+    }
+
+
+
     render() {
         const patterns = this.getPatterns(this.props.show);
 
@@ -65,15 +93,9 @@ export default class Gallery extends Component {
                 id="gallery"
                 className="Gallery"
             >
-                {patterns.map((pattern, index) => (
-                    <Image
-                        key={`GalleryImage_${index}`}
-                        index={index}
-                        pattern={pattern}
-                        show={this.props.show}
-                        callBackOnClick={this.props.callBackOnClick}
-                    />
-                ))}
+                {patterns.length ? this.renderImages(patterns) : (
+                    <span>No items found in the browsers Local Storage!</span>
+                )}
             </div>
         );
     }

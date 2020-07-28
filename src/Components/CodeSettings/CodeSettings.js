@@ -72,8 +72,6 @@ export function CodeSettings(props) {
                                 backgroundSizeSet = hasValue0 && hasValue1 && hasUnit0 && hasUnit1;
                             } catch (e) { }
 
-                            console.log(backgroundSizeSet);
-
                             return backgroundSizeSet;
                         })()}
                         handleOnClick={() => {

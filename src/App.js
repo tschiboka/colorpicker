@@ -144,7 +144,7 @@ export default class App extends Component {
       colorPicker: undefined,
       radialSettingsOn: false,
       radialSettings_GradientIndex: undefined,
-      patternName: undefined,
+      patternName: newPattern.patternName,
       backgroundSettingsOn: false,
       backgroundSettings_GradientIndex: undefined,
       backgroundSize: newPattern.backgroundSize,

@@ -250,6 +250,7 @@ export default class MainMenu extends Component {
                         onChange={e => this.handleSaveInputOnChange(e)}
                         onKeyPress={e => this.handleSaveInputOnKeyPress(e)}
                         defaultValue={this.props.patternName}
+                        autoFocus={true}
                     />
                 </div>
 
@@ -382,6 +383,7 @@ export default class MainMenu extends Component {
                                     type="text"
                                     onChange={e => this.handleDeleteInputOnChange(e)}
                                     onKeyPress={e => this.handleDeleteInputOnKeyPress(e)}
+                                    autoFocus={true}
                                 />
                             </div>
 
