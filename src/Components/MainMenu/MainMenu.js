@@ -25,6 +25,8 @@ export default class MainMenu extends Component {
             saveFormOpen: false,
             openFormOpen: false,
             openPatternDialog: false,
+            deleteFormOpen: false,
+            deletePatternDialog: false,
             showPredefinedOrStorage: "predefined",
             saveInputNameIsInvalid: this.props.patternName ? true : false
         }
@@ -264,7 +266,7 @@ export default class MainMenu extends Component {
     // OPTION OPEN FUNCTIONS
     renderOpenForm() {
         return (
-            <div className="MainMenu__open-form">
+            <div className="MainMenu__open-dialog">
                 <h2>Open</h2>
 
                 <ul className="MainMenu__storage-predefined-toggle">
@@ -279,10 +281,12 @@ export default class MainMenu extends Component {
                     </li>
                 </ul>
 
-                <Gallery
-                    show={this.state.showPredefinedOrStorage}
-                    callBackOnClick={this.setOpenPatternDialog.bind(this)}
-                />
+                <div>
+                    <Gallery
+                        show={this.state.showPredefinedOrStorage}
+                        callBackOnClick={this.setOpenPatternDialog.bind(this)}
+                    />
+                </div>
             </div>
         );
     }
@@ -300,7 +304,7 @@ export default class MainMenu extends Component {
             <div>
                 {this.checkIfChangesHaveBeenMadeInPattern()
                     ? (
-                        <div className="MainMenu__new-form">
+                        <div className="MainMenu__open-form">
                             <h2>Open</h2>
 
                             <p>
@@ -315,13 +319,13 @@ export default class MainMenu extends Component {
 
                                 <button onClick={() => this.openNewPattern()}>Don&apos;t save</button>
 
-                                <button onClick={() => this.setState({ ...this.state, newFormOpen: false })}>Cancel</button>
+                                <button onClick={() => this.setState({ ...this.state, openPatternDialog: undefined, openFormOpen: undefined })}>Cancel</button>
                             </div>
                         </div>
                     )
                     : (
-                        <div className="MainMenu__new-form">
-                            <h2>New</h2>
+                        <div className="MainMenu__open-form">
+                            <h2>Open</h2>
 
                             <p>
                                 Your work has no unsaved changes.<br />
@@ -332,7 +336,7 @@ export default class MainMenu extends Component {
                             <div>
                                 <button onClick={() => this.openNewPattern()}>Ok</button>
 
-                                <button onClick={() => this.setState({ ...this.state, newFormOpen: false })}>Cancel</button>
+                                <button onClick={() => this.setState({ ...this.state, openDialogOpen: undefined, openFormOpen: undefined })}>Cancel</button>
                             </div>
                         </div>
                     )
@@ -350,6 +354,108 @@ export default class MainMenu extends Component {
 
             this.props.changeStateToPattern(pattern);
         });
+    }
+
+
+
+    // DELETE OPTION FUNCTIONS
+    renderDeleteForm() {
+        return (
+            <div className="MainMenu__delete-form">
+                <h2>Delete</h2>
+
+                <div>
+                    <Gallery
+                        show={"storage"}
+                        callBackOnClick={this.setDeleteDialog.bind(this)}
+                    />
+
+                    {this.state.deletePatternDialog && (
+                        <div className="delete-dialog">
+                            <p>Confirm the name of the pattern to be deleted!</p>
+
+                            <div>
+                                <span>Type its name [ <span>{this.state.patternToDelete}</span> ]:&nbsp;&nbsp;&nbsp;</span>
+
+                                <input
+                                    type="text"
+                                    onChange={e => this.handleDeleteInputOnChange(e)}
+                                    onKeyPress={e => this.handleDeleteInputOnKeyPress(e)}
+                                />
+                            </div>
+
+                            <div>
+                                <button onClick={() => this.deletePattern()}>Delete</button>
+
+                                <button onClick={() => this.setState({ ...this.state, patternToDelete: undefined, deletePatternDialog: false })}>Cancel</button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+
+
+    handleDeleteInputOnChange(event) {
+        this.setState({ ...this.state, patternNameConfirmed: false });
+
+        const value = event.target.value;
+        const inputLength = value.length;
+        const subString = this.state.patternToDelete.substr(0, inputLength);
+
+        if (subString === value) {
+            event.target.classList.remove(...event.target.classList);
+            event.target.classList.add("partially-correct");
+        }
+        else {
+            event.target.classList.remove(...event.target.classList);
+            event.target.classList.add("incorrect");
+        }
+
+        if (value === this.state.patternToDelete) {
+            event.target.classList.remove(...event.target.classList);
+            event.target.classList.add("correct");
+
+            this.setState({ ...this.state, patternNameConfirmed: true });
+        }
+    }
+
+
+
+    handleDeleteInputOnKeyPress(event) {
+        if (this.state.patternNameConfirmed) {
+            const key = event.which || event.keyCode || event.key;
+
+            if (key === 13 || key === "Enter") {
+                this.deletePattern();
+            }
+        }
+    }
+
+
+
+    setDeleteDialog(pattern) {
+        const patternToDelete = pattern.patternName;
+        this.setState({ ...this.state, patternToDelete, deletePatternDialog: true, patternNameConfirmed: false });
+    }
+
+
+
+    deletePattern() {
+        if (this.state.patternNameConfirmed) {
+            const storagePatterns = JSON.parse(localStorage.patterns);
+            const deleteIndex = storagePatterns.findIndex(pattern => pattern.patternName === this.state.patternToDelete);
+
+            if (storagePatterns[deleteIndex]) {
+                storagePatterns.splice(deleteIndex, 1);
+
+                localStorage.setItem("patterns", JSON.stringify(storagePatterns));
+
+                this.setState({ ...this.state, patternNameConfirmed: false, patternToDelete: undefined, deletePatternDialog: undefined });
+            }
+        }
     }
 
 
@@ -389,6 +495,7 @@ export default class MainMenu extends Component {
                         </li>
 
                         <li
+                            onClick={() => this.setState({ ...this.state, deleteFormOpen: true })}
                             onMouseOver={() => this.setState({ ...this.state, menuListHovered: "delete" })}
                         >
                             <div style={{ backgroundImage: `url(${this.state.menuListHovered === "delete" ? deleteActiveIcon : deleteIcon})` }}></div>
@@ -407,13 +514,15 @@ export default class MainMenu extends Component {
                     </ul>
                 </div>
 
+                {this.state.openFormOpen && this.renderOpenForm()}
+
+                {this.state.openPatternDialog && this.renderOpenPatternDialog()}
+
                 {this.state.newFormOpen && this.renderNewForm()}
 
                 {this.state.saveFormOpen && this.renderSaveForm()}
 
-                {this.state.openFormOpen && this.renderOpenForm()}
-
-                {this.state.openPatternDialog && this.renderOpenPatternDialog()}
+                {this.state.deleteFormOpen && this.renderDeleteForm()}
             </div>
         )
     }
