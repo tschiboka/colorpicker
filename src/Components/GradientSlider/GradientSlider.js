@@ -179,8 +179,9 @@ export default class GradientSlider extends Component {
 
 
     setNewColorStopValue(value, index) {
-        const gradientCopy = this.props.gradient;
-        gradientCopy.colors[index].stop = Number(value);
+        const gradientCopy = produce(this.props.gradient, draft => {
+            draft.colors[index].stop = Number(value);
+        });
 
         const gradientSorted = sortGradientByColorStopsPercentage(gradientCopy);
         const filteredGradient = filterIdenticalColorPercentages(gradientSorted, index);

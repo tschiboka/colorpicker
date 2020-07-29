@@ -1,50 +1,92 @@
 export default {
-    "patternName": "carbon",
+    "patternName": "japanese cubes",
     "backgroundSize": [
         {
-            "value": 20,
+            "value": 80,
             "unit": "px"
         },
         {
-            "value": 20,
+            "value": 140,
             "unit": "px"
         }
     ],
-    "backgroundColor": "rgb(19, 19, 19)",
+    "backgroundColor": "rgba(85, 85, 102, 0)",
     "gradients": [
         {
-            "name": "horizontal",
+            "name": "BL - TR corners",
             "visible": true,
             "type": "linear",
-            "angle": 0,
+            "angle": 60,
             "repeating": false,
             "repeatingUnit": "%",
             "max": 100,
             "colorHints": [
                 25,
-                50,
                 75
             ],
             "colors": [
                 {
-                    "color": "#1d1d1d",
+                    "color": "#9999aa",
                     "stop": 0
                 },
                 {
-                    "color": "#1a1a1a",
+                    "color": "rgba(255, 255, 255, 0)",
                     "stop": 25
                 },
                 {
-                    "color": "rgba(255, 255, 255, 0)",
-                    "stop": 50
-                },
-                {
-                    "color": "#242424",
+                    "color": "#9999aa",
                     "stop": 75
+                }
+            ],
+            "radial": {
+                "shape": "ellipse",
+                "size": "50% 50%",
+                "position": [
+                    "50%",
+                    "50%"
+                ]
+            },
+            "background": {
+                "position": [
+                    {
+                        "value": 40,
+                        "unit": "px"
+                    },
+                    {
+                        "value": 70,
+                        "unit": "px"
+                    }
+                ],
+                "size": {
+                    "x": {},
+                    "y": {}
+                }
+            }
+        },
+        {
+            "name": "BL - TR corners copy",
+            "visible": true,
+            "type": "linear",
+            "angle": 60,
+            "repeating": false,
+            "repeatingUnit": "%",
+            "max": 100,
+            "colorHints": [
+                25,
+                75
+            ],
+            "colors": [
+                {
+                    "color": "#9999aa",
+                    "stop": 0
                 },
                 {
-                    "color": "#242424",
-                    "stop": 100
+                    "color": "rgba(255, 255, 255, 0)",
+                    "stop": 25
+                },
+                {
+                    "color": "#9999aa",
+                    "stop": 75
                 }
             ],
             "radial": {
@@ -67,22 +109,29 @@ export default {
             }
         },
         {
-            "name": "top-right corner 2",
+            "name": "BR corner",
             "visible": true,
             "type": "linear",
-            "angle": 207,
+            "angle": 150,
             "repeating": false,
-            "repeatingUnit": "px",
-            "max": 20,
-            "colorHints": [],
+            "repeatingUnit": "%",
+            "max": 100,
+            "colorHints": [
+                12,
+                87
+            ],
             "colors": [
                 {
-                    "color": "#222222",
+                    "color": "#444455",
                     "stop": 0
                 },
                 {
                     "color": "rgba(255, 255, 255, 0)",
-                    "stop": 10
+                    "stop": 12
+                },
+                {
+                    "color": "#444455",
+                    "stop": 87
                 }
             ],
             "radial": {
@@ -96,11 +145,11 @@ export default {
             "background": {
                 "position": [
                     {
-                        "value": 10,
+                        "value": 40,
                         "unit": "px"
                     },
                     {
-                        "value": 5,
+                        "value": 70,
                         "unit": "px"
                     }
                 ],
@@ -111,22 +160,80 @@ export default {
             }
         },
         {
-            "name": "bottom-left corner 2",
+            "name": "TL corner",
             "visible": true,
             "type": "linear",
-            "angle": 27,
+            "angle": 30,
             "repeating": false,
-            "repeatingUnit": "px",
-            "max": 20,
-            "colorHints": [],
+            "repeatingUnit": "%",
+            "max": 100,
+            "colorHints": [
+                12,
+                87
+            ],
             "colors": [
                 {
-                    "color": "#222222",
+                    "color": "#444455",
                     "stop": 0
                 },
                 {
                     "color": "rgba(255, 255, 255, 0)",
-                    "stop": 10
+                    "stop": 12.5
+                },
+                {
+                    "color": "#444455",
+                    "stop": 87.5
+                }
+            ],
+            "radial": {
+                "shape": "ellipse",
+                "size": "50% 50%",
+                "position": [
+                    "50%",
+                    "50%"
+                ]
+            },
+            "background": {
+                "position": [
+                    {
+                        "value": 40,
+                        "unit": "px"
+                    },
+                    {
+                        "value": 70,
+                        "unit": "px"
+                    }
+                ],
+                "size": {
+                    "x": {},
+                    "y": {}
+                }
+            }
+        },
+        {
+            "name": "TL corner copy",
+            "visible": true,
+            "type": "linear",
+            "angle": 150,
+            "repeating": false,
+            "repeatingUnit": "%",
+            "max": 100,
+            "colorHints": [
+                12,
+                87
+            ],
+            "colors": [
+                {
+                    "color": "#444455",
+                    "stop": 0
+                },
+                {
+                    "color": "rgba(255, 255, 255, 0)",
+                    "stop": 12.5
+                },
+                {
+                    "color": "#444455",
+                    "stop": 87.5
                 }
             ],
             "radial": {
@@ -140,10 +247,7 @@ export default {
             "background": {
                 "position": [
                     {},
-                    {
-                        "value": 10,
-                        "unit": "px"
-                    }
+                    {}
                 ],
                 "size": {
                     "x": {},
@@ -152,22 +256,29 @@ export default {
             }
         },
         {
-            "name": "top-right corner",
+            "name": "TL corner copy 2",
             "visible": true,
             "type": "linear",
-            "angle": 207,
+            "angle": 30,
             "repeating": false,
-            "repeatingUnit": "px",
-            "max": 20,
-            "colorHints": [],
+            "repeatingUnit": "%",
+            "max": 100,
+            "colorHints": [
+                12,
+                87
+            ],
             "colors": [
                 {
-                    "color": "#151515",
+                    "color": "#444455",
                     "stop": 0
                 },
                 {
                     "color": "rgba(255, 255, 255, 0)",
-                    "stop": 10
+                    "stop": 12.5
+                },
+                {
+                    "color": "#444455",
+                    "stop": 87.5
                 }
             ],
             "radial": {
@@ -180,56 +291,8 @@ export default {
             },
             "background": {
                 "position": [
-                    {
-                        "value": 10,
-                        "unit": "px"
-                    },
-                    {
-                        "unit": "px"
-                    }
-                ],
-                "size": {
-                    "x": {},
-                    "y": {}
-                }
-            }
-        },
-        {
-            "name": "bottom-left corner",
-            "visible": true,
-            "type": "linear",
-            "angle": 27,
-            "repeating": false,
-            "repeatingUnit": "px",
-            "max": 20,
-            "colorHints": [],
-            "colors": [
-                {
-                    "color": "#151515",
-                    "stop": 0
-                },
-                {
-                    "color": "rgba(255, 255, 255, 0)",
-                    "stop": 10
-                }
-            ],
-            "radial": {
-                "shape": "ellipse",
-                "size": "50% 50%",
-                "position": [
-                    "50%",
-                    "50%"
-                ]
-            },
-            "background": {
-                "position": [
-                    {
-                        "unit": "px"
-                    },
-                    {
-                        "value": 5,
-                        "unit": "px"
-                    }
+                    {},
+                    {}
                 ],
                 "size": {
                     "x": {},

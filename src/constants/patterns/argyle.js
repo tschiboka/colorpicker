@@ -1,49 +1,44 @@
 export default {
-    "patternName": "carbon",
+    "patternName": "argyle",
     "backgroundSize": [
         {
-            "value": 20,
+            "value": 70,
             "unit": "px"
         },
         {
-            "value": 20,
+            "value": 120,
             "unit": "px"
         }
     ],
-    "backgroundColor": "rgb(19, 19, 19)",
+    "backgroundColor": "rgb(111, 94, 109)",
     "gradients": [
         {
-            "name": "horizontal",
+            "name": "shade top left",
             "visible": true,
             "type": "linear",
-            "angle": 0,
+            "angle": 120,
             "repeating": false,
             "repeatingUnit": "%",
             "max": 100,
             "colorHints": [
                 25,
-                50,
                 75
             ],
             "colors": [
                 {
-                    "color": "#1d1d1d",
+                    "color": "rgba(0, 0, 0, 0.1)",
                     "stop": 0
                 },
                 {
-                    "color": "#1a1a1a",
+                    "color": "rgba(255, 255, 255, 0.5)",
                     "stop": 25
                 },
                 {
                     "color": "rgba(255, 255, 255, 0)",
-                    "stop": 50
-                },
-                {
-                    "color": "#242424",
                     "stop": 75
                 },
                 {
-                    "color": "#242424",
+                    "color": "rgba(0, 0, 0, 0.1)",
                     "stop": 100
                 }
             ],
@@ -67,66 +62,33 @@ export default {
             }
         },
         {
-            "name": "top-right corner 2",
+            "name": "shade top right",
             "visible": true,
             "type": "linear",
-            "angle": 207,
+            "angle": 60,
             "repeating": false,
-            "repeatingUnit": "px",
-            "max": 20,
-            "colorHints": [],
-            "colors": [
-                {
-                    "color": "#222222",
-                    "stop": 0
-                },
-                {
-                    "color": "rgba(255, 255, 255, 0)",
-                    "stop": 10
-                }
+            "repeatingUnit": "%",
+            "max": 100,
+            "colorHints": [
+                25,
+                75
             ],
-            "radial": {
-                "shape": "ellipse",
-                "size": "50% 50%",
-                "position": [
-                    "50%",
-                    "50%"
-                ]
-            },
-            "background": {
-                "position": [
-                    {
-                        "value": 10,
-                        "unit": "px"
-                    },
-                    {
-                        "value": 5,
-                        "unit": "px"
-                    }
-                ],
-                "size": {
-                    "x": {},
-                    "y": {}
-                }
-            }
-        },
-        {
-            "name": "bottom-left corner 2",
-            "visible": true,
-            "type": "linear",
-            "angle": 27,
-            "repeating": false,
-            "repeatingUnit": "px",
-            "max": 20,
-            "colorHints": [],
             "colors": [
                 {
-                    "color": "#222222",
+                    "color": "rgba(0, 0, 0, 0.1)",
                     "stop": 0
                 },
                 {
+                    "color": "rgba(255, 255, 255, 0.5)",
+                    "stop": 25
+                },
+                {
                     "color": "rgba(255, 255, 255, 0)",
-                    "stop": 10
+                    "stop": 75
+                },
+                {
+                    "color": "rgba(0, 0, 0, 0.1)",
+                    "stop": 100
                 }
             ],
             "radial": {
@@ -140,10 +102,7 @@ export default {
             "background": {
                 "position": [
                     {},
-                    {
-                        "value": 10,
-                        "unit": "px"
-                    }
+                    {}
                 ],
                 "size": {
                     "x": {},
@@ -152,22 +111,28 @@ export default {
             }
         },
         {
-            "name": "top-right corner",
+            "name": "line top left",
             "visible": true,
             "type": "linear",
-            "angle": 207,
-            "repeating": false,
+            "angle": 60,
+            "repeating": true,
             "repeatingUnit": "px",
-            "max": 20,
-            "colorHints": [],
+            "max": 60,
+            "colorHints": [
+                1
+            ],
             "colors": [
                 {
-                    "color": "#151515",
+                    "color": "rgba(255, 255, 255, 0.2)",
                     "stop": 0
                 },
                 {
                     "color": "rgba(255, 255, 255, 0)",
-                    "stop": 10
+                    "stop": 1
+                },
+                {
+                    "color": "rgba(255, 255, 255, 0)",
+                    "stop": 60
                 }
             ],
             "radial": {
@@ -180,13 +145,8 @@ export default {
             },
             "background": {
                 "position": [
-                    {
-                        "value": 10,
-                        "unit": "px"
-                    },
-                    {
-                        "unit": "px"
-                    }
+                    {},
+                    {}
                 ],
                 "size": {
                     "x": {},
@@ -195,22 +155,28 @@ export default {
             }
         },
         {
-            "name": "bottom-left corner",
+            "name": "line top right",
             "visible": true,
             "type": "linear",
-            "angle": 27,
-            "repeating": false,
+            "angle": 120,
+            "repeating": true,
             "repeatingUnit": "px",
-            "max": 20,
-            "colorHints": [],
+            "max": 60,
+            "colorHints": [
+                1
+            ],
             "colors": [
                 {
-                    "color": "#151515",
+                    "color": "rgba(255, 255, 255, 0.2)",
                     "stop": 0
                 },
                 {
                     "color": "rgba(255, 255, 255, 0)",
-                    "stop": 10
+                    "stop": 1
+                },
+                {
+                    "color": "rgba(255, 255, 255, 0)",
+                    "stop": 60
                 }
             ],
             "radial": {
@@ -223,13 +189,8 @@ export default {
             },
             "background": {
                 "position": [
-                    {
-                        "unit": "px"
-                    },
-                    {
-                        "value": 5,
-                        "unit": "px"
-                    }
+                    {},
+                    {}
                 ],
                 "size": {
                     "x": {},
