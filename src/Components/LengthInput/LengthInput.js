@@ -26,6 +26,13 @@ export default class LengthInput extends Component {
 
     componentDidUpdate() {
         if (this.lengthInput) this.lengthInput.focus();
+
+        const input = document.getElementById(`LengthInput_${this.props.id}`);
+        input.value = this.validatePropsValue(this.props.value);
+
+        if (this.state.unit !== this.props.unit) {
+            this.setState({ ...this.state, unit: this.props.unit });
+        }
     }
 
 

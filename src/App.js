@@ -152,6 +152,8 @@ export default class App extends Component {
       fullscreen: false,
     }
 
+    console.log(newState);
+
     this.setState(newState);
   }
 
