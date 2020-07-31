@@ -763,8 +763,9 @@ export default class Code extends Component {
                         <CodeSettings
                             backgroundSize={this.props.backgroundSize}
                             backgroundColor={this.props.backgroundColor}
-                            openColorPicker={this.props.openColorPicker}
                             changeBackgroundSize={this.props.changeBackgroundSize}
+                            openColorPicker={this.props.openColorPicker}
+                            resetBackgroundColor={this.props.resetBackgroundColor}
                             vendorPrefixes={this.state.vendorPrefixes}
                             setVendorPrefixes={this.setVendorPrefixes.bind(this)}
                             fallbackAllowed={this.state.fallbackAllowed}

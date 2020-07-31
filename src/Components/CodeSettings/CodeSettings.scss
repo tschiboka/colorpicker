@@ -60,7 +60,7 @@
     }
     .CodeSettings__background-size {
         & > div {
-            min-width: 250px;
+            min-width: 240px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -69,21 +69,25 @@
                 height: 100%;
                 &:last-child {
                     height: 22px;
-                    width: 65px;
+                    width: 60px;
                 }
             }
         }
     }
     .CodeSettings__background-color {
-        & > div {
+        .background-color-div {
             height: 22px;
-            width: 90px;
+            min-width: 80px;
             border: $tertiaryBorder;
             cursor: pointer;
-            div {
+            & > div {
                 width: 100%;
                 height: 100%;
             }
+        }
+        .ToggleButton {
+            width: 60px;
+            margin-left: 10px;
         }
     }
     .CodeSettings__vendor-prefixes, .CodeSettings__preferred-format {

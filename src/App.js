@@ -152,8 +152,6 @@ export default class App extends Component {
       fullscreen: false,
     }
 
-    console.log(newState);
-
     this.setState(newState);
   }
 
@@ -287,6 +285,10 @@ export default class App extends Component {
 
 
 
+  resetBackgroundColor() { this.setState({ ...this.state, backgroundColor: undefined }); }
+
+
+
   setFullscreen() { this.setState({ ...this.state, fullscreen: true }); }
 
 
@@ -332,6 +334,7 @@ export default class App extends Component {
           changeBackgroundSize={this.changeBackgroundSize.bind(this)}
           checkered={this.state.checkered}
           setCheckered={this.setCheckeredDisplay.bind(this)}
+          resetBackgroundColor={this.resetBackgroundColor.bind(this)}
         />
 
 

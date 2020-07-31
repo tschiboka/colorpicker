@@ -88,10 +88,21 @@ export function CodeSettings(props) {
                 <p>Background Color:</p>
 
                 <div
+                    className="background-color-div"
                     style={{ backgroundImage: `url(${checkeredBg})` }}
                     onClick={() => props.openColorPicker(undefined, undefined, props.backgroundColor)}
                 >
                     <div style={{ backgroundColor: props.backgroundColor }}></div>
+                </div>
+
+                <div>
+                    <ToggleButton
+                        on={props.backgroundColor}
+                        handleOnClick={() => props.backgroundColor
+                            ? props.resetBackgroundColor()
+                            : props.openColorPicker(undefined, undefined, props.backgroundColor)
+                        }
+                    />
                 </div>
             </div>
 
