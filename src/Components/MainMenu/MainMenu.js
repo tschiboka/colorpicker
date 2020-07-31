@@ -338,7 +338,7 @@ export default class MainMenu extends Component {
                             <div>
                                 <button onClick={() => this.openNewPattern()}>Ok</button>
 
-                                <button onClick={() => this.setState({ ...this.state, openDialogOpen: undefined, openFormOpen: undefined })}>Cancel</button>
+                                <button onClick={() => this.setState({ ...this.state, openPatternDialog: undefined, openDialogOpen: undefined, openFormOpen: undefined })}>Cancel</button>
                             </div>
                         </div>
                     )
