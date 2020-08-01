@@ -187,6 +187,8 @@ export default class MainMenu extends Component {
                 gradients
             };
 
+            if (this.props.backgroundBlendMode) pattern.backgroundBlendMode = this.props.backgroundBlendMode;
+
             // check if localStore has patterns key at all
             const storagePatterns = localStorage.patterns;
             if (!storagePatterns) {

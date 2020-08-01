@@ -23,7 +23,7 @@ export default class DropDown extends Component {
 
     renderOptions() {
         const focusTimer = setTimeout(() => {
-            this.dropdown.focus();
+            if (this.dropdown) this.dropdown.focus();
             clearTimeout(focusTimer);
         }, 200);
 

@@ -79,6 +79,7 @@ export default class App extends Component {
         display.style.backgroundSize = this.state.backgroundSize[0].value + this.state.backgroundSize[0].unit + " " +
           this.state.backgroundSize[1].value + this.state.backgroundSize[1].unit;
       }
+      display.style.backgroundBlendMode = this.state.backgroundBlendMode || "normal";
     }
   }
 
@@ -313,6 +314,7 @@ export default class App extends Component {
         <ResultDisplay
           backgroundSize={this.state.backgroundSize}
           backgroundColor={this.state.backgroundColor}
+          backgroundBlendMode={this.state.backgroundBlendMode}
           patternName={this.state.patternName}
           gradients={this.state.gradients}
           setFullscreen={this.setFullscreen.bind(this)}

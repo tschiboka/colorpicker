@@ -56,7 +56,7 @@ export default class Gallery extends Component {
                 imageDiv.style.backgroundSize = pattern.backgroundSize[0].value + pattern.backgroundSize[0].unit + " " +
                     pattern.backgroundSize[1].value + pattern.backgroundSize[1].unit;
             }
-
+            imageDiv.style.backgroundBlendMode = pattern.backgroundBlendMode || "normal";
         });
     }
 

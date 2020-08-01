@@ -41,7 +41,7 @@ export default class ResultDisplay extends Component {
 
         display.style.background = gradientObjsToStr([...this.props.gradients].reverse());
         display.style.backgroundColor = this.props.backgroundColor || "";
-        display.style.backgroundBlendMode = this.props.backgroundBlendMode;
+        display.style.backgroundBlendMode = this.props.backgroundBlendMode || "normal";
 
         if (backgroundSizeSet) {
             display.style.backgroundSize = this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " +
@@ -118,6 +118,7 @@ export default class ResultDisplay extends Component {
                             <MainMenu
                                 backgroundSize={this.props.backgroundSize}
                                 backgroundColor={this.props.backgroundColor}
+                                backgroundBlendMode={this.props.backgroundBlendMode}
                                 patternName={this.props.patternName}
                                 gradients={this.props.gradients}
                                 checkered={this.props.checkered}

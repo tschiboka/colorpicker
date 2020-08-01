@@ -42,8 +42,8 @@ export function CodeSettings(props) {
                             id="6"
                             name="background-size-x"
                             title="background size x"
-                            value={props.backgroundSize ? props.backgroundSize[0].value : ""}
-                            unit={props.backgroundSize ? props.backgroundSize[0].unit : "px"}
+                            value={(props.backgroundSize && props.backgroundSize[0] && props.backgroundSize[0].value) ? props.backgroundSize[0].value : ""}
+                            unit={(props.backgroundSize && props.backgroundSize[0] && props.backgroundSize[0].unit) ? props.backgroundSize[0].unit : "px"}
                             units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                             onChange={props.changeBackgroundSize}
                         />
@@ -54,8 +54,8 @@ export function CodeSettings(props) {
                             id="7"
                             name="background-size-y"
                             title="background size y"
-                            value={props.backgroundSize ? props.backgroundSize[1].value : ""}
-                            unit={props.backgroundSize ? props.backgroundSize[1].unit : "px"}
+                            value={(props.backgroundSize && props.backgroundSize[1] && props.backgroundSize[1].value) ? props.backgroundSize[1].value : ""}
+                            unit={(props.backgroundSize && props.backgroundSize[1] && props.backgroundSize[1].unit) ? props.backgroundSize[1].unit : "px"}
                             units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                             onChange={props.changeBackgroundSize}
                         />
