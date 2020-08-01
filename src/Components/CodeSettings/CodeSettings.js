@@ -111,11 +111,24 @@ export function CodeSettings(props) {
                 <p>Background Blend Mode: </p>
 
                 <DropDown
-                    options={["normal", "multiply", "screen", "overlay", "darken", "lighten", "color-dodge", "saturation", "color", "luminosity"]}
+                    options={["normal", "multiply", "screen", "overlay", "darken", "lighten", "color-dodge", "color-burn", "hard-light", "soft-light", "difference", "exclusion", "hue", "saturation", "color", "luminosity"]}
                     current={props.backgroundBlendMode}
                     default="normal"
                     onSelect={props.changeBackgroundBlendMode}
                 />
+            </div>
+
+            <div className="CodeSettings__preferred-format">
+                <p>Preferred Format: </p>
+
+                <div>
+                    <DropDown
+                        options={["default", "rgb", "hex", "hsl"]}
+                        current={props.preferredColorFormat}
+                        default="default"
+                        onSelect={props.setPreferredColorFormat}
+                    />
+                </div>
             </div>
 
             <div className="CodeSettings__vendor-prefixes">
@@ -159,43 +172,8 @@ export function CodeSettings(props) {
                 </div>
             </div>
 
-
-            <div className="CodeSettings__preferred-format">
-                <p>Preferred Format: </p>
-
-                <div>
-                    <button
-                        title="Hexadecimal / RGBA (for transparent colors)"
-                        onClick={() => props.setPreferredColorFormat("#")}>
-                        hex
-                    <div className={props.preferredColorFormat === "#" ? "btn--active" : "btn--inactive"}></div>
-                    </button>
-
-                    <button
-                        title="RGB (red, green, blue)"
-                        onClick={() => props.setPreferredColorFormat("rgb")}>
-                        rgb
-                    <div className={props.preferredColorFormat === "rgb" ? "btn--active" : "btn--inactive"}></div>
-                    </button>
-
-                    <button
-                        title="Hue Saturation Lightness"
-                        onClick={() => props.setPreferredColorFormat("hsl")}>
-                        hsl
-                    <div className={props.preferredColorFormat === "hsl" ? "btn--active" : "btn--inactive"}></div>
-                    </button>
-
-                    <button
-                        title="Color defined by you on the slider"
-                        onClick={() => props.setPreferredColorFormat(undefined)}>
-                        default
-                    <div className={props.preferredColorFormat === undefined ? "btn--active" : "btn--inactive"}></div>
-                    </button>
-                </div>
-            </div>
-
             <div>
-                <p>Allow hex short-hand:
+                <p>Allow HEX Shorthand:
                     <span> eg.: #FF6600 - #F60</span>
                 </p>
 
@@ -207,7 +185,7 @@ export function CodeSettings(props) {
 
 
             <div>
-                <p>css color names:
+                <p>CSS Color Names:
                     <span> eg.: #FFFFFF - white</span>
                 </p>
 
@@ -218,7 +196,7 @@ export function CodeSettings(props) {
             </div>
 
             <div>
-                <p>Show comments: </p>
+                <p>Show Comments: </p>
 
                 <ToggleButton
                     on={props.commentsAllowed}
@@ -227,7 +205,7 @@ export function CodeSettings(props) {
             </div>
 
             <div>
-                <p>Checkered / white background: </p>
+                <p>White / Checkered Background: </p>
 
                 <ToggleButton
                     on={props.checkered}

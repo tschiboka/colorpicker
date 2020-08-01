@@ -41,6 +41,8 @@ export default class ResultDisplay extends Component {
 
         display.style.background = gradientObjsToStr([...this.props.gradients].reverse());
         display.style.backgroundColor = this.props.backgroundColor || "";
+        display.style.backgroundBlendMode = this.props.backgroundBlendMode;
+
         if (backgroundSizeSet) {
             display.style.backgroundSize = this.props.backgroundSize[0].value + this.props.backgroundSize[0].unit + " " +
                 this.props.backgroundSize[1].value + this.props.backgroundSize[1].unit;

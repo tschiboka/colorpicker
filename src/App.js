@@ -327,6 +327,7 @@ export default class App extends Component {
           checkered={this.state.checkered}
           backgroundSize={this.state.backgroundSize}
           backgroundColor={this.state.backgroundColor}
+          backgroundBlendMode={this.state.backgroundBlendMode}
           updateGradients={this.updateGradients.bind(this)}
           updateGradient={this.updateGradient.bind(this)}
           openColorPicker={this.openColorPicker.bind(this)}

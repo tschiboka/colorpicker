@@ -16,7 +16,7 @@ export default class DropDown extends Component {
         const blurTimer = setTimeout(() => {
             this.setState({ ...this.state, dropDownListIsOpen: false });
             clearTimeout(blurTimer);
-        }, 100);
+        }, 200);
     }
 
 
@@ -25,7 +25,7 @@ export default class DropDown extends Component {
         const focusTimer = setTimeout(() => {
             this.dropdown.focus();
             clearTimeout(focusTimer);
-        }, 100);
+        }, 200);
 
         return this.props.options.map((option, index) => (
             <li

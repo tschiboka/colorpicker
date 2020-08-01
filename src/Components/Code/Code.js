@@ -725,6 +725,24 @@ export default class Code extends Component {
 
 
 
+    renderBackgroundBlendMode() {
+        if (this.props.backgroundBlendMode) return (
+            <span>
+                <span className="token property">background-blend-mode</span>
+
+                <span className="token punctuation">: </span>
+
+                <span className="token keyword">{this.props.backgroundBlendMode}</span>
+
+                <span className="token punctuation">;</span>
+
+                <br />
+            </span>
+        );
+    }
+
+
+
     render() {
         return (
             <div className="Code">
@@ -796,6 +814,8 @@ export default class Code extends Component {
                                 {this.renderBackgroundColor()}
 
                                 {this.renderPatternBackgroundSize()}
+
+                                {this.renderBackgroundBlendMode()}
                             </span>
                             : <span className="token comment">&#47;&#47; No gradients</span>
                         }

@@ -1,7 +1,7 @@
 @import "../../constants/constants.scss";
 
 .DropDown {
-    min-width: 120px;
+    width: 120px;
     height: 22px;
     display: flex;
     background: $tertiaryBackgroundColor;
@@ -43,10 +43,10 @@
         height: 100%;
         ul {
             position: absolute;
-            right: 13px;
+            right: -1px;
             top: 20px;
             max-height: 100px;
-            width: 106px;
+            width: 120px;
             background: $tertiaryBackgroundColor;
             border: $tertiaryBorder;
             border-bottom-left-radius: $borderRadius;
