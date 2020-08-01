@@ -1,6 +1,7 @@
 import React from 'react';
 import LengthInput from "../LengthInput/LengthInput";
 import { ToggleButton } from '../ToggleButton/ToggleButton';
+import DropDown from "../DropDown/DropDown";
 import checkeredBg from "../../images/checkered_rect.png";
 import "./CodeSettings.scss";
 
@@ -85,7 +86,7 @@ export function CodeSettings(props) {
             </div>
 
             <div className="CodeSettings__background-color">
-                <p>Background Color:</p>
+                <p>Background Color: </p>
 
                 <div
                     className="background-color-div"
@@ -104,6 +105,17 @@ export function CodeSettings(props) {
                         }
                     />
                 </div>
+            </div>
+
+            <div className="CodeSettings__background-blend-mode">
+                <p>Background Blend Mode: </p>
+
+                <DropDown
+                    options={["normal", "multiply", "screen", "overlay", "darken", "lighten", "color-dodge", "saturation", "color", "luminosity"]}
+                    current={props.backgroundBlendMode}
+                    default="normal"
+                    onSelect={props.changeBackgroundBlendMode}
+                />
             </div>
 
             <div className="CodeSettings__vendor-prefixes">

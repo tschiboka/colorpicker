@@ -1,0 +1,77 @@
+@import "../../constants/constants.scss";
+
+.DropDown {
+    min-width: 120px;
+    height: 22px;
+    display: flex;
+    background: $tertiaryBackgroundColor;
+    border-radius: $borderRadius;
+    border: $tertiaryBorder;
+    font-size: $smlFont;
+    & > div:first-child {
+        width: 100px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: not-allowed;
+    }
+    .DropDown__toggle-options-list {
+        width: 22px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $secondaryTextColor;
+        border: none;
+        border-left: $tertiaryBorder;
+        background: $secondaryBackgroundColor;
+        background: $buttonGradient;
+        text-shadow: -1px -1px black;
+        cursor: pointer;
+        &:hover {
+            color: $activeButtonTextColor;
+            background: $buttonHoverBackgroundColor;
+            background: $buttonGradientHover;
+            font-size: $xsmFont;
+            text-shadow: 1px 1px black;
+        }
+    }
+    .DropDown__HOOK {
+        position: relative;
+        width: 0;
+        height: 100%;
+        ul {
+            position: absolute;
+            right: 13px;
+            top: 20px;
+            max-height: 100px;
+            width: 106px;
+            background: $tertiaryBackgroundColor;
+            border: $tertiaryBorder;
+            border-bottom-left-radius: $borderRadius;
+            border-bottom-right-radius: $borderRadius;
+            overflow-y: auto;
+            z-index: 100;
+            li {
+                width: 100%;
+                height: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                &:hover {
+                    background: $buttonGradientHover;
+                    color: $activeButtonTextColor;
+                }
+                &:not(:last-child) {
+                    border-bottom: $tertiaryBorder;
+                }
+                &.option--disabled {
+                    color: #666;
+                    pointer-events: none;
+                }
+            }
+        }
+    }
+}

@@ -47,6 +47,7 @@ export default class App extends Component {
       backgroundSettings_GradientIndex: undefined,
       backgroundSize: undefined,
       backgroundColor: undefined,
+      backgroundBlendMode: undefined,
       fullscreen: false,
     };
   }
@@ -127,6 +128,7 @@ export default class App extends Component {
       backgroundSettings_GradientIndex: undefined,
       backgroundSize: undefined,
       backgroundColor: undefined,
+      backgroundBlendMode: undefined,
       fullscreen: false,
     };
 
@@ -149,6 +151,7 @@ export default class App extends Component {
       backgroundSettings_GradientIndex: undefined,
       backgroundSize: newPattern.backgroundSize,
       backgroundColor: newPattern.backgroundColor,
+      backgroundBlendMode: newPattern.backgroundBlendMode,
       fullscreen: false,
     }
 
@@ -289,6 +292,13 @@ export default class App extends Component {
 
 
 
+  changeBackgroundBlendMode(newBlendMode) {
+    const backgroundBlendMode = newBlendMode === "normal" ? undefined : newBlendMode;
+    this.setState({ ...this.state, backgroundBlendMode });
+  }
+
+
+
   setFullscreen() { this.setState({ ...this.state, fullscreen: true }); }
 
 
@@ -330,11 +340,13 @@ export default class App extends Component {
           gradients={this.state.gradients}
           backgroundSize={this.state.backgroundSize}
           backgroundColor={this.state.backgroundColor}
+          backgroundBlendMode={this.state.backgroundBlendMode}
           openColorPicker={this.openColorPicker.bind(this)}
           changeBackgroundSize={this.changeBackgroundSize.bind(this)}
           checkered={this.state.checkered}
           setCheckered={this.setCheckeredDisplay.bind(this)}
           resetBackgroundColor={this.resetBackgroundColor.bind(this)}
+          changeBackgroundBlendMode={this.changeBackgroundBlendMode.bind(this)}
         />
 
 
