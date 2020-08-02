@@ -5,6 +5,7 @@ import blue_squares from "./blue_squares";
 import argyle from "./argyle";
 import japanese_cubes from "./japanese_cubes";
 import rainbow_arcs from "./rainbow_arcs";
+import zig_zag from "./zig_zag";
 
 export default [
     textile_striped,
@@ -14,4 +15,5 @@ export default [
     blue_squares,
     argyle,
     japanese_cubes,
+    zig_zag,
 ];

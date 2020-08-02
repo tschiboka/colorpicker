@@ -49,7 +49,7 @@ export default class LengthInput extends Component {
     handleInputOnChange(inputValue) {
         const { valid, error, value } = { ...this.validateInput(inputValue) };
         this.setState({ ...this.state, valid, error })
-        if (valid) this.props.onChange(this.props.name, Number(value), this.state.unit);
+        if (valid) this.props.onChange(this.props.name, value, this.state.unit);
     }
 
 
@@ -70,10 +70,7 @@ export default class LengthInput extends Component {
         let valid = true;
         let value = inputValue;
 
-        if (inputValue === "") {                                                // TEST ""
-            error = "Can not be empty!";
-            return ({ valid: false, error, value });
-        }
+
         if (/^\d*[.]+$/g.test(inputValue)) {                                    // TEST . X. X..
             error = "Must not end in decimal point!";
             return ({ valid: false, error, value });

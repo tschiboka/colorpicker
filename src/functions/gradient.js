@@ -150,7 +150,7 @@ const defaultGradientObj = {
         { color: "rgb(0, 0, 0)", stop: 0 },
         { color: "rgba(255, 255, 255, 0.5)", stop: 100 },
     ],
-    radial: { shape: "ellipse", size: "50% 50%", position: ["50%", "50%"] },
+    radial: undefined,
     background: {
         position: [
             { keyword: undefined, value: undefined, unit: undefined },
@@ -176,7 +176,7 @@ export const getDefaultGradientObj = () => produce(defaultGradientObj, draft => 
     draft.max = 100;
     draft.colorHints = [50];
     draft.colors = [{ color: "rgb(0, 0, 0)", stop: 0 }, { color: "rgba(255, 255, 255, 0.5)", stop: 100 },];
-    draft.radial = { shape: "ellipse", size: "50% 50%", position: ["50%", "50%"] };
+    draft.radial = undefined;
     draft.background = {
         position: [
             { keyword: undefined, value: undefined, unit: undefined },

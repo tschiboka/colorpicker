@@ -188,7 +188,7 @@ export default class Code extends Component {
 
     renderShapeSizePosition(gradient) {
         const isRadial = gradient.type === "radial";
-        const { shape, size, position } = gradient.radial;
+        const { shape, size, position } = gradient.radial || { shape: undefined, size: undefined, position: undefined };
         const isUnit = str => /\d/g.test(str);
 
         if (isRadial) return (
@@ -206,14 +206,18 @@ export default class Code extends Component {
                 {((size || shape) && position) && <span> </span>/* leading whitespace */}
 
                 {
-                    position.map((pos, index, posArr, whiteSpace = posArr.length > 1 && !index) => isUnit(pos)
+                    position && position.map((pos, index, posArr, whiteSpace = posArr.length > 1 && !index) => isUnit(pos)
                         ? <span key={`size-span-radial-units-${index}`}>
+                            {index === 0 && <span className="token keyword">at </span>}
+
                             {this.renderUnit(pos)}
 
                             {whiteSpace && <span> </span>}
                         </span>
 
                         : <span key={`size-span-radial-keyword-${index}`}>
+                            {index === 0 && <span className="token keyword">at </span>}
+
                             <span className="token keyword">{pos}</span>
 
                             {whiteSpace && <span> </span>}

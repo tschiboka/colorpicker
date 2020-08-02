@@ -45,10 +45,10 @@ export default class GradientButtons extends Component {
 
 
     handleRepeatingInputChange(name, value, unit) {
+        console.log(value);
         const updatedGradient = produce(getImmutableGradientCopy(this.props.gradient), draft => {
             draft.max = value;
             draft.repeatingUnit = unit;
-
         });
 
         this.props.updateGradient(updatedGradient, this.props.index);

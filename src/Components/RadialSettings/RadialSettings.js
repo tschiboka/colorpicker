@@ -6,17 +6,20 @@ import "./RadialSettings.scss";
 
 export default function RadialSettings(props) {
     const gradient = props.gradients[props.index];
-    const shape = gradient.radial.shape;
-    const size = gradient.radial.size;
-    const isSizeNamed = /^(closest|farthest)-(side|corner)$/g.test(size);
+    const shape = gradient?.radial?.shape;
+    const size = gradient?.radial?.size;
+    const isSizeNamed = /^(closest|farthest)-(side|corner)$/g.test(size || "");
     const sizeNamed = isSizeNamed ? size.split("-") : [];
-    const sizeLengths = size.match(/(\d+(%|px|vw|vh|rem|em))/g);
-    const sizeLengthsObj = !sizeLengths ? [] : sizeLengths.map(size => ({
-        value: size.match(/\d+/g)[0],
-        unit: size.match(/%|px|vw|vh|rem|em/g)[0]
-    }
-    ));
-    const position = gradient.radial.position;
+    const sizeLengths = (size || "").match(/(\d+(%|px|vw|vh|rem|em))/g);
+    const sizeLengthsObj = !sizeLengths
+        ? [{ value: "", unit: "" }, { value: "", unit: "" }]
+        : sizeLengths.map(size => ({
+            value: size.match(/\d+/g)[0],
+            unit: size.match(/%|px|vw|vh|rem|em/g)[0]
+        }));
+    const position = (gradient.radial && gradient.radial.position)
+        ? gradient.radial.position
+        : [{ keyword: "", size: "", unit: "" }, { keyword: "", size: "", unit: "" }];
 
 
 
