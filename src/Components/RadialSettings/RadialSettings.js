@@ -30,8 +30,11 @@ export default function RadialSettings(props) {
         }
 
         if (key === "size") {
-            console.log("SIZE", value);
             radial.size = value;
+        }
+
+        if (key === "position") {
+            radial.position = value;
         }
 
         const updatedGradient = { ...gradient };
@@ -59,24 +62,43 @@ export default function RadialSettings(props) {
             if (hasSizeKeyword(1) === value) active = true;
         }
 
-        console.log(active);
+        if (key === "position-keyword-x") {
+            if (gradient?.radial?.position?.keyword?.x === value) active = true;
+        }
+
+        if (key === "position-keyword-y") {
+            if (gradient?.radial?.position?.keyword?.y === value) active = true;
+        }
+
+        if (key === "position-keyword-center") {
+            if (gradient?.radial?.position?.keyword?.x === "center" || gradient?.radial?.position?.keyword?.y === "center") active = true;
+        }
 
         return active ? "btn--active" : "btn--inactive";
     }
 
 
 
-    function updatePosition(index, value) {
-        //        const updatedGradient = { ...gradient };
-        //        const oppositeAxisIndex = index === 0 ? 1 : 0;
-        //        const oppositePos = position[oppositeAxisIndex];
-        //        const oppositeAxis = (oppositePos === "top" || oppositePos === "bottom") ? "vertical" : (oppositePos === "left" || oppositePos === "right") ? "horizontal" : "center";
-        //
-        //        if (oppositeAxis === "vertical" && (value === "top" || value === "bottom")) updatedGradient.radial.position[oppositeAxisIndex] = "center";
-        //        if (oppositeAxis === "horizontal" && (value === "left" || value === "right")) updatedGradient.radial.position[oppositeAxisIndex] = "center";
-        //        updatedGradient.radial.position[index] = value;
-        //
-        //        props.updateGradient(updatedGradient, props.index);
+    function updatePositionKeyword(value) {
+        const gradient = props.gradients[props.index];
+        const oldPos = gradient?.radial?.position || {};
+        const x = gradient?.radial?.position?.keyword?.x;
+        const y = gradient?.radial?.position?.keyword?.y;
+        const position = oldPos;
+
+        if (value === "left" || value === "right") {
+            position.keyword = { x: value, y: y || "center" };
+        }
+
+        if (value === "top" || value === "bottom") {
+            position.keyword = { x: x || "center", y: value };
+        }
+
+        if (value === "center") {
+            position.keyword = { x: "center", y: "center" };
+        }
+
+        updateGradientPropertyTo("position", position);
     }
 
 
@@ -102,7 +124,7 @@ export default function RadialSettings(props) {
     function handlePositionInputOnChange(inputName, value, unit) {
         //        const positionIndex = inputName === "position1" ? 0 : 1;
         //
-        //        if (value !== "") updatePosition(positionIndex, (value || "0") + (unit || "px"));
+        //        if (value !== "") updatePositionKeyword(positionIndex, (value || "0") + (unit || "px"));
     }
 
 
@@ -217,76 +239,38 @@ export default function RadialSettings(props) {
                     <div className="RadialSettings__position-btns">
                         <div>
                             <div>
-                                <button onClick={() => updatePosition(0, "top")}>
+                                <button onClick={() => updatePositionKeyword("top")}>
                                     top
 
-                                    <div className={"btn--inactive"}></div>
+                                    <div className={isActive("position-keyword-y", "top")}></div>
                                 </button>
                             </div>
 
                             <div>
-                                <button onClick={() => updatePosition(0, "left")}>
+                                <button onClick={() => updatePositionKeyword("left")}>
                                     left
 
-                                    <div className={"btn--inactive"}></div>
+                                    <div className={isActive("position-keyword-x", "left")}></div>
                                 </button>
 
-                                <button onClick={() => updatePosition(0, "center")}>
+                                <button onClick={() => updatePositionKeyword("center")}>
                                     center
 
-                                    <div className={"btn--inactive"}></div>
+                                    <div className={isActive("position-keyword-center")}></div>
                                 </button>
 
-                                <button onClick={() => updatePosition(0, "right")}>
+                                <button onClick={() => updatePositionKeyword("right")}>
                                     right
 
-                                    <div className={"btn--inactive"}></div>
+                                    <div className={isActive("position-keyword-x", "right")}></div>
                                 </button>
                             </div>
 
                             <div>
-                                <button onClick={() => updatePosition(0, "bottom")}>
+                                <button onClick={() => updatePositionKeyword("bottom")}>
                                     bottom
 
-                                    <div className={"btn--inactive"}></div>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <button onClick={() => updatePosition(1, "top")}>
-                                    top
-
-                                    <div className={"btn--inactive"}></div>
-                                </button>
-                            </div>
-
-                            <div>
-                                <button onClick={() => updatePosition(1, "left")}>
-                                    left
-
-                                    <div className={"btn--inactive"}></div>
-                                </button>
-
-                                <button onClick={() => updatePosition(1, "center")}>
-                                    center
-
-                                    <div className={"btn--inactive"}></div>
-                                </button>
-
-                                <button onClick={() => updatePosition(1, "right")}>
-                                    right
-
-                                    <div className={"btn--inactive"}></div>
-                                </button>
-                            </div>
-
-                            <div>
-                                <button onClick={() => updatePosition(1, "bottom")}>
-                                    bottom
-
-                                    <div className={"btn--inactive"}></div>
+                                    <div className={isActive("position-keyword-y", "bottom")}></div>
                                 </button>
                             </div>
                         </div>
