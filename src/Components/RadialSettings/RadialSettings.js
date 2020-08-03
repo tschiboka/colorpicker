@@ -5,6 +5,9 @@ import "./RadialSettings.scss";
 
 
 export default function RadialSettings(props) {
+    const hasSizeKeyword = index => props.gradients[props.index]?.radial?.size?.keyword
+        && props.gradients[props.index]?.radial?.size?.keyword[index];
+
     function updateGradientPropertyTo(key, value) {
         const gradient = props.gradients[props.index];
         const radial = gradient.radial ? { ...gradient.radial } : {}
@@ -17,13 +20,18 @@ export default function RadialSettings(props) {
         }
 
         if (key === "size-keyword-0") {
-            const size = { keyword: [value, gradient?.radial?.size?.keyword[1] || "corner"] }
+            const size = { keyword: [value, hasSizeKeyword(1) || "corner"] }
             radial.size = size;
         }
 
         if (key === "size-keyword-1") {
-            const size = { keyword: [gradient?.radial?.size?.keyword[0] || "farthest", value] }
+            const size = { keyword: [hasSizeKeyword(0) || "farthest", value] }
             radial.size = size;
+        }
+
+        if (key === "size") {
+            console.log("SIZE", value);
+            radial.size = value;
         }
 
         const updatedGradient = { ...gradient };
@@ -44,11 +52,11 @@ export default function RadialSettings(props) {
         }
 
         if (key === "size-keyword-0") {
-            if (gradient.radial?.size?.keyword[0] === value) active = true;
+            if (hasSizeKeyword(0) === value) active = true;
         }
 
         if (key === "size-keyword-1") {
-            if (gradient.radial?.size?.keyword[1] === value) active = true;
+            if (hasSizeKeyword(1) === value) active = true;
         }
 
         console.log(active);
@@ -74,16 +82,19 @@ export default function RadialSettings(props) {
 
 
     function handleSizeInputOnChange(inputName, value, unit) {
-        //        if (shape === "circle") {
-        //            updateGradientPropertyTo("size", value + (unit || "px"));
-        //        }
-        //        else {
-        //            if (!sizeLengthsObj.length) sizeLengthsObj.push(...[{ value: value, unit: unit }, { value: value, unit: unit }]);
-        //
-        //            if (inputName === "size1") updateGradientPropertyTo("size", value + (unit || "px") + " " + (sizeLengthsObj[1].value || 0) + sizeLengthsObj[1].unit);
-        //
-        //            if (inputName === "size2") updateGradientPropertyTo("size", (sizeLengthsObj[0].value || 0) + sizeLengthsObj[0].unit + " " + value + (unit || "px"));
-        //        }
+        const gradient = props.gradients[props.index];
+        if (gradient?.radial?.shape === "circle") {
+            updateGradientPropertyTo("size", { x: { value, unit } });
+        } else {
+            if (inputName === "size1") {
+                const y = gradient?.radial?.size?.y || { value: "0", unit: "px" }
+                updateGradientPropertyTo("size", { x: { value, unit }, y: { value: y.value, unit: y.unit } });
+            }
+            if (inputName === "size2") {
+                const x = gradient?.radial?.size?.x || { value: "0", unit: "px" }
+                updateGradientPropertyTo("size", { x: { value: x.value, unit: x.unit }, y: { value, unit } });
+            }
+        }
     }
 
 
@@ -181,18 +192,18 @@ export default function RadialSettings(props) {
                             <LengthInput
                                 id="1"
                                 name="size1"
-                                //value={sizeLengthsObj[0] ? sizeLengthsObj[0].value : ""}
-                                //unit={sizeLengthsObj[0] ? sizeLengthsObj[0].unit : ""}
-                                //units={shape === "circle" ? ["px", "vw", "vh", "em", "rem"].reverse() : ["%", "px", "vw", "vh", "em", "rem"].reverse()}
+                                value={props.gradients[props.index]?.radial?.size?.x?.value || ""}
+                                unit={props.gradients[props.index]?.radial?.size?.x?.unit || "px"}
+                                units={props.gradients[props.index]?.radial?.shape === "circle" ? ["px", "vw", "vh", "em", "rem"].reverse() : ["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handleSizeInputOnChange}
                             />
 
                             <LengthInput
                                 id="2"
                                 name="size2"
-                                //disabled={shape === "circle"}
-                                //value={sizeLengthsObj[1] ? sizeLengthsObj[1].value : ""}
-                                //unit={sizeLengthsObj[1] ? sizeLengthsObj[1].unit : ""}
+                                disabled={props.gradients[props.index]?.radial?.shape === "circle"}
+                                value={props.gradients[props.index]?.radial?.size?.y?.value || ""}
+                                unit={props.gradients[props.index]?.radial?.size?.y?.unit || "px"}
                                 units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handleSizeInputOnChange}
                             />

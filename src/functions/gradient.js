@@ -127,9 +127,12 @@ export function gradientObjsToStr(gradientArray) {
                 const shape = gradient.radial?.shape ? gradient.radial.shape + " " : "";
                 const size = gradient.radial?.size?.keyword
                     ? gradient.radial.size.keyword.join("-")
-                    : "";
-                const pos = gradient.radial?.position ? gradient.radial.position.join(" ") : " ";
+                    : gradient.radial?.size?.x && gradient.radial?.size?.y
+                        ? gradient.radial.size.x.value + gradient.radial.size.x.unit + " " + gradient.radial.size.y.value + gradient.radial.size.y.unit
+                        : "";
+                const pos = gradient.radial?.position ? gradient.radial.position.join(" ") : "";
                 //const shapeSizePos = (shape || size || pos) ? shape + size + (pos && "at " + pos) + "," : "";
+                console.log(shape, size, pos);
                 const shapeSizePos = shape + size + ((shape || size || pos) ? "," : "");
                 console.log(`${prefix}(${shapeSizePos}${colorStops}${background ? " " + background : ""})`);
                 return `${prefix}(${shapeSizePos}${colorStops}${background ? " " + background : ""})`;
