@@ -6,15 +6,54 @@ import "./RadialSettings.scss";
 
 export default function RadialSettings(props) {
     function updateGradientPropertyTo(key, value) {
-        //        if (key === "shape" && value === "circle") {
-        //            if (sizeLengthsObj[0] && sizeLengthsObj[0].unit === "%") {
-        //                updateGradientPropertyTo("size", "farthest-corner");
-        //            }
-        //        }
-        //        const updatedGradient = { ...gradient };
-        //        updatedGradient.radial[key] = value;
-        //
-        //        props.updateGradient(updatedGradient, props.index);
+        const gradient = props.gradients[props.index];
+        const radial = gradient.radial ? { ...gradient.radial } : {}
+
+        if (key === "shape") {
+            radial.shape = value;
+            if (value === "circle") {
+                // get rid of size[1]
+            }
+        }
+
+        if (key === "size-keyword-0") {
+            const size = { keyword: [value, gradient?.radial?.size?.keyword[1] || "corner"] }
+            radial.size = size;
+        }
+
+        if (key === "size-keyword-1") {
+            const size = { keyword: [gradient?.radial?.size?.keyword[0] || "farthest", value] }
+            radial.size = size;
+        }
+
+        const updatedGradient = { ...gradient };
+        updatedGradient.radial = radial;
+
+        props.updateGradient(updatedGradient, props.index);
+        console.log(radial);
+    }
+
+
+
+    function isActive(key, value) {
+        const gradient = props.gradients[props.index];
+        let active = false;
+
+        if (key === "shape") {
+            if (gradient.radial?.shape === value) active = true;
+        }
+
+        if (key === "size-keyword-0") {
+            if (gradient.radial?.size?.keyword[0] === value) active = true;
+        }
+
+        if (key === "size-keyword-1") {
+            if (gradient.radial?.size?.keyword[1] === value) active = true;
+        }
+
+        console.log(active);
+
+        return active ? "btn--active" : "btn--inactive";
     }
 
 
@@ -79,7 +118,7 @@ export default function RadialSettings(props) {
             <div className="RadialSettings__header">
                 <span>
                     Radial Settings of [
-                    <span>{}</span>
+                    <span>{props.gradients[props.index].name}</span>
                 ] gradient</span>
 
                 <button onClick={() => props.openRadialSettings(false, props.index, false)}>
@@ -95,13 +134,13 @@ export default function RadialSettings(props) {
                         <button onClick={() => updateGradientPropertyTo("shape", "ellipse")}>
                             ellipse
 
-                            <div className="btn--inactive"></div>
+                            <div className={isActive("shape", "ellipse")}></div>
                         </button>
 
                         <button onClick={() => updateGradientPropertyTo("shape", "circle")}>
                             circle
 
-                            <div className={`btn--inactive`}></div>
+                            <div className={isActive("shape", "circle")}></div>
                         </button>
                     </div>
                 </div>
@@ -112,26 +151,26 @@ export default function RadialSettings(props) {
                     <div className="RadialSettings__size-btns">
                         <div className="RadialSettings__size-btns__named">
                             <div>
-                                <button onClick={() => updateGradientPropertyTo()}>
+                                <button onClick={() => updateGradientPropertyTo("size-keyword-0", "closest")}>
                                     closest
-                                    <div className={"btn--inactive"}></div>
+                                    <div className={isActive("size-keyword-0", "closest")}></div>
                                 </button>
 
-                                <button onClick={() => updateGradientPropertyTo()}>
+                                <button onClick={() => updateGradientPropertyTo("size-keyword-1", "corner")}>
                                     corner
-                                    <div className={"btn--inactive"}></div>
+                                    <div className={isActive("size-keyword-1", "corner")}></div>
                                 </button>
                             </div>
 
                             <div>
-                                <button onClick={() => updateGradientPropertyTo()}>
+                                <button onClick={() => updateGradientPropertyTo("size-keyword-0", "farthest")}>
                                     farthest
-                                    <div className={"btn--inactive"}></div>
+                                    <div className={isActive("size-keyword-0", "farthest")}></div>
                                 </button>
 
-                                <button onClick={() => updateGradientPropertyTo()}>
+                                <button onClick={() => updateGradientPropertyTo("size-keyword-1", "side")}>
                                     side
-                                    <div className={"btn--inactive"}></div>
+                                    <div className={isActive("size-keyword-1", "side")}></div>
                                 </button>
                             </div>
                         </div>

@@ -197,7 +197,10 @@ export default class App extends Component {
 
     const gradients = produce(newGradients, draft => {
       draft[radialSettings_GradientIndex].type = type;
+      draft[radialSettings_GradientIndex].radial = setToRadial ? draft.radial : undefined;
     });
+
+    console.log(gradients[radialSettings_GradientIndex].radial);
 
     this.setState(
       {
