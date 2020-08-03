@@ -5,86 +5,68 @@ import "./RadialSettings.scss";
 
 
 export default function RadialSettings(props) {
-    const gradient = props.gradients[props.index];
-    const shape = gradient?.radial?.shape;
-    const size = gradient?.radial?.size;
-    const isSizeNamed = /^(closest|farthest)-(side|corner)$/g.test(size || "");
-    const sizeNamed = isSizeNamed ? size.split("-") : [];
-    const sizeLengths = (size || "").match(/(\d+(%|px|vw|vh|rem|em))/g);
-    const sizeLengthsObj = !sizeLengths
-        ? [{ value: "", unit: "" }, { value: "", unit: "" }]
-        : sizeLengths.map(size => ({
-            value: size.match(/\d+/g)[0],
-            unit: size.match(/%|px|vw|vh|rem|em/g)[0]
-        }));
-    const position = (gradient.radial && gradient.radial.position)
-        ? gradient.radial.position
-        : [{ keyword: "", size: "", unit: "" }, { keyword: "", size: "", unit: "" }];
-
-
-
     function updateGradientPropertyTo(key, value) {
-        if (key === "shape" && value === "circle") {
-            if (sizeLengthsObj[0] && sizeLengthsObj[0].unit === "%") {
-                updateGradientPropertyTo("size", "farthest-corner");
-            }
-        }
-        const updatedGradient = { ...gradient };
-        updatedGradient.radial[key] = value;
-
-        props.updateGradient(updatedGradient, props.index);
+        //        if (key === "shape" && value === "circle") {
+        //            if (sizeLengthsObj[0] && sizeLengthsObj[0].unit === "%") {
+        //                updateGradientPropertyTo("size", "farthest-corner");
+        //            }
+        //        }
+        //        const updatedGradient = { ...gradient };
+        //        updatedGradient.radial[key] = value;
+        //
+        //        props.updateGradient(updatedGradient, props.index);
     }
 
 
 
     function updatePosition(index, value) {
-        const updatedGradient = { ...gradient };
-        const oppositeAxisIndex = index === 0 ? 1 : 0;
-        const oppositePos = position[oppositeAxisIndex];
-        const oppositeAxis = (oppositePos === "top" || oppositePos === "bottom") ? "vertical" : (oppositePos === "left" || oppositePos === "right") ? "horizontal" : "center";
-
-        if (oppositeAxis === "vertical" && (value === "top" || value === "bottom")) updatedGradient.radial.position[oppositeAxisIndex] = "center";
-        if (oppositeAxis === "horizontal" && (value === "left" || value === "right")) updatedGradient.radial.position[oppositeAxisIndex] = "center";
-        updatedGradient.radial.position[index] = value;
-
-        props.updateGradient(updatedGradient, props.index);
+        //        const updatedGradient = { ...gradient };
+        //        const oppositeAxisIndex = index === 0 ? 1 : 0;
+        //        const oppositePos = position[oppositeAxisIndex];
+        //        const oppositeAxis = (oppositePos === "top" || oppositePos === "bottom") ? "vertical" : (oppositePos === "left" || oppositePos === "right") ? "horizontal" : "center";
+        //
+        //        if (oppositeAxis === "vertical" && (value === "top" || value === "bottom")) updatedGradient.radial.position[oppositeAxisIndex] = "center";
+        //        if (oppositeAxis === "horizontal" && (value === "left" || value === "right")) updatedGradient.radial.position[oppositeAxisIndex] = "center";
+        //        updatedGradient.radial.position[index] = value;
+        //
+        //        props.updateGradient(updatedGradient, props.index);
     }
 
 
 
     function handleSizeInputOnChange(inputName, value, unit) {
-        if (shape === "circle") {
-            updateGradientPropertyTo("size", value + (unit || "px"));
-        }
-        else {
-            if (!sizeLengthsObj.length) sizeLengthsObj.push(...[{ value: value, unit: unit }, { value: value, unit: unit }]);
-
-            if (inputName === "size1") updateGradientPropertyTo("size", value + (unit || "px") + " " + (sizeLengthsObj[1].value || 0) + sizeLengthsObj[1].unit);
-
-            if (inputName === "size2") updateGradientPropertyTo("size", (sizeLengthsObj[0].value || 0) + sizeLengthsObj[0].unit + " " + value + (unit || "px"));
-        }
+        //        if (shape === "circle") {
+        //            updateGradientPropertyTo("size", value + (unit || "px"));
+        //        }
+        //        else {
+        //            if (!sizeLengthsObj.length) sizeLengthsObj.push(...[{ value: value, unit: unit }, { value: value, unit: unit }]);
+        //
+        //            if (inputName === "size1") updateGradientPropertyTo("size", value + (unit || "px") + " " + (sizeLengthsObj[1].value || 0) + sizeLengthsObj[1].unit);
+        //
+        //            if (inputName === "size2") updateGradientPropertyTo("size", (sizeLengthsObj[0].value || 0) + sizeLengthsObj[0].unit + " " + value + (unit || "px"));
+        //        }
     }
 
 
 
     function handlePositionInputOnChange(inputName, value, unit) {
-        const positionIndex = inputName === "position1" ? 0 : 1;
-
-        if (value !== "") updatePosition(positionIndex, (value || "0") + (unit || "px"));
+        //        const positionIndex = inputName === "position1" ? 0 : 1;
+        //
+        //        if (value !== "") updatePosition(positionIndex, (value || "0") + (unit || "px"));
     }
 
 
 
     function getPositionInputValue(positionIndex) {
-        const positionValue = props.gradients[props.index].radial.position[positionIndex];
-        return /top|bottom|left|right|center/g.test(positionValue) ? "" : positionValue.match(/[0-9.]+/g)[0];
+        //      const positionValue = props.gradients[props.index].radial.position[positionIndex];
+        //      return /top|bottom|left|right|center/g.test(positionValue) ? "" : positionValue.match(/[0-9.]+/g)[0];
     }
 
 
 
     function getPositionUnit(positionIndex) {
-        const positionUnit = props.gradients[props.index].radial.position[positionIndex];
-        return /top|bottom|left|right|center/g.test(positionUnit) ? "" : positionUnit.match(/%|px|vw|vh|em|rem/g)[0];
+        //       const positionUnit = props.gradients[props.index].radial.position[positionIndex];
+        //       return /top|bottom|left|right|center/g.test(positionUnit) ? "" : positionUnit.match(/%|px|vw|vh|em|rem/g)[0];
     }
 
 
@@ -97,7 +79,7 @@ export default function RadialSettings(props) {
             <div className="RadialSettings__header">
                 <span>
                     Radial Settings of [
-                    <span>{gradient.name}</span>
+                    <span>{}</span>
                 ] gradient</span>
 
                 <button onClick={() => props.openRadialSettings(false, props.index, false)}>
@@ -113,13 +95,13 @@ export default function RadialSettings(props) {
                         <button onClick={() => updateGradientPropertyTo("shape", "ellipse")}>
                             ellipse
 
-                            <div className={`btn--${shape === "ellipse" ? "active" : "inactive"}`}></div>
+                            <div className="btn--inactive"></div>
                         </button>
 
                         <button onClick={() => updateGradientPropertyTo("shape", "circle")}>
                             circle
 
-                            <div className={`btn--${shape === "circle" ? "active" : "inactive"}`}></div>
+                            <div className={`btn--inactive`}></div>
                         </button>
                     </div>
                 </div>
@@ -130,26 +112,26 @@ export default function RadialSettings(props) {
                     <div className="RadialSettings__size-btns">
                         <div className="RadialSettings__size-btns__named">
                             <div>
-                                <button onClick={() => updateGradientPropertyTo("size", "closest-" + (sizeNamed[1] || "corner"))}>
+                                <button onClick={() => updateGradientPropertyTo()}>
                                     closest
-                                    <div className={`btn--${sizeNamed[0] === "closest" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
 
-                                <button onClick={() => updateGradientPropertyTo("size", (sizeNamed[0] || "farthest") + "-corner")}>
+                                <button onClick={() => updateGradientPropertyTo()}>
                                     corner
-                                    <div className={`btn--${sizeNamed[1] === "corner" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
                             </div>
 
                             <div>
-                                <button onClick={() => updateGradientPropertyTo("size", "farthest-" + (sizeNamed[1] || "corner"))}>
+                                <button onClick={() => updateGradientPropertyTo()}>
                                     farthest
-                                    <div className={`btn--${sizeNamed[0] === "farthest" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
 
-                                <button onClick={() => updateGradientPropertyTo("size", (sizeNamed[0] || "farthest") + "-side")}>
+                                <button onClick={() => updateGradientPropertyTo()}>
                                     side
-                                    <div className={`btn--${sizeNamed[1] === "side" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
                             </div>
                         </div>
@@ -160,18 +142,18 @@ export default function RadialSettings(props) {
                             <LengthInput
                                 id="1"
                                 name="size1"
-                                value={sizeLengthsObj[0] ? sizeLengthsObj[0].value : ""}
-                                unit={sizeLengthsObj[0] ? sizeLengthsObj[0].unit : ""}
-                                units={shape === "circle" ? ["px", "vw", "vh", "em", "rem"].reverse() : ["%", "px", "vw", "vh", "em", "rem"].reverse()}
+                                //value={sizeLengthsObj[0] ? sizeLengthsObj[0].value : ""}
+                                //unit={sizeLengthsObj[0] ? sizeLengthsObj[0].unit : ""}
+                                //units={shape === "circle" ? ["px", "vw", "vh", "em", "rem"].reverse() : ["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handleSizeInputOnChange}
                             />
 
                             <LengthInput
                                 id="2"
                                 name="size2"
-                                disabled={shape === "circle"}
-                                value={sizeLengthsObj[1] ? sizeLengthsObj[1].value : ""}
-                                unit={sizeLengthsObj[1] ? sizeLengthsObj[1].unit : ""}
+                                //disabled={shape === "circle"}
+                                //value={sizeLengthsObj[1] ? sizeLengthsObj[1].value : ""}
+                                //unit={sizeLengthsObj[1] ? sizeLengthsObj[1].unit : ""}
                                 units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handleSizeInputOnChange}
                             />
@@ -188,7 +170,7 @@ export default function RadialSettings(props) {
                                 <button onClick={() => updatePosition(0, "top")}>
                                     top
 
-                                    <div className={`btn--${position[0] === "top" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
                             </div>
 
@@ -196,19 +178,19 @@ export default function RadialSettings(props) {
                                 <button onClick={() => updatePosition(0, "left")}>
                                     left
 
-                                    <div className={`btn--${position[0] === "left" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
 
                                 <button onClick={() => updatePosition(0, "center")}>
                                     center
 
-                                    <div className={`btn--${position[0] === "center" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
 
                                 <button onClick={() => updatePosition(0, "right")}>
                                     right
 
-                                    <div className={`btn--${position[0] === "right" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
                             </div>
 
@@ -216,7 +198,7 @@ export default function RadialSettings(props) {
                                 <button onClick={() => updatePosition(0, "bottom")}>
                                     bottom
 
-                                    <div className={`btn--${position[0] === "bottom" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
                             </div>
                         </div>
@@ -226,7 +208,7 @@ export default function RadialSettings(props) {
                                 <button onClick={() => updatePosition(1, "top")}>
                                     top
 
-                                    <div className={`btn--${position[1] === "top" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
                             </div>
 
@@ -234,19 +216,19 @@ export default function RadialSettings(props) {
                                 <button onClick={() => updatePosition(1, "left")}>
                                     left
 
-                                    <div className={`btn--${position[1] === "left" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
 
                                 <button onClick={() => updatePosition(1, "center")}>
                                     center
 
-                                    <div className={`btn--${position[1] === "center" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
 
                                 <button onClick={() => updatePosition(1, "right")}>
                                     right
 
-                                    <div className={`btn--${position[1] === "right" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
                             </div>
 
@@ -254,7 +236,7 @@ export default function RadialSettings(props) {
                                 <button onClick={() => updatePosition(1, "bottom")}>
                                     bottom
 
-                                    <div className={`btn--${position[1] === "bottom" ? "active" : "inactive"}`}></div>
+                                    <div className={"btn--inactive"}></div>
                                 </button>
                             </div>
                         </div>

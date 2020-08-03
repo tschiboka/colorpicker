@@ -123,13 +123,13 @@ export function gradientObjsToStr(gradientArray) {
                 return `${prefix}(${angle}${colorStops})${background ? " " + background : ""}`;
             }
 
-            if (gradient.type === "radial") {
-                const shape = gradient.radial.shape ? gradient.radial.shape + " " : "";
-                const size = gradient.radial.size ? gradient.radial.size + " " : "";
-                const pos = gradient.radial.position.join(" ");
-                const shapeSizePos = (shape || size || pos) ? shape + size + (pos && "at " + pos) + "," : "";
-                return `${prefix}(${shapeSizePos}${colorStops}${background ? " " + background : ""})`;
-            }
+            //if (gradient.type === "radial") {
+            //    const shape = gradient.radial.shape ? gradient.radial.shape + " " : "";
+            //    const size = gradient.radial.size ? gradient.radial.size + " " : "";
+            //    const pos = gradient.radial.position.join(" ");
+            //    const shapeSizePos = (shape || size || pos) ? shape + size + (pos && "at " + pos) + "," : "";
+            //    return `${prefix}(${shapeSizePos}${colorStops}${background ? " " + background : ""})`;
+            //}
 
             return new Error("Illegal gradient type", gradient.type);
         }).join(",");
