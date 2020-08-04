@@ -194,17 +194,47 @@ export default class Code extends Component {
 
             function renderSize() {
                 const keyword = size.keyword ? size.keyword.join("-") : undefined;
-                if (keyword) return <span className="token keyword">{keyword}</span>
+
+                if (keyword) return <span className="token keyword"> {keyword}</span>
                 else return (
                     <span>
-                        <span className="token number">{size.x.value}</span>
+                        <span className="token number"> {size.x.value}</span>
 
                         <span className="token unit">{size.x.unit} </span>
 
                         <span className="token number">{size.y.value}</span>
 
-                        <span className="token unit">{size.y.unit} </span>
+                        <span className="token unit">{size.y.unit}</span>
                     </span>
+                )
+            }
+
+            function renderPosition() {
+                const [keywordX, keywordY] = [position?.keyword?.x, position?.keyword?.y];
+                const positionX = position?.x;
+                const positionY = position?.y;
+
+                return (
+                    <span>
+                        {keywordX && <span className="token keyword"> {keywordX}</span>}
+
+                        {positionX && <span>
+                            <span className="token number"> {positionX.value}</span>
+
+                            <span className="token unit">{positionX.unit}</span>
+                        </span>
+                        }
+
+                        {keywordY && <span className="token keyword"> {keywordY}</span>}
+
+                        {positionY && <span>
+                            <span className="token number"> {positionY.value}</span>
+
+                            <span className="token unit">{positionY.unit}</span>
+                        </span>
+                        }
+                    </span>
+
                 )
             }
 
@@ -212,9 +242,9 @@ export default class Code extends Component {
                 <span>
                     {shape && <span className="token keyword">{shape}</span>}
 
-                    {((size || position) && shape) && <span> </span>/* leading whitespace */}
-
                     {size && renderSize()}
+
+                    {position && renderPosition()}
 
                     {(shape || size || position) && <span className="token punctuation">, </span>/* trailing comma */}
                 </span>
