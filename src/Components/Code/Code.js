@@ -187,47 +187,38 @@ export default class Code extends Component {
 
 
     renderShapeSizePosition(gradient) {
-        if (gradient.type === "radial") {
-            //    const shape = gradient.radial.shape;
-            //    const size = gradient.radial.size;
-            //    const position = gradient.radial.position;
-            //    
-            //    return (
-            //        <span>
-            //            {shape && <span className="token keyword">{shape}</span>}
-            //
-            //            {(size && shape) && <span> </span>/* leading whitespace */}
-            //
-            //            {
-            //                isUnit(size)
-            //                    ? this.renderUnit(size)
-            //                    : <span className="token keyword">{size}</span>
-            //            }
-            //
-            //            {((size || shape) && position) && <span> </span>/* leading whitespace */}
-            //
-            //            {
-            //                position && position.map((pos, index, posArr, whiteSpace = posArr.length > 1 && !index) => isUnit(pos)
-            //                    ? <span key={`size-span-radial-units-${index}`}>
-            //                        {index === 0 && <span className="token keyword">at </span>}
-            //
-            //                        {this.renderUnit(pos)}
-            //
-            //                        {whiteSpace && <span> </span>}
-            //                    </span>
-            //
-            //                    : <span key={`size-span-radial-keyword-${index}`}>
-            //                        {index === 0 && <span className="token keyword">at </span>}
-            //
-            //                        <span className="token keyword">{pos}</span>
-            //
-            //                        {whiteSpace && <span> </span>}
-            //                    </span>
-            //                )
-            //            }
-            //            {(shape || size || position) && <span className="token punctuation">,</span>/* trailing comma */}
-            //        </span>
-            //    );
+        if (gradient.type === "radial" && gradient.radial) {
+            const shape = gradient.radial.shape;
+            const size = gradient.radial.size;
+            const position = gradient.radial.position;
+
+            function renderSize() {
+                const keyword = size.keyword ? size.keyword.join("-") : undefined;
+                if (keyword) return <span className="token keyword">{keyword}</span>
+                else return (
+                    <span>
+                        <span className="token number">{size.x.value}</span>
+
+                        <span className="token unit">{size.x.unit} </span>
+
+                        <span className="token number">{size.y.value}</span>
+
+                        <span className="token unit">{size.y.unit} </span>
+                    </span>
+                )
+            }
+
+            return (
+                <span>
+                    {shape && <span className="token keyword">{shape}</span>}
+
+                    {((size || position) && shape) && <span> </span>/* leading whitespace */}
+
+                    {size && renderSize()}
+
+                    {(shape || size || position) && <span className="token punctuation">, </span>/* trailing comma */}
+                </span>
+            );
         }
     }
 
