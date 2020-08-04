@@ -133,8 +133,8 @@ export function gradientObjsToStr(gradientArray) {
 
                 const posXKeyword = gradient.radial?.position?.keyword?.x;
                 const posYKeyword = gradient.radial?.position?.keyword?.y;
-                const posXValue = "";
-                const posYValue = "";
+                const posXValue = gradient.radial?.position?.x ? gradient.radial.position.x.value + gradient.radial.position.x.unit : "";
+                const posYValue = gradient.radial?.position?.y ? gradient.radial.position.y.value + gradient.radial.position.y.unit : "";
                 const pos = (posXKeyword || posXValue || posYKeyword || posYValue)
                     ? [posXKeyword, posXValue, posYKeyword, posYValue].filter(el => el !== "").join(" ")
                     : "";

@@ -122,23 +122,40 @@ export default function RadialSettings(props) {
 
 
     function handlePositionInputOnChange(inputName, value, unit) {
-        //        const positionIndex = inputName === "position1" ? 0 : 1;
-        //
-        //        if (value !== "") updatePositionKeyword(positionIndex, (value || "0") + (unit || "px"));
+        const oldPosition = props.gradients[props.index]?.radial?.position || {};
+
+        if (inputName === "position1") {
+            oldPosition.x = { value, unit };
+            oldPosition.y = oldPosition.y || { value: 0, unit: "px" };
+
+        }
+
+        if (inputName === "position2") {
+            oldPosition.y = { value, unit };
+            oldPosition.x = oldPosition.x || { value: 0, unit: "px" };
+
+        }
+
+        updateGradientPropertyTo("position", oldPosition);
     }
 
 
 
     function getPositionInputValue(positionIndex) {
-        //      const positionValue = props.gradients[props.index].radial.position[positionIndex];
-        //      return /top|bottom|left|right|center/g.test(positionValue) ? "" : positionValue.match(/[0-9.]+/g)[0];
+        let positionValue;
+        if (positionIndex === "x") positionValue = props.gradients[props.index]?.radial?.position?.x?.value || "";
+        if (positionIndex === "y") positionValue = props.gradients[props.index]?.radial?.position?.y?.value || "";
+        return positionValue;
     }
 
 
 
     function getPositionUnit(positionIndex) {
-        //       const positionUnit = props.gradients[props.index].radial.position[positionIndex];
-        //       return /top|bottom|left|right|center/g.test(positionUnit) ? "" : positionUnit.match(/%|px|vw|vh|em|rem/g)[0];
+        let positionUnit;
+        if (positionIndex === "x") positionUnit = props.gradients[props.index]?.radial?.position?.x?.unit || "px";
+        if (positionIndex === "y") positionUnit = props.gradients[props.index]?.radial?.position?.y?.unit || "px";
+        return positionUnit;
+
     }
 
 
@@ -281,8 +298,8 @@ export default function RadialSettings(props) {
                             <LengthInput
                                 id="3"
                                 name="position1"
-                                value={getPositionInputValue(0)}
-                                unit={getPositionUnit(0)}
+                                value={getPositionInputValue("x")}
+                                unit={getPositionUnit("x")}
                                 units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handlePositionInputOnChange}
                             />
@@ -290,8 +307,8 @@ export default function RadialSettings(props) {
                             <LengthInput
                                 id="4"
                                 name="position2"
-                                value={getPositionInputValue(1)}
-                                unit={getPositionUnit(1)}
+                                value={getPositionInputValue("y")}
+                                unit={getPositionUnit("y")}
                                 units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
                                 onChange={handlePositionInputOnChange}
                             />
