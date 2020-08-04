@@ -29,14 +29,6 @@ export default {
                     "stop": 10
                 }
             ],
-            "radial": {
-                "shape": "ellipse",
-                "size": "50% 50%",
-                "position": [
-                    "50%",
-                    "50%"
-                ]
-            },
             "background": {
                 "position": [
                     {},
@@ -75,14 +67,6 @@ export default {
                     "stop": 10
                 }
             ],
-            "radial": {
-                "shape": "ellipse",
-                "size": "50% 50%",
-                "position": [
-                    "50%",
-                    "50%"
-                ]
-            },
             "background": {
                 "position": [
                     {},
@@ -113,14 +97,6 @@ export default {
                     "stop": 100
                 }
             ],
-            "radial": {
-                "shape": "ellipse",
-                "size": "50% 50%",
-                "position": [
-                    "50%",
-                    "50%"
-                ]
-            },
             "background": {
                 "position": [
                     {},

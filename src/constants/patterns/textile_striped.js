@@ -28,12 +28,6 @@ export default {
                 { "color": "rgba(255, 255, 255, 0.2)", "stop": 182 },
                 { "color": "rgba(0, 0, 0, 0.5)", "stop": 232 }
             ],
-            "radial":
-            {
-                "shape": "ellipse",
-                "size": "50% 50%",
-                "position": ["50%", "50%"]
-            },
             "background": { "position": [{}, {}], "size": { "x": {}, "y": {} } }
         },
         {
@@ -58,11 +52,7 @@ export default {
                 { "color": "rgba(255, 255, 255, 0.2)", "stop": 182 },
                 { "color": "rgba(0, 0, 0, 0.5)", "stop": 232 }
             ],
-            "radial":
-            {
-                "shape": "ellipse",
-                "size": "50% 50%", "position": ["50%", "50%"]
-            }, "background": { "position": [{}, {}], "size": { "x": {}, "y": {} } }
+            "background": { "position": [{}, {}], "size": { "x": {}, "y": {} } }
         }
     ],
 }

@@ -1,5 +1,5 @@
 export default {
-    "patternName": "rainbow arcs",
+    "patternName": "rainbow",
     "gradients": [
         {
             "name": "bottom right colors",
@@ -102,14 +102,6 @@ export default {
                     "stop": 94.4
                 }
             ],
-            "radial": {
-                "shape": "circle",
-                "size": "farthest-corner",
-                "position": [
-                    "bottom",
-                    "right"
-                ]
-            },
             "background": {
                 "position": [
                     {},
@@ -118,6 +110,15 @@ export default {
                 "size": {
                     "x": {},
                     "y": {}
+                }
+            },
+            "radial": {
+                "shape": "circle",
+                "position": {
+                    "keyword": {
+                        "x": "left",
+                        "y": "bottom"
+                    }
                 }
             }
         },
@@ -222,14 +223,6 @@ export default {
                     "stop": 94.4
                 }
             ],
-            "radial": {
-                "shape": "circle",
-                "size": "farthest-corner",
-                "position": [
-                    "bottom",
-                    "left"
-                ]
-            },
             "background": {
                 "position": [
                     {},
@@ -239,6 +232,15 @@ export default {
                     "x": {},
                     "y": {}
                 }
+            },
+            "radial": {
+                "position": {
+                    "keyword": {
+                        "x": "right",
+                        "y": "bottom"
+                    }
+                },
+                "shape": "circle"
             }
         }
     ],

@@ -33,14 +33,6 @@ export default {
                     "stop": 25
                 }
             ],
-            "radial": {
-                "shape": "ellipse",
-                "size": "50% 50%",
-                "position": [
-                    "50%",
-                    "50%"
-                ]
-            },
             "background": {
                 "position": [
                     {},
@@ -73,14 +65,6 @@ export default {
                     "stop": 25
                 }
             ],
-            "radial": {
-                "shape": "ellipse",
-                "size": "50% 50%",
-                "position": [
-                    "50%",
-                    "50%"
-                ]
-            },
             "background": {
                 "position": [
                     {},
@@ -113,14 +97,6 @@ export default {
                     "stop": 25
                 }
             ],
-            "radial": {
-                "shape": "ellipse",
-                "size": "50% 50%",
-                "position": [
-                    "50%",
-                    "50%"
-                ]
-            },
             "background": {
                 "position": [
                     {
@@ -158,14 +134,6 @@ export default {
                     "stop": 25
                 }
             ],
-            "radial": {
-                "shape": "ellipse",
-                "size": "50% 50%",
-                "position": [
-                    "50%",
-                    "50%"
-                ]
-            },
             "background": {
                 "position": [
                     {

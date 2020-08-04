@@ -130,7 +130,6 @@ export function gradientObjsToStr(gradientArray) {
                     : gradient.radial?.size?.x && gradient.radial?.size?.y
                         ? gradient.radial.size.x.value + gradient.radial.size.x.unit + " " + gradient.radial.size.y.value + gradient.radial.size.y.unit
                         : "";
-
                 const posXKeyword = gradient.radial?.position?.keyword?.x;
                 const posYKeyword = gradient.radial?.position?.keyword?.y;
                 const posXValue = gradient.radial?.position?.x ? gradient.radial.position.x.value + gradient.radial.position.x.unit : "";
@@ -138,9 +137,8 @@ export function gradientObjsToStr(gradientArray) {
                 const pos = (posXKeyword || posXValue || posYKeyword || posYValue)
                     ? [posXKeyword, posXValue, posYKeyword, posYValue].filter(el => el !== "").join(" ")
                     : "";
-                console.log(shape, size, pos);
                 const shapeSizePos = shape + size + (pos ? " at " + pos : "") + ((shape || size || pos) ? "," : "");
-                console.log(`${prefix}(${shapeSizePos}${colorStops}${background ? " " + background : ""})`);
+
                 return `${prefix}(${shapeSizePos}${colorStops}${background ? " " + background : ""})`;
             }
 
