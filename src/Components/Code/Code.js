@@ -198,7 +198,8 @@ export default class Code extends Component {
                 if (keyword) return <span className="token keyword"> {keyword}</span>
                 else return (
                     <span>
-                        <span className="token number"> {size.x.value}</span>
+                        {shape && <span> </span>}
+                        <span className="token number">{size.x.value}</span>
 
                         <span className="token unit">{size.x.unit} </span>
 
@@ -216,7 +217,9 @@ export default class Code extends Component {
 
                 return (
                     <span>
-                        {keywordX && <span className="token keyword"> {keywordX}</span>}
+                        {(shape || size) && <span> </span>}
+
+                        {keywordX && <span className="token keyword">{keywordX}</span>}
 
                         {positionX && <span>
                             <span className="token number"> {positionX.value}</span>
