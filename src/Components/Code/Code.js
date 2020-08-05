@@ -713,6 +713,8 @@ export default class Code extends Component {
                 {this.renderColor(this.props.backgroundColor, 1, 0)}
 
                 <span className="token punctuation">;</span>
+
+                <br />
             </span>
         );
     }

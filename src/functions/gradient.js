@@ -138,8 +138,8 @@ export function gradientObjsToStr(gradientArray) {
                     ? [posXKeyword, posXValue, posYKeyword, posYValue].filter(el => el !== "").join(" ")
                     : "";
                 const shapeSizePos = shape + size + (pos ? " at " + pos : "") + ((shape || size || pos) ? "," : "");
-
-                return `${prefix}(${shapeSizePos}${colorStops}${background ? " " + background : ""})`;
+                console.log(`${prefix}(${shapeSizePos}${colorStops})${background ? " " + background : ""}`);
+                return `${prefix}(${shapeSizePos}${colorStops})${background ? " " + background : ""}`;
             }
 
             return new Error("Illegal gradient type", gradient.type);
