@@ -183,7 +183,10 @@
 
 @media only screen and (max-width: 500px) {
     .App {
-        .ColorPicker { max-width: 100%; }
+        .ColorPicker { 
+            max-width: 100%;
+            height: 100%;
+        }
         .GradientField { 
             height: 180px;
         }
