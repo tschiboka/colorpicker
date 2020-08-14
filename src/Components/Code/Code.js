@@ -219,7 +219,9 @@ export default class Code extends Component {
                     <span>
                         {(shape || size) && <span> </span>}
 
-                        {keywordX && <span className="token keyword">{keywordX}</span>}
+                        <span className="token keyword">at</span>
+
+                        {keywordX && <span className="token keyword"> {keywordX}</span>}
 
                         {positionX && <span>
                             <span className="token number"> {positionX.value}</span>

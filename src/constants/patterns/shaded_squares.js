@@ -1,6 +1,6 @@
 export default {
     "patternName": "shaded squares",
-    "backgroundColor": "rgb(255, 173, 115)",
+    "backgroundColor": "rgb(115, 255, 185)",
     "gradients": [
         {
             "name": "Untitled 1",
@@ -200,7 +200,7 @@ export default {
                     "stop": 0
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 9
                 },
                 {
@@ -208,7 +208,7 @@ export default {
                     "stop": 10
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 19
                 },
                 {
@@ -216,7 +216,7 @@ export default {
                     "stop": 20
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 29
                 },
                 {
@@ -224,7 +224,7 @@ export default {
                     "stop": 30
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 39
                 },
                 {
@@ -232,7 +232,7 @@ export default {
                     "stop": 40
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 49
                 },
                 {
@@ -240,7 +240,7 @@ export default {
                     "stop": 50
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 59
                 },
                 {
@@ -248,7 +248,7 @@ export default {
                     "stop": 60
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 69
                 },
                 {
@@ -256,7 +256,7 @@ export default {
                     "stop": 70
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 79
                 },
                 {
@@ -264,7 +264,7 @@ export default {
                     "stop": 80
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 89
                 },
                 {
@@ -272,7 +272,7 @@ export default {
                     "stop": 90
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 99
                 },
                 {
@@ -331,7 +331,7 @@ export default {
                     "stop": 0
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 9
                 },
                 {
@@ -339,7 +339,7 @@ export default {
                     "stop": 10
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 19
                 },
                 {
@@ -347,7 +347,7 @@ export default {
                     "stop": 20
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 29
                 },
                 {
@@ -355,7 +355,7 @@ export default {
                     "stop": 30
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 39
                 },
                 {
@@ -363,7 +363,7 @@ export default {
                     "stop": 40
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 49
                 },
                 {
@@ -371,7 +371,7 @@ export default {
                     "stop": 50
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 59
                 },
                 {
@@ -379,7 +379,7 @@ export default {
                     "stop": 60
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 69
                 },
                 {
@@ -387,7 +387,7 @@ export default {
                     "stop": 70
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 79
                 },
                 {
@@ -395,7 +395,7 @@ export default {
                     "stop": 80
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 89
                 },
                 {
@@ -403,7 +403,7 @@ export default {
                     "stop": 90
                 },
                 {
-                    "color": "rgb(255, 173, 115)",
+                    "color": "rgb(115, 255, 185)",
                     "stop": 99
                 },
                 {
