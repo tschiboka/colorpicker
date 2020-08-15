@@ -209,9 +209,9 @@ export default class ColorPicker extends Component {
 
     handleColorFormatOnClick() {
         switch (this.state.preferredFormat) {
-            case "rgb": { this.setState({ ...this.state, preferredFormat: "hsl" }); break; }
-            case "hsl": { this.setState({ ...this.state, preferredFormat: "hex" }); break; }
-            case "hex": { this.setState({ ...this.state, preferredFormat: "rgb" }); break; }
+            case "rgb": { this.setState({ ...this.state, preferredFormat: "hex" }); break; }
+            case "hex": { this.setState({ ...this.state, preferredFormat: "hsl" }); break; }
+            case "hsl": { this.setState({ ...this.state, preferredFormat: "rgb" }); break; }
             default: { throw Error("Incorrect color format"); }
         }
     }

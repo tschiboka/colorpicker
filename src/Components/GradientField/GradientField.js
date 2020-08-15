@@ -101,9 +101,9 @@ export default class GradientField extends Component {
         const insertIndex = where === "above" ? this.props.index : this.props.index + 1;
         const newGradient = this.state.copyWhenInsertOn ? { ...this.props.gradient } : getDefaultGradientObj();
         const copyName = this.state.copyWhenInsertOn ? this.getCopyName(this.props.gradient.name) : "";
-        const updatedGradient = produce(newGradient, draft => {
-            draft.name = copyName;
-        });
+        const updatedGradient = JSON.parse(JSON.stringify(newGradient));
+
+        updatedGradient.name = copyName;
 
         this.props.insertGradient(updatedGradient, insertIndex);
         this.setState({ ...this.state, copyWhenInsertOn: false });
