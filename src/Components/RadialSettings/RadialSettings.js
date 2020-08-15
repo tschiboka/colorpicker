@@ -41,7 +41,6 @@ export default function RadialSettings(props) {
         updatedGradient.radial = radial;
 
         props.updateGradient(updatedGradient, props.index);
-        console.log(radial);
     }
 
 

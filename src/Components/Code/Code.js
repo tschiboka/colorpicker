@@ -195,7 +195,7 @@ export default class Code extends Component {
             function renderSize() {
                 const keyword = size.keyword ? size.keyword.join("-") : undefined;
 
-                if (keyword) return <span className="token keyword"> {keyword}</span>
+                if (keyword) return <span className="token keyword">{shape && <span> </span>}{keyword}</span>
                 else return (
                     <span>
                         {shape && <span> </span>}
