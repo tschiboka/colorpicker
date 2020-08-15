@@ -1,5 +1,5 @@
 export default {
-    "patternName": "circles11",
+    "patternName": "circles",
     "backgroundSize": [
         {
             "value": "50",

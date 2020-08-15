@@ -5,6 +5,7 @@ import blue_squares from "./blue_squares";
 import carbon from "./carbon";
 import carbon_2 from "./carbon_2";
 import circles from "./circles";
+import crosses from "./crosses";
 import fish_scales from "./fish_scales";
 import half_rombes from "./half_rombes";
 import hearts from "./hearts";
@@ -14,12 +15,14 @@ import microbial_mat from "./microbial_mat";
 import simple_dotted from "./simple_dotted";
 import simple_stripes from "./simple_stripes";
 import stairs from "./stairs";
+import steps from "./steps";
 import textile_striped from "./textile_striped";
 import upholstery from "./upholstery";
 import rainbow_arcs from "./rainbow_arcs";
 import rainbow_bokeh from "./rainbow_bokeh";
 import shaded_squares from "./shaded_squares";
 import waves from "./waves";
+import waves_2 from "./waves_2";
 import weave from "./weave";
 import zig_zag from "./zig_zag";
 import zig_zag_2 from "./zig_zag_2";
@@ -50,5 +53,8 @@ export default [
     half_rombes,
     rainbow_bokeh,
     arrows,
+    crosses,
     weave,
+    steps,
+    waves_2,
 ];
