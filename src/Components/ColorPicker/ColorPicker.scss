@@ -1,24 +1,14 @@
 @import "../../constants/constants.scss";
 
-$primaryBg: #181719;
-$primarytColor: #c2c2c2;
-$borderColor: #111;
-$border: 1px solid $borderColor;
-
 .ColorPicker {
     position: absolute;
     width: 500px !important;
     max-width: 500px;
     height: 350px;
-    color: $primarytColor;
-    background: $primaryBg;
-    font-family: "Abel";
-    border: $border;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
+    color: $secondaryTextColor;
+    background: $secondaryBackgroundColor;
+    font-family: "Fira";
+    border: $secondaryBorder;
     box-shadow: 5px 5px 5px #000;
     z-index: 10000;
     -webkit-user-select: none; /* Safari */        
@@ -27,26 +17,15 @@ $border: 1px solid $borderColor;
     user-select: none; /* Standard */
     box-sizing: content-box;
     .ColorPicker--button-theme {
-        background: -moz-linear-gradient(top, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
-        background: -ms-linear-gradient(top, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
-        background: -o-linear-gradient(top, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
-        background: -webkit-gradient(linear, top from(#1a1a1a), color-stop(0.1, #1a1a1a), to(#0c0c0c));
-        background: -webkit-linear-gradient(top, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
-        background: linear-gradient(to bottom, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
+        background: $buttonGradient;
         border-radius: 3px;
         -webkit-border-radius: 3px;
-        -moz-border-radius: 3px;
-        -ms-border-radius: 3px;
-        -o-border-radius: 3px;
-        border: $border;
+        border: $secondaryBorder;
         text-shadow: -1px -1px black;
+        color: $secondaryTextColor;
         &:hover {
-            background: -moz-linear-gradient(bottom, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
-            background: -ms-linear-gradient(bottom, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
-            background: -o-linear-gradient(bottom, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
-            background: -webkit-gradient(linear, bottom from(#1a1a1a), color-stop(0.1, #1a1a1a), to(#0c0c0c));
-            background: -webkit-linear-gradient(bottom, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
-            background: linear-gradient(to top, #1a1a1a 0%, #1a1a1a 10%, #0c0c0c 100%);
+            background: $buttonGradientHover;
+            color: $activeButtonTextColor;
         }
     }
 }
@@ -57,14 +36,8 @@ $border: 1px solid $borderColor;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0,0,0, 0.2);
     font-size: 18px;
-    border-bottom: $border;
-    border-radius: 4px 4px 0 0;
-    -webkit-border-radius: 4px 4px 0 0;
-    -moz-border-radius: 4px 4px 0 0;
-    -ms-border-radius: 4px 4px 0 0;
-    -o-border-radius: 4px 4px 0 0;
+    border-bottom: $secondaryBorder;
     .ColorPicker__result-colors {
         margin: 3px;
         width: 70px;
@@ -76,42 +49,28 @@ $border: 1px solid $borderColor;
             margin: 0 1px;
             width: 50%;
             height: 70%;
-            border: $border;
+            border: $primaryBorder;
             div {
                 width: 100%;
                 height: 100%;
             }
         }
-        > div:first-child {
-            border-radius: 4px 0 0 0;
-            -webkit-border-radius: 4px 0 0 0;
-            -moz-border-radius: 4px 0 0 0;
-            -ms-border-radius: 4px 0 0 0;
-            -o-border-radius: 4px 0 0 0;
-            > div {
-                border-radius: 3px 0 0 0;
-                -webkit-border-radius: 3px 0 0 0;
-                -moz-border-radius: 3px 0 0 0;
-                -ms-border-radius: 3px 0 0 0;
-                -o-border-radius: 3px 0 0 0;
-            }
-        }
     }
     .color-code {
-        color: #555f64;
+        color: $secondaryTextColor;
         font-size: 14px;
-        font-family: monospace;
     }
     .button-box {
         display: flex;
         height: 100%;        
         button {
             position: relative;
-            padding: 0 1px;
             min-height: 95%;
             min-width: 30px;
-            color: #4cc3f1;
             font-size: 16px;
+            border: none;
+            border-radius: 0;
+            border-left: $secondaryBorder;
             cursor: pointer;
             div {
                 width: 100%;
@@ -168,7 +127,7 @@ $border: 1px solid $borderColor;
         margin: 2% 0 2% 5%;
         width: 85%;
         height: 92%;
-        border: $border;
+        border: $secondaryBorder;
         canvas {
             width: 100%;
             height: 100%;
@@ -229,14 +188,15 @@ $border: 1px solid $borderColor;
             display: flex;
             padding-left: 20%;
             justify-content: space-between;
-            color: #ddd1e4dc;
+            color: $secondaryTextColor;
             text-shadow: -2px -2px 2px black;
             input {
-                background: rgba(255, 255, 255, 0.035);
-                color: #fff;
+                background: $tertiaryBackgroundColor;
+                color: $tertiaryTextColor;
                 text-align: center;
                 width: 60%;
-                border: $border;
+                border: $tertiaryBorder;
+                border-radius: 2px;
             }
         }
         > p {
@@ -251,7 +211,7 @@ $border: 1px solid $borderColor;
             > span:last-child {
                 width: 50%;
                 text-align: center;
-                color: #eee;
+                color: $secondaryTextColor;
             }
         }
     }
@@ -271,13 +231,14 @@ $border: 1px solid $borderColor;
     > div:last-child { height: 40%; }
     .ColorPicker__ok-btn-box {
         button {
-            height: 65%;
-            min-width: 30px;
-            padding: 0 20px;
-            color: $primarytColor;
-            font-size: 17px;
+            height: 25px;
+            min-width: 100px;
+            color: $secondaryTextColor;
+            font-size: 16px;
             cursor: pointer;
-            &:hover { font-size: 14px; }
+            &:hover {
+                font-size: 14px;
+            }
         }
     }
 }
@@ -289,7 +250,7 @@ $border: 1px solid $borderColor;
     justify-content: center;
     align-items: center;
     background: black;
-    border: $border;
+    border: $tertiaryBorder;
     border-radius: 12px;
     -webkit-border-radius: 12px;
     -moz-border-radius: 12px;
@@ -311,7 +272,7 @@ $border: 1px solid $borderColor;
         position: relative;
         width: calc(100% - 12px);
         height: 4px;
-        border: $border;
+        border: $secondaryBorder;
         background: -moz-linear-gradient(left, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
         background: -ms-linear-gradient(left, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
         background: -o-linear-gradient(left, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
@@ -353,7 +314,7 @@ $border: 1px solid $borderColor;
         -moz-border-radius: 5px;
         -ms-border-radius: 5px;
         -o-border-radius: 5px;
-        border: $border;
+        border: $tertiaryBorder;
         .ColorPicker__alpha {
             position: relative;
             width: 100%;
@@ -401,20 +362,21 @@ $border: 1px solid $borderColor;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: $primaryBg;
+    background-color: $secondaryBackgroundColor;
     z-index: 3;
 }
 
 .ColorPicker__body--history-mode {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-start;
     align-content: flex-start;
-    flex-wrap: wrap;
+    overflow-y: auto;
     & > div {
-        margin: 3px;
-        min-width: calc(8% - 3px);
+        margin: 1px;
+        min-width: calc(10% - 2px);
         height: 20px;
-        border: $border; 
+        border: $secondaryBorder;
         div {
             width: 100%;
             height: 100%;
@@ -487,11 +449,7 @@ $border: 1px solid $borderColor;
         }
     }
 }
-
-.ColorPicker__body--history-mode {
-    display: flex;
-}
-
+ 
 @media only screen and (max-width: 500px) and (orientation: portrait) {
     .ColorPicker {
         position: absolute;

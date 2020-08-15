@@ -525,7 +525,11 @@ export default class ColorPicker extends Component {
         const hex = e.target.dataset.hex;
         if (!hex) return;
         const colorObj = getColorObj("#" + hex);
-        this.setState({ ...this.state, color: colorObj }, () => this.findAndSetColorByInput("hex", hex));
+        this.setState({
+            ...this.state,
+            mode: "palette",
+            color: colorObj
+        }, () => this.findAndSetColorByInput("hex", hex));
     }
 
 
@@ -698,14 +702,18 @@ export default class ColorPicker extends Component {
 
 
     renderHistory() {
-        const history = JSON.parse(localStorage.color_picker_history).filter((_, i) => i < 100);
+        const history = JSON.parse(localStorage.color_picker_history).filter((_, i) => i < 1000);
 
-        return (history || []).map((color, i) => (
+        return (history || []).reverse().map((color, i) => (
             <div key={`history_${i}`} style={{ backgroundImage: `url(${checkeredRect})` }}>
                 <div
                     style={{ backgroundColor: color }}
                     title={color}
-                    onClick={() => this.setState({ ...this.state, color: getColorObj(color) }, () => this.adjustSliders())}></div>
+                    onClick={() => this.setState({
+                        ...this.state,
+                        mode: "palette",
+                        color: getColorObj(color)
+                    }, () => this.adjustSliders())}></div>
             </div>
         ));
     }
@@ -718,7 +726,7 @@ export default class ColorPicker extends Component {
         if (!history) { localStorage.setItem("color_picker_history", JSON.stringify([this.state.color.code.rgba])); }
         else {
             let updatedHistory = JSON.parse(history);
-            const maxHistoryLength = 100;
+            const maxHistoryLength = 1000;
 
             if (updatedHistory.length >= maxHistoryLength) {
                 updatedHistory = updatedHistory.slice(Math.max(updatedHistory.length - maxHistoryLength, 0));
@@ -1009,11 +1017,9 @@ export default class ColorPicker extends Component {
                         </div>
                     </div> {/* end of palette mode */}
 
-                    {this.state.mode === "history" && <div
-                        className="ColorPicker__body--history-mode"
-                    >
+                    {this.state.mode === "history" && <div className="ColorPicker__body--history-mode">
                         {this.renderHistory()}
-                    </div>}
+                    </div>} {/* end of history mode */}
 
                     {this.state.mode === "names" && <div
                         className="ColorPicker__body--names-mode"
