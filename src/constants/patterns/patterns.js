@@ -12,7 +12,9 @@ import chess_board from "./chess_board";
 import cicada_stripes from "./cicada_stripes";
 import circles from "./circles";
 import circles_2 from "./circles_2";
+import circles_3 from "./circles_3";
 import cross_dots from "./cross_dots";
+import cross_lines from "./cross_lines";
 import crosses from "./crosses";
 import crosses_2 from "./crosses_2";
 import cymbal from "./cymbal";
@@ -31,8 +33,10 @@ import marrakesh from "./marrakesh";
 import microbial_mat from "./microbial_mat";
 import piramids from "./piramids";
 import polka_dots from "./polka_dots";
+import quarters from "./quarters";
 import rainbow_arcs from "./rainbow_arcs";
 import rainbow_bokeh from "./rainbow_bokeh";
+import red_dots from "./red_dots";
 import red_stripes from "./red_stripes";
 import roses from "./roses";
 import seigaiha from "./seigaiha";
@@ -41,6 +45,7 @@ import serpente from "./serpente";
 import shippo from "./shippo";
 import simple_dotted from "./simple_dotted";
 import simple_stripes from "./simple_stripes";
+import spikes from "./spikes";
 import stairs from "./stairs";
 import stars from "./stars";
 import steps from "./steps";
@@ -120,4 +125,9 @@ export default [
     yellow_squares,
     blue_stripes,
     red_stripes,
+    cross_lines,
+    spikes,
+    quarters,
+    circles_3,
+    red_dots,
 ];
