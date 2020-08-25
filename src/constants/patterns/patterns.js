@@ -32,6 +32,7 @@ import madras from "./madras";
 import marrakesh from "./marrakesh";
 import microbial_mat from "./microbial_mat";
 import piramids from "./piramids";
+import plastic_net from "./plastic_net";
 import polka_dots from "./polka_dots";
 import quarters from "./quarters";
 import rainbow_arcs from "./rainbow_arcs";
@@ -74,6 +75,7 @@ export default [
     rainbow_arcs,
     carbon,
     carbon_2,
+    plastic_net,
     basket,
     waves,
     fish_scales,

@@ -71,15 +71,16 @@ export default class LengthInput extends Component {
         let value = inputValue;
 
 
-        if (/^\d*[.]+$/g.test(inputValue)) {                                    // TEST . X. X..
-            error = "Must not end in decimal point!";
+
+        if (!this.props.negativeValueAllowed && /^-/.test(inputValue)) {        // TEST NEGATIVE VALUE
+            error = "Can not be negative!"
             return ({ valid: false, error, value });
         }
         if (/[.]\d{2,}?$/g.test(inputValue)) {                                  // TEST X.YZ 
             error = "Max 1 decimal value!";
             return ({ valid: false, error, value });
         }
-        if (!/^(\d+)?([.]?\d{1})?$/g.test(inputValue)) {                        // TEST X NUMBER OPTIONAL AND DECIMAL POINT
+        if (!/^-?(\d+)?([.]?\d{1})?\.?$/g.test(inputValue)) {                   // TEST X NUMBER OPTIONAL AND DECIMAL POINT
             error = "Must contain numbers!";
             return ({ valid: false, error, value });
         }

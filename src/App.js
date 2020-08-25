@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Animation from "./Components/Animation/Animation";
 import ColorPicker from "./Components/ColorPicker/ColorPicker";
 import ResultDisplay from "./Components/ResultDisplay/ResultDisplay";
 import GradientList from "./Components/GradientList/GradientList";
@@ -35,6 +36,7 @@ export default class App extends Component {
 
 
     this.state = {
+      animation: true,
       checkered: true,
       gradients: [{ ...getDefaultGradientObj() }],
       canResize: true,
@@ -50,6 +52,15 @@ export default class App extends Component {
       backgroundBlendMode: undefined,
       fullscreen: false,
     };
+  }
+
+
+
+  componentDidMount() {
+    const animationTimer = setTimeout(() => {
+      this.setState({ ...this.state, animation: false });
+      clearTimeout(animationTimer);
+    }, 2000);
   }
 
 
@@ -312,6 +323,8 @@ export default class App extends Component {
   render() {
     return (
       <div className="App">
+        {this.state.animation && <Animation />}
+
         <ResultDisplay
           backgroundSize={this.state.backgroundSize}
           backgroundColor={this.state.backgroundColor}

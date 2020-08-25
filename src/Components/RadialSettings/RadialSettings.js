@@ -300,6 +300,7 @@ export default function RadialSettings(props) {
                                 value={getPositionInputValue("x")}
                                 unit={getPositionUnit("x")}
                                 units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
+                                negativeValueAllowed={true}
                                 onChange={handlePositionInputOnChange}
                             />
 
@@ -309,6 +310,7 @@ export default function RadialSettings(props) {
                                 value={getPositionInputValue("y")}
                                 unit={getPositionUnit("y")}
                                 units={["%", "px", "vw", "vh", "em", "rem"].reverse()}
+                                negativeValueAllowed={true}
                                 onChange={handlePositionInputOnChange}
                             />
                         </div>
