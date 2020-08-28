@@ -37,6 +37,7 @@ export default class App extends Component {
 
     this.state = {
       animation: true,
+      aninationTime: 15000,
       checkered: true,
       gradients: [{ ...getDefaultGradientObj() }],
       canResize: true,
@@ -60,7 +61,7 @@ export default class App extends Component {
     const animationTimer = setTimeout(() => {
       this.setState({ ...this.state, animation: false });
       clearTimeout(animationTimer);
-    }, 2000);
+    }, this.state.aninationTime);
   }
 
 

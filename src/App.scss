@@ -2,13 +2,20 @@
     src: url("./fonts/Abel-Regular.ttf");
     font-family: "Abel";
 }
+
 @font-face {
     src: url("./fonts/FiraCode-Light.ttf");
     font-family: "Fira";
 }
+
 @font-face {
     src: url("./fonts/Fantasque-Italic.otf");
     font-family: "Fantasque";
+}
+
+@font-face {
+    src: url("./fonts/Existence-StencilLight.otf");
+    font-family: "Existence";
 }
 
 @import "./constants/constants.scss";

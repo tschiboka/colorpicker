@@ -114,11 +114,6 @@ export default class ColorPicker extends Component {
         const component = document.getElementById(this.props.id);
         const componentWidth = component ? component.getBoundingClientRect().width : 500;
         const componentHeight = component ? component.getBoundingClientRect().height : 350;
-        //const componentLeft = component ? component.getBoundingClientRect().left : x;
-        //const componentTop = component ? component.getBoundingClientRect().top : y;
-
-        //if (viewportWidth - (componentWidth + componentLeft) <= 0) x = Math.floor(viewportWidth - componentWidth);
-        //if (viewportHeight - (componentHeight + componentTop) <= 0) y = Math.floor(viewportHeight - componentHeight);
         x = (viewportWidth / 2) - (componentWidth / 2);
         y = (viewportHeight / 2) - (componentHeight / 2);
 
