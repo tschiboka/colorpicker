@@ -14,27 +14,62 @@
     background-image: $dottedImg;
     background-size: 100% 100%;
     z-index: 10000;
-    & > div {
+    .Animation__text {
+        position: absolute;
+        left: 0;
         width: 100vw;
         display: flex;
         justify-content: center;
-        background: $anim1Gradient;
-        background-clip: text;
         color: transparent;
-        animation: hue 2s linear infinite;
-        & > span {
+        &:nth-child(2) { 
+            top: 10%;
+            background: $anim1Gradient;
+            background-clip: text;
+            animation: hue1 2s linear infinite;
+        }
+        &:nth-child(3) {
+            top: 30%; 
+            background: $anim2Gradient;
+            background-clip: text;
+            animation: hue1 2s linear infinite;
+        }
+        &:nth-child(4) {
+            top: 50%; 
+            background: $anim2Gradient;
+            background-clip: text;
+            animation: hue1 2s linear infinite;
+        }
+        &:nth-child(5) {
+            top: 70%; 
+            background: $anim3Gradient;
+            background-clip: text;
+            animation: hue1 2s linear infinite;
+        }
+        span {
+            position: relative;
+            background-clip: none;
             font-family: "Existence";
             font-weight: lighter;
-            font-size: 70px;
+            font-size: 10vh;
+            text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.3);
         }
+    }
+    .Animation__zig-zag {
+        position: absolute;
+        width: 100%;
+        height: 30px;
+        left: 0;
+        background: $zigzagPattern;
+        background-size: 30px 40px;
+        animation: hue1 30s linear infinite;
+    }
+    .Animation__zig-zag:first-child { top: 0; }
+    .Animation__zig-zag:last-child { 
+        bottom: 0; 
+        animation-direction: reverse;
     }
 }
 
-@keyframes hue {
-    from {
-        background-position-x: 0vw;
-    }
-    to {
-        background-position-x: 100vw;
-    }
+@keyframes hue1 {
+    to { background-position-x: 100vw; }
 }

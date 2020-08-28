@@ -37,6 +37,8 @@ $buttonGradientHover:           linear-gradient(180deg, #0c0c0c 30%, #1a1a1a);
 $buttonGradientLrg:             linear-gradient(180deg, #1a1a1a 50%, #0c0c0c 85%, #0c0c0c);
 $buttonGradientHoverLrg:        linear-gradient(180deg, #0c0c0c 15%, #1a1a1a 50%, #1a1a1a);
 $anim1Gradient:                 linear-gradient(120deg, #e52e71, #fcca42, #e52e71);
+$anim2Gradient:                 linear-gradient(120deg, #4cc3f1, #fca266, #4cc3f1);
+$anim3Gradient:                 linear-gradient(120deg, #4cc3f1, #ff1493, #4cc3f1);
 
 
 
@@ -70,3 +72,9 @@ $tertiaryBorder:                $borderThin    solid  $tertiaryBorderColor;
 $shadeBorder:                   $borderThin    solid  $shadeBorderColor;
 $warningBorder:                 $borderMedium  dotted $warningTextColor;
 $messageBorder:                 $borderThick   dashed $messageBorderColor;
+
+
+
+// ----------- PATTERNS -----------
+$zigzagPattern:                 linear-gradient(150deg, rgb(9, 9, 9) 0% 24%, rgba(255, 255, 255, 0.15) 24%, black 26% 26.1%, transparent 26.1% 74%, rgba(255, 255, 255, 0.15) 74% 76%, black 76%) 0 15px,     
+                                linear-gradient(30deg, black 0% 24%, rgba(255, 255, 255, 0.15) 24%, black 26% 26.1%, transparent 26.1% 74%, rgba(255, 255, 255, 0.15) 74% 76%, black 76%) 0 15px;

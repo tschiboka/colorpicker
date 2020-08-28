@@ -168,7 +168,7 @@
             min-width: 100%;
             flex: 1;
         }
-        & > * {
+        & > *:not(.Animation) {
             height: 50%;
             flex: 1 1 50%;
             border: $primaryBorder
