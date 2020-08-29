@@ -123,6 +123,7 @@ export default class Code extends Component {
     copyToClipboard(text) {
         var textarea = document.createElement("textarea");
         textarea.textContent = text;
+        console.log(text);
         textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
         document.body.appendChild(textarea);
         textarea.select();
@@ -633,7 +634,7 @@ export default class Code extends Component {
                                     ? <span className="token punctuation">
                                         ,{this.renderComment(gradIndex)}
 
-                                        <br />
+                                        <br />{"\n"}
 
                                         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     </span>
