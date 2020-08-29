@@ -123,7 +123,6 @@ export default class Code extends Component {
     copyToClipboard(text) {
         var textarea = document.createElement("textarea");
         textarea.textContent = text;
-        console.log(text);
         textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
         document.body.appendChild(textarea);
         textarea.select();
@@ -592,7 +591,10 @@ export default class Code extends Component {
 
 
     renderBackgroundWithPrefix(vendorPrefix) {
-        const gradients = this.props.gradients.map(grad => getImmutableGradientCopy(grad)).reverse();
+        const gradients = this.props.gradients
+            .map(grad => getImmutableGradientCopy(grad))
+            .reverse()
+            .filter(gradient => gradient.visible);
         const functionNames = gradients.map(gradient => (gradient.repeating ? "repeating-" : "") + gradient.type + "-gradient");
 
         const renderFunctionSpans = gradIndex => (
@@ -634,7 +636,7 @@ export default class Code extends Component {
                                     ? <span className="token punctuation">
                                         ,{this.renderComment(gradIndex)}
 
-                                        <br />{"\n"}
+                                        {"\n"}
 
                                         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     </span>
@@ -840,7 +842,7 @@ export default class Code extends Component {
                     )}
 
                     <div id="code">
-                        {this.props.gradients.length
+                        {this.props.gradients.filter(gradient => gradient.visible).length
                             ? <span>
                                 {this.renderFallback()}
 
