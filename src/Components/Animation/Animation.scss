@@ -13,6 +13,7 @@
     background-color: $secondaryBackgroundColor;
     background-image: $dottedImg;
     background-size: 100% 100%;
+    animation: fade 3s 3s;
     z-index: 10000;
     .Animation__text {
         position: absolute;
@@ -25,25 +26,25 @@
             top: 10%;
             background: $anim1Gradient;
             background-clip: text;
-            animation: hue1 2s linear infinite;
+            animation: leftToRightBg 2s linear infinite, fromLeft 1.5s ease-in;
         }
         &:nth-child(3) {
             top: 30%; 
             background: $anim2Gradient;
             background-clip: text;
-            animation: hue1 2s linear infinite;
+            animation: leftToRightBg 2s linear infinite, invisible 0.11s, fromRight 1.5s ease-in 0.1s;
         }
         &:nth-child(4) {
             top: 50%; 
             background: $anim2Gradient;
             background-clip: text;
-            animation: hue1 2s linear infinite;
+            animation: leftToRightBg 2s linear infinite, invisible 0.21s, fromLeft 1.5s ease-in 0.2s;
         }
         &:nth-child(5) {
             top: 70%; 
             background: $anim3Gradient;
             background-clip: text;
-            animation: hue1 2s linear infinite;
+            animation: leftToRightBg 2s linear infinite, invisible 0.36s, fromRight 1.5s ease-in 0.3s;
         }
         span {
             position: relative;
@@ -61,7 +62,7 @@
         left: 0;
         background: $zigzagPattern;
         background-size: 30px 40px;
-        animation: hue1 30s linear infinite;
+        animation: leftToRightBg 30s linear infinite;
     }
     .Animation__zig-zag:first-child { top: 0; }
     .Animation__zig-zag:last-child { 
@@ -70,6 +71,35 @@
     }
 }
 
-@keyframes hue1 {
-    to { background-position-x: 100vw; }
+@keyframes leftToRightBg { to { background-position-x: 100vw; } }
+
+@keyframes fromLeft { 
+    0% { left: -150vw; }
+    93% { left: 5vw; }
+    96% { left: -3vw; }
+    100% { left: 0; } 
+}
+
+@keyframes fromRight { 
+    0% { left: 150vw; }
+    93% { left: -5vw; }
+    96% { left: 3vw; }
+    100% { left: 0; } 
+}
+
+@keyframes invisible { 
+    0% { opacity: 0; }
+    99% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes fade {
+    50% { 
+        opacity: 1; 
+        filter: grayscale(0);
+    }
+    100% {
+        opacity: 0;
+        filter: grayscale(100%);
+    }
 }
