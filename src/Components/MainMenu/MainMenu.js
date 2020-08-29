@@ -8,6 +8,8 @@ import saveIcon from "../../images/save.png";
 import saveActiveIcon from "../../images/save_active.png";
 import deleteIcon from "../../images/delete.png";
 import deleteActiveIcon from "../../images/delete_active.png";
+import helpIcon from "../../images/help_sml.png";
+import helpActiveIcon from "../../images/help_sml_active.png";
 import backIcon from "../../images/expand_less.png";
 import backActiveIcon from "../../images/expand_less_active.png";
 import "./MainMenu.scss";
@@ -507,6 +509,16 @@ export default class MainMenu extends Component {
 
                             <span>Delete</span>
                         </li>
+
+                        <li
+                            onClick={() => { }}
+                            onMouseOver={() => this.setState({ ...this.state, menuListHovered: "help" })}
+                        >
+                            <div style={{ backgroundImage: `url(${this.state.menuListHovered === "delete" ? helpActiveIcon : helpIcon})` }}></div>
+
+                            <span>Help</span>
+                        </li>
+
 
                         <li
                             onMouseOver={() => this.setState({ ...this.state, menuListHovered: "back" })}
