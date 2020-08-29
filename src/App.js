@@ -6,6 +6,7 @@ import GradientList from "./Components/GradientList/GradientList";
 import Code from "./Components/Code/Code";
 import RadialSettings from "./Components/RadialSettings/RadialSettings";
 import BackgroundSettings from "./Components/BackgroundSettings/BackgroundSettings";
+import HelpMenu from "./Components/HelpMenu/HelpMenu";
 import { getDefaultGradientObj, gradientObjsToStr } from "./functions/gradient";
 import checkeredRect from "./images/checkered_rect.png";
 import { produce } from "immer";
@@ -52,6 +53,7 @@ export default class App extends Component {
       backgroundColor: undefined,
       backgroundBlendMode: undefined,
       fullscreen: false,
+      helpMenuOpen: false,
     };
   }
 
@@ -143,6 +145,7 @@ export default class App extends Component {
       backgroundColor: undefined,
       backgroundBlendMode: undefined,
       fullscreen: false,
+      helpMenuOpen: false,
     };
 
     this.setState(newState);
@@ -166,6 +169,7 @@ export default class App extends Component {
       backgroundColor: newPattern.backgroundColor,
       backgroundBlendMode: newPattern.backgroundBlendMode,
       fullscreen: false,
+      helpMenuOpen: this.state.helpMenuOpen,
     }
 
     this.setState(newState);
@@ -317,7 +321,11 @@ export default class App extends Component {
 
 
 
-  setCheckeredDisplay(checkered) { console.log(checkered); this.setState({ ...this.state, checkered }); }
+  setCheckeredDisplay(checkered) { this.setState({ ...this.state, checkered }); }
+
+
+
+  openHelpMenu() { this.setState({ ...this.state, helpMenuOpen: true }); }
 
 
 
@@ -337,6 +345,7 @@ export default class App extends Component {
           renamePattern={this.renamePattern.bind(this)}
           setDefaultState={this.setDefaultState.bind(this)}
           changeStateToPattern={this.changeStateToPattern.bind(this)}
+          openHelpMenu={this.openHelpMenu.bind(this)}
         />
 
         <GradientList
@@ -352,6 +361,7 @@ export default class App extends Component {
           openBackgroundSettings={this.openBackgroundSettings.bind(this)}
           insertGradient={this.insertGradient.bind(this)}
           swapGradientFields={this.swapGradientFields.bind(this)}
+          openHelpMenu={this.openHelpMenu.bind(this)}
         />
 
         <Code
@@ -413,6 +423,8 @@ export default class App extends Component {
             </div>
           </div>
         )}
+
+        {this.state.helpMenuOpen && <HelpMenu />}
       </div>
     );
   }

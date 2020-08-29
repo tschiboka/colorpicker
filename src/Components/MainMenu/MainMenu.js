@@ -511,7 +511,10 @@ export default class MainMenu extends Component {
                         </li>
 
                         <li
-                            onClick={() => { }}
+                            onClick={() => {
+                                this.props.openHelpMenu();
+                                this.props.closeMenu();
+                            }}
                             onMouseOver={() => this.setState({ ...this.state, menuListHovered: "help" })}
                         >
                             <div style={{ backgroundImage: `url(${this.state.menuListHovered === "delete" ? helpActiveIcon : helpIcon})` }}></div>

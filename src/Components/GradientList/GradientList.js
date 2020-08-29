@@ -179,6 +179,7 @@ export default class GradientList extends Component {
                     <div>
                         <button
                             title="help and tutorial"
+                            onClick={() => this.props.openHelpMenu()}
                             onMouseOver={() => this.setState({ ...this.state, helpIconHover: true, addIconHover: false })}
                             onMouseLeave={() => this.setState({ ...this.state, helpIconHover: false, addIconHover: false })}
                         >

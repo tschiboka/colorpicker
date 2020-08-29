@@ -126,6 +126,7 @@ export default class ResultDisplay extends Component {
                                 renamePattern={this.props.renamePattern}
                                 setDefaultState={this.props.setDefaultState}
                                 changeStateToPattern={this.props.changeStateToPattern}
+                                openHelpMenu={this.props.openHelpMenu}
                                 closeMenu={this.closeMenu.bind(this)}
                             />
                         )}
